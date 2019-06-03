@@ -1,4 +1,4 @@
-# RPG Maker MV TypeScript Port
+# **STRONK!** A RPG Maker MV TypeScript Port
 
 ## TODO: Write a proper readme
 
