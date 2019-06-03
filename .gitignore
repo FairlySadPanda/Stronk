@@ -1,0 +1,15 @@
+node_modules
+.vscode
+audio
+chrome
+data
+fonts
+icon
+img
+js
+movies
+save
+Game.rpgproject
+index.html
+package-lock.json
+/ts/plugins
