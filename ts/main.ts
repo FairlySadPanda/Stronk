@@ -48,11 +48,6 @@ window.$testEvent        = null;
 
 PluginManager.setup([]);
 
-//@ts-ignore
-window.Yanfly = {};
-//@ts-ignore
-window.Yanfly.SpawnEventAt = function () {};
-
 window.onload = function () {
     SceneManager.run(Scene_Boot);
 };
