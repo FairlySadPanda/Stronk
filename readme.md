@@ -6,7 +6,7 @@
 
 This is a work-in-progress port of CoreScript, the Javascript (nw.js/pixi.js) 2D RPG engine for RPG Maker MV, to TypeScript.
 
-CoreScript can be found here: https://github.com/rpgtkoolmv/corescript
+Corescript can be found here: https://github.com/rpgtkoolmv/corescript
 
 Many files have been completely ported. All of the engine files have at least had all their functions typed in a placeholder fashion.
 
