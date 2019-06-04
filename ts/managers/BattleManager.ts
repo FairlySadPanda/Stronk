@@ -1,5 +1,6 @@
 import Utils from "../core/Utils";
 import Game_Action from "../objects/Game_Action";
+import Game_Battler from "../objects/Game_Battler";
 import Scene_Gameover from "../scenes/Scene_Gameover";
 import AudioManager from "./AudioManager";
 import SceneManager from "./SceneManager";
@@ -447,8 +448,8 @@ BattleManager.getNextSubject = function() {
     }
 };
 
-BattleManager.allBattleMembers = function() {
-    return $gameParty.members().concat($gameTroop.members());
+BattleManager.allBattleMembers = function(): Game_Battler[] {
+    return [...$gameParty.members(), ...$gameTroop.members()];
 };
 
 BattleManager.makeActionOrders = function() {

@@ -1,4 +1,4 @@
-import * as PIXI from "pixi";
+import * as PIXI from "pixi.js";
 import Graphics from "./Graphics";
 import Utils from "./Utils";
 

@@ -179,7 +179,7 @@ export default abstract class ImageManager {
         );
     }
 
-    public static reserveFace(filename, hue?, reservationId?: Bitmap) {
+    public static reserveFace(filename, hue?, reservationId?): Bitmap {
         return this.reserveBitmap(
             "img/faces/",
             filename,

@@ -4,7 +4,6 @@ import Stage from "../core/Stage";
 import Utils from "../core/Utils";
 import WindowLayer from "../core/WindowLayer";
 import AudioManager from "../managers/AudioManager";
-
 import ImageManager from "../managers/ImageManager";
 import SceneManager from "../managers/SceneManager";
 import Scene_Gameover from "./Scene_Gameover";
