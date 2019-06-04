@@ -4,7 +4,7 @@
 
 ## TODO: Write a proper readme
 
-This is a work-in-progress port of CoreScript, the Javascript (nw.js/pixi.js) 2D RPG engine for RPG Maker MV, to TypeScript.
+This is a work-in-progress port of Corescript, the Javascript (nw.js/pixi.js) 2D RPG engine for RPG Maker MV, to TypeScript.
 
 Corescript can be found here: https://github.com/rpgtkoolmv/corescript
 
