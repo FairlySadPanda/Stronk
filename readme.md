@@ -1,4 +1,5 @@
 # **STRONK!** A RPG Maker MV TypeScript Port
+STRong typing and lots of thONK!
 
 ![Everyone needs a STRONG THONK once in a while](https://i.imgur.com/22arsXa.gif)
 
