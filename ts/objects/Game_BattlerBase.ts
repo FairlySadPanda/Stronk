@@ -14,37 +14,36 @@ export interface Game_BattlerBase_OnLoad {
 }
 
 export default class Game_BattlerBase {
-
-    public static TRAIT_ELEMENT_RATE   = 11;
-    public static TRAIT_DEBUFF_RATE    = 12;
-    public static TRAIT_STATE_RATE     = 13;
-    public static TRAIT_STATE_RESIST   = 14;
-    public static TRAIT_PARAM          = 21;
-    public static TRAIT_XPARAM         = 22;
-    public static TRAIT_SPARAM         = 23;
+    public static TRAIT_ELEMENT_RATE = 11;
+    public static TRAIT_DEBUFF_RATE = 12;
+    public static TRAIT_STATE_RATE = 13;
+    public static TRAIT_STATE_RESIST = 14;
+    public static TRAIT_PARAM = 21;
+    public static TRAIT_XPARAM = 22;
+    public static TRAIT_SPARAM = 23;
     public static TRAIT_ATTACK_ELEMENT = 31;
-    public static TRAIT_ATTACK_STATE   = 32;
-    public static TRAIT_ATTACK_SPEED   = 33;
-    public static TRAIT_ATTACK_TIMES   = 34;
-    public static TRAIT_STYPE_ADD      = 41;
-    public static TRAIT_STYPE_SEAL     = 42;
-    public static TRAIT_SKILL_ADD      = 43;
-    public static TRAIT_SKILL_SEAL     = 44;
-    public static TRAIT_EQUIP_WTYPE    = 51;
-    public static TRAIT_EQUIP_ATYPE    = 52;
-    public static TRAIT_EQUIP_LOCK     = 53;
-    public static TRAIT_EQUIP_SEAL     = 54;
-    public static TRAIT_SLOT_TYPE      = 55;
-    public static TRAIT_ACTION_PLUS    = 61;
-    public static TRAIT_SPECIAL_FLAG   = 62;
-    public static TRAIT_COLLAPSE_TYPE  = 63;
-    public static TRAIT_PARTY_ABILITY  = 64;
-    public static FLAG_ID_AUTO_BATTLE  = 0;
-    public static FLAG_ID_GUARD        = 1;
-    public static FLAG_ID_SUBSTITUTE   = 2;
-    public static FLAG_ID_PRESERVE_TP  = 3;
-    public static ICON_BUFF_START      = 32;
-    public static ICON_DEBUFF_START    = 48;
+    public static TRAIT_ATTACK_STATE = 32;
+    public static TRAIT_ATTACK_SPEED = 33;
+    public static TRAIT_ATTACK_TIMES = 34;
+    public static TRAIT_STYPE_ADD = 41;
+    public static TRAIT_STYPE_SEAL = 42;
+    public static TRAIT_SKILL_ADD = 43;
+    public static TRAIT_SKILL_SEAL = 44;
+    public static TRAIT_EQUIP_WTYPE = 51;
+    public static TRAIT_EQUIP_ATYPE = 52;
+    public static TRAIT_EQUIP_LOCK = 53;
+    public static TRAIT_EQUIP_SEAL = 54;
+    public static TRAIT_SLOT_TYPE = 55;
+    public static TRAIT_ACTION_PLUS = 61;
+    public static TRAIT_SPECIAL_FLAG = 62;
+    public static TRAIT_COLLAPSE_TYPE = 63;
+    public static TRAIT_PARTY_ABILITY = 64;
+    public static FLAG_ID_AUTO_BATTLE = 0;
+    public static FLAG_ID_GUARD = 1;
+    public static FLAG_ID_SUBSTITUTE = 2;
+    public static FLAG_ID_PRESERVE_TP = 3;
+    public static ICON_BUFF_START = 32;
+    public static ICON_DEBUFF_START = 48;
 
     private _hp: any;
     private _mp: any;
@@ -207,7 +206,7 @@ export default class Game_BattlerBase {
     }
 
     public clearParamPlus() {
-        this._paramPlus = [0,0,0,0,0,0,0,0];
+        this._paramPlus = [0, 0, 0, 0, 0, 0, 0, 0];
     }
 
     public clearStates() {
@@ -246,7 +245,7 @@ export default class Game_BattlerBase {
     }
 
     public updateStateTurns() {
-        this._states.forEach(function (stateId) {
+        this._states.forEach(function(stateId) {
             if (this._stateTurns[stateId] > 0) {
                 this._stateTurns[stateId]--;
             }
@@ -254,8 +253,8 @@ export default class Game_BattlerBase {
     }
 
     public clearBuffs() {
-        this._buffs = [0,0,0,0,0,0,0,0];
-        this._buffTurns = [0,0,0,0,0,0,0,0];
+        this._buffs = [0, 0, 0, 0, 0, 0, 0, 0];
+        this._buffTurns = [0, 0, 0, 0, 0, 0, 0, 0];
     }
 
     public eraseBuff(paramId) {
@@ -334,17 +333,19 @@ export default class Game_BattlerBase {
     }
 
     public states() {
-        return this._states.map(function (id) {
+        return this._states.map(function(id) {
             return $dataStates[id];
         });
     }
 
     public stateIcons() {
-        return this.states().map(function (state) {
-            return state.iconIndex;
-        }).filter(function (iconIndex) {
-            return iconIndex > 0;
-        });
+        return this.states()
+            .map(function(state) {
+                return state.iconIndex;
+            })
+            .filter(function(iconIndex) {
+                return iconIndex > 0;
+            });
     }
 
     public buffIcons() {
@@ -359,9 +360,15 @@ export default class Game_BattlerBase {
 
     public buffIconIndex(buffLevel, paramId) {
         if (buffLevel > 0) {
-            return Game_BattlerBase.ICON_BUFF_START + (buffLevel - 1) * 8 + paramId;
+            return (
+                Game_BattlerBase.ICON_BUFF_START + (buffLevel - 1) * 8 + paramId
+            );
         } else if (buffLevel < 0) {
-            return Game_BattlerBase.ICON_DEBUFF_START + (-buffLevel - 1) * 8 + paramId;
+            return (
+                Game_BattlerBase.ICON_DEBUFF_START +
+                (-buffLevel - 1) * 8 +
+                paramId
+            );
         } else {
             return 0;
         }
@@ -377,43 +384,43 @@ export default class Game_BattlerBase {
     }
 
     public allTraits() {
-        return this.traitObjects().reduce(function (r, obj) {
+        return this.traitObjects().reduce(function(r, obj) {
             return r.concat(obj.traits);
         }, []);
     }
 
     public traits(code) {
-        return this.allTraits().filter(function (trait) {
+        return this.allTraits().filter(function(trait) {
             return trait.code === code;
         });
     }
 
     public traitsWithId(code, id) {
-        return this.allTraits().filter(function (trait) {
+        return this.allTraits().filter(function(trait) {
             return trait.code === code && trait.dataId === id;
         });
     }
 
     public traitsPi(code, id) {
-        return this.traitsWithId(code, id).reduce(function (r, trait) {
+        return this.traitsWithId(code, id).reduce(function(r, trait) {
             return r * trait.value;
         }, 1);
     }
 
     public traitsSum(code, id) {
-        return this.traitsWithId(code, id).reduce(function (r, trait) {
+        return this.traitsWithId(code, id).reduce(function(r, trait) {
             return r + trait.value;
         }, 0);
     }
 
     public traitsSumAll(code) {
-        return this.traits(code).reduce(function (r, trait) {
+        return this.traits(code).reduce(function(r, trait) {
             return r + trait.value;
         }, 0);
     }
 
     public traitsSet(code) {
-        return this.traits(code).reduce(function (r, trait) {
+        return this.traits(code).reduce(function(r, trait) {
             return r.concat(trait.dataId);
         }, []);
     }
@@ -428,7 +435,7 @@ export default class Game_BattlerBase {
 
     public paramMin(paramId) {
         if (paramId === 1) {
-            return 0;   // MMP
+            return 0; // MMP
         } else {
             return 1;
         }
@@ -436,9 +443,9 @@ export default class Game_BattlerBase {
 
     public paramMax(paramId) {
         if (paramId === 0) {
-            return 999999;  // MHP
+            return 999999; // MHP
         } else if (paramId === 1) {
-            return 9999;    // MMP
+            return 9999; // MMP
         } else {
             return 999;
         }
@@ -505,7 +512,10 @@ export default class Game_BattlerBase {
     }
 
     public attackTimesAdd() {
-        return Math.max(this.traitsSumAll(Game_BattlerBase.TRAIT_ATTACK_TIMES), 0);
+        return Math.max(
+            this.traitsSumAll(Game_BattlerBase.TRAIT_ATTACK_TIMES),
+            0
+        );
     }
 
     public addedSkillTypes() {
@@ -513,7 +523,10 @@ export default class Game_BattlerBase {
     }
 
     public isSkillTypeSealed(stypeId) {
-        return this.traitsSet(Game_BattlerBase.TRAIT_STYPE_SEAL).indexOf(stypeId) > -1;
+        return (
+            this.traitsSet(Game_BattlerBase.TRAIT_STYPE_SEAL).indexOf(stypeId) >
+            -1
+        );
     }
 
     public addedSkills() {
@@ -521,23 +534,40 @@ export default class Game_BattlerBase {
     }
 
     public isSkillSealed(skillId) {
-        return this.traitsSet(Game_BattlerBase.TRAIT_SKILL_SEAL).indexOf(skillId) > -1;
+        return (
+            this.traitsSet(Game_BattlerBase.TRAIT_SKILL_SEAL).indexOf(skillId) >
+            -1
+        );
     }
 
     public isEquipWtypeOk(wtypeId) {
-        return this.traitsSet(Game_BattlerBase.TRAIT_EQUIP_WTYPE).indexOf(wtypeId) > -1;
+        return (
+            this.traitsSet(Game_BattlerBase.TRAIT_EQUIP_WTYPE).indexOf(
+                wtypeId
+            ) > -1
+        );
     }
 
     public isEquipAtypeOk(atypeId) {
-        return this.traitsSet(Game_BattlerBase.TRAIT_EQUIP_ATYPE).indexOf(atypeId) > -1;
+        return (
+            this.traitsSet(Game_BattlerBase.TRAIT_EQUIP_ATYPE).indexOf(
+                atypeId
+            ) > -1
+        );
     }
 
     public isEquipTypeLocked(etypeId) {
-        return this.traitsSet(Game_BattlerBase.TRAIT_EQUIP_LOCK).indexOf(etypeId) > -1;
+        return (
+            this.traitsSet(Game_BattlerBase.TRAIT_EQUIP_LOCK).indexOf(etypeId) >
+            -1
+        );
     }
 
     public isEquipTypeSealed(etypeId) {
-        return this.traitsSet(Game_BattlerBase.TRAIT_EQUIP_SEAL).indexOf(etypeId) > -1;
+        return (
+            this.traitsSet(Game_BattlerBase.TRAIT_EQUIP_SEAL).indexOf(etypeId) >
+            -1
+        );
     }
 
     public slotType() {
@@ -550,13 +580,17 @@ export default class Game_BattlerBase {
     }
 
     public actionPlusSet() {
-        return this.traits(Game_BattlerBase.TRAIT_ACTION_PLUS).map(function (trait) {
+        return this.traits(Game_BattlerBase.TRAIT_ACTION_PLUS).map(function(
+            trait
+        ) {
             return trait.value;
         });
     }
 
     public specialFlag(flagId) {
-        return this.traits(Game_BattlerBase.TRAIT_SPECIAL_FLAG).some(function (trait) {
+        return this.traits(Game_BattlerBase.TRAIT_SPECIAL_FLAG).some(function(
+            trait
+        ) {
             return trait.dataId === flagId;
         });
     }
@@ -567,7 +601,9 @@ export default class Game_BattlerBase {
     }
 
     public partyAbility(abilityId) {
-        return this.traits(Game_BattlerBase.TRAIT_PARTY_ABILITY).some(function (trait) {
+        return this.traits(Game_BattlerBase.TRAIT_PARTY_ABILITY).some(function(
+            trait
+        ) {
             return trait.dataId === abilityId;
         });
     }
@@ -577,11 +613,16 @@ export default class Game_BattlerBase {
     }
 
     public isGuard() {
-        return this.specialFlag(Game_BattlerBase.FLAG_ID_GUARD) && this.canMove();
+        return (
+            this.specialFlag(Game_BattlerBase.FLAG_ID_GUARD) && this.canMove()
+        );
     }
 
     public isSubstitute() {
-        return this.specialFlag(Game_BattlerBase.FLAG_ID_SUBSTITUTE) && this.canMove();
+        return (
+            this.specialFlag(Game_BattlerBase.FLAG_ID_SUBSTITUTE) &&
+            this.canMove()
+        );
     }
 
     public isPreserveTp() {
@@ -613,7 +654,7 @@ export default class Game_BattlerBase {
     }
 
     public refresh() {
-        this.stateResistSet().forEach(function (stateId) {
+        this.stateResistSet().forEach(function(stateId) {
             this.eraseState(stateId);
         }, this);
         this._hp = Utils.clamp(this._hp, 0, this.mhp);
@@ -672,7 +713,9 @@ export default class Game_BattlerBase {
     }
 
     public canInput() {
-        return this.isAppeared() && !this.isRestricted() && !this.isAutoBattle();
+        return (
+            this.isAppeared() && !this.isRestricted() && !this.isAutoBattle()
+        );
     }
 
     public canMove() {
@@ -680,7 +723,11 @@ export default class Game_BattlerBase {
     }
 
     public isConfused() {
-        return this.isAppeared() && this.restriction() >= 1 && this.restriction() <= 3;
+        return (
+            this.isAppeared() &&
+            this.restriction() >= 1 &&
+            this.restriction() <= 3
+        );
     }
 
     public confusionLevel() {
@@ -696,7 +743,7 @@ export default class Game_BattlerBase {
     }
 
     public sortStates() {
-        this._states.sort(function (a, b) {
+        this._states.sort(function(a, b) {
             const p1 = $dataStates[a].priority;
             const p2 = $dataStates[b].priority;
             if (p1 !== p2) {
@@ -707,9 +754,14 @@ export default class Game_BattlerBase {
     }
 
     public restriction() {
-        return Math.max.apply(null, this.states().map(function (state) {
-            return state.restriction;
-        }).concat(0));
+        return Math.max.apply(
+            null,
+            this.states()
+                .map(function(state) {
+                    return state.restriction;
+                })
+                .concat(0)
+        );
     }
 
     public addNewState(stateId) {
@@ -724,8 +776,7 @@ export default class Game_BattlerBase {
         }
     }
 
-    public onRestrict() {
-    }
+    public onRestrict() {}
 
     public mostImportantStateText() {
         const states = this.states();
@@ -768,7 +819,10 @@ export default class Game_BattlerBase {
     }
 
     public canPaySkillCost(skill) {
-        return this._tp >= this.skillTpCost(skill) && this._mp >= this.skillMpCost(skill);
+        return (
+            this._tp >= this.skillTpCost(skill) &&
+            this._mp >= this.skillMpCost(skill)
+        );
     }
 
     public paySkillCost(skill) {
@@ -789,9 +843,13 @@ export default class Game_BattlerBase {
     }
 
     public meetsSkillConditions(skill) {
-        return (this.meetsUsableItemConditions(skill) &&
-                this.isSkillWtypeOk(skill) && this.canPaySkillCost(skill) &&
-                !this.isSkillSealed(skill.id) && !this.isSkillTypeSealed(skill.stypeId));
+        return (
+            this.meetsUsableItemConditions(skill) &&
+            this.isSkillWtypeOk(skill) &&
+            this.canPaySkillCost(skill) &&
+            !this.isSkillSealed(skill.id) &&
+            !this.isSkillTypeSealed(skill.stypeId)
+        );
     }
 
     public meetsItemConditions(item) {
@@ -823,11 +881,17 @@ export default class Game_BattlerBase {
     }
 
     public canEquipWeapon(item) {
-        return this.isEquipWtypeOk(item.wtypeId) && !this.isEquipTypeSealed(item.etypeId);
+        return (
+            this.isEquipWtypeOk(item.wtypeId) &&
+            !this.isEquipTypeSealed(item.etypeId)
+        );
     }
 
     public canEquipArmor(item) {
-        return this.isEquipAtypeOk(item.atypeId) && !this.isEquipTypeSealed(item.etypeId);
+        return (
+            this.isEquipAtypeOk(item.atypeId) &&
+            !this.isEquipTypeSealed(item.etypeId)
+        );
     }
 
     public attackSkillId() {
@@ -845,5 +909,4 @@ export default class Game_BattlerBase {
     public canGuard() {
         return this.canUse($dataSkills[this.guardSkillId()]);
     }
-
 }

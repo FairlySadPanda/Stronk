@@ -1,4 +1,3 @@
-
 import Utils from "../core/Utils";
 import DataManager from "../managers/DataManager";
 import TextManager from "../managers/TextManager";
@@ -19,12 +18,12 @@ export interface Game_Party_Onload extends Game_Unit_OnLoad {
 }
 
 export default class Game_Party extends Game_Unit {
-    public static ABILITY_ENCOUNTER_HALF    = 0;
-    public static ABILITY_ENCOUNTER_NONE    = 1;
-    public static ABILITY_CANCEL_SURPRISE   = 2;
-    public static ABILITY_RAISE_PREEMPTIVE  = 3;
-    public static ABILITY_GOLD_DOUBLE       = 4;
-    public static ABILITY_DROP_ITEM_DOUBLE  = 5;
+    public static ABILITY_ENCOUNTER_HALF = 0;
+    public static ABILITY_ENCOUNTER_NONE = 1;
+    public static ABILITY_CANCEL_SURPRISE = 2;
+    public static ABILITY_RAISE_PREEMPTIVE = 3;
+    public static ABILITY_GOLD_DOUBLE = 4;
+    public static ABILITY_DROP_ITEM_DOUBLE = 5;
 
     private _gold: number;
     private _steps: number;
@@ -46,8 +45,8 @@ export default class Game_Party extends Game_Unit {
             this._targetActorId = gameLoadInput._targetActorId;
             this._actors = gameLoadInput._actors;
             this._items = gameLoadInput._items;
-            this._weapons  = gameLoadInput._weapons;
-            this._armors  = gameLoadInput._armors;
+            this._weapons = gameLoadInput._weapons;
+            this._armors = gameLoadInput._armors;
         } else {
             this._gold = 0;
             this._steps = 0;
@@ -82,15 +81,17 @@ export default class Game_Party extends Game_Unit {
     }
 
     public allMembers() {
-        return this._actors.map(function (id) {
+        return this._actors.map(function(id) {
             return $gameActors.actor(id);
         });
     }
 
     public battleMembers() {
-        return this.allMembers().slice(0, this.maxBattleMembers()).filter(function (actor) {
-            return actor.isAppeared();
-        });
+        return this.allMembers()
+            .slice(0, this.maxBattleMembers())
+            .filter(function(actor) {
+                return actor.isAppeared();
+            });
     }
 
     public maxBattleMembers() {
@@ -102,7 +103,7 @@ export default class Game_Party extends Game_Unit {
     }
 
     public reviveBattleMembers() {
-        this.battleMembers().forEach(function (actor) {
+        this.battleMembers().forEach(function(actor) {
             if (actor.isDead()) {
                 actor.setHp(1);
             }
@@ -157,7 +158,7 @@ export default class Game_Party extends Game_Unit {
 
     public setupStartingMembers() {
         this._actors = [];
-        $dataSystem.partyMembers.forEach(function (actorId) {
+        $dataSystem.partyMembers.forEach(function(actorId) {
             if ($gameActors.actor(actorId)) {
                 this._actors.push(actorId);
             }
@@ -181,7 +182,7 @@ export default class Game_Party extends Game_Unit {
     }
 
     public setupBattleTestMembers() {
-        $dataSystem.testBattlers.forEach(function (battler) {
+        $dataSystem.testBattlers.forEach(function(battler) {
             const actor = $gameActors.actor(battler.actorId);
             if (actor) {
                 actor.changeLevel(battler.level, false);
@@ -193,7 +194,7 @@ export default class Game_Party extends Game_Unit {
     }
 
     public setupBattleTestItems() {
-        $dataItems.forEach(function (item) {
+        $dataItems.forEach(function(item) {
             if (item && item.name.length > 0) {
                 this.gainItem(item, this.maxItems(item));
             }
@@ -201,9 +202,12 @@ export default class Game_Party extends Game_Unit {
     }
 
     public highestLevel() {
-        return Math.max.apply(null, this.members().map(function (actor) {
-            return actor.level;
-        }));
+        return Math.max.apply(
+            null,
+            this.members().map(function(actor) {
+                return actor.level;
+            })
+        );
     }
 
     public addActor(actorId) {
@@ -273,7 +277,7 @@ export default class Game_Party extends Game_Unit {
     }
 
     public isAnyMemberEquipped(item) {
-        return this.members().some(function (actor) {
+        return this.members().some(function(actor) {
             return actor.equips().indexOf(item) > -1;
         });
     }
@@ -296,7 +300,7 @@ export default class Game_Party extends Game_Unit {
 
     public discardMembersEquip(item, amount) {
         let n = amount;
-        this.members().forEach(function (actor) {
+        this.members().forEach(function(actor) {
             while (n > 0 && actor.isEquipped(item)) {
                 actor.discardEquip(item);
                 n--;
@@ -315,13 +319,13 @@ export default class Game_Party extends Game_Unit {
     }
 
     public canUse(item) {
-        return this.members().some(function (actor) {
+        return this.members().some(function(actor) {
             return actor.canUse(item);
         });
     }
 
     public canInput() {
-        return this.members().some(function (actor) {
+        return this.members().some(function(actor) {
             return actor.canInput();
         });
     }
@@ -335,7 +339,7 @@ export default class Game_Party extends Game_Unit {
     }
 
     public onPlayerWalk() {
-        this.members().forEach(function (actor) {
+        this.members().forEach(function(actor) {
             return actor.onPlayerWalk();
         });
     }
@@ -400,19 +404,19 @@ export default class Game_Party extends Game_Unit {
     }
 
     public charactersForSavefile() {
-        return this.battleMembers().map(function (actor) {
+        return this.battleMembers().map(function(actor) {
             return [actor.characterName(), actor.characterIndex()];
         });
     }
 
     public facesForSavefile() {
-        return this.battleMembers().map(function (actor) {
+        return this.battleMembers().map(function(actor) {
             return [actor.faceName(), actor.faceIndex()];
         });
     }
 
     public partyAbility(abilityId) {
-        return this.battleMembers().some(function (actor) {
+        return this.battleMembers().some(function(actor) {
             return actor.partyAbility(abilityId);
         });
     }
@@ -458,27 +462,26 @@ export default class Game_Party extends Game_Unit {
     }
 
     public performVictory() {
-        this.members().forEach(function (actor) {
+        this.members().forEach(function(actor) {
             actor.performVictory();
         });
     }
 
     public performEscape() {
-        this.members().forEach(function (actor) {
+        this.members().forEach(function(actor) {
             actor.performEscape();
         });
     }
 
     public removeBattleStates() {
-        this.members().forEach(function (actor) {
+        this.members().forEach(function(actor) {
             actor.removeBattleStates();
         });
     }
 
     public requestMotionRefresh() {
-        this.members().forEach(function (actor) {
+        this.members().forEach(function(actor) {
             actor.requestMotionRefresh();
         });
     }
-
 }

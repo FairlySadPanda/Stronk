@@ -5,12 +5,60 @@ import Game_Unit from "./Game_Unit";
 
 export default class Game_Troop extends Game_Unit {
     public static LETTER_TABLE_HALF: string[] = [
-        " A"," B"," C"," D"," E"," F"," G"," H"," I"," J"," K"," L"," M",
-        " N"," O"," P"," Q"," R"," S"," T"," U"," V"," W"," X"," Y"," Z"
+        " A",
+        " B",
+        " C",
+        " D",
+        " E",
+        " F",
+        " G",
+        " H",
+        " I",
+        " J",
+        " K",
+        " L",
+        " M",
+        " N",
+        " O",
+        " P",
+        " Q",
+        " R",
+        " S",
+        " T",
+        " U",
+        " V",
+        " W",
+        " X",
+        " Y",
+        " Z"
     ];
     public static LETTER_TABLE_FULL: string[] = [
-        "Ａ","Ｂ","Ｃ","Ｄ","Ｅ","Ｆ","Ｇ","Ｈ","Ｉ","Ｊ","Ｋ","Ｌ","Ｍ",
-        "Ｎ","Ｏ","Ｐ","Ｑ","Ｒ","Ｓ","Ｔ","Ｕ","Ｖ","Ｗ","Ｘ","Ｙ","Ｚ"
+        "Ａ",
+        "Ｂ",
+        "Ｃ",
+        "Ｄ",
+        "Ｅ",
+        "Ｆ",
+        "Ｇ",
+        "Ｈ",
+        "Ｉ",
+        "Ｊ",
+        "Ｋ",
+        "Ｌ",
+        "Ｍ",
+        "Ｎ",
+        "Ｏ",
+        "Ｐ",
+        "Ｑ",
+        "Ｒ",
+        "Ｓ",
+        "Ｔ",
+        "Ｕ",
+        "Ｖ",
+        "Ｗ",
+        "Ｘ",
+        "Ｙ",
+        "Ｚ"
     ];
 
     public _interpreter: Game_Interpreter;
@@ -59,7 +107,7 @@ export default class Game_Troop extends Game_Unit {
         this.clear();
         this._troopId = troopId;
         this._enemies = [];
-        this.troop().members.forEach(function (member) {
+        this.troop().members.forEach(function(member) {
             if ($dataEnemies[member.enemyId]) {
                 const enemyId = member.enemyId;
                 const x = member.x;
@@ -76,7 +124,7 @@ export default class Game_Troop extends Game_Unit {
 
     public makeUniqueNames() {
         const table = this.letterTable();
-        this.members().forEach(function (enemy) {
+        this.members().forEach(function(enemy) {
             if (enemy.isAlive() && enemy.isLetterEmpty()) {
                 const name = enemy.originalName();
                 const n = this._namesCount[name] || 0;
@@ -84,7 +132,7 @@ export default class Game_Troop extends Game_Unit {
                 this._namesCount[name] = n + 1;
             }
         }, this);
-        this.members().forEach(function (enemy) {
+        this.members().forEach(function(enemy) {
             const name = enemy.originalName();
             if (this._namesCount[name] >= 2) {
                 enemy.setPlural(true);
@@ -93,13 +141,14 @@ export default class Game_Troop extends Game_Unit {
     }
 
     public letterTable() {
-        return $gameSystem.isCJK() ? Game_Troop.LETTER_TABLE_FULL :
-                Game_Troop.LETTER_TABLE_HALF;
+        return $gameSystem.isCJK()
+            ? Game_Troop.LETTER_TABLE_FULL
+            : Game_Troop.LETTER_TABLE_HALF;
     }
 
     public enemyNames() {
         const names = [];
-        this.members().forEach(function (enemy) {
+        this.members().forEach(function(enemy) {
             const name = enemy.originalName();
             if (enemy.isAlive() && names.indexOf(name) === -1) {
                 names.push(name);
@@ -110,9 +159,14 @@ export default class Game_Troop extends Game_Unit {
 
     public meetsConditions(page) {
         const c = page.conditions;
-        if (!c.turnEnding && !c.turnValid && !c.enemyValid &&
-                !c.actorValid && !c.switchValid) {
-            return false;  // Conditions not set
+        if (
+            !c.turnEnding &&
+            !c.turnValid &&
+            !c.enemyValid &&
+            !c.actorValid &&
+            !c.switchValid
+        ) {
+            return false; // Conditions not set
         }
         if (c.turnEnding) {
             if (!BattleManager.isTurnEnd()) {
@@ -123,10 +177,10 @@ export default class Game_Troop extends Game_Unit {
             const n = this._turnCount;
             const a = c.turnA;
             const b = c.turnB;
-            if ((b === 0 && n !== a)) {
+            if (b === 0 && n !== a) {
                 return false;
             }
-            if ((b > 0 && (n < 1 || n < a || n % b !== a % b))) {
+            if (b > 0 && (n < 1 || n < a || n % b !== a % b)) {
                 return false;
             }
         }
@@ -181,15 +235,17 @@ export default class Game_Troop extends Game_Unit {
     }
 
     public expTotal() {
-        return this.deadMembers().reduce(function (r, enemy) {
+        return this.deadMembers().reduce(function(r, enemy) {
             return r + enemy.exp();
         }, 0);
     }
 
     public goldTotal() {
-        return this.deadMembers().reduce(function (r, enemy) {
-            return r + enemy.gold();
-        }, 0) * this.goldRate();
+        return (
+            this.deadMembers().reduce(function(r, enemy) {
+                return r + enemy.gold();
+            }, 0) * this.goldRate()
+        );
     }
 
     public goldRate() {
@@ -197,9 +253,8 @@ export default class Game_Troop extends Game_Unit {
     }
 
     public makeDropItems() {
-        return this.deadMembers().reduce(function (r, enemy) {
+        return this.deadMembers().reduce(function(r, enemy) {
             return r.concat(enemy.makeDropItems());
         }, []);
     }
-
 }

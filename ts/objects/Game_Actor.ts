@@ -66,12 +66,18 @@ export default class Game_Actor extends Game_Battler {
             this._exp = gameLoadInput._exp;
             this._skills = gameLoadInput._skills;
             this._equips = [];
-            for(const equip of gameLoadInput._equips) {
+            for (const equip of gameLoadInput._equips) {
                 this._equips.push(new Game_Item(undefined, equip));
             }
             this._actionInputIndex = gameLoadInput._actionInputIndex;
-            this._lastMenuSkill = new Game_Item(undefined, gameLoadInput._lastMenuSkill);
-            this._lastBattleSkill = new Game_Item(undefined, gameLoadInput._lastBattleSkill);
+            this._lastMenuSkill = new Game_Item(
+                undefined,
+                gameLoadInput._lastMenuSkill
+            );
+            this._lastBattleSkill = new Game_Item(
+                undefined,
+                gameLoadInput._lastBattleSkill
+            );
             this._lastCommandSymbol = gameLoadInput._lastCommandSymbol;
             this._profile = gameLoadInput._profile;
             this._stateSteps = gameLoadInput._stateSteps;
@@ -101,7 +107,7 @@ export default class Game_Actor extends Game_Battler {
         this._equips = [];
         this._actionInputIndex = 0;
         this._lastMenuSkill = new Game_Item();
-        this._lastBattleSkill  = new Game_Item();
+        this._lastBattleSkill = new Game_Item();
         this._lastCommandSymbol = "";
     }
 
@@ -203,8 +209,14 @@ export default class Game_Actor extends Game_Battler {
         const extra = c.expParams[1];
         const acc_a = c.expParams[2];
         const acc_b = c.expParams[3];
-        return Math.round(basis*(Math.pow(level-1, 0.9+acc_a/250))*level*
-                (level+1)/(6+Math.pow(level,2)/50/acc_b)+(level-1)*extra);
+        return Math.round(
+            (basis *
+                Math.pow(level - 1, 0.9 + acc_a / 250) *
+                level *
+                (level + 1)) /
+                (6 + Math.pow(level, 2) / 50 / acc_b) +
+                (level - 1) * extra
+        );
     }
 
     public initExp() {
@@ -237,7 +249,7 @@ export default class Game_Actor extends Game_Battler {
 
     public initSkills() {
         this._skills = [];
-        this.currentClass().learnings.forEach(function (learning) {
+        this.currentClass().learnings.forEach(function(learning) {
             if (learning.level <= this._level) {
                 this.learnSkill(learning.skillId);
             }
@@ -272,19 +284,19 @@ export default class Game_Actor extends Game_Battler {
     }
 
     public equips() {
-        return this._equips.map(function (item) {
+        return this._equips.map(function(item) {
             return item.object();
         });
     }
 
     public weapons() {
-        return this.equips().filter(function (item) {
+        return this.equips().filter(function(item) {
             return item && DataManager.isWeapon(item);
         });
     }
 
     public armors() {
-        return this.equips().filter(function (item) {
+        return this.equips().filter(function(item) {
             return item && DataManager.isArmor(item);
         });
     }
@@ -298,13 +310,17 @@ export default class Game_Actor extends Game_Battler {
     }
 
     public isEquipChangeOk(slotId) {
-        return (!this.isEquipTypeLocked(this.equipSlots()[slotId]) &&
-                !this.isEquipTypeSealed(this.equipSlots()[slotId]));
+        return (
+            !this.isEquipTypeLocked(this.equipSlots()[slotId]) &&
+            !this.isEquipTypeSealed(this.equipSlots()[slotId])
+        );
     }
 
     public changeEquip(slotId, item) {
-        if (this.tradeItemWithParty(item, this.equips()[slotId]) &&
-                (!item || this.equipSlots()[slotId] === item.etypeId)) {
+        if (
+            this.tradeItemWithParty(item, this.equips()[slotId]) &&
+            (!item || this.equipSlots()[slotId] === item.etypeId)
+        ) {
             this._equips[slotId].setObject(item);
             this.refresh();
         }
@@ -353,7 +369,10 @@ export default class Game_Actor extends Game_Battler {
             let changed = false;
             for (let i = 0; i < equips.length; i++) {
                 const item = equips[i];
-                if (item && (!this.canEquip(item) || item.etypeId !== slots[i])) {
+                if (
+                    item &&
+                    (!this.canEquip(item) || item.etypeId !== slots[i])
+                ) {
                     if (!forcing) {
                         this.tradeItemWithParty(null, item);
                     }
@@ -388,7 +407,7 @@ export default class Game_Actor extends Game_Battler {
 
     public bestEquipItem(slotId) {
         const etypeId = this.equipSlots()[slotId];
-        const items = $gameParty.equipItems().filter(function (item) {
+        const items = $gameParty.equipItems().filter(function(item) {
             return item.etypeId === etypeId && this.canEquip(item);
         }, this);
         let bestItem = null;
@@ -404,7 +423,7 @@ export default class Game_Actor extends Game_Battler {
     }
 
     public calcEquipItemPerformance(item) {
-        return item.params.reduce(function (a, b) {
+        return item.params.reduce(function(a, b) {
             return a + b;
         });
     }
@@ -412,9 +431,11 @@ export default class Game_Actor extends Game_Battler {
     public isSkillWtypeOk(skill) {
         const wtypeId1 = skill.requiredWtypeId1;
         const wtypeId2 = skill.requiredWtypeId2;
-        if ((wtypeId1 === 0 && wtypeId2 === 0) ||
-                (wtypeId1 > 0 && this.isWtypeEquipped(wtypeId1)) ||
-                (wtypeId2 > 0 && this.isWtypeEquipped(wtypeId2))) {
+        if (
+            (wtypeId1 === 0 && wtypeId2 === 0) ||
+            (wtypeId1 > 0 && this.isWtypeEquipped(wtypeId1)) ||
+            (wtypeId2 > 0 && this.isWtypeEquipped(wtypeId2))
+        ) {
             return true;
         } else {
             return false;
@@ -422,7 +443,7 @@ export default class Game_Actor extends Game_Battler {
     }
 
     public isWtypeEquipped(wtypeId) {
-        return this.weapons().some(function (weapon) {
+        return this.weapons().some(function(weapon) {
             return weapon.wtypeId === wtypeId;
         });
     }
@@ -466,7 +487,7 @@ export default class Game_Actor extends Game_Battler {
 
     public skills() {
         const list = [];
-        this._skills.concat(this.addedSkills()).forEach(function (id) {
+        this._skills.concat(this.addedSkills()).forEach(function(id) {
             if (list.indexOf($dataSkills[id]) === -1) {
                 list.push($dataSkills[id]);
             }
@@ -475,7 +496,7 @@ export default class Game_Actor extends Game_Battler {
     }
 
     public usableSkills() {
-        return this.skills().filter(function (skill) {
+        return this.skills().filter(function(skill) {
             return this.canUse(skill);
         }, this);
     }
@@ -495,7 +516,10 @@ export default class Game_Actor extends Game_Battler {
 
     public attackElements() {
         const set = super.attackElements();
-        if (this.hasNoWeapons() && !(set.indexOf(this.bareHandsElementId()) > -1)) {
+        if (
+            this.hasNoWeapons() &&
+            !(set.indexOf(this.bareHandsElementId()) > -1)
+        ) {
             set.push(this.bareHandsElementId());
         }
         return set;
@@ -511,7 +535,7 @@ export default class Game_Actor extends Game_Battler {
 
     public paramMax(paramId) {
         if (paramId === 0) {
-            return 9999;    // MHP
+            return 9999; // MHP
         }
         return super.paramMax(paramId);
     }
@@ -568,7 +592,7 @@ export default class Game_Actor extends Game_Battler {
 
     public levelUp() {
         this._level++;
-        this.currentClass().learnings.forEach(function (learning) {
+        this.currentClass().learnings.forEach(function(learning) {
             if (learning.level === this._level) {
                 this.learnSkill(learning.skillId);
             }
@@ -591,21 +615,29 @@ export default class Game_Actor extends Game_Battler {
     }
 
     public displayLevelUp(newSkills) {
-        const text = Utils.format(TextManager.levelUp, this._name, TextManager.level, this._level);
+        const text = Utils.format(
+            TextManager.levelUp,
+            this._name,
+            TextManager.level,
+            this._level
+        );
         $gameMessage.newPage();
         $gameMessage.add(text);
-        newSkills.forEach(function (skill) {
+        newSkills.forEach(function(skill) {
             $gameMessage.add(Utils.format(TextManager.obtainSkill, skill.name));
         });
     }
 
     public gainExp(exp) {
-        const newExp = this.currentExp() + Math.round(exp * this.finalExpRate());
+        const newExp =
+            this.currentExp() + Math.round(exp * this.finalExpRate());
         this.changeExp(newExp, this.shouldDisplayLevelUp());
     }
 
     public finalExpRate() {
-        return this.exr * (this.isBattleMember() ? 1 : this.benchMembersExpRate());
+        return (
+            this.exr * (this.isBattleMember() ? 1 : this.benchMembersExpRate())
+        );
     }
 
     public benchMembersExpRate() {
@@ -624,7 +656,7 @@ export default class Game_Actor extends Game_Battler {
     public learnSkill(skillId) {
         if (!this.isLearnedSkill(skillId)) {
             this._skills.push(skillId);
-            this._skills.sort(function (a, b) {
+            this._skills.sort(function(a, b) {
                 return a - b;
             });
         }
@@ -765,7 +797,7 @@ export default class Game_Actor extends Game_Battler {
         let action = new Game_Action(this);
         action.setAttack();
         list.push(action);
-        this.usableSkills().forEach(function (skill) {
+        this.usableSkills().forEach(function(skill) {
             action = new Game_Action(this);
             action.setSkill(skill.id);
             list.push(action);
@@ -814,7 +846,7 @@ export default class Game_Actor extends Game_Battler {
         this.checkFloorEffect();
         if ($gamePlayer.isNormal()) {
             this.turnEndOnMap();
-            this.states().forEach(function (state) {
+            this.states().forEach(function(state) {
                 this.updateStateSteps(state);
             }, this);
             this.showAddedStates();
@@ -833,19 +865,23 @@ export default class Game_Actor extends Game_Battler {
     }
 
     public showAddedStates() {
-        this.result().addedStateObjects().forEach(function (state) {
-            if (state.message1) {
-                $gameMessage.add(this._name + state.message1);
-            }
-        }, this);
+        this.result()
+            .addedStateObjects()
+            .forEach(function(state) {
+                if (state.message1) {
+                    $gameMessage.add(this._name + state.message1);
+                }
+            }, this);
     }
 
     public showRemovedStates() {
-        this.result().removedStateObjects().forEach(function (state) {
-            if (state.message4) {
-                $gameMessage.add(this._name + state.message4);
-            }
-        }, this);
+        this.result()
+            .removedStateObjects()
+            .forEach(function(state) {
+                if (state.message4) {
+                    $gameMessage.add(this._name + state.message4);
+                }
+            }, this);
     }
 
     public stepsForTurn() {
@@ -942,16 +978,19 @@ export default class Game_Actor extends Game_Battler {
     }
 
     public testEscape(item) {
-        return item.effects.some(function (effect, index, ar) {
+        return item.effects.some(function(effect, index, ar) {
             return effect && effect.code === Game_Action.EFFECT_SPECIAL;
         });
     }
 
     public meetsUsableItemConditions(item) {
-        if ($gameParty.inBattle() && !BattleManager.canEscape() && this.testEscape(item)) {
+        if (
+            $gameParty.inBattle() &&
+            !BattleManager.canEscape() &&
+            this.testEscape(item)
+        ) {
             return false;
         }
         return super.meetsUsableItemConditions(item);
     }
-
 }

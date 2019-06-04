@@ -2,7 +2,7 @@ import Graphics from "../core/Graphics";
 import ImageManager from "../managers/ImageManager";
 import Window_Base from "./Window_Base";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_NameEdit
 //
 // The window for editing an actor's name on the name input screen.
@@ -18,7 +18,9 @@ export default class Window_NameEdit extends Window_Base {
     public faceWidth: () => number;
     public charWidth: () => any;
     public left: () => number;
-    public itemRect: (index: any) => { "x": any; "y": number; "width": any; "height": any; };
+    public itemRect: (
+        index: any
+    ) => { x: any; y: number; width: any; height: any };
     public underlineRect: (index: any) => any;
     public underlineColor: () => any;
     public drawUnderline: (index: any) => void;
@@ -27,7 +29,10 @@ export default class Window_NameEdit extends Window_Base {
         const width = Window_NameEdit.prototype.windowWidth();
         const height = Window_NameEdit.prototype.windowHeight();
         const x = (Graphics.boxWidth - width) / 2;
-        const y = (Graphics.boxHeight - (height + Window_NameEdit.prototype.fittingHeight(9) + 8)) / 2;
+        const y =
+            (Graphics.boxHeight -
+                (height + Window_NameEdit.prototype.fittingHeight(9) + 8)) /
+            2;
         super(x, y, width, height);
         this._actor = actor;
         this._name = actor.name().slice(0, this._maxLength);
@@ -52,27 +57,27 @@ export default class Window_NameEdit extends Window_Base {
     }
 }
 
-Window_NameEdit.prototype.windowWidth = function () {
+Window_NameEdit.prototype.windowWidth = function() {
     return 480;
 };
 
-Window_NameEdit.prototype.windowHeight = function () {
+Window_NameEdit.prototype.windowHeight = function() {
     return this.fittingHeight(4);
 };
 
-//@ts-ignore
-Window_NameEdit.prototype.name = function () {
+// @ts-ignore
+Window_NameEdit.prototype.name = function() {
     return this._name;
 };
 
-Window_NameEdit.prototype.restoreDefault = function () {
+Window_NameEdit.prototype.restoreDefault = function() {
     this._name = this._defaultName;
     this._index = this._name.length;
     this.refresh();
     return this._name.length > 0;
 };
 
-Window_NameEdit.prototype.add = function (ch) {
+Window_NameEdit.prototype.add = function(ch) {
     if (this._index < this._maxLength) {
         this._name += ch;
         this._index++;
@@ -83,7 +88,7 @@ Window_NameEdit.prototype.add = function (ch) {
     }
 };
 
-Window_NameEdit.prototype.back = function () {
+Window_NameEdit.prototype.back = function() {
     if (this._index > 0) {
         this._index--;
         this._name = this._name.slice(0, this._index);
@@ -94,31 +99,34 @@ Window_NameEdit.prototype.back = function () {
     }
 };
 
-Window_NameEdit.prototype.faceWidth = function () {
+Window_NameEdit.prototype.faceWidth = function() {
     return 144;
 };
 
-Window_NameEdit.prototype.charWidth = function () {
+Window_NameEdit.prototype.charWidth = function() {
     const text = $gameSystem.isJapanese() ? "\uff21" : "A";
     return this.textWidth(text);
 };
 
-Window_NameEdit.prototype.left = function () {
+Window_NameEdit.prototype.left = function() {
     const nameCenter = (this.contentsWidth() + this.faceWidth()) / 2;
     const nameWidth = (this._maxLength + 1) * this.charWidth();
-    return Math.min(nameCenter - nameWidth / 2, this.contentsWidth() - nameWidth);
+    return Math.min(
+        nameCenter - nameWidth / 2,
+        this.contentsWidth() - nameWidth
+    );
 };
 
-Window_NameEdit.prototype.itemRect = function (index) {
+Window_NameEdit.prototype.itemRect = function(index) {
     return {
-        "x": this.left() + index * this.charWidth(),
-        "y": 54,
-        "width": this.charWidth(),
-        "height": this.lineHeight()
+        x: this.left() + index * this.charWidth(),
+        y: 54,
+        width: this.charWidth(),
+        height: this.lineHeight()
     };
 };
 
-Window_NameEdit.prototype.underlineRect = function (index) {
+Window_NameEdit.prototype.underlineRect = function(index) {
     const rect = this.itemRect(index);
     rect.x++;
     rect.y += rect.height - 4;
@@ -127,11 +135,11 @@ Window_NameEdit.prototype.underlineRect = function (index) {
     return rect;
 };
 
-Window_NameEdit.prototype.underlineColor = function () {
+Window_NameEdit.prototype.underlineColor = function() {
     return this.normalColor();
 };
 
-Window_NameEdit.prototype.drawUnderline = function (index) {
+Window_NameEdit.prototype.drawUnderline = function(index) {
     const rect = this.underlineRect(index);
     const color = this.underlineColor();
     this.contents.paintOpacity = 48;
@@ -139,13 +147,13 @@ Window_NameEdit.prototype.drawUnderline = function (index) {
     this.contents.paintOpacity = 255;
 };
 
-Window_NameEdit.prototype.drawChar = function (index) {
+Window_NameEdit.prototype.drawChar = function(index) {
     const rect = this.itemRect(index);
     this.resetTextColor();
     this.drawText(this._name[index] || "", rect.x, rect.y);
 };
 
-Window_NameEdit.prototype.refresh = function () {
+Window_NameEdit.prototype.refresh = function() {
     this.contents.clear();
     this.drawActorFace(this._actor, 0, 0);
     for (let i = 0; i < this._maxLength; i++) {

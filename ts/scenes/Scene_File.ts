@@ -6,9 +6,6 @@ import Scene_MenuBase from "./Scene_MenuBase";
 
 export default class Scene_File extends Scene_MenuBase {
     private _listWindow: any;
-    public constructor() {
-        super();
-    }
 
     public create() {
         super.create();
@@ -38,7 +35,7 @@ export default class Scene_File extends Scene_MenuBase {
         const width = Graphics.boxWidth;
         const height = Graphics.boxHeight - y;
         this._listWindow = new Window_SavefileList(x, y, width, height);
-        this._listWindow.setHandler("ok",     this.onSavefileOk.bind(this));
+        this._listWindow.setHandler("ok", this.onSavefileOk.bind(this));
         this._listWindow.setHandler("cancel", this.popScene.bind(this));
         this._listWindow.select(this.firstSavefileIndex());
         this._listWindow.setTopRow(this.firstSavefileIndex() - 2);
@@ -63,7 +60,5 @@ export default class Scene_File extends Scene_MenuBase {
         return 0;
     }
 
-    public onSavefileOk() {
-    }
-
+    public onSavefileOk() {}
 }

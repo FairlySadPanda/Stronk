@@ -88,7 +88,9 @@ export default class Game_Map {
         if (gameLoadInput) {
             this.tileEvents = gameLoadInput.tileEvents;
             this._needsRefresh = gameLoadInput._needsRefresh;
-            this._interpreter = new Game_Interpreter(gameLoadInput._interpreter);
+            this._interpreter = new Game_Interpreter(
+                gameLoadInput._interpreter
+            );
             this._mapId = gameLoadInput._mapId;
             this._tilesetId = gameLoadInput._tilesetId;
 
@@ -96,7 +98,9 @@ export default class Game_Map {
 
             for (const event of gameLoadInput._events) {
                 if (event) {
-                    this._events.push(new Game_Event(event._mapId, event._eventId, event));
+                    this._events.push(
+                        new Game_Event(event._mapId, event._eventId, event)
+                    );
                 } else {
                     this._events.push(null);
                 }
@@ -104,7 +108,9 @@ export default class Game_Map {
 
             this._commonEvents = [];
             for (const event of gameLoadInput._commonEvents) {
-                this._commonEvents.push(new Game_CommonEvent(event._commonEventId, event));
+                this._commonEvents.push(
+                    new Game_CommonEvent(event._commonEventId, event)
+                );
             }
             this._vehicles = [];
             for (const vehicle of gameLoadInput._vehicles) {
@@ -209,7 +215,7 @@ export default class Game_Map {
     }
 
     public refereshVehicles() {
-        this._vehicles.forEach(function (vehicle) {
+        this._vehicles.forEach(function(vehicle) {
             vehicle.refresh();
         });
     }
@@ -219,11 +225,11 @@ export default class Game_Map {
     }
 
     public vehicle(type) {
-        if (type ===  0 || type === "boat") {
+        if (type === 0 || type === "boat") {
             return this.boat();
-        } else if (type ===  1 || type === "ship") {
+        } else if (type === 1 || type === "ship") {
             return this.ship();
-        } else if (type ===  2 || type === "airship") {
+        } else if (type === 2 || type === "airship") {
             return this.airship();
         } else {
             return null;
@@ -249,14 +255,16 @@ export default class Game_Map {
                 this._events[i] = new Game_Event(this._mapId, i);
             }
         }
-        this._commonEvents = this.parallelCommonEvents().map(function (commonEvent) {
+        this._commonEvents = this.parallelCommonEvents().map(function(
+            commonEvent
+        ) {
             return new Game_CommonEvent(commonEvent.id);
         });
         this.refreshTileEvents();
     }
 
     public events() {
-        return this._events.filter(function (event) {
+        return this._events.filter(function(event) {
             return !!event;
         });
     }
@@ -270,7 +278,7 @@ export default class Game_Map {
     }
 
     public parallelCommonEvents() {
-        return $dataCommonEvents.filter(function (commonEvent) {
+        return $dataCommonEvents.filter(function(commonEvent) {
             return commonEvent && commonEvent.trigger === 2;
         });
     }
@@ -325,7 +333,7 @@ export default class Game_Map {
         if (this._parallaxZero) {
             return this._parallaxX * this.tileWidth();
         } else if (this._parallaxLoopX) {
-            return this._parallaxX * this.tileWidth() / 2;
+            return (this._parallaxX * this.tileWidth()) / 2;
         } else {
             return 0;
         }
@@ -335,7 +343,7 @@ export default class Game_Map {
         if (this._parallaxZero) {
             return this._parallaxY * this.tileHeight();
         } else if (this._parallaxLoopY) {
-            return this._parallaxY * this.tileHeight() / 2;
+            return (this._parallaxY * this.tileHeight()) / 2;
         } else {
             return 0;
         }
@@ -403,8 +411,10 @@ export default class Game_Map {
     }
 
     public adjustX(x) {
-        if (this.isLoopHorizontal() && x < this._displayX -
-                (this.width() - this.screenTileX()) / 2) {
+        if (
+            this.isLoopHorizontal() &&
+            x < this._displayX - (this.width() - this.screenTileX()) / 2
+        ) {
             return x - this._displayX + $dataMap.width;
         } else {
             return x - this._displayX;
@@ -412,8 +422,10 @@ export default class Game_Map {
     }
 
     public adjustY(y) {
-        if (this.isLoopVertical() && y < this._displayY -
-                (this.height() - this.screenTileY()) / 2) {
+        if (
+            this.isLoopVertical() &&
+            y < this._displayY - (this.height() - this.screenTileY()) / 2
+        ) {
             return y - this._displayY + $dataMap.height;
         } else {
             return y - this._displayY;
@@ -506,10 +518,10 @@ export default class Game_Map {
     }
 
     public refresh() {
-        this.events().forEach(function (event) {
+        this.events().forEach(function(event) {
             event.refresh();
         });
-        this._commonEvents.forEach(function (event) {
+        this._commonEvents.forEach(function(event) {
             event.refresh();
         });
         this.refreshTileEvents();
@@ -517,25 +529,25 @@ export default class Game_Map {
     }
 
     public refreshTileEvents() {
-        this.tileEvents = this.events().filter(function (event) {
+        this.tileEvents = this.events().filter(function(event) {
             return event.isTile();
         });
     }
 
     public eventsXy(x, y) {
-        return this.events().filter(function (event) {
+        return this.events().filter(function(event) {
             return event.pos(x, y);
         });
     }
 
     public eventsXyNt(x, y) {
-        return this.events().filter(function (event) {
+        return this.events().filter(function(event) {
             return event.posNt(x, y);
         });
     }
 
     public tileEventsXy(x, y) {
-        return this.tileEvents.filter(function (event) {
+        return this.tileEvents.filter(function(event) {
             return event.posNt(x, y);
         });
     }
@@ -554,8 +566,10 @@ export default class Game_Map {
             }
         } else if (this.height() >= this.screenTileY()) {
             const lastY = this._displayY;
-            this._displayY = Math.min(this._displayY + distance,
-                this.height() - this.screenTileY());
+            this._displayY = Math.min(
+                this._displayY + distance,
+                this.height() - this.screenTileY()
+            );
             this._parallaxY += this._displayY - lastY;
         }
     }
@@ -583,8 +597,10 @@ export default class Game_Map {
             }
         } else if (this.width() >= this.screenTileX()) {
             const lastX = this._displayX;
-            this._displayX = Math.min(this._displayX + distance,
-                this.width() - this.screenTileX());
+            this._displayX = Math.min(
+                this._displayX + distance,
+                this.width() - this.screenTileX()
+            );
             this._parallaxX += this._displayX - lastX;
         }
     }
@@ -612,13 +628,16 @@ export default class Game_Map {
         const tiles = this.allTiles(x, y);
         for (let i = 0; i < tiles.length; i++) {
             const flag = flags[tiles[i]];
-            if ((flag & 0x10) !== 0) {  // [*] No effect on passage
+            if ((flag & 0x10) !== 0) {
+                // [*] No effect on passage
                 continue;
             }
-            if ((flag & bit) === 0) {   // [o] Passable
+            if ((flag & bit) === 0) {
+                // [o] Passable
                 return true;
             }
-            if ((flag & bit) === bit) { // [x] Impassable
+            if ((flag & bit) === bit) {
+                // [x] Impassable
                 return false;
             }
         }
@@ -640,7 +659,7 @@ export default class Game_Map {
     }
 
     public allTiles(x, y) {
-        const tiles = this.tileEventsXy(x, y).map(function (event) {
+        const tiles = this.tileEventsXy(x, y).map(function(event) {
             return event.tileId();
         });
         return tiles.concat(this.layeredTiles(x, y));
@@ -669,7 +688,7 @@ export default class Game_Map {
 
     public checkLayeredTilesFlags(x, y, bit) {
         const flags = this.tilesetFlags();
-        return this.layeredTiles(x, y).some(function (tileId) {
+        return this.layeredTiles(x, y).some(function(tileId) {
             return (flags[tileId] & bit) !== 0;
         });
     }
@@ -748,32 +767,32 @@ export default class Game_Map {
 
     public doScroll(direction, distance) {
         switch (direction) {
-        case 2:
-            this.scrollDown(distance);
-            break;
-        case 4:
-            this.scrollLeft(distance);
-            break;
-        case 6:
-            this.scrollRight(distance);
-            break;
-        case 8:
-            this.scrollUp(distance);
-            break;
+            case 2:
+                this.scrollDown(distance);
+                break;
+            case 4:
+                this.scrollLeft(distance);
+                break;
+            case 6:
+                this.scrollRight(distance);
+                break;
+            case 8:
+                this.scrollUp(distance);
+                break;
         }
     }
 
     public updateEvents() {
-        this.events().forEach(function (event) {
+        this.events().forEach(function(event) {
             event.update();
         });
-        this._commonEvents.forEach(function (event) {
+        this._commonEvents.forEach(function(event) {
             event.update();
         });
     }
 
     public updateVehicles() {
-        this._vehicles.forEach(function (vehicle) {
+        this._vehicles.forEach(function(vehicle) {
             vehicle.update();
         });
     }
@@ -876,7 +895,11 @@ export default class Game_Map {
     public setupAutorunCommonEvent() {
         for (let i = 0; i < $dataCommonEvents.length; i++) {
             const event = $dataCommonEvents[i];
-            if (event && event.trigger === 1 && $gameSwitches.value(event.switchId)) {
+            if (
+                event &&
+                event.trigger === 1 &&
+                $gameSwitches.value(event.switchId)
+            ) {
                 this._interpreter.setup(event.list);
                 return true;
             }
@@ -885,9 +908,8 @@ export default class Game_Map {
     }
 
     public isAnyEventStarting() {
-        return this.events().some(function (event) {
+        return this.events().some(function(event) {
             return event.isStarting();
         });
     }
-
 }

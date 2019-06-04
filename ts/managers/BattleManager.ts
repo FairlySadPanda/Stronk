@@ -38,7 +38,10 @@ export default abstract class BattleManager {
     public static isEscaped: () => any;
     public static actor: () => any;
     public static clearActor: () => void;
-    public static changeActor: (newActorIndex: any, lastActorActionState: any) => void;
+    public static changeActor: (
+        newActorIndex: any,
+        lastActorActionState: any
+    ) => void;
     public static startBattle: () => void;
     public static displayStartMessages: () => void;
     public static startInput: () => void;
@@ -89,10 +92,9 @@ export default abstract class BattleManager {
     public static gainExp: () => void;
     public static gainGold: () => void;
     public static gainDropItems: () => void;
-
 }
 
-BattleManager.setup = function (troopId, canEscape, canLose) {
+BattleManager.setup = function(troopId, canEscape, canLose) {
     this.initMembers();
     this._canEscape = canEscape;
     this._canLose = canLose;
@@ -101,7 +103,7 @@ BattleManager.setup = function (troopId, canEscape, canLose) {
     this.makeEscapeRatio();
 };
 
-BattleManager.initMembers = function () {
+BattleManager.initMembers = function() {
     this._phase = "init";
     this._canEscape = false;
     this._canLose = false;
@@ -126,62 +128,62 @@ BattleManager.initMembers = function () {
     this._turnForced = false;
 };
 
-BattleManager.isBattleTest = function () {
+BattleManager.isBattleTest = function() {
     return this._battleTest;
 };
 
-BattleManager.setBattleTest = function (battleTest) {
+BattleManager.setBattleTest = function(battleTest) {
     this._battleTest = battleTest;
 };
 
-BattleManager.setEventCallback = function (callback) {
+BattleManager.setEventCallback = function(callback) {
     this._eventCallback = callback;
 };
 
-BattleManager.setLogWindow = function (logWindow) {
+BattleManager.setLogWindow = function(logWindow) {
     this._logWindow = logWindow;
 };
 
-BattleManager.setStatusWindow = function (statusWindow) {
+BattleManager.setStatusWindow = function(statusWindow) {
     this._statusWindow = statusWindow;
 };
 
-BattleManager.setSpriteset = function (spriteset) {
+BattleManager.setSpriteset = function(spriteset) {
     this._spriteset = spriteset;
 };
 
-BattleManager.onEncounter = function () {
-    this._preemptive = (Math.random() < this.ratePreemptive());
-    this._surprise = (Math.random() < this.rateSurprise() && !this._preemptive);
+BattleManager.onEncounter = function() {
+    this._preemptive = Math.random() < this.ratePreemptive();
+    this._surprise = Math.random() < this.rateSurprise() && !this._preemptive;
 };
 
-BattleManager.ratePreemptive = function () {
+BattleManager.ratePreemptive = function() {
     return $gameParty.ratePreemptive($gameTroop.agility());
 };
 
-BattleManager.rateSurprise = function () {
+BattleManager.rateSurprise = function() {
     return $gameParty.rateSurprise($gameTroop.agility());
 };
 
-BattleManager.saveBgmAndBgs = function () {
+BattleManager.saveBgmAndBgs = function() {
     this._mapBgm = AudioManager.saveBgm();
     this._mapBgs = AudioManager.saveBgs();
 };
 
-BattleManager.playBattleBgm = function () {
+BattleManager.playBattleBgm = function() {
     AudioManager.playBgm($gameSystem.battleBgm());
     AudioManager.stopBgs();
 };
 
-BattleManager.playVictoryMe = function () {
+BattleManager.playVictoryMe = function() {
     AudioManager.playMe($gameSystem.victoryMe());
 };
 
-BattleManager.playDefeatMe = function () {
+BattleManager.playDefeatMe = function() {
     AudioManager.playMe($gameSystem.defeatMe());
 };
 
-BattleManager.replayBgmAndBgs = function () {
+BattleManager.replayBgmAndBgs = function() {
     if (this._mapBgm) {
         AudioManager.replayBgm(this._mapBgm);
     } else {
@@ -192,33 +194,33 @@ BattleManager.replayBgmAndBgs = function () {
     }
 };
 
-BattleManager.makeEscapeRatio = function () {
-    this._escapeRatio = 0.5 * $gameParty.agility() / $gameTroop.agility();
+BattleManager.makeEscapeRatio = function() {
+    this._escapeRatio = (0.5 * $gameParty.agility()) / $gameTroop.agility();
 };
 
-BattleManager.update = function () {
+BattleManager.update = function() {
     if (!this.isBusy() && !this.updateEvent()) {
         switch (this._phase) {
-        case "start":
-            this.startInput();
-            break;
-        case "turn":
-            this.updateTurn();
-            break;
-        case "action":
-            this.updateAction();
-            break;
-        case "turnEnd":
-            this.updateTurnEnd();
-            break;
-        case "battleEnd":
-            this.updateBattleEnd();
-            break;
+            case "start":
+                this.startInput();
+                break;
+            case "turn":
+                this.updateTurn();
+                break;
+            case "action":
+                this.updateAction();
+                break;
+            case "turnEnd":
+                this.updateTurnEnd();
+                break;
+            case "battleEnd":
+                this.updateBattleEnd();
+                break;
         }
     }
 };
 
-BattleManager.updateEvent = function () {
+BattleManager.updateEvent = function() {
     switch (this._phase) {
         case "start":
         case "turn":
@@ -233,7 +235,7 @@ BattleManager.updateEvent = function () {
     return this.checkAbort();
 };
 
-BattleManager.updateEventMain = function () {
+BattleManager.updateEventMain = function() {
     $gameTroop.updateInterpreter();
     $gameParty.requestMotionRefresh();
     if ($gameTroop.isEventRunning() || this.checkBattleEnd()) {
@@ -246,52 +248,57 @@ BattleManager.updateEventMain = function () {
     return false;
 };
 
-BattleManager.isBusy = function () {
-    return ($gameMessage.isBusy() || this._spriteset.isBusy() ||
-            this._logWindow.isBusy());
+BattleManager.isBusy = function() {
+    return (
+        $gameMessage.isBusy() ||
+        this._spriteset.isBusy() ||
+        this._logWindow.isBusy()
+    );
 };
 
-BattleManager.isInputting = function () {
+BattleManager.isInputting = function() {
     return this._phase === "input";
 };
 
-BattleManager.isInTurn = function () {
+BattleManager.isInTurn = function() {
     return this._phase === "turn";
 };
 
-BattleManager.isTurnEnd = function () {
+BattleManager.isTurnEnd = function() {
     return this._phase === "turnEnd";
 };
 
-BattleManager.isAborting = function () {
+BattleManager.isAborting = function() {
     return this._phase === "aborting";
 };
 
-BattleManager.isBattleEnd = function () {
+BattleManager.isBattleEnd = function() {
     return this._phase === "battleEnd";
 };
 
-BattleManager.canEscape = function () {
+BattleManager.canEscape = function() {
     return this._canEscape;
 };
 
-BattleManager.canLose = function () {
+BattleManager.canLose = function() {
     return this._canLose;
 };
 
-BattleManager.isEscaped = function () {
+BattleManager.isEscaped = function() {
     return this._escaped;
 };
 
-BattleManager.actor = function () {
-    return this._actorIndex >= 0 ? $gameParty.members()[this._actorIndex] : null;
+BattleManager.actor = function() {
+    return this._actorIndex >= 0
+        ? $gameParty.members()[this._actorIndex]
+        : null;
 };
 
-BattleManager.clearActor = function () {
+BattleManager.clearActor = function() {
     this.changeActor(-1, "");
 };
 
-BattleManager.changeActor = function (newActorIndex, lastActorActionState) {
+BattleManager.changeActor = function(newActorIndex, lastActorActionState) {
     const lastActor = this.actor();
     this._actorIndex = newActorIndex;
     const newActor = this.actor();
@@ -303,7 +310,7 @@ BattleManager.changeActor = function (newActorIndex, lastActorActionState) {
     }
 };
 
-BattleManager.startBattle = function () {
+BattleManager.startBattle = function() {
     this._phase = "start";
     $gameSystem.onBattleStart();
     $gameParty.onBattleStart();
@@ -311,18 +318,20 @@ BattleManager.startBattle = function () {
     this.displayStartMessages();
 };
 
-BattleManager.displayStartMessages = function () {
-    $gameTroop.enemyNames().forEach(function (name) {
+BattleManager.displayStartMessages = function() {
+    $gameTroop.enemyNames().forEach(function(name) {
         $gameMessage.add(Utils.format(TextManager.emerge, name));
     });
     if (this._preemptive) {
-        $gameMessage.add(Utils.format(TextManager.preemptive, $gameParty.name()));
+        $gameMessage.add(
+            Utils.format(TextManager.preemptive, $gameParty.name())
+        );
     } else if (this._surprise) {
         $gameMessage.add(Utils.format(TextManager.surprise, $gameParty.name()));
     }
 };
 
-BattleManager.startInput = function () {
+BattleManager.startInput = function() {
     this._phase = "input";
     $gameParty.makeActions();
     $gameTroop.makeActions();
@@ -332,11 +341,11 @@ BattleManager.startInput = function () {
     }
 };
 
-BattleManager.inputtingAction = function () {
+BattleManager.inputtingAction = function() {
     return this.actor() ? this.actor().inputtingAction() : null;
 };
 
-BattleManager.selectNextCommand = function () {
+BattleManager.selectNextCommand = function() {
     do {
         if (!this.actor() || !this.actor().selectNextCommand()) {
             this.changeActor(this._actorIndex + 1, "waiting");
@@ -348,7 +357,7 @@ BattleManager.selectNextCommand = function () {
     } while (!this.actor().canInput());
 };
 
-BattleManager.selectPreviousCommand = function () {
+BattleManager.selectPreviousCommand = function() {
     do {
         if (!this.actor() || !this.actor().selectPreviousCommand()) {
             this.changeActor(this._actorIndex - 1, "undecided");
@@ -359,11 +368,11 @@ BattleManager.selectPreviousCommand = function () {
     } while (!this.actor().canInput());
 };
 
-BattleManager.refreshStatus = function () {
+BattleManager.refreshStatus = function() {
     this._statusWindow.refresh();
 };
 
-BattleManager.startTurn = function () {
+BattleManager.startTurn = function() {
     this._phase = "turn";
     this.clearActor();
     $gameTroop.increaseTurn();
@@ -372,7 +381,7 @@ BattleManager.startTurn = function () {
     this._logWindow.startTurn();
 };
 
-BattleManager.updateTurn = function () {
+BattleManager.updateTurn = function() {
     $gameParty.requestMotionRefresh();
     if (!this._subject) {
         this._subject = this.getNextSubject();
@@ -384,7 +393,7 @@ BattleManager.updateTurn = function () {
     }
 };
 
-BattleManager.processTurn = function () {
+BattleManager.processTurn = function() {
     const subject = this._subject;
     const action = subject.currentAction();
     if (action) {
@@ -403,11 +412,11 @@ BattleManager.processTurn = function () {
     }
 };
 
-BattleManager.endTurn = function () {
+BattleManager.endTurn = function() {
     this._phase = "turnEnd";
     this._preemptive = false;
     this._surprise = false;
-    this.allBattleMembers().forEach(function (battler) {
+    this.allBattleMembers().forEach(function(battler) {
         battler.onTurnEnd();
         this.refreshStatus();
         this._logWindow.displayAutoAffectedStatus(battler);
@@ -418,15 +427,15 @@ BattleManager.endTurn = function () {
     }
 };
 
-BattleManager.isForcedTurn = function () {
+BattleManager.isForcedTurn = function() {
     return this._turnForced;
 };
 
-BattleManager.updateTurnEnd = function () {
+BattleManager.updateTurnEnd = function() {
     this.startInput();
 };
 
-BattleManager.getNextSubject = function () {
+BattleManager.getNextSubject = function() {
     while (true) {
         const battler = this._actionBattlers.shift();
         if (!battler) {
@@ -438,11 +447,11 @@ BattleManager.getNextSubject = function () {
     }
 };
 
-BattleManager.allBattleMembers = function () {
+BattleManager.allBattleMembers = function() {
     return $gameParty.members().concat($gameTroop.members());
 };
 
-BattleManager.makeActionOrders = function () {
+BattleManager.makeActionOrders = function() {
     let battlers = [];
     if (!this._surprise) {
         battlers = battlers.concat($gameParty.members());
@@ -450,16 +459,16 @@ BattleManager.makeActionOrders = function () {
     if (!this._preemptive) {
         battlers = battlers.concat($gameTroop.members());
     }
-    battlers.forEach(function (battler) {
+    battlers.forEach(function(battler) {
         battler.makeSpeed();
     });
-    battlers.sort(function (a, b) {
+    battlers.sort(function(a, b) {
         return b.speed() - a.speed();
     });
     this._actionBattlers = battlers;
 };
 
-BattleManager.startAction = function () {
+BattleManager.startAction = function() {
     const subject = this._subject;
     const action = subject.currentAction();
     const targets = action.makeTargets();
@@ -472,7 +481,7 @@ BattleManager.startAction = function () {
     this._logWindow.startAction(subject, action, targets);
 };
 
-BattleManager.updateAction = function () {
+BattleManager.updateAction = function() {
     const target = this._targets.shift();
     if (target) {
         this.invokeAction(this._subject, target);
@@ -481,12 +490,12 @@ BattleManager.updateAction = function () {
     }
 };
 
-BattleManager.endAction = function () {
+BattleManager.endAction = function() {
     this._logWindow.endAction(this._subject);
     this._phase = "turn";
 };
 
-BattleManager.invokeAction = function (subject, target) {
+BattleManager.invokeAction = function(subject, target) {
     this._logWindow.push("pushBaseLine");
     if (Math.random() < this._action.itemCnt(target)) {
         this.invokeCounterAttack(subject, target);
@@ -500,13 +509,13 @@ BattleManager.invokeAction = function (subject, target) {
     this.refreshStatus();
 };
 
-BattleManager.invokeNormalAction = function (subject, target) {
+BattleManager.invokeNormalAction = function(subject, target) {
     const realTarget = this.applySubstitute(target);
     this._action.apply(realTarget);
     this._logWindow.displayActionResults(subject, realTarget);
 };
 
-BattleManager.invokeCounterAttack = function (subject, target) {
+BattleManager.invokeCounterAttack = function(subject, target) {
     const action = new Game_Action(target);
     action.setAttack();
     action.apply(subject);
@@ -514,14 +523,14 @@ BattleManager.invokeCounterAttack = function (subject, target) {
     this._logWindow.displayActionResults(target, subject);
 };
 
-BattleManager.invokeMagicReflection = function (subject, target) {
-	this._action._reflectionTarget = target;
+BattleManager.invokeMagicReflection = function(subject, target) {
+    this._action._reflectionTarget = target;
     this._logWindow.displayReflection(target);
     this._action.apply(subject);
     this._logWindow.displayActionResults(target, subject);
 };
 
-BattleManager.applySubstitute = function (target) {
+BattleManager.applySubstitute = function(target) {
     if (this.checkSubstitute(target)) {
         const substitute = target.friendsUnit().substituteBattler();
         if (substitute && target !== substitute) {
@@ -532,15 +541,15 @@ BattleManager.applySubstitute = function (target) {
     return target;
 };
 
-BattleManager.checkSubstitute = function (target) {
+BattleManager.checkSubstitute = function(target) {
     return target.isDying() && !this._action.isCertainHit();
 };
 
-BattleManager.isActionForced = function () {
+BattleManager.isActionForced = function() {
     return !!this._actionForcedBattler;
 };
 
-BattleManager.forceAction = function (battler) {
+BattleManager.forceAction = function(battler) {
     this._actionForcedBattler = battler;
     const index = this._actionBattlers.indexOf(battler);
     if (index >= 0) {
@@ -548,7 +557,7 @@ BattleManager.forceAction = function (battler) {
     }
 };
 
-BattleManager.processForcedAction = function () {
+BattleManager.processForcedAction = function() {
     if (this._actionForcedBattler) {
         this._turnForced = true;
         this._subject = this._actionForcedBattler;
@@ -558,11 +567,11 @@ BattleManager.processForcedAction = function () {
     }
 };
 
-BattleManager.abort = function () {
+BattleManager.abort = function() {
     this._phase = "aborting";
 };
 
-BattleManager.checkBattleEnd = function () {
+BattleManager.checkBattleEnd = function() {
     if (this._phase) {
         if (this.checkAbort()) {
             return true;
@@ -577,7 +586,7 @@ BattleManager.checkBattleEnd = function () {
     return false;
 };
 
-BattleManager.checkAbort = function () {
+BattleManager.checkAbort = function() {
     if ($gameParty.isEmpty() || this.isAborting()) {
         SoundManager.playEscape();
         this._escaped = true;
@@ -586,7 +595,7 @@ BattleManager.checkAbort = function () {
     return false;
 };
 
-BattleManager.processVictory = function () {
+BattleManager.processVictory = function() {
     $gameParty.removeBattleStates();
     $gameParty.performVictory();
     this.playVictoryMe();
@@ -598,10 +607,10 @@ BattleManager.processVictory = function () {
     this.endBattle(0);
 };
 
-BattleManager.processEscape = function () {
+BattleManager.processEscape = function() {
     $gameParty.performEscape();
     SoundManager.playEscape();
-    const success = this._preemptive ? true : (Math.random() < this._escapeRatio);
+    const success = this._preemptive ? true : Math.random() < this._escapeRatio;
     if (success) {
         this.displayEscapeSuccessMessage();
         this._escaped = true;
@@ -615,13 +624,13 @@ BattleManager.processEscape = function () {
     return success;
 };
 
-BattleManager.processAbort = function () {
+BattleManager.processAbort = function() {
     $gameParty.removeBattleStates();
     this.replayBgmAndBgs();
     this.endBattle(1);
 };
 
-BattleManager.processDefeat = function () {
+BattleManager.processDefeat = function() {
     this.displayDefeatMessage();
     this.playDefeatMe();
     if (this._canLose) {
@@ -632,7 +641,7 @@ BattleManager.processDefeat = function () {
     this.endBattle(2);
 };
 
-BattleManager.endBattle = function (result) {
+BattleManager.endBattle = function(result) {
     this._phase = "battleEnd";
     if (this._eventCallback) {
         this._eventCallback(result);
@@ -644,7 +653,7 @@ BattleManager.endBattle = function (result) {
     }
 };
 
-BattleManager.updateBattleEnd = function () {
+BattleManager.updateBattleEnd = function() {
     if (this.isBattleTest()) {
         AudioManager.stopBgm();
         SceneManager.exit();
@@ -661,37 +670,37 @@ BattleManager.updateBattleEnd = function () {
     this._phase = null;
 };
 
-BattleManager.makeRewards = function () {
+BattleManager.makeRewards = function() {
     this._rewards = {};
     this._rewards.gold = $gameTroop.goldTotal();
     this._rewards.exp = $gameTroop.expTotal();
     this._rewards.items = $gameTroop.makeDropItems();
 };
 
-BattleManager.displayVictoryMessage = function () {
+BattleManager.displayVictoryMessage = function() {
     $gameMessage.add(Utils.format(TextManager.victory, $gameParty.name()));
 };
 
-BattleManager.displayDefeatMessage = function () {
+BattleManager.displayDefeatMessage = function() {
     $gameMessage.add(Utils.format(TextManager.defeat, $gameParty.name()));
 };
 
-BattleManager.displayEscapeSuccessMessage = function () {
+BattleManager.displayEscapeSuccessMessage = function() {
     $gameMessage.add(Utils.format(TextManager.escapeStart, $gameParty.name()));
 };
 
-BattleManager.displayEscapeFailureMessage = function () {
+BattleManager.displayEscapeFailureMessage = function() {
     $gameMessage.add(Utils.format(TextManager.escapeStart, $gameParty.name()));
     $gameMessage.add("\\." + TextManager.escapeFailure);
 };
 
-BattleManager.displayRewards = function () {
+BattleManager.displayRewards = function() {
     this.displayExp();
     this.displayGold();
     this.displayDropItems();
 };
 
-BattleManager.displayExp = function () {
+BattleManager.displayExp = function() {
     const exp = this._rewards.exp;
     if (exp > 0) {
         const text = TextManager.obtainExp.format(exp, TextManager.exp);
@@ -699,43 +708,43 @@ BattleManager.displayExp = function () {
     }
 };
 
-BattleManager.displayGold = function () {
+BattleManager.displayGold = function() {
     const gold = this._rewards.gold;
     if (gold > 0) {
         $gameMessage.add("\\." + Utils.format(TextManager.obtainGold, gold));
     }
 };
 
-BattleManager.displayDropItems = function () {
+BattleManager.displayDropItems = function() {
     const items = this._rewards.items;
     if (items.length > 0) {
         $gameMessage.newPage();
-        items.forEach(function (item) {
+        items.forEach(function(item) {
             $gameMessage.add(Utils.format(TextManager.obtainItem, item.name));
         });
     }
 };
 
-BattleManager.gainRewards = function () {
+BattleManager.gainRewards = function() {
     this.gainExp();
     this.gainGold();
     this.gainDropItems();
 };
 
-BattleManager.gainExp = function () {
+BattleManager.gainExp = function() {
     const exp = this._rewards.exp;
-    $gameParty.allMembers().forEach(function (actor) {
+    $gameParty.allMembers().forEach(function(actor) {
         actor.gainExp(exp);
     });
 };
 
-BattleManager.gainGold = function () {
+BattleManager.gainGold = function() {
     $gameParty.gainGold(this._rewards.gold);
 };
 
-BattleManager.gainDropItems = function () {
+BattleManager.gainDropItems = function() {
     const items = this._rewards.items;
-    items.forEach(function (item) {
+    items.forEach(function(item) {
         $gameParty.gainItem(item, 1);
     });
 };

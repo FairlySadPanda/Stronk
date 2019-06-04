@@ -5,7 +5,7 @@ import Utils from "../core/Utils";
 import SoundManager from "../managers/SoundManager";
 import Window_Base from "./Window_Base";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_Selectable
 //
 // The window class with cursor movement and scroll export default functions.
@@ -67,8 +67,10 @@ export default class Window_Selectable extends Window_Base {
     }
 
     public itemWidth() {
-        return Math.floor((this.width - this.padding * 2 +
-                        this.spacing()) / this.maxCols() - this.spacing());
+        return Math.floor(
+            (this.width - this.padding * 2 + this.spacing()) / this.maxCols() -
+                this.spacing()
+        );
     }
 
     public itemHeight() {
@@ -118,7 +120,8 @@ export default class Window_Selectable extends Window_Base {
     }
 
     public setTopRow(row) {
-        const scrollY = Utils.clamp(row, 0, this.maxTopRow()) * this.itemHeight();
+        const scrollY =
+            Utils.clamp(row, 0, this.maxTopRow()) * this.itemHeight();
         if (this._scrollY !== scrollY) {
             this._scrollY = scrollY;
             this.refresh();
@@ -160,7 +163,8 @@ export default class Window_Selectable extends Window_Base {
         const maxCols = this.maxCols();
         rect.width = this.itemWidth();
         rect.height = this.itemHeight();
-        rect.x = index % maxCols * (rect.width + this.spacing()) - this._scrollX;
+        rect.x =
+            (index % maxCols) * (rect.width + this.spacing()) - this._scrollX;
         rect.y = Math.floor(index / maxCols) * rect.height - this._scrollY;
         return rect;
     }
@@ -208,8 +212,12 @@ export default class Window_Selectable extends Window_Base {
     }
 
     public isCursorMovable() {
-        return (this.isOpenAndActive() && !this._cursorFixed &&
-                !this._cursorAll && this.maxItems() > 0);
+        return (
+            this.isOpenAndActive() &&
+            !this._cursorFixed &&
+            !this._cursorAll &&
+            this.maxItems() > 0
+        );
     }
 
     public cursorDown(wrap?) {
@@ -234,7 +242,10 @@ export default class Window_Selectable extends Window_Base {
         const index = this.index();
         const maxItems = this.maxItems();
         const maxCols = this.maxCols();
-        if (maxCols >= 2 && (index < maxItems - 1 || (wrap && this.isHorizontal()))) {
+        if (
+            maxCols >= 2 &&
+            (index < maxItems - 1 || (wrap && this.isHorizontal()))
+        ) {
             this.select((index + 1) % maxItems);
         }
     }
@@ -327,9 +338,15 @@ export default class Window_Selectable extends Window_Base {
                 this.processOk();
             } else if (this.isCancelEnabled() && this.isCancelTriggered()) {
                 this.processCancel();
-            } else if (this.isHandled("pagedown") && Input.isTriggered("pagedown")) {
+            } else if (
+                this.isHandled("pagedown") &&
+                Input.isTriggered("pagedown")
+            ) {
                 this.processPagedown();
-            } else if (this.isHandled("pageup") && Input.isTriggered("pageup")) {
+            } else if (
+                this.isHandled("pageup") &&
+                Input.isTriggered("pageup")
+            ) {
                 this.processPageup();
             }
         }
@@ -411,7 +428,12 @@ export default class Window_Selectable extends Window_Base {
                     const rect = this.itemRect(index);
                     const right = rect.x + rect.width;
                     const bottom = rect.y + rect.height;
-                    if (cx >= rect.x && cy >= rect.y && cx < right && cy < bottom) {
+                    if (
+                        cx >= rect.x &&
+                        cy >= rect.y &&
+                        cx < right &&
+                        cy < bottom
+                    ) {
                         return index;
                     }
                 }
@@ -425,7 +447,7 @@ export default class Window_Selectable extends Window_Base {
         const top = this.padding;
         const right = this.width - this.padding;
         const bottom = this.height - this.padding;
-        return (x >= left && y >= top && x < right && y < bottom);
+        return x >= left && y >= top && x < right && y < bottom;
     }
 
     public isTouchOkEnabled() {
@@ -558,8 +580,7 @@ export default class Window_Selectable extends Window_Base {
         }
     }
 
-    public drawItem(index) {
-    }
+    public drawItem(index) {}
 
     public clearItem(index) {
         const rect = this.itemRect(index);
@@ -582,6 +603,5 @@ export default class Window_Selectable extends Window_Base {
             this.contents.clear();
             this.drawAllItems();
         }
-}
-
+    }
 }

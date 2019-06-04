@@ -1,7 +1,6 @@
-import "pixi.js";
+import * as PIXI from "pixi.js";
 
 export default class WindowLayer extends PIXI.Container {
-
     /**
      * The width of the window layer in pixels.
      *
@@ -14,7 +13,7 @@ export default class WindowLayer extends PIXI.Container {
 
     public set width(value: number) {
         this._width = value;
-     }
+    }
 
     /**
      * The height of the window layer in pixels.
@@ -51,7 +50,7 @@ export default class WindowLayer extends PIXI.Container {
         this.filterArea = new PIXI.Rectangle();
         this.filters = [WindowLayer.voidFilter];
 
-        //temporary fix for memory leak bug
+        // temporary fix for memory leak bug
         this.on("removed", this.onRemoveAsAChild);
     }
 
@@ -81,7 +80,7 @@ export default class WindowLayer extends PIXI.Container {
      * @method update
      */
     public update() {
-        this.children.forEach(function (child) {
+        this.children.forEach(function(child) {
             if (child.update) {
                 child.update();
             }
@@ -98,7 +97,7 @@ export default class WindowLayer extends PIXI.Container {
             return;
         }
 
-        if (this.children.length===0) {
+        if (this.children.length === 0) {
             return;
         }
 
@@ -110,8 +109,12 @@ export default class WindowLayer extends PIXI.Container {
         const shift = new PIXI.Point();
         const rt = renderer._activeRenderTarget;
         const projectionMatrix = rt.projectionMatrix;
-        shift.x = Math.round((projectionMatrix.tx + 1) / 2 * rt.sourceFrame.width);
-        shift.y = Math.round((projectionMatrix.ty + 1) / 2 * rt.sourceFrame.height);
+        shift.x = Math.round(
+            ((projectionMatrix.tx + 1) / 2) * rt.sourceFrame.width
+        );
+        shift.y = Math.round(
+            ((projectionMatrix.ty + 1) / 2) * rt.sourceFrame.height
+        );
 
         for (let i = 0; i < this.children.length; i++) {
             const child = this.children[i];
@@ -147,9 +150,12 @@ export default class WindowLayer extends PIXI.Container {
         this._windowMask.boundsDirty = Number(true);
         const rect = this._windowRect;
         rect.x = this.x + shift.x + window.x;
-        rect.y = this.x + shift.y + window.y + window.height / 2 * (1 - window._openness / 255);
+        rect.y =
+            this.x +
+            shift.y +
+            window.y +
+            (window.height / 2) * (1 - window._openness / 255);
         rect.width = window.width;
-        rect.height = window.height * window._openness / 255;
+        rect.height = (window.height * window._openness) / 255;
     }
-
 }

@@ -1,6 +1,6 @@
 import Window_Base from "./Window_Base";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_SkillStatus
 //
 // The window for displaying the skill user's status on the skill screen.
@@ -15,14 +15,14 @@ export default class Window_SkillStatus extends Window_Base {
     }
 }
 
-Window_SkillStatus.prototype.setActor = function (actor) {
+Window_SkillStatus.prototype.setActor = function(actor) {
     if (this._actor !== actor) {
         this._actor = actor;
         this.refresh();
     }
 };
 
-Window_SkillStatus.prototype.refresh = function () {
+Window_SkillStatus.prototype.refresh = function() {
     this.contents.clear();
     if (this._actor) {
         const w = this.width - this.padding * 2;

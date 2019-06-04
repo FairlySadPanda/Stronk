@@ -2,7 +2,7 @@ import Sprite from "../core/Sprite";
 import Utils from "../core/Utils";
 import Sprite_Animation from "./Sprite_Animation";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Sprite_Base
 //
 // The sprite class with a feature which displays animations.
@@ -63,5 +63,4 @@ export default class Sprite_Base extends Sprite {
     public isAnimationPlaying() {
         return this._animationSprites.length > 0;
     }
-
 }

@@ -1,7 +1,6 @@
 import CacheMap from "./CacheMap";
 
 export default class CacheEntry {
-
     private cache: CacheMap;
     private key: string;
     private item: string;
@@ -31,7 +30,6 @@ export default class CacheEntry {
             this.cached = false;
             delete this.cache.inner[this.key];
         }
-        return;
     }
 
     public allocate(): CacheEntry {
@@ -44,13 +42,17 @@ export default class CacheEntry {
     }
 
     public isStillAlive(): boolean {
-        return ((this.ttlTicks === 0) || (this.touchTicks + this.ttlTicks < this.cache.updateTicks)) &&
-        ((this.ttlSeconds === 0) || (this.touchSeconds + this.ttlSeconds < this.cache.updateSeconds));
+        return (
+            (this.ttlTicks === 0 ||
+                this.touchTicks + this.ttlTicks < this.cache.updateTicks) &&
+            (this.ttlSeconds === 0 ||
+                this.touchSeconds + this.ttlSeconds < this.cache.updateSeconds)
+        );
     }
 
     public touch(): void {
         if (this.cached) {
-            this.touchTicks = this.cache. updateTicks;
+            this.touchTicks = this.cache.updateTicks;
             this.touchSeconds = this.cache.updateSeconds;
         } else if (this.freedByTTL) {
             this.freedByTTL = false;
@@ -67,5 +69,4 @@ export default class CacheEntry {
     public set reservationId(value: string) {
         this._reservationId = value;
     }
-
 }

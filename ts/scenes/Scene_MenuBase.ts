@@ -9,10 +9,6 @@ export default class Scene_MenuBase extends Scene_Base {
     private _actor: any;
     private _backgroundSprite: Sprite;
 
-    public constructor() {
-        super();
-    }
-
     public create() {
         Scene_Base.prototype.create.call(this);
         this.createBackground();
@@ -55,7 +51,5 @@ export default class Scene_MenuBase extends Scene_Base {
         this.onActorChange();
     }
 
-    public onActorChange() {
-    }
-
+    public onActorChange() {}
 }

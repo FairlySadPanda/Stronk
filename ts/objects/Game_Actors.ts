@@ -11,7 +11,11 @@ export default class Game_Actors {
 
         if (gameLoadInput) {
             for (let i = 0; i < gameLoadInput._data.length; i++) {
-                gameLoadInput._data[i] ? this._data.push(new Game_Actor(i, gameLoadInput._data[i] || undefined)): this._data.push(null);
+                gameLoadInput._data[i]
+                    ? this._data.push(
+                          new Game_Actor(i, gameLoadInput._data[i] || undefined)
+                      )
+                    : this._data.push(null);
             }
         }
     }

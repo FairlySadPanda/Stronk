@@ -3,13 +3,12 @@ import DataManager from "../managers/DataManager";
 import TextManager from "../managers/TextManager";
 import Window_Command from "./Window_Command";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_TitleCommand
 //
 // The window for selecting New Game/Continue on the title screen.
 
 export default class Window_TitleCommand extends Window_Command {
-
     public static initCommandPosition() {
         Window_TitleCommand._lastCommandSymbol = null;
     }
@@ -35,9 +34,13 @@ export default class Window_TitleCommand extends Window_Command {
     }
 
     public makeCommandList() {
-        this.addCommand(TextManager.newGame,   "newGame");
-        this.addCommand(TextManager.continue_, "continue", this.isContinueEnabled());
-        this.addCommand(TextManager.options,   "options");
+        this.addCommand(TextManager.newGame, "newGame");
+        this.addCommand(
+            TextManager.continue_,
+            "continue",
+            this.isContinueEnabled()
+        );
+        this.addCommand(TextManager.options, "options");
     }
 
     public isContinueEnabled() {
@@ -55,4 +58,5 @@ export default class Window_TitleCommand extends Window_Command {
         } else if (this.isContinueEnabled()) {
             this.selectSymbol("continue");
         }
-    }}
+    }
+}

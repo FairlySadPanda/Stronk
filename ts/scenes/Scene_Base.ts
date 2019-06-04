@@ -232,7 +232,8 @@ export default class Scene_Base extends Stage {
             if (this._fadeSign > 0) {
                 this._fadeSprite.opacity -= this._fadeSprite.opacity / d;
             } else {
-                this._fadeSprite.opacity += (255 - this._fadeSprite.opacity) / d;
+                this._fadeSprite.opacity +=
+                    (255 - this._fadeSprite.opacity) / d;
             }
             this._fadeDuration--;
         }
@@ -246,7 +247,7 @@ export default class Scene_Base extends Stage {
      * @memberof Scene_Base
      */
     public updateChildren() {
-        this.children.forEach(function (child) {
+        this.children.forEach(function(child) {
             if (child.update) {
                 child.update();
             }
@@ -316,5 +317,4 @@ export default class Scene_Base extends Stage {
     public slowFadeSpeed() {
         return this.fadeSpeed() * 2;
     }
-
 }

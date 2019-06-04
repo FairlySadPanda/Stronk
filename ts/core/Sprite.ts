@@ -3,55 +3,54 @@ import Graphics from "./Graphics";
 import Rectangle from "./Rectangle";
 import Utils from "./Utils";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 /**
  * The basic object that is rendered to the game screen.
  *
  */
 export default class Sprite extends PIXI.Sprite {
-
-    get bitmap() {
+    public get bitmap() {
         return this._bitmap;
     }
 
-    set bitmap(value) {
+    public set bitmap(value) {
         if (this._bitmap !== value) {
             this._bitmap = value;
 
-            if(value){
+            if (value) {
                 this._refreshFrame = true;
                 value.addLoadListener(this._onBitmapLoad.bind(this));
-            }else{
+            } else {
                 this._refreshFrame = false;
                 this.texture.frame = Rectangle.emptyRectangle;
             }
         }
     }
 
-    get width() {
+    public get width() {
         return this._frame.width;
     }
 
-    set width(value) {
+    public set width(value) {
         this._frame.width = value;
         this._refresh();
     }
 
-    get height() {
+    public get height() {
         return this._frame.height;
     }
 
-    set height(value) {
+    public set height(value) {
         this._frame.height = value;
         this._refresh();
     }
 
-    get opacity() {
+    public get opacity() {
         return this.alpha * 255;
     }
 
-    set opacity(value) {
-        this.alpha = Utils.clamp(value,0, 255) / 255;
+    public set opacity(value) {
+        this.alpha = Utils.clamp(value, 0, 255) / 255;
     }
 
     public static voidFilter = new PIXI.filters.AlphaFilter(0);
@@ -105,7 +104,7 @@ export default class Sprite extends PIXI.Sprite {
      * @method update
      */
     public update() {
-        this.children.forEach(function (child) {
+        this.children.forEach(function(child) {
             if (child.update) {
                 child.update();
             }
@@ -136,8 +135,12 @@ export default class Sprite extends PIXI.Sprite {
     public setFrame(x, y, width, height) {
         this._refreshFrame = false;
         const frame = this._frame;
-        if (x !== frame.x || y !== frame.y ||
-                width !== frame.width || height !== frame.height) {
+        if (
+            x !== frame.x ||
+            y !== frame.y ||
+            width !== frame.width ||
+            height !== frame.height
+        ) {
             frame.x = x;
             frame.y = y;
             frame.width = width;
@@ -201,7 +204,7 @@ export default class Sprite extends PIXI.Sprite {
      * @private
      */
     public _onBitmapLoad(bitmapLoaded) {
-        if(bitmapLoaded === this._bitmap){
+        if (bitmapLoaded === this._bitmap) {
             if (this._refreshFrame && this._bitmap) {
                 this._refreshFrame = false;
                 this._frame.width = this._bitmap.width;
@@ -224,8 +227,8 @@ export default class Sprite extends PIXI.Sprite {
         const bitmapH = this._bitmap ? this._bitmap.height : 0;
         const realX = Utils.clamp(frameX, 0, bitmapW);
         const realY = Utils.clamp(frameY, 0, bitmapH);
-        const realW = Utils.clamp((frameW - realX + frameX), 0, bitmapW - realX);
-        const realH = Utils.clamp((frameH - realY + frameY), 0, bitmapH - realY);
+        const realW = Utils.clamp(frameW - realX + frameX, 0, bitmapW - realX);
+        const realH = Utils.clamp(frameH - realY + frameY, 0, bitmapH - realY);
 
         this._realFrame.x = realX;
         this._realFrame.y = realY;
@@ -250,8 +253,14 @@ export default class Sprite extends PIXI.Sprite {
         } else if (this._bitmap) {
             this.texture.frame = Rectangle.emptyRectangle;
         } else {
-            this.texture.baseTexture.width = Math.max(this.texture.baseTexture.width, this._frame.x + this._frame.width);
-            this.texture.baseTexture.height = Math.max(this.texture.baseTexture.height, this._frame.y + this._frame.height);
+            this.texture.baseTexture.width = Math.max(
+                this.texture.baseTexture.width,
+                this._frame.x + this._frame.width
+            );
+            this.texture.baseTexture.height = Math.max(
+                this.texture.baseTexture.height,
+                this._frame.y + this._frame.height
+            );
             this.texture.frame = this._frame;
         }
         this.texture._updateID++;
@@ -266,8 +275,13 @@ export default class Sprite extends PIXI.Sprite {
      * @private
      */
     public _isInBitmapRect(x, y, w, h) {
-        return (this._bitmap && x + w > 0 && y + h > 0 &&
-                x < this._bitmap.width && y < this._bitmap.height);
+        return (
+            this._bitmap &&
+            x + w > 0 &&
+            y + h > 0 &&
+            x < this._bitmap.width &&
+            y < this._bitmap.height
+        );
     }
     /**
      * @method _needsTint
@@ -276,7 +290,9 @@ export default class Sprite extends PIXI.Sprite {
      */
     public _needsTint() {
         const tone = this._colorTone;
-        return tone[0] || tone[1] || tone[2] || tone[3] || this._blendColor[3] > 0;
+        return (
+            tone[0] || tone[1] || tone[2] || tone[3] || this._blendColor[3] > 0
+        );
     }
     /**
      * @method _createTinter
@@ -377,11 +393,16 @@ export default class Sprite extends PIXI.Sprite {
                 const stage = renderer._lastObjectRendered;
                 const f = stage._filters;
                 if (!f || !f[0]) {
-                    setTimeout(function () {
+                    setTimeout(function() {
                         const f = stage._filters;
                         if (!f || !f[0]) {
                             stage.filters = [Sprite.voidFilter];
-                            stage.filterArea = new PIXI.Rectangle(0, 0, Graphics.width, Graphics.height);
+                            stage.filterArea = new PIXI.Rectangle(
+                                0,
+                                0,
+                                Graphics.width,
+                                Graphics.height
+                            );
                         }
                     }, 0);
                 }
@@ -397,7 +418,7 @@ export default class Sprite extends PIXI.Sprite {
         if (this.bitmap) {
             this.bitmap.touch();
         }
-        if(this.bitmap && !this.bitmap.isReady()){
+        if (this.bitmap && !this.bitmap.isReady()) {
             return;
         }
         if (this.texture.frame.width > 0 && this.texture.frame.height > 0) {
@@ -405,7 +426,7 @@ export default class Sprite extends PIXI.Sprite {
                 this._bitmap.checkDirty();
             }
 
-            //copy of pixi-v4 internal code
+            // copy of pixi-v4 internal code
             this.calculateVertices();
 
             if (this.pluginName === "sprite" && this._isPicture) {

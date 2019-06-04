@@ -2,7 +2,6 @@ import Bitmap from "./Bitmap";
 import CacheEntry from "./CacheEntry";
 
 export default class ImageCacheEntry extends CacheEntry {
-
     private _bitmap: Bitmap;
 
     public get bitmap(): Bitmap {

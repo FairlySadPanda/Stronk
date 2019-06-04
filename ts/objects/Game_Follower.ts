@@ -7,7 +7,10 @@ interface Game_Follower_OnLoad extends Game_Character_OnLoad {
 export default class Game_Follower extends Game_Character {
     private _memberIndex: number;
 
-    public constructor(memberIndex?: number, gameLoadInput?: Game_Follower_OnLoad) {
+    public constructor(
+        memberIndex?: number,
+        gameLoadInput?: Game_Follower_OnLoad
+    ) {
         super(gameLoadInput);
         this._memberIndex = memberIndex;
         this.setTransparent($dataSystem.optTransparent);
@@ -19,8 +22,12 @@ export default class Game_Follower extends Game_Character {
     }
 
     public refresh() {
-        const characterName = this.isVisible() ? this.actor().characterName() : "";
-        const characterIndex = this.isVisible() ? this.actor().characterIndex() : 0;
+        const characterName = this.isVisible()
+            ? this.actor().characterName()
+            : "";
+        const characterIndex = this.isVisible()
+            ? this.actor().characterIndex()
+            : 0;
         this.setImage(characterName, characterIndex);
     }
 
@@ -55,5 +62,4 @@ export default class Game_Follower extends Game_Character {
         }
         this.setMoveSpeed($gamePlayer.realMoveSpeed());
     }
-
 }

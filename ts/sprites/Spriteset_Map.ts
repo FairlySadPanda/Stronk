@@ -5,11 +5,11 @@ import TilingSprite from "../core/TilingSprite";
 import Utils from "../core/Utils";
 import Weather from "../core/Weather";
 import ImageManager from "../managers/ImageManager";
+import Spriteset_Base from "./Spriteset_Base";
 import Sprite_Character from "./Sprite_Character";
 import Sprite_Destination from "./Sprite_Destination";
-import Spriteset_Base from "./Spriteset_Base";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Spriteset_Map
 //
 // The set of sprites on the map screen.
@@ -24,10 +24,6 @@ export default class Spriteset_Map extends Spriteset_Base {
     private _weather: Weather;
 
     private _parallaxName: string;
-
-    public constructor() {
-        super();
-    }
 
     public createLowerLayer() {
         super.createLowerLayer();
@@ -66,7 +62,11 @@ export default class Spriteset_Map extends Spriteset_Base {
         this._tilemap = new Tilemap();
         this._tilemap.tileWidth = $gameMap.tileWidth();
         this._tilemap.tileHeight = $gameMap.tileHeight();
-        this._tilemap.setData($gameMap.width(), $gameMap.height(), $gameMap.data());
+        this._tilemap.setData(
+            $gameMap.width(),
+            $gameMap.height(),
+            $gameMap.data()
+        );
         this._tilemap.horizontalWrap = $gameMap.isLoopHorizontal();
         this._tilemap.verticalWrap = $gameMap.isLoopVertical();
         this.loadTileset();
@@ -78,7 +78,9 @@ export default class Spriteset_Map extends Spriteset_Base {
         if (this._tileset) {
             const tilesetNames = this._tileset.tilesetNames;
             for (let i = 0; i < tilesetNames.length; i++) {
-                this._tilemap.bitmaps[i] = ImageManager.loadTileset(tilesetNames[i]);
+                this._tilemap.bitmaps[i] = ImageManager.loadTileset(
+                    tilesetNames[i]
+                );
             }
             const newTilesetFlags = $gameMap.tilesetFlags();
             this._tilemap.refreshTileset();
@@ -91,13 +93,13 @@ export default class Spriteset_Map extends Spriteset_Base {
 
     public createCharacters() {
         this._characterSprites = [];
-        $gameMap.events().forEach(function (event) {
+        $gameMap.events().forEach(function(event) {
             this._characterSprites.push(new Sprite_Character(event));
         }, this);
-        $gameMap.vehicles().forEach(function (vehicle) {
+        $gameMap.vehicles().forEach(function(vehicle) {
             this._characterSprites.push(new Sprite_Character(vehicle));
         }, this);
-        $gamePlayer.followers().reverseEach(function (follower) {
+        $gamePlayer.followers().reverseEach(function(follower) {
             this._characterSprites.push(new Sprite_Character(follower));
         }, this);
         this._characterSprites.push(new Sprite_Character($gamePlayer));
@@ -133,15 +135,15 @@ export default class Spriteset_Map extends Spriteset_Base {
     }
 
     /*
-    * Simple fix for canvas parallax issue, destroy old parallax and readd to  the tree.
-    */
+     * Simple fix for canvas parallax issue, destroy old parallax and readd to  the tree.
+     */
     public _canvasReAddParallax() {
         const index = this._baseSprite.children.indexOf(this._parallax);
         this._baseSprite.removeChild(this._parallax);
         this._parallax = new TilingSprite();
         this._parallax.move(0, 0, Graphics.width, Graphics.height);
         this._parallax.bitmap = ImageManager.loadParallax(this._parallaxName);
-        this._baseSprite.addChildAt(this._parallax,index);
+        this._baseSprite.addChildAt(this._parallax, index);
     }
 
     public updateParallax() {
@@ -151,7 +153,9 @@ export default class Spriteset_Map extends Spriteset_Base {
             if (this._parallax.bitmap && Graphics.isWebGL() !== true) {
                 this._canvasReAddParallax();
             } else {
-                this._parallax.bitmap = ImageManager.loadParallax(this._parallaxName);
+                this._parallax.bitmap = ImageManager.loadParallax(
+                    this._parallaxName
+                );
             }
         }
         if (this._parallax.bitmap) {
@@ -178,5 +182,4 @@ export default class Spriteset_Map extends Spriteset_Base {
         this._weather.origin.x = $gameMap.displayX() * $gameMap.tileWidth();
         this._weather.origin.y = $gameMap.displayY() * $gameMap.tileHeight();
     }
-
 }

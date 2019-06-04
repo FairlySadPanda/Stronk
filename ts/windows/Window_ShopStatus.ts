@@ -5,7 +5,7 @@ import SoundManager from "../managers/SoundManager";
 import TextManager from "../managers/TextManager";
 import Window_Base from "./Window_Base";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_ShopStatus
 //
 // The window for displaying number of items in possession and the actor's
@@ -22,7 +22,12 @@ export default class Window_ShopStatus extends Window_Base {
     public pageSize: () => number;
     public maxPages: () => number;
     public drawActorEquipInfo: (x: any, y: any, actor: any) => void;
-    public drawActorParamChange: (x: any, y: any, actor: any, item1: any) => void;
+    public drawActorParamChange: (
+        x: any,
+        y: any,
+        actor: any,
+        item1: any
+    ) => void;
     public paramId: () => 2 | 3;
     public currentEquippedItem: (actor: any, etypeId: any) => any;
     public updatePage: () => void;
@@ -41,7 +46,7 @@ export default class Window_ShopStatus extends Window_Base {
     }
 }
 
-Window_ShopStatus.prototype.refresh = function () {
+Window_ShopStatus.prototype.refresh = function() {
     this.contents.clear();
     if (this._item) {
         const x = this.textPadding();
@@ -52,16 +57,16 @@ Window_ShopStatus.prototype.refresh = function () {
     }
 };
 
-Window_ShopStatus.prototype.setItem = function (item) {
+Window_ShopStatus.prototype.setItem = function(item) {
     this._item = item;
     this.refresh();
 };
 
-Window_ShopStatus.prototype.isEquipItem = function () {
+Window_ShopStatus.prototype.isEquipItem = function() {
     return DataManager.isWeapon(this._item) || DataManager.isArmor(this._item);
 };
 
-Window_ShopStatus.prototype.drawPossession = function (x, y) {
+Window_ShopStatus.prototype.drawPossession = function(x, y) {
     const width = this.contents.width - this.textPadding() - x;
     const possessionWidth = this.textWidth("0000");
     this.changeTextColor(this.systemColor());
@@ -70,28 +75,34 @@ Window_ShopStatus.prototype.drawPossession = function (x, y) {
     this.drawText($gameParty.numItems(this._item), x, y, width, "right");
 };
 
-Window_ShopStatus.prototype.drawEquipInfo = function (x, y) {
+Window_ShopStatus.prototype.drawEquipInfo = function(x, y) {
     const members = this.statusMembers();
     for (let i = 0; i < members.length; i++) {
-        this.drawActorEquipInfo(x, y + this.lineHeight() * (i * 2.4), members[i]);
+        this.drawActorEquipInfo(
+            x,
+            y + this.lineHeight() * (i * 2.4),
+            members[i]
+        );
     }
 };
 
-Window_ShopStatus.prototype.statusMembers = function () {
+Window_ShopStatus.prototype.statusMembers = function() {
     const start = this._pageIndex * this.pageSize();
     const end = start + this.pageSize();
     return $gameParty.members().slice(start, end);
 };
 
-Window_ShopStatus.prototype.pageSize = function () {
+Window_ShopStatus.prototype.pageSize = function() {
     return 4;
 };
 
-Window_ShopStatus.prototype.maxPages = function () {
-    return Math.floor(($gameParty.size() + this.pageSize() - 1) / this.pageSize());
+Window_ShopStatus.prototype.maxPages = function() {
+    return Math.floor(
+        ($gameParty.size() + this.pageSize() - 1) / this.pageSize()
+    );
 };
 
-Window_ShopStatus.prototype.drawActorEquipInfo = function (x, y, actor) {
+Window_ShopStatus.prototype.drawActorEquipInfo = function(x, y, actor) {
     const enabled = actor.canEquip(this._item);
     this.changePaintOpacity(enabled);
     this.resetTextColor();
@@ -104,19 +115,25 @@ Window_ShopStatus.prototype.drawActorEquipInfo = function (x, y, actor) {
     this.changePaintOpacity(true);
 };
 
-Window_ShopStatus.prototype.drawActorParamChange = function (x, y, actor, item1) {
+Window_ShopStatus.prototype.drawActorParamChange = function(
+    x,
+    y,
+    actor,
+    item1
+) {
     const width = this.contents.width - this.textPadding() - x;
     const paramId = this.paramId();
-    const change = this._item.params[paramId] - (item1 ? item1.params[paramId] : 0);
+    const change =
+        this._item.params[paramId] - (item1 ? item1.params[paramId] : 0);
     this.changeTextColor(this.paramchangeTextColor(change));
     this.drawText((change > 0 ? "+" : "") + change, x, y, width, "right");
 };
 
-Window_ShopStatus.prototype.paramId = function () {
+Window_ShopStatus.prototype.paramId = function() {
     return DataManager.isWeapon(this._item) ? 2 : 3;
 };
 
-Window_ShopStatus.prototype.currentEquippedItem = function (actor, etypeId) {
+Window_ShopStatus.prototype.currentEquippedItem = function(actor, etypeId) {
     const list = [];
     const equips = actor.equips();
     const slots = actor.equipSlots();
@@ -137,22 +154,22 @@ Window_ShopStatus.prototype.currentEquippedItem = function (actor, etypeId) {
     return worstItem;
 };
 
-Window_ShopStatus.prototype.update = function () {
+Window_ShopStatus.prototype.update = function() {
     Window_Base.prototype.update.call(this);
     this.updatePage();
 };
 
-Window_ShopStatus.prototype.updatePage = function () {
+Window_ShopStatus.prototype.updatePage = function() {
     if (this.isPageChangeEnabled() && this.isPageChangeRequested()) {
         this.changePage();
     }
 };
 
-Window_ShopStatus.prototype.isPageChangeEnabled = function () {
+Window_ShopStatus.prototype.isPageChangeEnabled = function() {
     return this.visible && this.maxPages() >= 2;
 };
 
-Window_ShopStatus.prototype.isPageChangeRequested = function () {
+Window_ShopStatus.prototype.isPageChangeRequested = function() {
     if (Input.isTriggered("shift")) {
         return true;
     }
@@ -162,13 +179,13 @@ Window_ShopStatus.prototype.isPageChangeRequested = function () {
     return false;
 };
 
-Window_ShopStatus.prototype.isTouchedInsideFrame = function () {
+Window_ShopStatus.prototype.isTouchedInsideFrame = function() {
     const x = this.canvasToLocalX(TouchInput.x);
     const y = this.canvasToLocalY(TouchInput.y);
     return x >= 0 && y >= 0 && x < this.width && y < this.height;
 };
 
-Window_ShopStatus.prototype.changePage = function () {
+Window_ShopStatus.prototype.changePage = function() {
     this._pageIndex = (this._pageIndex + 1) % this.maxPages();
     this.refresh();
     SoundManager.playCursor();

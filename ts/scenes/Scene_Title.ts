@@ -2,7 +2,6 @@ import Bitmap from "../core/Bitmap";
 import Graphics from "../core/Graphics";
 import Sprite from "../core/Sprite";
 import AudioManager from "../managers/AudioManager";
-
 import DataManager from "../managers/DataManager";
 import ImageManager from "../managers/ImageManager";
 import SceneManager from "../managers/SceneManager";
@@ -17,10 +16,6 @@ export default class Scene_Title extends Scene_Base {
     private _gameTitleSprite: Sprite;
     private _backSprite1: Sprite;
     private _backSprite2: Sprite;
-
-    public constructor() {
-        super();
-    }
 
     public create() {
         super.create();
@@ -47,7 +42,10 @@ export default class Scene_Title extends Scene_Base {
     }
 
     public isBusy() {
-        return this._commandWindow.isClosing() || Scene_Base.prototype.isBusy.call(this);
+        return (
+            this._commandWindow.isClosing() ||
+            Scene_Base.prototype.isBusy.call(this)
+        );
     }
 
     public terminate() {
@@ -56,14 +54,20 @@ export default class Scene_Title extends Scene_Base {
     }
 
     public createBackground() {
-        this._backSprite1 = new Sprite(ImageManager.loadTitle1($dataSystem.title1Name));
-        this._backSprite2 = new Sprite(ImageManager.loadTitle2($dataSystem.title2Name));
+        this._backSprite1 = new Sprite(
+            ImageManager.loadTitle1($dataSystem.title1Name)
+        );
+        this._backSprite2 = new Sprite(
+            ImageManager.loadTitle2($dataSystem.title2Name)
+        );
         this.addChild(this._backSprite1);
         this.addChild(this._backSprite2);
     }
 
     public createForeground() {
-        this._gameTitleSprite = new Sprite(new Bitmap(Graphics.width, Graphics.height));
+        this._gameTitleSprite = new Sprite(
+            new Bitmap(Graphics.width, Graphics.height)
+        );
         this.addChild(this._gameTitleSprite);
         if ($dataSystem.optDrawTitle) {
             this.drawGameTitle();
@@ -78,7 +82,14 @@ export default class Scene_Title extends Scene_Base {
         this._gameTitleSprite.bitmap.outlineColor = "black";
         this._gameTitleSprite.bitmap.outlineWidth = 8;
         this._gameTitleSprite.bitmap.fontSize = 72;
-        this._gameTitleSprite.bitmap.drawText(text, x, y, maxWidth, 48, "center");
+        this._gameTitleSprite.bitmap.drawText(
+            text,
+            x,
+            y,
+            maxWidth,
+            48,
+            "center"
+        );
     }
 
     public centerSprite(sprite) {
@@ -90,9 +101,18 @@ export default class Scene_Title extends Scene_Base {
 
     public createCommandWindow() {
         this._commandWindow = new Window_TitleCommand();
-        this._commandWindow.setHandler("newGame",  this.commandNewGame.bind(this));
-        this._commandWindow.setHandler("continue", this.commandContinue.bind(this));
-        this._commandWindow.setHandler("options",  this.commandOptions.bind(this));
+        this._commandWindow.setHandler(
+            "newGame",
+            this.commandNewGame.bind(this)
+        );
+        this._commandWindow.setHandler(
+            "continue",
+            this.commandContinue.bind(this)
+        );
+        this._commandWindow.setHandler(
+            "options",
+            this.commandOptions.bind(this)
+        );
         this.addWindow(this._commandWindow);
     }
 
@@ -118,5 +138,4 @@ export default class Scene_Title extends Scene_Base {
         AudioManager.stopBgs();
         AudioManager.stopMe();
     }
-
 }

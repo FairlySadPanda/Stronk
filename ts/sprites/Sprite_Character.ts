@@ -3,7 +3,7 @@ import ImageManager from "../managers/ImageManager";
 import Sprite_Balloon from "./Sprite_Balloon";
 import Sprite_Base from "./Sprite_Base";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Sprite_Character
 //
 // The sprite for displaying a character.
@@ -83,10 +83,12 @@ export default class Sprite_Character extends Sprite_Base {
     }
 
     public isImageChanged() {
-        return (this._tilesetId !== $gameMap.tilesetId() ||
-                this._tileId !== this._character.tileId() ||
-                this._characterName !== this._character.characterName() ||
-                this._characterIndex !== this._character.characterIndex());
+        return (
+            this._tilesetId !== $gameMap.tilesetId() ||
+            this._tileId !== this._character.tileId() ||
+            this._characterName !== this._character.characterName() ||
+            this._characterIndex !== this._character.characterIndex()
+        );
     }
 
     public setTileBitmap() {
@@ -109,8 +111,10 @@ export default class Sprite_Character extends Sprite_Base {
     public updateTileFrame() {
         const pw = this.patternWidth();
         const ph = this.patternHeight();
-        const sx = (Math.floor(this._tileId / 128) % 2 * 8 + this._tileId % 8) * pw;
-        const sy = Math.floor(this._tileId % 256 / 8) % 16 * ph;
+        const sx =
+            ((Math.floor(this._tileId / 128) % 2) * 8 + (this._tileId % 8)) *
+            pw;
+        const sy = (Math.floor((this._tileId % 256) / 8) % 16) * ph;
         this.setFrame(sx, sy, pw, ph);
     }
 
@@ -135,7 +139,7 @@ export default class Sprite_Character extends Sprite_Base {
             return 0;
         } else {
             const index = this._character.characterIndex();
-            return index % 4 * 3;
+            return (index % 4) * 3;
         }
     }
 
@@ -181,7 +185,7 @@ export default class Sprite_Character extends Sprite_Base {
             this.createHalfBodySprites();
             this._upperBody.bitmap = this.bitmap;
             this._upperBody.visible = true;
-            this._upperBody.y = - this._bushDepth;
+            this._upperBody.y = -this._bushDepth;
             this._lowerBody.bitmap = this.bitmap;
             this._lowerBody.visible = true;
             this._upperBody.setBlendColor(this.getBlendColor());
@@ -276,5 +280,4 @@ export default class Sprite_Character extends Sprite_Base {
     public isBalloonPlaying() {
         return !!this._balloonSprite;
     }
-
 }

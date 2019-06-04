@@ -8,7 +8,7 @@ import Utils from "../core/Utils";
 import Sprite_Picture from "./Sprite_Picture";
 import Sprite_Timer from "./Sprite_Timer";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Spriteset_Base
 //
 // The superclass of Spriteset_Map and Spriteset_Battle.
@@ -72,7 +72,12 @@ export default class Spriteset_Base extends Sprite {
         this._toneFilter = new ToneFilter();
         this._toneFilter.enabled = false;
         this._baseSprite.filters = [this._toneFilter];
-        this._baseSprite.filterArea = new Rectangle(-margin, -margin, width, height);
+        this._baseSprite.filterArea = new Rectangle(
+            -margin,
+            -margin,
+            width,
+            height
+        );
     }
 
     public createPictures() {
@@ -136,5 +141,4 @@ export default class Spriteset_Base extends Sprite {
         this.y = Math.round(-screen.zoomY() * (scale - 1));
         this.x += Math.round(screen.shake());
     }
-
 }

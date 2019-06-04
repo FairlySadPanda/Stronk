@@ -1,7 +1,6 @@
 import CacheEntry from "./CacheEntry";
 
 export default class CacheMap {
-
     private manager: any;
     private _inner: CacheEntry[];
     private lastRemovedEntries: CacheEntry[];
@@ -47,12 +46,12 @@ export default class CacheMap {
         this.lastRemovedEntries.length = 0;
     }
 
-    public getItem(key: string): CacheEntry|null {
+    public getItem(key: string): CacheEntry | null {
         return this._inner[key] ? this._inner[key].item : null;
     }
 
     public clear(): void {
-        for(const entry of this._inner) {
+        for (const entry of this._inner) {
             entry.free(false);
         }
     }
@@ -69,5 +68,4 @@ export default class CacheMap {
             this.checkTTL();
         }
     }
-
 }

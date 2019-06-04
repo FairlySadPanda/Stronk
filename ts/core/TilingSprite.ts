@@ -6,7 +6,6 @@ import Sprite from "./Sprite";
 import Utils from "./Utils";
 
 export default class TilingSprite extends PIXI.extras.TilingSprite {
-
     /**
      * The image for the tiling sprite.
      *
@@ -95,7 +94,7 @@ export default class TilingSprite extends PIXI.extras.TilingSprite {
      */
     public update() {
         for (const child of this.children) {
-            if(child instanceof TilingSprite) {
+            if (child instanceof TilingSprite) {
                 child.update();
             }
         }
@@ -160,17 +159,22 @@ export default class TilingSprite extends PIXI.extras.TilingSprite {
         const blend = this.blendMode;
         if (renderer.renderingToScreen && renderer._activeRenderTarget.root) {
             if (picture.drawModes[blend]) {
-                //@ts-ignore
+                // @ts-ignore
                 const stage = renderer._lastObjectRendered;
-                //@ts-ignore
+                // @ts-ignore
                 const f = stage._filters;
                 if (!f || !f[0]) {
-                    setTimeout(function () {
-                        //@ts-ignore
+                    setTimeout(function() {
+                        // @ts-ignore
                         const f = stage._filters;
                         if (!f || !f[0]) {
                             stage.filters = [Sprite.voidFilter];
-                            stage.filterArea = new PIXI.Rectangle(0, 0, Graphics.width, Graphics.height);
+                            stage.filterArea = new PIXI.Rectangle(
+                                0,
+                                0,
+                                Graphics.width,
+                                Graphics.height
+                            );
                         }
                     }, 0);
                 }

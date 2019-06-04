@@ -3,7 +3,7 @@ import Input from "../core/Input";
 
 import Window_Command from "./Window_Command";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_ChoiceList
 //
 // The window used for the event command [Show Choices].
@@ -37,15 +37,15 @@ export default class Window_ChoiceList extends Window_Command {
         this.width = this.windowWidth();
         this.height = this.windowHeight();
         switch (positionType) {
-        case 0:
-            this.x = 0;
-            break;
-        case 1:
-            this.x = (Graphics.boxWidth - this.width) / 2;
-            break;
-        case 2:
-            this.x = Graphics.boxWidth - this.width;
-            break;
+            case 0:
+                this.x = 0;
+                break;
+            case 1:
+                this.x = (Graphics.boxWidth - this.width) / 2;
+                break;
+            case 2:
+                this.x = Graphics.boxWidth - this.width;
+                break;
         }
         if (messageY >= Graphics.boxHeight / 2) {
             this.y = messageY - this.height;
@@ -84,7 +84,8 @@ export default class Window_ChoiceList extends Window_Command {
         let maxWidth = 96;
         const choices = $gameMessage.choices();
         for (let i = 0; i < choices.length; i++) {
-            const choiceWidth = this.textWidthEx(choices[i]) + this.textPadding() * 2;
+            const choiceWidth =
+                this.textWidthEx(choices[i]) + this.textPadding() * 2;
             if (maxWidth < choiceWidth) {
                 maxWidth = choiceWidth;
             }
@@ -131,5 +132,4 @@ export default class Window_ChoiceList extends Window_Command {
         this._messageWindow.terminateMessage();
         this.close();
     }
-
 }

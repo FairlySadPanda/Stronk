@@ -3,7 +3,7 @@ import Game_Actor, { Game_Actor_OnLoad } from "../objects/Game_Actor";
 import Window_EquipStatus from "./Window_EquipStatus";
 import Window_ItemList from "./Window_ItemList";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_EquipItem
 //
 // The window for selecting an equipment item on the equipment screen.
@@ -39,7 +39,10 @@ export default class Window_EquipItem extends Window_ItemList {
         if (item === null) {
             return true;
         }
-        if (this._slotId < 0 || item.etypeId !== this._actor.equipSlots()[this._slotId]) {
+        if (
+            this._slotId < 0 ||
+            item.etypeId !== this._actor.equipSlots()[this._slotId]
+        ) {
             return false;
         }
         return this._actor.canEquip(item);
@@ -49,8 +52,7 @@ export default class Window_EquipItem extends Window_ItemList {
         return true;
     }
 
-    public selectLast() {
-    }
+    public selectLast() {}
 
     public setStatusWindow(statusWindow) {
         this._statusWindow = statusWindow;
@@ -60,13 +62,14 @@ export default class Window_EquipItem extends Window_ItemList {
     public updateHelp() {
         super.updateHelp();
         if (this._actor && this._statusWindow) {
-            const actor = new Game_Actor(this._actor.actorId(), JsonEx.makeDeepCopy(this._actor) as Game_Actor_OnLoad);
+            const actor = new Game_Actor(
+                this._actor.actorId(),
+                JsonEx.makeDeepCopy(this._actor) as Game_Actor_OnLoad
+            );
             actor.forceChangeEquip(this._slotId, this.item());
             this._statusWindow.setTempActor(actor);
         }
     }
 
-    public playOkSound() {
-    }
-
+    public playOkSound() {}
 }

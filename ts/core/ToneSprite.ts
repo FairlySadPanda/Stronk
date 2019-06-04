@@ -1,3 +1,4 @@
+import * as PIXI from "pixi";
 import Graphics from "./Graphics";
 import Utils from "./Utils";
 
@@ -13,10 +14,9 @@ export default class ToneSprite extends PIXI.Container {
 
     public _renderWebGL(renderer) {
         // Not supported
-        return;
     }
 
-    protected _renderCanvas = function (renderer) {
+    protected _renderCanvas = function(renderer) {
         if (this.visible) {
             const context = renderer.context;
             const t = this.worldTransform;
@@ -65,7 +65,7 @@ export default class ToneSprite extends PIXI.Container {
  *
  * @method reset
  */
-ToneSprite.prototype.clear = function () {
+ToneSprite.prototype.clear = function() {
     this._red = 0;
     this._green = 0;
     this._blue = 0;
@@ -81,7 +81,7 @@ ToneSprite.prototype.clear = function () {
  * @param {Number} b The blue strength in the range (-255, 255)
  * @param {Number} gray The grayscale level in the range (0, 255)
  */
-ToneSprite.prototype.setTone = function (r, g, b, gray) {
+ToneSprite.prototype.setTone = function(r, g, b, gray) {
     this._red = Utils.clamp(Math.round(r || 0), -255, 255);
     this._green = Utils.clamp(Math.round(g || 0), -255, 255);
     this._blue = Utils.clamp(Math.round(b || 0), -255, 255);
@@ -93,6 +93,6 @@ ToneSprite.prototype.setTone = function (r, g, b, gray) {
  * @param {Object} renderSession
  * @private
  */
-ToneSprite.prototype._renderWebGL = function (renderer) {
+ToneSprite.prototype._renderWebGL = function(renderer) {
     // Not supported
 };

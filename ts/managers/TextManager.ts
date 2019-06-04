@@ -1,5 +1,4 @@
 export default abstract class TextManager {
-
     public static basic(basicId: number) {
         return $dataSystem.terms.basic[basicId] || "";
     }
@@ -359,5 +358,4 @@ export default abstract class TextManager {
     public static get actionFailure() {
         return this.message("actionFailure");
     }
-
 }

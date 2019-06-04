@@ -2,7 +2,7 @@ import Rectangle from "../core/Rectangle";
 import Sprite from "../core/Sprite";
 import TouchInput from "../core/TouchInput";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Sprite_Button
 //
 // The sprite for displaying a button.
@@ -31,13 +31,13 @@ export default class Sprite_Button extends Sprite {
     }
 }
 
-Sprite_Button.prototype.update = function () {
+Sprite_Button.prototype.update = function() {
     Sprite.prototype.update.call(this);
     this.updateFrame();
     this.processTouch();
 };
 
-Sprite_Button.prototype.updateFrame = function () {
+Sprite_Button.prototype.updateFrame = function() {
     let frame;
     if (this._touching) {
         frame = this._hotFrame;
@@ -49,25 +49,25 @@ Sprite_Button.prototype.updateFrame = function () {
     }
 };
 
-Sprite_Button.prototype.setColdFrame = function (x, y, width, height) {
+Sprite_Button.prototype.setColdFrame = function(x, y, width, height) {
     this._coldFrame = new Rectangle(x, y, width, height);
 };
 
-Sprite_Button.prototype.setHotFrame = function (x, y, width, height) {
+Sprite_Button.prototype.setHotFrame = function(x, y, width, height) {
     this._hotFrame = new Rectangle(x, y, width, height);
 };
 
-Sprite_Button.prototype.setClickHandler = function (method) {
+Sprite_Button.prototype.setClickHandler = function(method) {
     this._clickHandler = method;
 };
 
-Sprite_Button.prototype.callClickHandler = function () {
+Sprite_Button.prototype.callClickHandler = function() {
     if (this._clickHandler) {
         this._clickHandler();
     }
 };
 
-Sprite_Button.prototype.processTouch = function () {
+Sprite_Button.prototype.processTouch = function() {
     if (this.isActive()) {
         if (TouchInput.isTriggered() && this.isButtonTouched()) {
             this._touching = true;
@@ -85,7 +85,7 @@ Sprite_Button.prototype.processTouch = function () {
     }
 };
 
-Sprite_Button.prototype.isActive = function () {
+Sprite_Button.prototype.isActive = function() {
     let node = this;
     while (node) {
         if (!node.visible) {
@@ -96,13 +96,13 @@ Sprite_Button.prototype.isActive = function () {
     return true;
 };
 
-Sprite_Button.prototype.isButtonTouched = function () {
+Sprite_Button.prototype.isButtonTouched = function() {
     const x = this.canvasToLocalX(TouchInput.x);
     const y = this.canvasToLocalY(TouchInput.y);
     return x >= 0 && y >= 0 && x < this.width && y < this.height;
 };
 
-Sprite_Button.prototype.canvasToLocalX = function (x) {
+Sprite_Button.prototype.canvasToLocalX = function(x) {
     let node = this;
     while (node) {
         x -= node.x;
@@ -111,7 +111,7 @@ Sprite_Button.prototype.canvasToLocalX = function (x) {
     return x;
 };
 
-Sprite_Button.prototype.canvasToLocalY = function (y) {
+Sprite_Button.prototype.canvasToLocalY = function(y) {
     let node = this;
     while (node) {
         y -= node.y;

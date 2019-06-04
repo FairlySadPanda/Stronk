@@ -2,7 +2,7 @@ import Bitmap from "../core/Bitmap";
 import Graphics from "../core/Graphics";
 import Sprite from "../core/Sprite";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Sprite_Destination
 //
 // The sprite for displaying the destination place of the touch input.
@@ -12,7 +12,7 @@ export default class Sprite_Destination extends Sprite {
     public update: () => void;
     public updatePosition: () => void;
     public updateAnimation: () => void;
-    z: number;
+    public z: number;
     public constructor() {
         super();
         this.createBitmap();
@@ -23,9 +23,9 @@ export default class Sprite_Destination extends Sprite {
     }
 }
 
-Sprite_Destination.prototype.update = function () {
+Sprite_Destination.prototype.update = function() {
     Sprite.prototype.update.call(this);
-    if ($gameTemp.isDestinationValid()){
+    if ($gameTemp.isDestinationValid()) {
         this.updatePosition();
         this.updateAnimation();
         this.visible = true;
@@ -35,7 +35,7 @@ Sprite_Destination.prototype.update = function () {
     }
 };
 
-Sprite_Destination.prototype.createBitmap = function () {
+Sprite_Destination.prototype.createBitmap = function() {
     const tileWidth = $gameMap.tileWidth();
     const tileHeight = $gameMap.tileHeight();
     this.bitmap = new Bitmap(tileWidth, tileHeight);
@@ -45,7 +45,7 @@ Sprite_Destination.prototype.createBitmap = function () {
     this.blendMode = Graphics.BLEND_ADD;
 };
 
-Sprite_Destination.prototype.updatePosition = function () {
+Sprite_Destination.prototype.updatePosition = function() {
     const tileWidth = $gameMap.tileWidth();
     const tileHeight = $gameMap.tileHeight();
     const x = $gameTemp.destinationX();
@@ -54,7 +54,7 @@ Sprite_Destination.prototype.updatePosition = function () {
     this.y = ($gameMap.adjustY(y) + 0.5) * tileHeight;
 };
 
-Sprite_Destination.prototype.updateAnimation = function () {
+Sprite_Destination.prototype.updateAnimation = function() {
     this._frameCount++;
     this._frameCount %= 20;
     this.opacity = (20 - this._frameCount) * 6;

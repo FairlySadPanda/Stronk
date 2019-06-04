@@ -3,7 +3,7 @@ import Utils from "../core/Utils";
 import TextManager from "../managers/TextManager";
 import Window_Selectable from "./Window_Selectable";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_Status
 //
 // The window for displaying full status on the status screen.
@@ -33,14 +33,14 @@ export default class Window_Status extends Window_Selectable {
     }
 }
 
-Window_Status.prototype.setActor = function (actor) {
+Window_Status.prototype.setActor = function(actor) {
     if (this._actor !== actor) {
         this._actor = actor;
         this.refresh();
     }
 };
 
-Window_Status.prototype.refresh = function () {
+Window_Status.prototype.refresh = function() {
     this.contents.clear();
     if (this._actor) {
         const lineHeight = this.lineHeight();
@@ -54,39 +54,39 @@ Window_Status.prototype.refresh = function () {
     }
 };
 
-Window_Status.prototype.drawBlock1 = function (y) {
+Window_Status.prototype.drawBlock1 = function(y) {
     this.drawActorName(this._actor, 6, y);
     this.drawActorClass(this._actor, 192, y);
     this.drawActorNickname(this._actor, 432, y);
 };
 
-Window_Status.prototype.drawBlock2 = function (y) {
+Window_Status.prototype.drawBlock2 = function(y) {
     this.drawActorFace(this._actor, 12, y);
     this.drawBasicInfo(204, y);
     this.drawExpInfo(456, y);
 };
 
-Window_Status.prototype.drawBlock3 = function (y) {
+Window_Status.prototype.drawBlock3 = function(y) {
     this.drawParameters(48, y);
     this.drawEquipments(432, y);
 };
 
-Window_Status.prototype.drawBlock4 = function (y) {
+Window_Status.prototype.drawBlock4 = function(y) {
     this.drawProfile(6, y);
 };
 
-Window_Status.prototype.drawHorzLine = function (y) {
+Window_Status.prototype.drawHorzLine = function(y) {
     const lineY = y + this.lineHeight() / 2 - 1;
     this.contents.paintOpacity = 48;
     this.contents.fillRect(0, lineY, this.contentsWidth(), 2, this.lineColor());
     this.contents.paintOpacity = 255;
 };
 
-Window_Status.prototype.lineColor = function () {
+Window_Status.prototype.lineColor = function() {
     return this.normalColor();
 };
 
-Window_Status.prototype.drawBasicInfo = function (x, y) {
+Window_Status.prototype.drawBasicInfo = function(x, y) {
     const lineHeight = this.lineHeight();
     this.drawActorLevel(this._actor, x, y + lineHeight * 0);
     this.drawActorIcons(this._actor, x, y + lineHeight * 1);
@@ -94,7 +94,7 @@ Window_Status.prototype.drawBasicInfo = function (x, y) {
     this.drawActorMp(this._actor, x, y + lineHeight * 3);
 };
 
-Window_Status.prototype.drawParameters = function (x, y) {
+Window_Status.prototype.drawParameters = function(x, y) {
     const lineHeight = this.lineHeight();
     for (let i = 0; i < 6; i++) {
         const paramId = i + 2;
@@ -106,7 +106,7 @@ Window_Status.prototype.drawParameters = function (x, y) {
     }
 };
 
-Window_Status.prototype.drawExpInfo = function (x, y) {
+Window_Status.prototype.drawExpInfo = function(x, y) {
     const lineHeight = this.lineHeight();
     const expTotal = Utils.format(TextManager.expTotal, TextManager.exp);
     const expNext = Utils.format(TextManager.expNext, TextManager.level);
@@ -124,7 +124,7 @@ Window_Status.prototype.drawExpInfo = function (x, y) {
     this.drawText(value2, x, y + lineHeight * 3, 270, "right");
 };
 
-Window_Status.prototype.drawEquipments = function (x, y) {
+Window_Status.prototype.drawEquipments = function(x, y) {
     const equips = this._actor.equips();
     const count = Math.min(equips.length, this.maxEquipmentLines());
     for (let i = 0; i < count; i++) {
@@ -132,10 +132,10 @@ Window_Status.prototype.drawEquipments = function (x, y) {
     }
 };
 
-Window_Status.prototype.drawProfile = function (x, y) {
+Window_Status.prototype.drawProfile = function(x, y) {
     this.drawTextEx(this._actor.profile(), x, y);
 };
 
-Window_Status.prototype.maxEquipmentLines = function () {
+Window_Status.prototype.maxEquipmentLines = function() {
     return 6;
 };

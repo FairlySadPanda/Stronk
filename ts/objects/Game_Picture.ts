@@ -54,7 +54,9 @@ export default class Game_Picture {
                 if (this.hasOwnProperty(key)) {
                     this[key] = gameLoadInput[key];
                 } else {
-                    throw new TypeError(`Game_Picture does not have a property called ${key}`);
+                    throw new TypeError(
+                        `Game_Picture does not have a property called ${key}`
+                    );
                 }
             }
         }
@@ -131,8 +133,7 @@ export default class Game_Picture {
         this._rotationSpeed = 0;
     }
 
-    public show(name, origin, x, y, scaleX,
-                                           scaleY, opacity, blendMode) {
+    public show(name, origin, x, y, scaleX, scaleY, opacity, blendMode) {
         this._name = name;
         this._origin = origin;
         this._x = x;
@@ -146,8 +147,7 @@ export default class Game_Picture {
         this.initRotation();
     }
 
-    public move(origin, x, y, scaleX, scaleY,
-                                           opacity, blendMode, duration) {
+    public move(origin, x, y, scaleX, scaleY, opacity, blendMode, duration) {
         this._origin = origin;
         this._targetX = x;
         this._targetY = y;
@@ -192,8 +192,8 @@ export default class Game_Picture {
             const d = this._duration;
             this._x = (this._x * (d - 1) + this._targetX) / d;
             this._y = (this._y * (d - 1) + this._targetY) / d;
-            this._scaleX  = (this._scaleX  * (d - 1) + this._targetScaleX)  / d;
-            this._scaleY  = (this._scaleY  * (d - 1) + this._targetScaleY)  / d;
+            this._scaleX = (this._scaleX * (d - 1) + this._targetScaleX) / d;
+            this._scaleY = (this._scaleY * (d - 1) + this._targetScaleY) / d;
             this._opacity = (this._opacity * (d - 1) + this._targetOpacity) / d;
             this._duration--;
         }
@@ -203,7 +203,8 @@ export default class Game_Picture {
         if (this._toneDuration > 0) {
             const d = this._toneDuration;
             for (let i = 0; i < 4; i++) {
-                this._tone[i] = (this._tone[i] * (d - 1) + this._toneTarget[i]) / d;
+                this._tone[i] =
+                    (this._tone[i] * (d - 1) + this._toneTarget[i]) / d;
             }
             this._toneDuration--;
         }
@@ -214,5 +215,4 @@ export default class Game_Picture {
             this._angle += this._rotationSpeed / 2;
         }
     }
-
 }

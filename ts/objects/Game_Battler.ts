@@ -39,13 +39,13 @@ export default class Game_Battler extends Game_BattlerBase {
         super(gameLoadInput);
 
         if (gameLoadInput) {
-            this._actions =  gameLoadInput._actions;
+            this._actions = gameLoadInput._actions;
             this._speed = gameLoadInput._speed;
             this._result = new Game_ActionResult(gameLoadInput._result);
             this._actionState = gameLoadInput._actionState;
             this._lastTargetIndex = gameLoadInput._lastTargetIndex;
             this._animations = gameLoadInput._animations;
-            this._damagePopup = gameLoadInput. _damagePopup;
+            this._damagePopup = gameLoadInput._damagePopup;
             this._effectType = gameLoadInput._effectType;
             this._motionType = gameLoadInput._motionType;
             this._weaponImageId = gameLoadInput._weaponImageId;
@@ -156,7 +156,7 @@ export default class Game_Battler extends Game_BattlerBase {
     }
 
     public startAnimation(animationId, mirror, delay) {
-        const data = { "animationId": animationId, "mirror": mirror, "delay": delay };
+        const data = { animationId: animationId, mirror: mirror, delay: delay };
         this._animations.push(data);
     }
 
@@ -213,10 +213,13 @@ export default class Game_Battler extends Game_BattlerBase {
     }
 
     public isStateAddable(stateId) {
-        return (this.isAlive() && $dataStates[stateId] &&
-                !this.isStateResist(stateId) &&
-                !this._result.isStateRemoved(stateId) &&
-                !this.isStateRestrict(stateId));
+        return (
+            this.isAlive() &&
+            $dataStates[stateId] &&
+            !this.isStateResist(stateId) &&
+            !this._result.isStateRemoved(stateId) &&
+            !this.isStateRestrict(stateId)
+        );
     }
 
     public isStateRestrict(stateId) {
@@ -226,7 +229,7 @@ export default class Game_Battler extends Game_BattlerBase {
     public onRestrict() {
         Game_BattlerBase.prototype.onRestrict.call(this);
         this.clearActions();
-        this.states().forEach(function (state) {
+        this.states().forEach(function(state) {
             if (state.removeByRestriction) {
                 this.removeState(state.id);
             }
@@ -284,7 +287,7 @@ export default class Game_Battler extends Game_BattlerBase {
     }
 
     public removeBattleStates() {
-        this.states().forEach(function (state) {
+        this.states().forEach(function(state) {
             if (state.removeAtBattleEnd) {
                 this.removeState(state.id);
             }
@@ -298,8 +301,11 @@ export default class Game_Battler extends Game_BattlerBase {
     }
 
     public removeStatesAuto(timing) {
-        this.states().forEach(function (state) {
-            if (this.isStateExpired(state.id) && state.autoRemovalTiming === timing) {
+        this.states().forEach(function(state) {
+            if (
+                this.isStateExpired(state.id) &&
+                state.autoRemovalTiming === timing
+            ) {
                 this.removeState(state.id);
             }
         }, this);
@@ -314,15 +320,18 @@ export default class Game_Battler extends Game_BattlerBase {
     }
 
     public removeStatesByDamage() {
-        this.states().forEach(function (state) {
-            if (state.removeByDamage && Utils.randomInt(100) < state.chanceByDamage) {
+        this.states().forEach(function(state) {
+            if (
+                state.removeByDamage &&
+                Utils.randomInt(100) < state.chanceByDamage
+            ) {
                 this.removeState(state.id);
             }
         }, this);
     }
 
     public makeActionTimes() {
-        return this.actionPlusSet().reduce(function (r, p) {
+        return this.actionPlusSet().reduce(function(r, p) {
             return Math.random() < p ? r + 1 : r;
         }, 1);
     }
@@ -343,9 +352,13 @@ export default class Game_Battler extends Game_BattlerBase {
     }
 
     public makeSpeed() {
-        this._speed = Math.min.apply(null, this._actions.map(function (action) {
-            return action.speed();
-        })) || 0;
+        this._speed =
+            Math.min.apply(
+                null,
+                this._actions.map(function(action) {
+                    return action.speed();
+                })
+            ) || 0;
     }
 
     public currentAction() {
@@ -518,7 +531,7 @@ export default class Game_Battler extends Game_BattlerBase {
 
     public isChanting() {
         if (this.isWaiting()) {
-            return this._actions.some(function (action) {
+            return this._actions.some(function(action) {
                 return action.isMagicSkill();
             });
         }
@@ -527,7 +540,7 @@ export default class Game_Battler extends Game_BattlerBase {
 
     public isGuardWaiting() {
         if (this.isWaiting()) {
-            return this._actions.some(function (action) {
+            return this._actions.some(function(action) {
                 return action.isGuard();
             });
         }
@@ -540,15 +553,13 @@ export default class Game_Battler extends Game_BattlerBase {
         }
     }
 
-    public performAction(action) {
-    }
+    public performAction(action) {}
 
     public performActionEnd() {
         this.setActionState("done");
     }
 
-    public performDamage() {
-    }
+    public performDamage() {}
 
     public performMiss() {
         SoundManager.playMiss();
@@ -574,10 +585,7 @@ export default class Game_Battler extends Game_BattlerBase {
         SoundManager.playReflection();
     }
 
-    public performSubstitute(target) {
-    }
+    public performSubstitute(target) {}
 
-    public performCollapse() {
-    }
-
+    public performCollapse() {}
 }

@@ -1,7 +1,7 @@
 import Sprite from "../core/Sprite";
 import ImageManager from "../managers/ImageManager";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Sprite_StateIcon
 //
 // The sprite for displaying state icons.
@@ -26,10 +26,10 @@ export default class Sprite_StateIcon extends Sprite {
     }
 }
 
-Sprite_StateIcon._iconWidth  = 32;
+Sprite_StateIcon._iconWidth = 32;
 Sprite_StateIcon._iconHeight = 32;
 
-Sprite_StateIcon.prototype.initMembers = function () {
+Sprite_StateIcon.prototype.initMembers = function() {
     this._battler = null;
     this._iconIndex = 0;
     this._animationCount = 0;
@@ -38,16 +38,16 @@ Sprite_StateIcon.prototype.initMembers = function () {
     this.anchor.y = 0.5;
 };
 
-Sprite_StateIcon.prototype.loadBitmap = function () {
+Sprite_StateIcon.prototype.loadBitmap = function() {
     this.bitmap = ImageManager.loadSystem("IconSet");
     this.setFrame(0, 0, 0, 0);
 };
 
-Sprite_StateIcon.prototype.setup = function (battler) {
+Sprite_StateIcon.prototype.setup = function(battler) {
     this._battler = battler;
 };
 
-Sprite_StateIcon.prototype.update = function () {
+Sprite_StateIcon.prototype.update = function() {
     Sprite.prototype.update.call(this);
     this._animationCount++;
     if (this._animationCount >= this.animationWait()) {
@@ -57,11 +57,11 @@ Sprite_StateIcon.prototype.update = function () {
     }
 };
 
-Sprite_StateIcon.prototype.animationWait = function () {
+Sprite_StateIcon.prototype.animationWait = function() {
     return 40;
 };
 
-Sprite_StateIcon.prototype.updateIcon = function () {
+Sprite_StateIcon.prototype.updateIcon = function() {
     let icons = [];
     if (this._battler && this._battler.isAlive()) {
         icons = this._battler.allIcons();
@@ -78,10 +78,10 @@ Sprite_StateIcon.prototype.updateIcon = function () {
     }
 };
 
-Sprite_StateIcon.prototype.updateFrame = function () {
+Sprite_StateIcon.prototype.updateFrame = function() {
     const pw = Sprite_StateIcon._iconWidth;
     const ph = Sprite_StateIcon._iconHeight;
-    const sx = this._iconIndex % 16 * pw;
+    const sx = (this._iconIndex % 16) * pw;
     const sy = Math.floor(this._iconIndex / 16) * ph;
     this.setFrame(sx, sy, pw, ph);
 };

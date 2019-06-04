@@ -33,5 +33,4 @@ export default class Game_SelfSwitches {
     public onChange() {
         $gameMap.requestRefresh();
     }
-
 }

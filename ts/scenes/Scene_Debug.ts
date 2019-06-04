@@ -12,26 +12,23 @@ export default class Scene_Debug extends Scene_MenuBase {
     public onEditCancel: () => void;
     public refreshHelpWindow: () => void;
     public helpText: () => string;
-    public constructor() {
-        super();
-    }
 }
 
-Scene_Debug.prototype.create = function () {
+Scene_Debug.prototype.create = function() {
     Scene_MenuBase.prototype.create.call(this);
     this.createRangeWindow();
     this.createEditWindow();
     this.createDebugHelpWindow();
 };
 
-Scene_Debug.prototype.createRangeWindow = function () {
+Scene_Debug.prototype.createRangeWindow = function() {
     this._rangeWindow = new Window_DebugRange(0, 0);
-    this._rangeWindow.setHandler("ok",     this.onRangeOk.bind(this));
+    this._rangeWindow.setHandler("ok", this.onRangeOk.bind(this));
     this._rangeWindow.setHandler("cancel", this.popScene.bind(this));
     this.addWindow(this._rangeWindow);
 };
 
-Scene_Debug.prototype.createEditWindow = function () {
+Scene_Debug.prototype.createEditWindow = function() {
     const wx = this._rangeWindow.width;
     const ww = Graphics.boxWidth - wx;
     this._editWindow = new Window_DebugEdit(wx, 0, ww);
@@ -40,7 +37,7 @@ Scene_Debug.prototype.createEditWindow = function () {
     this.addWindow(this._editWindow);
 };
 
-Scene_Debug.prototype.createDebugHelpWindow = function () {
+Scene_Debug.prototype.createDebugHelpWindow = function() {
     const wx = this._editWindow.x;
     const wy = this._editWindow.height;
     const ww = this._editWindow.width;
@@ -49,32 +46,34 @@ Scene_Debug.prototype.createDebugHelpWindow = function () {
     this.addWindow(this._debugHelpWindow);
 };
 
-Scene_Debug.prototype.onRangeOk = function () {
+Scene_Debug.prototype.onRangeOk = function() {
     this._editWindow.activate();
     this._editWindow.select(0);
     this.refreshHelpWindow();
 };
 
-Scene_Debug.prototype.onEditCancel = function () {
+Scene_Debug.prototype.onEditCancel = function() {
     this._rangeWindow.activate();
     this._editWindow.deselect();
     this.refreshHelpWindow();
 };
 
-Scene_Debug.prototype.refreshHelpWindow = function () {
+Scene_Debug.prototype.refreshHelpWindow = function() {
     this._debugHelpWindow.contents.clear();
     if (this._editWindow.active) {
         this._debugHelpWindow.drawTextEx(this.helpText(), 4, 0);
     }
 };
 
-Scene_Debug.prototype.helpText = function () {
+Scene_Debug.prototype.helpText = function() {
     if (this._rangeWindow.mode() === "switch") {
         return "Enter : ON / OFF";
     } else {
-        return ("Left     :  -1\n" +
-                "Right    :  +1\n" +
-                "Pageup   : -10\n" +
-                "Pagedown : +10");
+        return (
+            "Left     :  -1\n" +
+            "Right    :  +1\n" +
+            "Pageup   : -10\n" +
+            "Pagedown : +10"
+        );
     }
 };

@@ -5,7 +5,6 @@ import RequestQueue from "../core/RequestQueue";
 import Utils from "../core/Utils";
 
 export default abstract class ImageManager {
-
     public static cache = new CacheMap(ImageManager);
 
     public static loadAnimation(filename, hue?): Bitmap {
@@ -59,7 +58,12 @@ export default abstract class ImageManager {
         return this.loadBitmap("img/titles2/", filename, hue, true);
     }
 
-    public static loadBitmap(folder: string, filename: string, hue?: number, smooth?: boolean): Bitmap {
+    public static loadBitmap(
+        folder: string,
+        filename: string,
+        hue?: number,
+        smooth?: boolean
+    ): Bitmap {
         if (filename) {
             const path = folder + encodeURIComponent(filename) + ".png";
             const bitmap = this.loadNormalBitmap(path, hue || 0);
@@ -72,10 +76,14 @@ export default abstract class ImageManager {
 
     public static loadEmptyBitmap(): Bitmap {
         let empty = this._imageCache.get("empty");
-        if(!empty){
+        if (!empty) {
             empty = new Bitmap();
             this._imageCache.add("empty", empty);
-            this._imageCache.reserve("empty", empty, this._systemReservationId.toString());
+            this._imageCache.reserve(
+                "empty",
+                empty,
+                this._systemReservationId.toString()
+            );
         }
 
         return empty;
@@ -88,11 +96,11 @@ export default abstract class ImageManager {
             bitmap = Bitmap.load(path);
             this._callCreationHook(bitmap);
 
-            bitmap.addLoadListener(function () {
+            bitmap.addLoadListener(function() {
                 bitmap.rotateHue(hue);
             });
             this._imageCache.add(key, bitmap);
-        }else if(!bitmap.isReady()){
+        } else if (!bitmap.isReady()) {
             bitmap.decode();
         }
 
@@ -108,12 +116,12 @@ export default abstract class ImageManager {
     }
 
     public static isObjectCharacter(filename): boolean {
-        const sign = filename.match(/^[\!\$]+/);
+        const sign = filename.match(/^[!$]+/);
         return sign && sign[0].includes("!");
     }
 
     public static isBigCharacter(filename): boolean {
-        const sign = filename.match(/^[\!\$]+/);
+        const sign = filename.match(/^[!$]+/);
         return sign && sign[0].includes("$");
     }
 
@@ -122,65 +130,159 @@ export default abstract class ImageManager {
     }
 
     public static reserveAnimation(filename, hue?, reservationId?): Bitmap {
-        return this.reserveBitmap("img/animations/", filename, hue, true, reservationId);
+        return this.reserveBitmap(
+            "img/animations/",
+            filename,
+            hue,
+            true,
+            reservationId
+        );
     }
 
     public static reserveBattleback1(filename, hue?, reservationId?): Bitmap {
-        return this.reserveBitmap("img/battlebacks1/", filename, hue, true, reservationId);
+        return this.reserveBitmap(
+            "img/battlebacks1/",
+            filename,
+            hue,
+            true,
+            reservationId
+        );
     }
 
     public static reserveBattleback2(filename, hue?, reservationId?): Bitmap {
-        return this.reserveBitmap("img/battlebacks2/", filename, hue, true, reservationId);
+        return this.reserveBitmap(
+            "img/battlebacks2/",
+            filename,
+            hue,
+            true,
+            reservationId
+        );
     }
 
     public static reserveEnemy(filename, hue?, reservationId?): Bitmap {
-        return this.reserveBitmap("img/enemies/", filename, hue, true, reservationId);
+        return this.reserveBitmap(
+            "img/enemies/",
+            filename,
+            hue,
+            true,
+            reservationId
+        );
     }
 
     public static reserveCharacter(filename, hue?, reservationId?): Bitmap {
-        return this.reserveBitmap("img/characters/", filename, hue, false, reservationId);
+        return this.reserveBitmap(
+            "img/characters/",
+            filename,
+            hue,
+            false,
+            reservationId
+        );
     }
 
     public static reserveFace(filename, hue?, reservationId?: Bitmap) {
-        return this.reserveBitmap("img/faces/", filename, hue, true, reservationId);
+        return this.reserveBitmap(
+            "img/faces/",
+            filename,
+            hue,
+            true,
+            reservationId
+        );
     }
 
     public static reserveParallax(filename, hue?, reservationId?): Bitmap {
-        return this.reserveBitmap("img/parallaxes/", filename, hue, true, reservationId);
+        return this.reserveBitmap(
+            "img/parallaxes/",
+            filename,
+            hue,
+            true,
+            reservationId
+        );
     }
 
     public static reservePicture(filename, hue?, reservationId?): Bitmap {
-        return this.reserveBitmap("img/pictures/", filename, hue, true, reservationId);
+        return this.reserveBitmap(
+            "img/pictures/",
+            filename,
+            hue,
+            true,
+            reservationId
+        );
     }
 
     public static reserveSvActor(filename, hue?, reservationId?): Bitmap {
-        return this.reserveBitmap("img/sv_actors/", filename, hue, false, reservationId);
+        return this.reserveBitmap(
+            "img/sv_actors/",
+            filename,
+            hue,
+            false,
+            reservationId
+        );
     }
 
     public static reserveSvEnemy(filename, hue?, reservationId?): Bitmap {
-        return this.reserveBitmap("img/sv_enemies/", filename, hue, true, reservationId);
+        return this.reserveBitmap(
+            "img/sv_enemies/",
+            filename,
+            hue,
+            true,
+            reservationId
+        );
     }
 
     public static reserveSystem(filename, hue?, reservationId?): Bitmap {
-        return this.reserveBitmap("img/system/", filename, hue, false, reservationId || this._systemReservationId);
+        return this.reserveBitmap(
+            "img/system/",
+            filename,
+            hue,
+            false,
+            reservationId || this._systemReservationId
+        );
     }
 
     public static reserveTileset(filename, hue?, reservationId?): Bitmap {
-        return this.reserveBitmap("img/tilesets/", filename, hue, false, reservationId);
+        return this.reserveBitmap(
+            "img/tilesets/",
+            filename,
+            hue,
+            false,
+            reservationId
+        );
     }
 
     public static reserveTitle1(filename, hue?, reservationId?): Bitmap {
-        return this.reserveBitmap("img/titles1/", filename, hue, true, reservationId);
+        return this.reserveBitmap(
+            "img/titles1/",
+            filename,
+            hue,
+            true,
+            reservationId
+        );
     }
 
     public static reserveTitle2(filename, hue?, reservationId?): Bitmap {
-        return this.reserveBitmap("img/titles2/", filename, hue, true, reservationId);
+        return this.reserveBitmap(
+            "img/titles2/",
+            filename,
+            hue,
+            true,
+            reservationId
+        );
     }
 
-    public static reserveBitmap(folder, filename, hue, smooth, reservationId): Bitmap {
+    public static reserveBitmap(
+        folder,
+        filename,
+        hue,
+        smooth,
+        reservationId
+    ): Bitmap {
         if (filename) {
             const path = folder + encodeURIComponent(filename) + ".png";
-            const bitmap = this.reserveNormalBitmap(path, hue || 0, reservationId || this._defaultReservationId);
+            const bitmap = this.reserveNormalBitmap(
+                path,
+                hue || 0,
+                reservationId || this._defaultReservationId
+            );
             bitmap.smooth = smooth;
             return bitmap;
         } else {
@@ -190,15 +292,19 @@ export default abstract class ImageManager {
 
     public static reserveNormalBitmap(path, hue?, reservationId?): Bitmap {
         const bitmap = this.loadNormalBitmap(path, hue);
-        this._imageCache.reserve(this._generateCacheKey(path, hue), bitmap, reservationId);
+        this._imageCache.reserve(
+            this._generateCacheKey(path, hue),
+            bitmap,
+            reservationId
+        );
         return bitmap;
     }
 
-    public static releaseReservation(reservationId){
+    public static releaseReservation(reservationId) {
         this._imageCache.releaseReservation(reservationId);
     }
 
-    public static setDefaultReservationId(reservationId){
+    public static setDefaultReservationId(reservationId) {
         this._defaultReservationId = reservationId;
     }
 
@@ -272,31 +378,31 @@ export default abstract class ImageManager {
     public static requestNormalBitmap(path, hue?): Bitmap {
         const key = this._generateCacheKey(path, hue);
         let bitmap = this._imageCache.get(key);
-        if(!bitmap){
+        if (!bitmap) {
             bitmap = Bitmap.request(path);
             this._callCreationHook(bitmap);
 
-            bitmap.addLoadListener(function (){
+            bitmap.addLoadListener(function() {
                 bitmap.rotateHue(hue);
             });
             this._imageCache.add(key, bitmap);
             this._requestQueue.enqueue(key, bitmap);
-        }else{
+        } else {
             this._requestQueue.raisePriority(key);
         }
 
         return bitmap;
     }
 
-    public static update(){
+    public static update() {
         this._requestQueue.update();
     }
 
-    public static clearRequest(){
+    public static clearRequest() {
         this._requestQueue.clear();
     }
 
-    public static setCreationHook(hook){
+    public static setCreationHook(hook) {
         this._creationHook = hook;
     }
     private static _creationHook: any;
@@ -306,12 +412,13 @@ export default abstract class ImageManager {
     private static _systemReservationId = Utils.generateRuntimeId();
     private static _defaultReservationId: any;
 
-    private static _generateCacheKey(path, hue?){
-        return  path + ":" + hue;
+    private static _generateCacheKey(path, hue?) {
+        return path + ":" + hue;
     }
 
-    private static _callCreationHook(bitmap){
-        if(this._creationHook) { this._creationHook(bitmap); }
+    private static _callCreationHook(bitmap) {
+        if (this._creationHook) {
+            this._creationHook(bitmap);
+        }
     }
-
 }

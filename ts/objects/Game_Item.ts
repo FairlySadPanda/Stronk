@@ -1,4 +1,3 @@
-
 import DataManager from "../managers/DataManager";
 
 export interface Game_Item_OnLoad {
@@ -17,7 +16,7 @@ export default class Game_Item {
             this.setObject(item);
         }
 
-        if(gameLoadInput) {
+        if (gameLoadInput) {
             this._dataClass = gameLoadInput._dataClass;
             this._itemId = gameLoadInput._itemId;
         }
@@ -88,5 +87,4 @@ export default class Game_Item {
         this._dataClass = isWeapon ? "weapon" : "armor";
         this._itemId = itemId;
     }
-
 }

@@ -4,7 +4,12 @@ import Graphics from "./Graphics";
 export default abstract class ResourceHandler {
     public static _reloaders: any[];
     public static _defaultRetryInterval: number[];
-    public static createLoader: (url: any, retryMethod: any, resignMethod?: any, retryInterval?: any) => () => void;
+    public static createLoader: (
+        url: any,
+        retryMethod: any,
+        resignMethod?: any,
+        retryInterval?: any
+    ) => () => void;
     public static exists: () => boolean;
     public static retry: () => void;
 }
@@ -12,11 +17,16 @@ export default abstract class ResourceHandler {
 ResourceHandler._reloaders = [];
 ResourceHandler._defaultRetryInterval = [500, 1000, 3000];
 
-ResourceHandler.createLoader = function (url, retryMethod, resignMethod?, retryInterval?): () => void {
+ResourceHandler.createLoader = function(
+    url,
+    retryMethod,
+    resignMethod?,
+    retryInterval?
+): () => void {
     retryInterval = retryInterval || this._defaultRetryInterval;
     const reloaders = this._reloaders;
     let retryCount = 0;
-    return function () {
+    return function() {
         if (retryCount < retryInterval.length) {
             setTimeout(retryMethod, retryInterval[retryCount]);
             retryCount++;
@@ -29,7 +39,7 @@ ResourceHandler.createLoader = function (url, retryMethod, resignMethod?, retryI
                     Graphics.printLoadingError(url);
                     SceneManager.stop();
                 }
-                reloaders.push(function () {
+                reloaders.push(function() {
                     retryCount = 0;
                     retryMethod();
                 });
@@ -38,15 +48,15 @@ ResourceHandler.createLoader = function (url, retryMethod, resignMethod?, retryI
     };
 };
 
-ResourceHandler.exists = function () {
+ResourceHandler.exists = function() {
     return this._reloaders.length > 0;
 };
 
-ResourceHandler.retry = function () {
+ResourceHandler.retry = function() {
     if (this._reloaders.length > 0) {
         Graphics.eraseLoadingError();
         SceneManager.resume();
-        this._reloaders.forEach(function (reloader) {
+        this._reloaders.forEach(function(reloader) {
             reloader();
         });
         this._reloaders.length = 0;

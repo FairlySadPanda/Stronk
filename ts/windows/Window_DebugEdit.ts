@@ -3,7 +3,7 @@ import Utils from "../core/Utils";
 import SoundManager from "../managers/SoundManager";
 import Window_Selectable from "./Window_Selectable";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_DebugEdit
 //
 // The window for displaying switches and variables on the debug screen.
@@ -29,16 +29,16 @@ export default class Window_DebugEdit extends Window_Selectable {
     }
 }
 
-Window_DebugEdit.prototype.maxItems = function () {
+Window_DebugEdit.prototype.maxItems = function() {
     return 10;
 };
 
-Window_DebugEdit.prototype.refresh = function () {
+Window_DebugEdit.prototype.refresh = function() {
     this.contents.clear();
     this.drawAllItems();
 };
 
-Window_DebugEdit.prototype.drawItem = function (index) {
+Window_DebugEdit.prototype.drawItem = function(index) {
     const dataId = this._topId + index;
     const idText = Utils.padZero(dataId, 4) + ":";
     const idWidth = this.textWidth(idText);
@@ -54,7 +54,7 @@ Window_DebugEdit.prototype.drawItem = function (index) {
     this.drawText(status, rect.x + rect.width, rect.y, statusWidth, "right");
 };
 
-Window_DebugEdit.prototype.itemName = function (dataId) {
+Window_DebugEdit.prototype.itemName = function(dataId) {
     if (this._mode === "switch") {
         return $dataSystem.switches[dataId];
     } else {
@@ -62,7 +62,7 @@ Window_DebugEdit.prototype.itemName = function (dataId) {
     }
 };
 
-Window_DebugEdit.prototype.itemStatus = function (dataId) {
+Window_DebugEdit.prototype.itemStatus = function(dataId) {
     if (this._mode === "switch") {
         return $gameSwitches.value(dataId) ? "[ON]" : "[OFF]";
     } else {
@@ -70,25 +70,25 @@ Window_DebugEdit.prototype.itemStatus = function (dataId) {
     }
 };
 
-Window_DebugEdit.prototype.setMode = function (mode) {
+Window_DebugEdit.prototype.setMode = function(mode) {
     if (this._mode !== mode) {
         this._mode = mode;
         this.refresh();
     }
 };
 
-Window_DebugEdit.prototype.setTopId = function (id) {
+Window_DebugEdit.prototype.setTopId = function(id) {
     if (this._topId !== id) {
         this._topId = id;
         this.refresh();
     }
 };
 
-Window_DebugEdit.prototype.currentId = function () {
+Window_DebugEdit.prototype.currentId = function() {
     return this._topId + this.index();
 };
 
-Window_DebugEdit.prototype.update = function () {
+Window_DebugEdit.prototype.update = function() {
     Window_Selectable.prototype.update.call(this);
     if (this.active) {
         if (this._mode === "switch") {
@@ -99,7 +99,7 @@ Window_DebugEdit.prototype.update = function () {
     }
 };
 
-Window_DebugEdit.prototype.updateSwitch = function () {
+Window_DebugEdit.prototype.updateSwitch = function() {
     if (Input.isRepeated("ok")) {
         const switchId = this.currentId();
         SoundManager.playCursor();
@@ -108,7 +108,7 @@ Window_DebugEdit.prototype.updateSwitch = function () {
     }
 };
 
-Window_DebugEdit.prototype.updateVariable = function () {
+Window_DebugEdit.prototype.updateVariable = function() {
     const variableId = this.currentId();
     let value = $gameVariables.value(variableId);
     if (typeof value === "number") {

@@ -1,7 +1,7 @@
 import ImageManager from "../managers/ImageManager";
 import Sprite_Base from "./Sprite_Base";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Sprite_Balloon
 //
 // The sprite for displaying a balloon icon.
@@ -26,7 +26,7 @@ export default class Sprite_Balloon extends Sprite_Base {
     }
 }
 
-Sprite_Balloon.prototype.initMembers = function () {
+Sprite_Balloon.prototype.initMembers = function() {
     this._balloonId = 0;
     this._duration = 0;
     this.anchor.x = 0.5;
@@ -34,17 +34,17 @@ Sprite_Balloon.prototype.initMembers = function () {
     this.z = 7;
 };
 
-Sprite_Balloon.prototype.loadBitmap = function () {
+Sprite_Balloon.prototype.loadBitmap = function() {
     this.bitmap = ImageManager.loadSystem("Balloon");
     this.setFrame(0, 0, 0, 0);
 };
 
-Sprite_Balloon.prototype.setup = function (balloonId) {
+Sprite_Balloon.prototype.setup = function(balloonId) {
     this._balloonId = balloonId;
     this._duration = 8 * this.speed() + this.waitTime();
 };
 
-Sprite_Balloon.prototype.update = function () {
+Sprite_Balloon.prototype.update = function() {
     Sprite_Base.prototype.update.call(this);
     if (this._duration > 0) {
         this._duration--;
@@ -54,7 +54,7 @@ Sprite_Balloon.prototype.update = function () {
     }
 };
 
-Sprite_Balloon.prototype.updateFrame = function () {
+Sprite_Balloon.prototype.updateFrame = function() {
     const w = 48;
     const h = 48;
     const sx = this.frameIndex() * w;
@@ -62,19 +62,19 @@ Sprite_Balloon.prototype.updateFrame = function () {
     this.setFrame(sx, sy, w, h);
 };
 
-Sprite_Balloon.prototype.speed = function () {
+Sprite_Balloon.prototype.speed = function() {
     return 8;
 };
 
-Sprite_Balloon.prototype.waitTime = function () {
+Sprite_Balloon.prototype.waitTime = function() {
     return 12;
 };
 
-Sprite_Balloon.prototype.frameIndex = function () {
+Sprite_Balloon.prototype.frameIndex = function() {
     const index = (this._duration - this.waitTime()) / this.speed();
     return 7 - Math.max(Math.floor(index), 0);
 };
 
-Sprite_Balloon.prototype.isPlaying = function () {
+Sprite_Balloon.prototype.isPlaying = function() {
     return this._duration > 0;
 };

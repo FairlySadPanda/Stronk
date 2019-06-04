@@ -9,13 +9,18 @@ export default class Game_CommonEvent {
     private _commonEventId: number;
     private _interpreter: Game_Interpreter;
 
-    public constructor(commonEventId: number, gameLoadInput?: Game_CommonEvent_OnLoad) {
+    public constructor(
+        commonEventId: number,
+        gameLoadInput?: Game_CommonEvent_OnLoad
+    ) {
         this._commonEventId = commonEventId;
         this.refresh();
 
         if (gameLoadInput) {
             this._commonEventId = gameLoadInput._commonEventId;
-            this._interpreter = new Game_Interpreter(gameLoadInput._interpreter);
+            this._interpreter = new Game_Interpreter(
+                gameLoadInput._interpreter
+            );
         }
     }
 
@@ -50,5 +55,4 @@ export default class Game_CommonEvent {
             this._interpreter.update();
         }
     }
-
 }

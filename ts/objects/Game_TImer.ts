@@ -48,5 +48,4 @@ export default class Game_Timer {
     public onExpire() {
         BattleManager.abort();
     }
-
 }

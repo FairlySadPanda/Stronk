@@ -1,7 +1,6 @@
-
 import Window_Base from "./Window_Base";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_MapName
 //
 // The window for displaying the map name on the map screen.
@@ -14,7 +13,12 @@ export default class Window_MapName extends Window_Base {
     public updateFadeOut: () => void;
     public drawBackground: (x: any, y: any, width: any, height: any) => void;
     public constructor() {
-        super(0, 0, Window_MapName.prototype.windowWidth(), Window_MapName.prototype.windowHeight());
+        super(
+            0,
+            0,
+            Window_MapName.prototype.windowWidth(),
+            Window_MapName.prototype.windowHeight()
+        );
         this.opacity = 0;
         this.contentsOpacity = 0;
         this._showCount = 0;
@@ -31,15 +35,15 @@ export default class Window_MapName extends Window_Base {
     }
 }
 
-Window_MapName.prototype.windowWidth = function () {
+Window_MapName.prototype.windowWidth = function() {
     return 360;
 };
 
-Window_MapName.prototype.windowHeight = function () {
+Window_MapName.prototype.windowHeight = function() {
     return this.fittingHeight(1);
 };
 
-Window_MapName.prototype.update = function () {
+Window_MapName.prototype.update = function() {
     Window_Base.prototype.update.call(this);
     if (this._showCount > 0 && $gameMap.isNameDisplayEnabled()) {
         this.updateFadeIn();
@@ -49,24 +53,24 @@ Window_MapName.prototype.update = function () {
     }
 };
 
-Window_MapName.prototype.updateFadeIn = function () {
+Window_MapName.prototype.updateFadeIn = function() {
     this.contentsOpacity += 16;
 };
 
-Window_MapName.prototype.updateFadeOut = function () {
+Window_MapName.prototype.updateFadeOut = function() {
     this.contentsOpacity -= 16;
 };
 
-Window_MapName.prototype.open = function () {
+Window_MapName.prototype.open = function() {
     this.refresh();
     this._showCount = 150;
 };
 
-Window_MapName.prototype.close = function () {
+Window_MapName.prototype.close = function() {
     this._showCount = 0;
 };
 
-Window_MapName.prototype.refresh = function () {
+Window_MapName.prototype.refresh = function() {
     this.contents.clear();
     if ($gameMap.displayName()) {
         const width = this.contentsWidth();
@@ -75,9 +79,16 @@ Window_MapName.prototype.refresh = function () {
     }
 };
 
-Window_MapName.prototype.drawBackground = function (x, y, width, height) {
+Window_MapName.prototype.drawBackground = function(x, y, width, height) {
     const color1 = this.dimColor1();
     const color2 = this.dimColor2();
     this.contents.gradientFillRect(x, y, width / 2, height, color2, color1);
-    this.contents.gradientFillRect(x + width / 2, y, width / 2, height, color1, color2);
+    this.contents.gradientFillRect(
+        x + width / 2,
+        y,
+        width / 2,
+        height,
+        color1,
+        color2
+    );
 };

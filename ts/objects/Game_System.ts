@@ -254,5 +254,4 @@ export default class Game_System {
     public saveWalkingBgm2() {
         this._walkingBgm = $dataMap.bgm;
     }
-
 }

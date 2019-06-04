@@ -53,7 +53,7 @@ export default class Game_ActionResult {
             this.addedStates = gameLoadInput.addedStates;
             this.removedStates = gameLoadInput.removedStates;
             this.addedBuffs = gameLoadInput.addedBuffs;
-            this.addedDebuffs  = gameLoadInput.addedDebuffs;
+            this.addedDebuffs = gameLoadInput.addedDebuffs;
             this.removedBuffs = gameLoadInput.removedBuffs;
         }
     }
@@ -78,21 +78,25 @@ export default class Game_ActionResult {
     }
 
     public addedStateObjects() {
-        return this.addedStates.map(function (id) {
+        return this.addedStates.map(function(id) {
             return $dataStates[id];
         });
     }
 
     public removedStateObjects() {
-        return this.removedStates.map(function (id) {
+        return this.removedStates.map(function(id) {
             return $dataStates[id];
         });
     }
 
     public isStatusAffected() {
-        return (this.addedStates.length > 0 || this.removedStates.length > 0 ||
-                this.addedBuffs.length > 0 || this.addedDebuffs.length > 0 ||
-                this.removedBuffs.length > 0);
+        return (
+            this.addedStates.length > 0 ||
+            this.removedStates.length > 0 ||
+            this.addedBuffs.length > 0 ||
+            this.addedDebuffs.length > 0 ||
+            this.removedBuffs.length > 0
+        );
     }
 
     public isHit() {

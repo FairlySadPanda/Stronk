@@ -10,18 +10,17 @@ PIXI.tilemap.TileRenderer.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 PIXI.tilemap.TileRenderer.DO_CLEAR = true;
 
 export default class Tilemap extends PIXI.Container {
-
     /**
      * The width of the screen in pixels.
      *
      * @property width
      * @type Number
      */
-    get width(): number {
+    public get width(): number {
         return this._width;
     }
 
-    set width(value: number) {
+    public set width(value: number) {
         if (this._width !== value) {
             this._width = value;
             this._createLayers();
@@ -34,11 +33,11 @@ export default class Tilemap extends PIXI.Container {
      * @property height
      * @type Number
      */
-    get height(): number {
+    public get height(): number {
         return this._height;
     }
 
-    set height(value: number) {
+    public set height(value: number) {
         if (this._height !== value) {
             this._height = value;
             this._createLayers();
@@ -52,11 +51,11 @@ export default class Tilemap extends PIXI.Container {
      * @type Number
      */
 
-    get tileWidth(): number {
+    public get tileWidth(): number {
         return this._tileWidth;
     }
 
-    set tileWidth(value: number) {
+    public set tileWidth(value: number) {
         if (this._tileWidth !== value) {
             this._tileWidth = value;
             this._createLayers();
@@ -69,11 +68,11 @@ export default class Tilemap extends PIXI.Container {
      * @property tileHeight
      * @type Number
      */
-    get tileHeight() {
+    public get tileHeight() {
         return this._tileHeight;
     }
 
-    set tileHeight(value) {
+    public set tileHeight(value) {
         if (this._tileHeight !== value) {
             this._tileHeight = value;
             this._createLayers();
@@ -82,60 +81,94 @@ export default class Tilemap extends PIXI.Container {
 
     // Tile type checkers
 
-    public static TILE_ID_B      = 0;
-    public static TILE_ID_C      = 256;
-    public static TILE_ID_D      = 512;
-    public static TILE_ID_E      = 768;
-    public static TILE_ID_A5     = 1536;
-    public static TILE_ID_A1     = 2048;
-    public static TILE_ID_A2     = 2816;
-    public static TILE_ID_A3     = 4352;
-    public static TILE_ID_A4     = 5888;
-    public static TILE_ID_MAX    = 8192;
+    public static TILE_ID_B = 0;
+    public static TILE_ID_C = 256;
+    public static TILE_ID_D = 512;
+    public static TILE_ID_E = 768;
+    public static TILE_ID_A5 = 1536;
+    public static TILE_ID_A1 = 2048;
+    public static TILE_ID_A2 = 2816;
+    public static TILE_ID_A3 = 4352;
+    public static TILE_ID_A4 = 5888;
+    public static TILE_ID_MAX = 8192;
 
     // Autotile shape number to coordinates of tileset images
 
     public static FLOOR_AUTOTILE_TABLE = [
-        [[2,4],[1,4],[2,3],[1,3]],[[2,0],[1,4],[2,3],[1,3]],
-        [[2,4],[3,0],[2,3],[1,3]],[[2,0],[3,0],[2,3],[1,3]],
-        [[2,4],[1,4],[2,3],[3,1]],[[2,0],[1,4],[2,3],[3,1]],
-        [[2,4],[3,0],[2,3],[3,1]],[[2,0],[3,0],[2,3],[3,1]],
-        [[2,4],[1,4],[2,1],[1,3]],[[2,0],[1,4],[2,1],[1,3]],
-        [[2,4],[3,0],[2,1],[1,3]],[[2,0],[3,0],[2,1],[1,3]],
-        [[2,4],[1,4],[2,1],[3,1]],[[2,0],[1,4],[2,1],[3,1]],
-        [[2,4],[3,0],[2,1],[3,1]],[[2,0],[3,0],[2,1],[3,1]],
-        [[0,4],[1,4],[0,3],[1,3]],[[0,4],[3,0],[0,3],[1,3]],
-        [[0,4],[1,4],[0,3],[3,1]],[[0,4],[3,0],[0,3],[3,1]],
-        [[2,2],[1,2],[2,3],[1,3]],[[2,2],[1,2],[2,3],[3,1]],
-        [[2,2],[1,2],[2,1],[1,3]],[[2,2],[1,2],[2,1],[3,1]],
-        [[2,4],[3,4],[2,3],[3,3]],[[2,4],[3,4],[2,1],[3,3]],
-        [[2,0],[3,4],[2,3],[3,3]],[[2,0],[3,4],[2,1],[3,3]],
-        [[2,4],[1,4],[2,5],[1,5]],[[2,0],[1,4],[2,5],[1,5]],
-        [[2,4],[3,0],[2,5],[1,5]],[[2,0],[3,0],[2,5],[1,5]],
-        [[0,4],[3,4],[0,3],[3,3]],[[2,2],[1,2],[2,5],[1,5]],
-        [[0,2],[1,2],[0,3],[1,3]],[[0,2],[1,2],[0,3],[3,1]],
-        [[2,2],[3,2],[2,3],[3,3]],[[2,2],[3,2],[2,1],[3,3]],
-        [[2,4],[3,4],[2,5],[3,5]],[[2,0],[3,4],[2,5],[3,5]],
-        [[0,4],[1,4],[0,5],[1,5]],[[0,4],[3,0],[0,5],[1,5]],
-        [[0,2],[3,2],[0,3],[3,3]],[[0,2],[1,2],[0,5],[1,5]],
-        [[0,4],[3,4],[0,5],[3,5]],[[2,2],[3,2],[2,5],[3,5]],
-        [[0,2],[3,2],[0,5],[3,5]],[[0,0],[1,0],[0,1],[1,1]]
+        [[2, 4], [1, 4], [2, 3], [1, 3]],
+        [[2, 0], [1, 4], [2, 3], [1, 3]],
+        [[2, 4], [3, 0], [2, 3], [1, 3]],
+        [[2, 0], [3, 0], [2, 3], [1, 3]],
+        [[2, 4], [1, 4], [2, 3], [3, 1]],
+        [[2, 0], [1, 4], [2, 3], [3, 1]],
+        [[2, 4], [3, 0], [2, 3], [3, 1]],
+        [[2, 0], [3, 0], [2, 3], [3, 1]],
+        [[2, 4], [1, 4], [2, 1], [1, 3]],
+        [[2, 0], [1, 4], [2, 1], [1, 3]],
+        [[2, 4], [3, 0], [2, 1], [1, 3]],
+        [[2, 0], [3, 0], [2, 1], [1, 3]],
+        [[2, 4], [1, 4], [2, 1], [3, 1]],
+        [[2, 0], [1, 4], [2, 1], [3, 1]],
+        [[2, 4], [3, 0], [2, 1], [3, 1]],
+        [[2, 0], [3, 0], [2, 1], [3, 1]],
+        [[0, 4], [1, 4], [0, 3], [1, 3]],
+        [[0, 4], [3, 0], [0, 3], [1, 3]],
+        [[0, 4], [1, 4], [0, 3], [3, 1]],
+        [[0, 4], [3, 0], [0, 3], [3, 1]],
+        [[2, 2], [1, 2], [2, 3], [1, 3]],
+        [[2, 2], [1, 2], [2, 3], [3, 1]],
+        [[2, 2], [1, 2], [2, 1], [1, 3]],
+        [[2, 2], [1, 2], [2, 1], [3, 1]],
+        [[2, 4], [3, 4], [2, 3], [3, 3]],
+        [[2, 4], [3, 4], [2, 1], [3, 3]],
+        [[2, 0], [3, 4], [2, 3], [3, 3]],
+        [[2, 0], [3, 4], [2, 1], [3, 3]],
+        [[2, 4], [1, 4], [2, 5], [1, 5]],
+        [[2, 0], [1, 4], [2, 5], [1, 5]],
+        [[2, 4], [3, 0], [2, 5], [1, 5]],
+        [[2, 0], [3, 0], [2, 5], [1, 5]],
+        [[0, 4], [3, 4], [0, 3], [3, 3]],
+        [[2, 2], [1, 2], [2, 5], [1, 5]],
+        [[0, 2], [1, 2], [0, 3], [1, 3]],
+        [[0, 2], [1, 2], [0, 3], [3, 1]],
+        [[2, 2], [3, 2], [2, 3], [3, 3]],
+        [[2, 2], [3, 2], [2, 1], [3, 3]],
+        [[2, 4], [3, 4], [2, 5], [3, 5]],
+        [[2, 0], [3, 4], [2, 5], [3, 5]],
+        [[0, 4], [1, 4], [0, 5], [1, 5]],
+        [[0, 4], [3, 0], [0, 5], [1, 5]],
+        [[0, 2], [3, 2], [0, 3], [3, 3]],
+        [[0, 2], [1, 2], [0, 5], [1, 5]],
+        [[0, 4], [3, 4], [0, 5], [3, 5]],
+        [[2, 2], [3, 2], [2, 5], [3, 5]],
+        [[0, 2], [3, 2], [0, 5], [3, 5]],
+        [[0, 0], [1, 0], [0, 1], [1, 1]]
     ];
 
     public static WALL_AUTOTILE_TABLE = [
-        [[2,2],[1,2],[2,1],[1,1]],[[0,2],[1,2],[0,1],[1,1]],
-        [[2,0],[1,0],[2,1],[1,1]],[[0,0],[1,0],[0,1],[1,1]],
-        [[2,2],[3,2],[2,1],[3,1]],[[0,2],[3,2],[0,1],[3,1]],
-        [[2,0],[3,0],[2,1],[3,1]],[[0,0],[3,0],[0,1],[3,1]],
-        [[2,2],[1,2],[2,3],[1,3]],[[0,2],[1,2],[0,3],[1,3]],
-        [[2,0],[1,0],[2,3],[1,3]],[[0,0],[1,0],[0,3],[1,3]],
-        [[2,2],[3,2],[2,3],[3,3]],[[0,2],[3,2],[0,3],[3,3]],
-        [[2,0],[3,0],[2,3],[3,3]],[[0,0],[3,0],[0,3],[3,3]]
+        [[2, 2], [1, 2], [2, 1], [1, 1]],
+        [[0, 2], [1, 2], [0, 1], [1, 1]],
+        [[2, 0], [1, 0], [2, 1], [1, 1]],
+        [[0, 0], [1, 0], [0, 1], [1, 1]],
+        [[2, 2], [3, 2], [2, 1], [3, 1]],
+        [[0, 2], [3, 2], [0, 1], [3, 1]],
+        [[2, 0], [3, 0], [2, 1], [3, 1]],
+        [[0, 0], [3, 0], [0, 1], [3, 1]],
+        [[2, 2], [1, 2], [2, 3], [1, 3]],
+        [[0, 2], [1, 2], [0, 3], [1, 3]],
+        [[2, 0], [1, 0], [2, 3], [1, 3]],
+        [[0, 0], [1, 0], [0, 3], [1, 3]],
+        [[2, 2], [3, 2], [2, 3], [3, 3]],
+        [[0, 2], [3, 2], [0, 3], [3, 3]],
+        [[2, 0], [3, 0], [2, 3], [3, 3]],
+        [[0, 0], [3, 0], [0, 3], [3, 3]]
     ];
 
     public static WATERFALL_AUTOTILE_TABLE = [
-        [[2,0],[1,0],[2,1],[1,1]],[[0,0],[1,0],[0,1],[1,1]],
-        [[2,0],[3,0],[2,1],[3,1]],[[0,0],[3,0],[0,1],[3,1]]
+        [[2, 0], [1, 0], [2, 1], [1, 1]],
+        [[0, 0], [1, 0], [0, 1], [1, 1]],
+        [[2, 0], [3, 0], [2, 1], [3, 1]],
+        [[0, 0], [3, 0], [0, 1], [3, 1]]
     ];
 
     public static isVisibleTile(tileId) {
@@ -160,7 +193,9 @@ export default class Tilemap extends PIXI.Container {
 
     public static isSameKindTile(tileID1, tileID2) {
         if (this.isAutotile(tileID1) && this.isAutotile(tileID2)) {
-            return this.getAutotileKind(tileID1) === this.getAutotileKind(tileID2);
+            return (
+                this.getAutotileKind(tileID1) === this.getAutotileKind(tileID2)
+            );
         } else {
             return tileID1 === tileID2;
         }
@@ -188,7 +223,9 @@ export default class Tilemap extends PIXI.Container {
 
     public static isWaterTile(tileId) {
         if (this.isTileA1(tileId)) {
-            return !(tileId >= this.TILE_ID_A1 + 96 && tileId < this.TILE_ID_A1 + 192);
+            return !(
+                tileId >= this.TILE_ID_A1 + 96 && tileId < this.TILE_ID_A1 + 192
+            );
         } else {
             return false;
         }
@@ -203,7 +240,11 @@ export default class Tilemap extends PIXI.Container {
     }
 
     public static isGroundTile(tileId) {
-        return this.isTileA1(tileId) || this.isTileA2(tileId) || this.isTileA5(tileId);
+        return (
+            this.isTileA1(tileId) ||
+            this.isTileA2(tileId) ||
+            this.isTileA5(tileId)
+        );
     }
 
     public static isShadowingTile(tileId) {
@@ -219,8 +260,10 @@ export default class Tilemap extends PIXI.Container {
     }
 
     public static isWallSideTile(tileId) {
-        return (this.isTileA3(tileId) || this.isTileA4(tileId)) &&
-                this.getAutotileKind(tileId) % 16 >= 8;
+        return (
+            (this.isTileA3(tileId) || this.isTileA4(tileId)) &&
+            this.getAutotileKind(tileId) % 16 >= 8
+        );
     }
 
     public static isWallTile(tileId) {
@@ -228,8 +271,11 @@ export default class Tilemap extends PIXI.Container {
     }
 
     public static isFloorTypeAutotile(tileId) {
-        return (this.isTileA1(tileId) && !this.isWaterfallTile(tileId)) ||
-                this.isTileA2(tileId) || this.isWallTopTile(tileId);
+        return (
+            (this.isTileA1(tileId) && !this.isWaterfallTile(tileId)) ||
+            this.isTileA2(tileId) ||
+            this.isWallTopTile(tileId)
+        );
     }
 
     public static isWallTypeAutotile(tileId) {
@@ -374,15 +420,15 @@ export default class Tilemap extends PIXI.Container {
      *
      * @method update
      */
-    public update = function () {
+    public update = function() {
         this.animationCount++;
         this.animationFrame = Math.floor(this.animationCount / 30);
-        this.children.forEach(function (child) {
+        this.children.forEach(function(child) {
             if (child.update) {
                 child.update();
             }
         });
-        for (let i=0; i<this.bitmaps.length;i++) {
+        for (let i = 0; i < this.bitmaps.length; i++) {
             if (this.bitmaps[i]) {
                 this.bitmaps[i].touch();
             }
@@ -430,7 +476,9 @@ export default class Tilemap extends PIXI.Container {
      * @method updateBitmaps
      */
     public refreshTileset() {
-        const bitmaps = this.bitmaps.map(function (x) { return x._baseTexture ? new PIXI.Texture(x._baseTexture) : x; });
+        const bitmaps = this.bitmaps.map(function(x) {
+            return x._baseTexture ? new PIXI.Texture(x._baseTexture) : x;
+        });
         this.lowerLayer.setBitmaps(bitmaps);
         this.upperLayer.setBitmaps(bitmaps);
     }
@@ -452,8 +500,11 @@ export default class Tilemap extends PIXI.Container {
         const startX = Math.floor((ox - this._margin) / this._tileWidth);
         const startY = Math.floor((oy - this._margin) / this._tileHeight);
         this._updateLayerPositions(startX, startY);
-        if (this._needsRepaint ||
-            this._lastStartX !== startX || this._lastStartY !== startY) {
+        if (
+            this._needsRepaint ||
+            this._lastStartX !== startX ||
+            this._lastStartY !== startY
+        ) {
             this._lastStartX = startX;
             this._lastStartY = startY;
             this._paintAllTiles(startX, startY);
@@ -526,9 +577,12 @@ export default class Tilemap extends PIXI.Container {
      */
     private _hackRenderer(renderer) {
         let af = this.animationFrame % 4;
-        if (af===3) { af = 1; }
+        if (af === 3) {
+            af = 1;
+        }
         renderer.plugins.tilemap.tileAnim[0] = af * this._tileWidth;
-        renderer.plugins.tilemap.tileAnim[1] = (this.animationFrame % 3) * this._tileHeight;
+        renderer.plugins.tilemap.tileAnim[1] =
+            (this.animationFrame % 3) * this._tileHeight;
         return renderer;
     }
 
@@ -540,16 +594,41 @@ export default class Tilemap extends PIXI.Container {
         this._needsRepaint = true;
 
         if (!this.lowerZLayer) {
-            //@hackerham: create layers only in initialization. Doesn't depend on width/height
-            this.addChild(this.lowerZLayer = new PIXI.tilemap.ZLayer(this, 0));
-            this.addChild(this.upperZLayer = new PIXI.tilemap.ZLayer(this, 4));
+            // @hackerham: create layers only in initialization. Doesn't depend on width/height
+            this.addChild(
+                (this.lowerZLayer = new PIXI.tilemap.ZLayer(this, 0))
+            );
+            this.addChild(
+                (this.upperZLayer = new PIXI.tilemap.ZLayer(this, 4))
+            );
 
             const parameters = PluginManager.parameters("ShaderTilemap");
-            const useSquareShader = Number(parameters.hasOwnProperty("squareShader") ? parameters["squareShader"] : 0);
+            const useSquareShader = Number(
+                parameters.hasOwnProperty("squareShader")
+                    ? parameters["squareShader"]
+                    : 0
+            );
 
-            this.lowerZLayer.addChild(this.lowerLayer = new PIXI.tilemap.CompositeRectTileLayer(0, [], useSquareShader));
-            this.lowerLayer.shadowColor = new Float32Array([0.0, 0.0, 0.0, 0.5]);
-            this.upperZLayer.addChild(this.upperLayer = new PIXI.tilemap.CompositeRectTileLayer(4, [], useSquareShader));
+            this.lowerZLayer.addChild(
+                (this.lowerLayer = new PIXI.tilemap.CompositeRectTileLayer(
+                    0,
+                    [],
+                    useSquareShader
+                ))
+            );
+            this.lowerLayer.shadowColor = new Float32Array([
+                0.0,
+                0.0,
+                0.0,
+                0.5
+            ]);
+            this.upperZLayer.addChild(
+                (this.upperLayer = new PIXI.tilemap.CompositeRectTileLayer(
+                    4,
+                    [],
+                    useSquareShader
+                ))
+            );
         }
     }
 
@@ -604,7 +683,8 @@ export default class Tilemap extends PIXI.Container {
     private _paintTiles(startX, startY, x, y) {
         const mx = startX + x;
         const my = startY + y;
-        const dx = x * this._tileWidth, dy = y * this._tileHeight;
+        const dx = x * this._tileWidth;
+        const dy = y * this._tileHeight;
         const tileId0 = this._readMapData(mx, my, 0);
         const tileId1 = this._readMapData(mx, my, 1);
         const tileId2 = this._readMapData(mx, my, 2);
@@ -686,8 +766,8 @@ export default class Tilemap extends PIXI.Container {
 
         const w = this._tileWidth;
         const h = this._tileHeight;
-        const sx = (Math.floor(tileId / 128) % 2 * 8 + tileId % 8) * w;
-        const sy = (Math.floor(tileId % 256 / 8) % 16) * h;
+        const sx = ((Math.floor(tileId / 128) % 2) * 8 + (tileId % 8)) * w;
+        const sy = (Math.floor((tileId % 256) / 8) % 16) * h;
 
         layer.addRect(setNumber, sx, sy, dx, dy, w, h);
     }
@@ -710,7 +790,8 @@ export default class Tilemap extends PIXI.Container {
         let by = 0;
         let setNumber = 0;
         let isTable = false;
-        let animX = 0, animY = 0;
+        let animX = 0;
+        let animY = 0;
 
         if (Tilemap.isTileA1(tileId)) {
             setNumber = 0;
@@ -728,11 +809,10 @@ export default class Tilemap extends PIXI.Container {
                 by = 3;
             } else {
                 bx = Math.floor(tx / 4) * 8;
-                by = ty * 6 + Math.floor(tx / 2) % 2 * 3;
+                by = ty * 6 + (Math.floor(tx / 2) % 2) * 3;
                 if (kind % 2 === 0) {
                     animX = 2;
-                }
-                else {
+                } else {
                     bx += 6;
                     autotileTable = Tilemap.WATERFALL_AUTOTILE_TABLE;
                     animY = 1;
@@ -771,15 +851,45 @@ export default class Tilemap extends PIXI.Container {
                 let qsx2 = qsx;
                 const qsy2 = 3;
                 if (qsy === 1) {
-                    //qsx2 = [0, 3, 2, 1][qsx];
-                    qsx2 = (4-qsx)%4;
+                    // qsx2 = [0, 3, 2, 1][qsx];
+                    qsx2 = (4 - qsx) % 4;
                 }
                 const sx2 = (bx * 2 + qsx2) * w1;
                 const sy2 = (by * 2 + qsy2) * h1;
-                layer.addRect(setNumber, sx2, sy2, dx1, dy1, w1, h1, animX, animY);
-                layer.addRect(setNumber, sx1, sy1, dx1, dy1+h1/2, w1, h1/2, animX, animY);
+                layer.addRect(
+                    setNumber,
+                    sx2,
+                    sy2,
+                    dx1,
+                    dy1,
+                    w1,
+                    h1,
+                    animX,
+                    animY
+                );
+                layer.addRect(
+                    setNumber,
+                    sx1,
+                    sy1,
+                    dx1,
+                    dy1 + h1 / 2,
+                    w1,
+                    h1 / 2,
+                    animX,
+                    animY
+                );
             } else {
-                layer.addRect(setNumber, sx1, sy1, dx1, dy1, w1, h1, animX, animY);
+                layer.addRect(
+                    setNumber,
+                    sx1,
+                    sy1,
+                    dx1,
+                    dy1,
+                    w1,
+                    h1,
+                    animX,
+                    animY
+                );
             }
         }
     }
@@ -812,7 +922,7 @@ export default class Tilemap extends PIXI.Container {
                 const sy1 = (by * 2 + qsy) * h1 + h1 / 2;
                 const dx1 = dx + (i % 2) * w1;
                 const dy1 = dy + Math.floor(i / 2) * h1;
-                layer.addRect(setNumber, sx1, sy1, dx1, dy1, w1, h1/2);
+                layer.addRect(setNumber, sx1, sy1, dx1, dy1, w1, h1 / 2);
             }
         }
     }

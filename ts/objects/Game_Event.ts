@@ -2,7 +2,7 @@ import Utils from "../core/Utils";
 import Game_Character, { Game_Character_OnLoad } from "./Game_Character";
 import Game_Interpreter, { Game_Interpreter_OnLoad } from "./Game_Interpreter";
 
-export interface Game_Event_OnLoad extends Game_Character_OnLoad{
+export interface Game_Event_OnLoad extends Game_Character_OnLoad {
     _mapId: number;
     _eventId: number;
     _moveType: number;
@@ -15,11 +15,9 @@ export interface Game_Event_OnLoad extends Game_Character_OnLoad{
     _prelockDirection: number;
     _locked: boolean;
     _interpreter: Game_Interpreter_OnLoad;
-
 }
 
 export default class Game_Event extends Game_Character {
-
     private _mapId: any;
     private _eventId: any;
     private _moveType: number;
@@ -33,7 +31,11 @@ export default class Game_Event extends Game_Character {
     private _locked: boolean;
     private _interpreter: any;
 
-    public constructor(mapId: number, eventId: number, gameLoadInput?: Game_Event_OnLoad) {
+    public constructor(
+        mapId: number,
+        eventId: number,
+        gameLoadInput?: Game_Event_OnLoad
+    ) {
         super(gameLoadInput);
 
         if (gameLoadInput) {
@@ -55,7 +57,6 @@ export default class Game_Event extends Game_Character {
             this.locate(this.event().x, this.event().y);
             this.refresh();
         }
-
     }
 
     public initMembers() {
@@ -88,8 +89,10 @@ export default class Game_Event extends Game_Character {
     }
 
     public isCollidedWithCharacters(x, y) {
-        return (super.isCollidedWithCharacters.call(this, x, y) ||
-                this.isCollidedWithPlayerCharacters(x, y));
+        return (
+            super.isCollidedWithCharacters.call(this, x, y) ||
+            this.isCollidedWithPlayerCharacters(x, y)
+        );
     }
 
     public isCollidedWithEvents(x, y) {
@@ -127,18 +130,21 @@ export default class Game_Event extends Game_Character {
     }
 
     public updateSelfMovement() {
-        if (!this._locked && this.isNearTheScreen() &&
-                this.checkStop(this.stopCountThreshold())) {
+        if (
+            !this._locked &&
+            this.isNearTheScreen() &&
+            this.checkStop(this.stopCountThreshold())
+        ) {
             switch (this._moveType) {
-            case 1:
-                this.moveTypeRandom();
-                break;
-            case 2:
-                this.moveTypeTowardPlayer();
-                break;
-            case 3:
-                this.moveTypeCustom();
-                break;
+                case 1:
+                    this.moveTypeRandom();
+                    break;
+                case 2:
+                    this.moveTypeTowardPlayer();
+                    break;
+                case 3:
+                    this.moveTypeCustom();
+                    break;
             }
         }
     }
@@ -149,30 +155,36 @@ export default class Game_Event extends Game_Character {
 
     public moveTypeRandom() {
         switch (Utils.randomInt(6)) {
-        case 0: case 1:
-            this.moveRandom();
-            break;
-        case 2: case 3: case 4:
-            this.moveForward();
-            break;
-        case 5:
-            this.resetStopCount();
-            break;
+            case 0:
+            case 1:
+                this.moveRandom();
+                break;
+            case 2:
+            case 3:
+            case 4:
+                this.moveForward();
+                break;
+            case 5:
+                this.resetStopCount();
+                break;
         }
     }
 
     public moveTypeTowardPlayer() {
         if (this.isNearThePlayer()) {
             switch (Utils.randomInt(6)) {
-            case 0: case 1: case 2: case 3:
-                this.moveTowardPlayer();
-                break;
-            case 4:
-                this.moveRandom();
-                break;
-            case 5:
-                this.moveForward();
-                break;
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    this.moveTowardPlayer();
+                    break;
+                case 4:
+                    this.moveRandom();
+                    break;
+                case 5:
+                    this.moveForward();
+                    break;
             }
         } else {
             this.moveRandom();
@@ -205,7 +217,7 @@ export default class Game_Event extends Game_Character {
         const list = this.list();
         if (list && list.length > 1) {
             this._starting = true;
-            if (this.isTriggerIn([0,1,2])) {
+            if (this.isTriggerIn([0, 1, 2])) {
                 this.lock();
             }
         }
@@ -375,5 +387,4 @@ export default class Game_Event extends Game_Character {
         super.forceMoveRoute.call(this, moveRoute);
         this._prelockDirection = 0;
     }
-
 }

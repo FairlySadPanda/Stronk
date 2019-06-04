@@ -7,56 +7,63 @@ export default abstract class ConfigManager {
     public static commandRemember: boolean;
     public static load: () => void;
     public static save: () => void;
-    public static makeData: () => { "alwaysDash": any; "commandRemember": any; "bgmVolume": any; "bgsVolume": any; "meVolume": any; "seVolume": any; };
+    public static makeData: () => {
+        alwaysDash: any;
+        commandRemember: any;
+        bgmVolume: any;
+        bgsVolume: any;
+        meVolume: any;
+        seVolume: any;
+    };
     public static applyData: (config: any) => void;
     public static readFlag: (config: any, name: any) => boolean;
     public static readVolume: (config: any, name: any) => number;
 }
 
-ConfigManager.alwaysDash        = false;
-ConfigManager.commandRemember   = false;
+ConfigManager.alwaysDash = false;
+ConfigManager.commandRemember = false;
 
 Object.defineProperty(ConfigManager, "bgmVolume", {
-    "get"() {
+    get() {
         return AudioManager._bgmVolume;
     },
-    "set"(value) {
+    set(value) {
         AudioManager.bgmVolume = value;
     },
-    "configurable": true
+    configurable: true
 });
 
 Object.defineProperty(ConfigManager, "bgsVolume", {
-    "get"() {
+    get() {
         return AudioManager.bgsVolume;
     },
-    "set"(value) {
+    set(value) {
         AudioManager.bgsVolume = value;
     },
-    "configurable": true
+    configurable: true
 });
 
 Object.defineProperty(ConfigManager, "meVolume", {
-    "get"() {
+    get() {
         return AudioManager.meVolume;
     },
-    "set"(value) {
+    set(value) {
         AudioManager.meVolume = value;
     },
-    "configurable": true
+    configurable: true
 });
 
 Object.defineProperty(ConfigManager, "seVolume", {
-    "get"() {
+    get() {
         return AudioManager.seVolume;
     },
-    "set"(value) {
+    set(value) {
         AudioManager.seVolume = value;
     },
-    "configurable": true
+    configurable: true
 });
 
-ConfigManager.load = function () {
+ConfigManager.load = function() {
     let json;
     let config = {};
     try {
@@ -70,22 +77,22 @@ ConfigManager.load = function () {
     this.applyData(config);
 };
 
-ConfigManager.save = function () {
+ConfigManager.save = function() {
     StorageManager.save(-1, JSON.stringify(this.makeData()));
 };
 
-ConfigManager.makeData = function () {
+ConfigManager.makeData = function() {
     return {
-        "alwaysDash": this.alwaysDash,
-        "commandRemember": this.commandRemember,
-        "bgmVolume": this.bgmVolume,
-        "bgsVolume": this.bgsVolume,
-        "meVolume": this.meVolume,
-        "seVolume": this.seVolume
+        alwaysDash: this.alwaysDash,
+        commandRemember: this.commandRemember,
+        bgmVolume: this.bgmVolume,
+        bgsVolume: this.bgsVolume,
+        meVolume: this.meVolume,
+        seVolume: this.seVolume
     };
 };
 
-ConfigManager.applyData = function (config) {
+ConfigManager.applyData = function(config) {
     this.alwaysDash = this.readFlag(config, "alwaysDash");
     this.commandRemember = this.readFlag(config, "commandRemember");
     this.bgmVolume = this.readVolume(config, "bgmVolume");
@@ -94,11 +101,11 @@ ConfigManager.applyData = function (config) {
     this.seVolume = this.readVolume(config, "seVolume");
 };
 
-ConfigManager.readFlag = function (config, name) {
+ConfigManager.readFlag = function(config, name) {
     return !!config[name];
 };
 
-ConfigManager.readVolume = function (config, name) {
+ConfigManager.readVolume = function(config, name) {
     const value = config[name];
     if (value !== undefined) {
         return Utils.clamp(Number(value), 0, 100);

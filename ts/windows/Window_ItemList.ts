@@ -1,9 +1,8 @@
-
 import DataManager from "../managers/DataManager";
 import Game_Item from "../objects/Game_Item";
 import Window_Selectable from "./Window_Selectable";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_ItemList
 //
 // The window for selecting an item on the item screen.
@@ -49,16 +48,16 @@ export default class Window_ItemList extends Window_Selectable {
 
     public includes(item) {
         switch (this._category) {
-        case "item":
-            return DataManager.isItem(item) && item.itypeId === 1;
-        case "weapon":
-            return DataManager.isWeapon(item);
-        case "armor":
-            return DataManager.isArmor(item);
-        case "keyItem":
-            return DataManager.isItem(item) && item.itypeId === 2;
-        default:
-            return false;
+            case "item":
+                return DataManager.isItem(item) && item.itypeId === 1;
+            case "weapon":
+                return DataManager.isWeapon(item);
+            case "armor":
+                return DataManager.isArmor(item);
+            case "keyItem":
+                return DataManager.isItem(item) && item.itypeId === 2;
+            default:
+                return false;
         }
     }
 
@@ -71,7 +70,7 @@ export default class Window_ItemList extends Window_Selectable {
     }
 
     public makeItemList() {
-        this._data = $gameParty.allItems().filter(function (item) {
+        this._data = $gameParty.allItems().filter(function(item) {
             return this.includes(item);
         }, this);
         if (this.includes(null)) {
@@ -117,5 +116,4 @@ export default class Window_ItemList extends Window_Selectable {
         this.createContents();
         this.drawAllItems();
     }
-
 }

@@ -1,5 +1,4 @@
 export default abstract class JsonEx {
-
     /**
      * The maximum depth of objects.
      *
@@ -59,12 +58,12 @@ export default abstract class JsonEx {
     }
     private static _id: number = 1;
 
-    private static _generateId(){
+    private static _generateId() {
         return JsonEx._id++;
     }
 
-    private static _restoreCircularReference(circulars){
-        circulars.forEach(function (circular){
+    private static _restoreCircularReference(circulars) {
+        circulars.forEach(function(circular) {
             const key = circular[0];
             const value = circular[1];
             const content = circular[2];
@@ -73,8 +72,8 @@ export default abstract class JsonEx {
         });
     }
 
-    private static _linkCircularReference(contents, circulars, registry){
-        circulars.forEach(function (circular){
+    private static _linkCircularReference(contents, circulars, registry) {
+        circulars.forEach(function(circular) {
             const key = circular[0];
             const value = circular[1];
             const id = circular[2];
@@ -83,16 +82,18 @@ export default abstract class JsonEx {
         });
     }
 
-    private static _cleanMetadata(object){
-        if(!object) { return; }
+    private static _cleanMetadata(object) {
+        if (!object) {
+            return;
+        }
 
         delete object["@"];
         delete object["@c"];
 
-        if(typeof object === "object"){
-            Object.keys(object).forEach(function (key){
+        if (typeof object === "object") {
+            Object.keys(object).forEach(function(key) {
                 const value = object[key];
-                if(typeof value === "object"){
+                if (typeof value === "object") {
                     JsonEx._cleanMetadata(value);
                 }
             });
@@ -123,15 +124,19 @@ export default abstract class JsonEx {
             }
             for (const key in value) {
                 if (value.hasOwnProperty(key) && !key.match(/^@./)) {
-                    if(value[key] && typeof value[key] === "object"){
-                        if(value[key]["@c"]){
+                    if (value[key] && typeof value[key] === "object") {
+                        if (value[key]["@c"]) {
                             circular.push([key, value, value[key]]);
-                            value[key] = {"@r": value[key]["@c"]};
-                        }else{
-                            value[key] = this._encode(value[key], circular, depth + 1);
+                            value[key] = { "@r": value[key]["@c"] };
+                        } else {
+                            value[key] = this._encode(
+                                value[key],
+                                circular,
+                                depth + 1
+                            );
 
-                            if(value[key] instanceof Array){
-                                //wrap array
+                            if (value[key] instanceof Array) {
+                                // wrap array
                                 circular.push([key, value, value[key]]);
 
                                 value[key] = {
@@ -140,8 +145,12 @@ export default abstract class JsonEx {
                                 };
                             }
                         }
-                    }else{
-                        value[key] = this._encode(value[key], circular, depth + 1);
+                    } else {
+                        value[key] = this._encode(
+                            value[key],
+                            circular,
+                            depth + 1
+                        );
                     }
                 }
             }
@@ -172,14 +181,14 @@ export default abstract class JsonEx {
             }
             for (const key in value) {
                 if (value.hasOwnProperty(key)) {
-                    if(value[key] && value[key]["@a"]){
-                        //object is array wrapper
+                    if (value[key] && value[key]["@a"]) {
+                        // object is array wrapper
                         const body = value[key]["@a"];
                         body["@c"] = value[key]["@c"];
                         value[key] = body;
                     }
-                    if(value[key] && value[key]["@r"]){
-                        //object is reference
+                    if (value[key] && value[key]["@r"]) {
+                        // object is reference
                         circular.push([key, value, value[key]["@r"]]);
                     }
                     value[key] = this._decode(value[key], circular, registry);
@@ -214,19 +223,20 @@ export default abstract class JsonEx {
      * @private
      */
     private static _resetPrototype(value, prototype) {
-        if (Object.setPrototypeOf !== undefined) {
-            Object.setPrototypeOf(value, prototype);
-        } else if ("__proto__" in value) {
-            value.__proto__ = prototype;
-        } else {
-            const newValue = Object.create(prototype);
-            for (const key in value) {
-                if (value.hasOwnProperty(key)) {
-                    newValue[key] = value[key];
-                }
-            }
-            value = newValue;
-        }
+        Object.setPrototypeOf(value, prototype);
         return value;
+        // if (Object.setPrototypeOf !== undefined) {
+
+        // } else if ("__proto__" in value) {
+        //     value.__proto__ = prototype;
+        // } else {
+        //     const newValue = Object.create(prototype);
+        //     for (const key in value) {
+        //         if (value.hasOwnProperty(key)) {
+        //             newValue[key] = value[key];
+        //         }
+        //     }
+        //     value = newValue;
+        // }
     }
 }

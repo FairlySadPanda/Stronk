@@ -1,26 +1,30 @@
-import "pixi.js";
+import * as PIXI from "pixi.js";
 import Decrypter from "./Decrypter";
 import Graphics from "./Graphics";
-import ImageCacheEntry from "./ImageCacheEntry";
 import Rectangle from "./Rectangle";
 import ResourceHandler from "./ResourceHandler";
 import Stage from "./Stage";
 import Utils from "./Utils";
 
 export default class Bitmap {
-
     private get _canvas() {
-        if(!this.__canvas) {this._createCanvas(); }
+        if (!this.__canvas) {
+            this._createCanvas();
+        }
         return this.__canvas;
     }
 
     private get _context() {
-        if(!this.__context) {this._createCanvas(); }
+        if (!this.__context) {
+            this._createCanvas();
+        }
         return this.__context;
     }
 
     private get _baseTexture() {
-        if(!this.__baseTexture) { this._createBaseTexture(this._image || this.__canvas); }
+        if (!this.__baseTexture) {
+            this._createBaseTexture(this._image || this.__canvas);
+        }
         return this.__baseTexture;
     }
 
@@ -41,16 +45,16 @@ export default class Bitmap {
     }
 
     public get width() {
-        if(this.isReady()){
-            return this._image? this._image.width: this._canvas.width;
+        if (this.isReady()) {
+            return this._image ? this._image.width : this._canvas.width;
         }
 
         return 0;
     }
 
     public get height() {
-        if(this.isReady()){
-            return this._image? this._image.height: this._canvas.height;
+        if (this.isReady()) {
+            return this._image ? this._image.height : this._canvas.height;
         }
 
         return 0;
@@ -67,7 +71,7 @@ export default class Bitmap {
     public set smooth(value) {
         if (this._smooth !== value) {
             this._smooth = value;
-            if(this.__baseTexture){
+            if (this.__baseTexture) {
                 if (this._smooth) {
                     this._baseTexture.scaleMode = PIXI.SCALE_MODES.LINEAR;
                 } else {
@@ -125,14 +129,18 @@ export default class Bitmap {
         if (stage) {
             Graphics.renderer.render(stage, renderTexture);
             stage.worldTransform.identity();
-            context.drawImage(Graphics.renderer.extract.canvas(renderTexture), 0, 0);
+            context.drawImage(
+                Graphics.renderer.extract.canvas(renderTexture),
+                0,
+                0
+            );
         }
         renderTexture.destroy(true);
         bitmap._setDirty();
         return bitmap;
     }
 
-    public static request(url){
+    public static request(url) {
         const bitmap = new Bitmap(undefined, undefined, true);
 
         bitmap._url = url;
@@ -141,7 +149,7 @@ export default class Bitmap {
         return bitmap;
     }
 
-    //for iOS. img consumes memory. so reuse it.
+    // for iOS. img consumes memory. so reuse it.
     private static _reuseImages = [];
     public cacheEntry: any;
     public fontFace: string;
@@ -168,7 +176,7 @@ export default class Bitmap {
 
     public constructor(width?, height?, defer?) {
         this._defer = defer;
-        if(!this._defer){
+        if (!this._defer) {
             this._createCanvas(width, height);
         }
 
@@ -295,13 +303,41 @@ export default class Bitmap {
      * @param {Number} [dw=sw] The width to draw the image in the destination
      * @param {Number} [dh=sh] The height to draw the image in the destination
      */
-    public blt(source: Bitmap, sx: number, sy: number, sw: number, sh: number, dx: number, dy: number, dw?: number, dh?: number) {
+    public blt(
+        source: Bitmap,
+        sx: number,
+        sy: number,
+        sw: number,
+        sh: number,
+        dx: number,
+        dy: number,
+        dw?: number,
+        dh?: number
+    ) {
         dw = dw || sw;
         dh = dh || sh;
-        if (sx >= 0 && sy >= 0 && sw > 0 && sh > 0 && dw > 0 && dh > 0 &&
-                sx + sw <= source.width && sy + sh <= source.height) {
+        if (
+            sx >= 0 &&
+            sy >= 0 &&
+            sw > 0 &&
+            sh > 0 &&
+            dw > 0 &&
+            dh > 0 &&
+            sx + sw <= source.width &&
+            sy + sh <= source.height
+        ) {
             this._context.globalCompositeOperation = "source-over";
-            this._context.drawImage(source._canvas, sx, sy, sw, sh, dx, dy, dw, dh);
+            this._context.drawImage(
+                source._canvas,
+                sx,
+                sy,
+                sw,
+                sh,
+                dx,
+                dy,
+                dw,
+                dh
+            );
             this._setDirty();
         }
     }
@@ -323,10 +359,28 @@ export default class Bitmap {
     public bltImage(source, sx, sy, sw, sh, dx, dy, dw, dh) {
         dw = dw || sw;
         dh = dh || sh;
-        if (sx >= 0 && sy >= 0 && sw > 0 && sh > 0 && dw > 0 && dh > 0 &&
-            sx + sw <= source.width && sy + sh <= source.height) {
+        if (
+            sx >= 0 &&
+            sy >= 0 &&
+            sw > 0 &&
+            sh > 0 &&
+            dw > 0 &&
+            dh > 0 &&
+            sx + sw <= source.width &&
+            sy + sh <= source.height
+        ) {
             this._context.globalCompositeOperation = "source-over";
-            this._context.drawImage(source._image, sx, sy, sw, sh, dx, dy, dw, dh);
+            this._context.drawImage(
+                source._image,
+                sx,
+                sy,
+                sw,
+                sh,
+                dx,
+                dy,
+                dw,
+                dh
+            );
             this._setDirty();
         }
     }
@@ -425,7 +479,15 @@ export default class Bitmap {
      * @param {String} color2 The gradient ending color
      * @param {Boolean} vertical Wether the gradient should be draw as vertical or not
      */
-    public gradientFillRect(x: number, y: number, width: number, height: number, color1: string, color2: string, vertical?: boolean) {
+    public gradientFillRect(
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        color1: string,
+        color2: string,
+        vertical?: boolean
+    ) {
         const context = this._context;
         let grad;
         if (vertical) {
@@ -473,7 +535,14 @@ export default class Bitmap {
      * @param {Number} lineHeight The height of the text line
      * @param {String} align The alignment of the text
      */
-    public drawText(text: string, x: number , y: number, maxWidth: number, lineHeight: number, align?: string) {
+    public drawText(
+        text: string,
+        x: number,
+        y: number,
+        maxWidth: number,
+        lineHeight: number,
+        align?: string
+    ) {
         // Note: Firefox has a bug with textBaseline: Bug 737852
         //       So we use 'alphabetic' here.
         if (text !== undefined) {
@@ -482,7 +551,10 @@ export default class Bitmap {
                 return;
             }
             let tx = x;
-            const ty = y + lineHeight - Math.round((lineHeight - this.fontSize * 0.7) / 2);
+            const ty =
+                y +
+                lineHeight -
+                Math.round((lineHeight - this.fontSize * 0.7) / 2);
             const context = this._context;
             const alpha = context.globalAlpha;
             maxWidth = maxWidth || 0xffffffff;
@@ -524,23 +596,46 @@ export default class Bitmap {
         bitmap.fontItalic = this.fontItalic;
         bitmap.textColor = this.textColor;
         bitmap.outlineColor = this.outlineColor;
-        bitmap.outlineWidth = this.outlineWidth * minFontSize / this.fontSize;
+        bitmap.outlineWidth = (this.outlineWidth * minFontSize) / this.fontSize;
         maxWidth = maxWidth || 816;
         const height = this.fontSize * 1.5;
-        const scaledMaxWidth = maxWidth * minFontSize / this.fontSize;
-        const scaledMaxWidthWithOutline = scaledMaxWidth + bitmap.outlineWidth * 2;
-        const scaledHeight = height * minFontSize / this.fontSize;
+        const scaledMaxWidth = (maxWidth * minFontSize) / this.fontSize;
+        const scaledMaxWidthWithOutline =
+            scaledMaxWidth + bitmap.outlineWidth * 2;
+        const scaledHeight = (height * minFontSize) / this.fontSize;
         const scaledHeightWithOutline = scaledHeight + bitmap.outlineWidth * 2;
 
         let bitmapWidth = bitmap.width;
         let bitmapHeight = bitmap.height;
-        while (scaledMaxWidthWithOutline > bitmapWidth) { bitmapWidth *= 2; }
-        while (scaledHeightWithOutline > bitmapHeight) { bitmapHeight *= 2; }
-        if (bitmap.width !== bitmapWidth || bitmap.height !== bitmapHeight) { bitmap.resize(bitmapWidth, bitmapHeight); }
+        while (scaledMaxWidthWithOutline > bitmapWidth) {
+            bitmapWidth *= 2;
+        }
+        while (scaledHeightWithOutline > bitmapHeight) {
+            bitmapHeight *= 2;
+        }
+        if (bitmap.width !== bitmapWidth || bitmap.height !== bitmapHeight) {
+            bitmap.resize(bitmapWidth, bitmapHeight);
+        }
 
-        bitmap.drawText(text, bitmap.outlineWidth, bitmap.outlineWidth, scaledMaxWidth, minFontSize, align);
-        this.blt(bitmap, 0, 0, scaledMaxWidthWithOutline, scaledHeightWithOutline,
-            x - this.outlineWidth, y - this.outlineWidth + (lineHeight - this.fontSize) / 2, maxWidth + this.outlineWidth * 2, height + this.outlineWidth * 2);
+        bitmap.drawText(
+            text,
+            bitmap.outlineWidth,
+            bitmap.outlineWidth,
+            scaledMaxWidth,
+            minFontSize,
+            align
+        );
+        this.blt(
+            bitmap,
+            0,
+            0,
+            scaledMaxWidthWithOutline,
+            scaledHeightWithOutline,
+            x - this.outlineWidth,
+            y - this.outlineWidth + (lineHeight - this.fontSize) / 2,
+            maxWidth + this.outlineWidth * 2,
+            height + this.outlineWidth * 2
+        );
         bitmap.clear();
     }
 
@@ -571,7 +666,12 @@ export default class Bitmap {
     public adjustTone(r, g, b) {
         if ((r || g || b) && this.width > 0 && this.height > 0) {
             const context = this._context;
-            const imageData = context.getImageData(0, 0, this.width, this.height);
+            const imageData = context.getImageData(
+                0,
+                0,
+                this.width,
+                this.height
+            );
             const pixels = imageData.data;
             for (let i = 0; i < pixels.length; i += 4) {
                 pixels[i + 0] += r;
@@ -590,7 +690,7 @@ export default class Bitmap {
      * @param {Number} offset The hue offset in 360 degrees
      */
     public rotateHue(offset) {
-        function rgbToHsl (r, g, b) {
+        function rgbToHsl(r, g, b) {
             const cmin = Math.min(r, g, b);
             const cmax = Math.max(r, g, b);
             let h = 0;
@@ -611,9 +711,9 @@ export default class Bitmap {
             return [h, s, l];
         }
 
-        function hslToRgb (h, s, l) {
+        function hslToRgb(h, s, l) {
             const c = (255 - Math.abs(2 * l - 255)) * s;
-            const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+            const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
             const m = l - c / 2;
             const cm = c + m;
             const xm = x + m;
@@ -636,10 +736,19 @@ export default class Bitmap {
         if (offset && this.width > 0 && this.height > 0) {
             offset = ((offset % 360) + 360) % 360;
             const context = this._context;
-            const imageData = context.getImageData(0, 0, this.width, this.height);
+            const imageData = context.getImageData(
+                0,
+                0,
+                this.width,
+                this.height
+            );
             const pixels = imageData.data;
             for (let i = 0; i < pixels.length; i += 4) {
-                const hsl = rgbToHsl(pixels[i + 0], pixels[i + 1], pixels[i + 2]);
+                const hsl = rgbToHsl(
+                    pixels[i + 0],
+                    pixels[i + 1],
+                    pixels[i + 2]
+                );
                 const h = (hsl[0] + offset) % 360;
                 const s = hsl[1];
                 const l = hsl[2];
@@ -702,26 +811,42 @@ export default class Bitmap {
         }
     }
 
-    public decode(){
-        switch(this._loadingState){
-            case "requestCompleted": case "decryptCompleted":
+    public decode() {
+        switch (this._loadingState) {
+            case "requestCompleted":
+            case "decryptCompleted":
                 this._loadingState = "loaded";
 
-                if(!this.__canvas) { this._createBaseTexture(this._image); }
+                if (!this.__canvas) {
+                    this._createBaseTexture(this._image);
+                }
                 this._setDirty();
                 this._callLoadListeners();
                 break;
 
-            case "requesting": case "decrypting":
+            case "requesting":
+            case "decrypting":
                 this._decodeAfterRequest = true;
                 if (!this._loader) {
-                    this._loader = ResourceHandler.createLoader(this._url, this._requestImage.bind(this, this._url), this._onError.bind(this));
-                    this._image.removeEventListener("error", this._errorListener);
-                    this._image.addEventListener("error", this._errorListener = this._loader);
+                    this._loader = ResourceHandler.createLoader(
+                        this._url,
+                        this._requestImage.bind(this, this._url),
+                        this._onError.bind(this)
+                    );
+                    this._image.removeEventListener(
+                        "error",
+                        this._errorListener
+                    );
+                    this._image.addEventListener(
+                        "error",
+                        (this._errorListener = this._loader)
+                    );
                 }
                 break;
 
-            case "pending": case "purged": case "error":
+            case "pending":
+            case "purged":
+            case "error":
                 this._decodeAfterRequest = true;
                 this._requestImage(this._url);
                 break;
@@ -736,25 +861,27 @@ export default class Bitmap {
         if (this._dirty) {
             this._baseTexture.update();
             const baseTexture = this._baseTexture;
-            setTimeout(function () {
+            setTimeout(function() {
                 baseTexture.update();
             }, 0);
             this._dirty = false;
         }
     }
 
-    public isRequestOnly(){
+    public isRequestOnly() {
         return !(this._decodeAfterRequest || this.isReady());
     }
 
-    public isRequestReady(){
-        return this._loadingState !== "pending" &&
+    public isRequestReady() {
+        return (
+            this._loadingState !== "pending" &&
             this._loadingState !== "requesting" &&
-            this._loadingState !== "decrypting";
+            this._loadingState !== "decrypting"
+        );
     }
 
-    public startRequest(){
-        if(this._loadingState === "pending"){
+    public startRequest() {
+        if (this._loadingState === "pending") {
             this._decodeAfterRequest = false;
             this._requestImage(this._url);
         }
@@ -770,12 +897,12 @@ export default class Bitmap {
 
         this._renewCanvas();
 
-        switch(this._loadingState){
+        switch (this._loadingState) {
             case "requesting":
                 this._loadingState = "requestCompleted";
-                if(this._decodeAfterRequest){
+                if (this._decodeAfterRequest) {
                     this.decode();
-                }else{
+                } else {
                     this._loadingState = "purged";
                     this._clearImgInstance();
                 }
@@ -784,9 +911,9 @@ export default class Bitmap {
             case "decrypting":
                 window.URL.revokeObjectURL(this._image.src);
                 this._loadingState = "decryptCompleted";
-                if(this._decodeAfterRequest){
+                if (this._decodeAfterRequest) {
                     this.decode();
-                }else{
+                } else {
                     this._loadingState = "purged";
                     this._clearImgInstance();
                 }
@@ -836,14 +963,14 @@ export default class Bitmap {
      *
      */
 
-    private _createCanvas(width?, height?){
+    private _createCanvas(width?, height?) {
         this.__canvas = this.__canvas || document.createElement("canvas");
         this.__context = this.__canvas.getContext("2d");
 
         this.__canvas.width = Math.max(width || 0, 1);
         this.__canvas.height = Math.max(height || 0, 1);
 
-        if(this._image){
+        if (this._image) {
             const w = Math.max(this._image.width || 0, 1);
             const h = Math.max(this._image.height || 0, 1);
             this.__canvas.width = w;
@@ -856,7 +983,7 @@ export default class Bitmap {
         this._setDirty();
     }
 
-    private _createBaseTexture(source){
+    private _createBaseTexture(source) {
         this.__baseTexture = new PIXI.BaseTexture(source);
         this.__baseTexture.mipmap = false;
         this.__baseTexture.width = source.width;
@@ -868,7 +995,7 @@ export default class Bitmap {
             this._baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
         }
     }
-    private _clearImgInstance(){
+    private _clearImgInstance() {
         this._image.src = "";
         this._image.onload = null;
         this._image.onerror = null;
@@ -878,9 +1005,14 @@ export default class Bitmap {
         Bitmap._reuseImages.push(this._image);
         this._image = null;
     }
-    private _renewCanvas(){
+    private _renewCanvas() {
         const newImage = this._image;
-        if(newImage && this.__canvas && (this.__canvas.width < newImage.width || this.__canvas.height < newImage.height)){
+        if (
+            newImage &&
+            this.__canvas &&
+            (this.__canvas.width < newImage.width ||
+                this.__canvas.height < newImage.height)
+        ) {
             this._createCanvas();
         }
     }
@@ -889,8 +1021,12 @@ export default class Bitmap {
      * @private
      */
     private _makeFontNameText() {
-        return (this.fontItalic ? "Italic " : "") +
-                this.fontSize + "px " + this.fontFace;
+        return (
+            (this.fontItalic ? "Italic " : "") +
+            this.fontSize +
+            "px " +
+            this.fontFace
+        );
     }
 
     /**
@@ -942,29 +1078,38 @@ export default class Bitmap {
         this._dirty = true;
     }
 
-    private _requestImage(url){
-        if(Bitmap._reuseImages.length !== 0){
+    private _requestImage(url) {
+        if (Bitmap._reuseImages.length !== 0) {
             this._image = Bitmap._reuseImages.pop();
-        }else{
+        } else {
             this._image = new Image();
         }
 
         if (this._decodeAfterRequest && !this._loader) {
-            this._loader = ResourceHandler.createLoader(url, this._requestImage.bind(this, url), this._onError.bind(this));
+            this._loader = ResourceHandler.createLoader(
+                url,
+                this._requestImage.bind(this, url),
+                this._onError.bind(this)
+            );
         }
 
         this._url = url;
         this._loadingState = "requesting";
 
-        if(!Decrypter.checkImgIgnore(url) && Decrypter.hasEncryptedImages) {
+        if (!Decrypter.checkImgIgnore(url) && Decrypter.hasEncryptedImages) {
             this._loadingState = "decrypting";
             Decrypter.decryptImg(url, this);
         } else {
             this._image.src = url;
 
-            this._image.addEventListener("load", this._loadListener = this._onLoad.bind(this));
-            this._image.addEventListener("error", this._errorListener = this._loader || this._onError.bind(this));
+            this._image.addEventListener(
+                "load",
+                (this._loadListener = this._onLoad.bind(this))
+            );
+            this._image.addEventListener(
+                "error",
+                (this._errorListener = this._loader || this._onError.bind(this))
+            );
         }
     }
-
 }

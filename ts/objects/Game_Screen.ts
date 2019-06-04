@@ -1,4 +1,3 @@
-
 import Utils from "../core/Utils";
 import Game_Picture, { Game_Picture_OnLoad } from "./Game_Picture";
 
@@ -55,29 +54,29 @@ export default class Game_Screen {
 
     public constructor(gameLoadInput?: Game_Screen_OnLoad) {
         if (gameLoadInput) {
-            this._brightness            = gameLoadInput._brightness;
-            this._tone                  = gameLoadInput._tone;
-            this._flashColor            = gameLoadInput._flashColor;
-            this._shake                 = gameLoadInput._shake;
-            this._zoomX                 = gameLoadInput._zoomX;
-            this._zoomY                 = gameLoadInput._zoomY;
-            this._zoomScale             = gameLoadInput._zoomScale;
-            this._weatherType           = gameLoadInput._weatherType;
-            this._weatherPower          = gameLoadInput._weatherPower;
-            this._fadeOutDuration       = gameLoadInput._fadeOutDuration;
-            this._fadeInDuration        = gameLoadInput._fadeInDuration;
-            this._toneTarget            = gameLoadInput._toneTarget;
-            this._toneDuration          = gameLoadInput._toneDuration;
-            this._flashDuration         = gameLoadInput._flashDuration;
-            this._shakePower            = gameLoadInput._shakePower;
-            this._shakeSpeed            = gameLoadInput._shakeSpeed;
-            this._shakeDuration         = gameLoadInput._shakeDuration;
-            this._shakeDirection        = gameLoadInput._shakeDirection;
-            this._zoomScaleTarget       = gameLoadInput._zoomScaleTarget;
-            this._zoomDuration          = gameLoadInput._zoomDuration;
-            this._weatherPowerTarget    = gameLoadInput._weatherPowerTarget;
-            this._weatherDuration       = gameLoadInput._weatherDuration;
-            this._pictures              = [];
+            this._brightness = gameLoadInput._brightness;
+            this._tone = gameLoadInput._tone;
+            this._flashColor = gameLoadInput._flashColor;
+            this._shake = gameLoadInput._shake;
+            this._zoomX = gameLoadInput._zoomX;
+            this._zoomY = gameLoadInput._zoomY;
+            this._zoomScale = gameLoadInput._zoomScale;
+            this._weatherType = gameLoadInput._weatherType;
+            this._weatherPower = gameLoadInput._weatherPower;
+            this._fadeOutDuration = gameLoadInput._fadeOutDuration;
+            this._fadeInDuration = gameLoadInput._fadeInDuration;
+            this._toneTarget = gameLoadInput._toneTarget;
+            this._toneDuration = gameLoadInput._toneDuration;
+            this._flashDuration = gameLoadInput._flashDuration;
+            this._shakePower = gameLoadInput._shakePower;
+            this._shakeSpeed = gameLoadInput._shakeSpeed;
+            this._shakeDuration = gameLoadInput._shakeDuration;
+            this._shakeDirection = gameLoadInput._shakeDirection;
+            this._zoomScaleTarget = gameLoadInput._zoomScaleTarget;
+            this._zoomDuration = gameLoadInput._zoomDuration;
+            this._weatherPowerTarget = gameLoadInput._weatherPowerTarget;
+            this._weatherDuration = gameLoadInput._weatherDuration;
+            this._pictures = [];
             for (const picture of gameLoadInput._pictures) {
                 this._pictures.push(new Game_Picture(picture));
             }
@@ -288,7 +287,8 @@ export default class Game_Screen {
         if (this._toneDuration > 0) {
             const d = this._toneDuration;
             for (let i = 0; i < 4; i++) {
-                this._tone[i] = (this._tone[i] * (d - 1) + this._toneTarget[i]) / d;
+                this._tone[i] =
+                    (this._tone[i] * (d - 1) + this._toneTarget[i]) / d;
             }
             this._toneDuration--;
         }
@@ -304,8 +304,13 @@ export default class Game_Screen {
 
     public updateShake() {
         if (this._shakeDuration > 0 || this._shake !== 0) {
-            const delta = (this._shakePower * this._shakeSpeed * this._shakeDirection) / 10;
-            if (this._shakeDuration <= 1 && this._shake * (this._shake + delta) < 0) {
+            const delta =
+                (this._shakePower * this._shakeSpeed * this._shakeDirection) /
+                10;
+            if (
+                this._shakeDuration <= 1 &&
+                this._shake * (this._shake + delta) < 0
+            ) {
                 this._shake = 0;
             } else {
                 this._shake += delta;
@@ -313,7 +318,7 @@ export default class Game_Screen {
             if (this._shake > this._shakePower * 2) {
                 this._shakeDirection = -1;
             }
-            if (this._shake < - this._shakePower * 2) {
+            if (this._shake < -this._shakePower * 2) {
                 this._shakeDirection = 1;
             }
             this._shakeDuration--;
@@ -342,7 +347,7 @@ export default class Game_Screen {
     }
 
     public updatePictures() {
-        this._pictures.forEach(function (picture) {
+        this._pictures.forEach(function(picture) {
             if (picture) {
                 picture.update();
             }
@@ -353,19 +358,46 @@ export default class Game_Screen {
         this.startFlash([255, 0, 0, 128], 8);
     }
 
-    public showPicture(pictureId, name, origin, x, y,
-                                                 scaleX, scaleY, opacity, blendMode) {
+    public showPicture(
+        pictureId,
+        name,
+        origin,
+        x,
+        y,
+        scaleX,
+        scaleY,
+        opacity,
+        blendMode
+    ) {
         const realPictureId = this.realPictureId(pictureId);
         const picture = new Game_Picture();
         picture.show(name, origin, x, y, scaleX, scaleY, opacity, blendMode);
         this._pictures[realPictureId] = picture;
     }
 
-    public movePicture(pictureId, origin, x, y, scaleX,
-                                                 scaleY, opacity, blendMode, duration) {
+    public movePicture(
+        pictureId,
+        origin,
+        x,
+        y,
+        scaleX,
+        scaleY,
+        opacity,
+        blendMode,
+        duration
+    ) {
         const picture = this.picture(pictureId);
         if (picture) {
-            picture.move(origin, x, y, scaleX, scaleY, opacity, blendMode, duration);
+            picture.move(
+                origin,
+                x,
+                y,
+                scaleX,
+                scaleY,
+                opacity,
+                blendMode,
+                duration
+            );
         }
     }
 
@@ -387,5 +419,4 @@ export default class Game_Screen {
         const realPictureId = this.realPictureId(pictureId);
         this._pictures[realPictureId] = null;
     }
-
 }

@@ -1,7 +1,7 @@
 import Graphics from "../core/Graphics";
 import Window_Base from "./Window_Base";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_Help
 //
 // The window for displaying the description of the selected item.
@@ -20,22 +20,22 @@ export default class Window_Help extends Window_Base {
     }
 }
 
-Window_Help.prototype.setText = function (text) {
+Window_Help.prototype.setText = function(text) {
     if (this._text !== text) {
         this._text = text;
         this.refresh();
     }
 };
 
-Window_Help.prototype.clear = function () {
+Window_Help.prototype.clear = function() {
     this.setText("");
 };
 
-Window_Help.prototype.setItem = function (item) {
+Window_Help.prototype.setItem = function(item) {
     this.setText(item ? item.description : "");
 };
 
-Window_Help.prototype.refresh = function () {
+Window_Help.prototype.refresh = function() {
     this.contents.clear();
     this.drawTextEx(this._text, this.textPadding(), 0);
 };

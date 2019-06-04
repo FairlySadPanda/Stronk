@@ -10,7 +10,7 @@ import Window_EventItem from "./Window_EventItem";
 import Window_Gold from "./Window_Gold";
 import Window_NumberInput from "./Window_NumberInput";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_Message
 //
 // The window for displaying text messages.
@@ -55,8 +55,12 @@ export default class Window_Message extends Window_Base {
     }
 
     public subWindows() {
-        return [this._goldWindow, this._choiceWindow,
-                this._numberWindow, this._itemWindow];
+        return [
+            this._goldWindow,
+            this._choiceWindow,
+            this._numberWindow,
+            this._itemWindow
+        ];
     }
 
     public createSubWindows() {
@@ -123,8 +127,8 @@ export default class Window_Message extends Window_Base {
 
     public startMessage() {
         this._textState = {
-            "index": 0,
-            "text": this.convertEscapeCharacters($gameMessage.allText())
+            index: 0,
+            text: this.convertEscapeCharacters($gameMessage.allText())
         };
         this.newPage(this._textState);
         this.updatePlacement();
@@ -134,8 +138,9 @@ export default class Window_Message extends Window_Base {
 
     public updatePlacement() {
         this._positionType = $gameMessage.positionType();
-        this.y = this._positionType * (Graphics.boxHeight - this.height) / 2;
-        this._goldWindow.y = this.y > 0 ? 0 : Graphics.boxHeight - this._goldWindow.height;
+        this.y = (this._positionType * (Graphics.boxHeight - this.height)) / 2;
+        this._goldWindow.y =
+            this.y > 0 ? 0 : Graphics.boxHeight - this._goldWindow.height;
     }
 
     public updateBackground() {
@@ -190,9 +195,11 @@ export default class Window_Message extends Window_Base {
     }
 
     public isAnySubWindowActive() {
-        return (this._choiceWindow.active ||
-                this._numberWindow.active ||
-                this._itemWindow.active);
+        return (
+            this._choiceWindow.active ||
+            this._numberWindow.active ||
+            this._itemWindow.active
+        );
     }
 
     public updateMessage() {
@@ -202,13 +209,21 @@ export default class Window_Message extends Window_Base {
                     this.newPage(this._textState);
                 }
                 this.updateShowFast();
-                if (!this._showFast && !this._lineShowFast && this._textSpeedCount < this._textSpeed) {
+                if (
+                    !this._showFast &&
+                    !this._lineShowFast &&
+                    this._textSpeedCount < this._textSpeed
+                ) {
                     this._textSpeedCount++;
                     break;
                 }
                 this._textSpeedCount = 0;
                 this.processCharacter(this._textState);
-                if (!this._showFast && !this._lineShowFast && this._textSpeed !== -1) {
+                if (
+                    !this._showFast &&
+                    !this._lineShowFast &&
+                    this._textSpeed !== -1
+                ) {
                     break;
                 }
                 if (this.pause || this._waitCount > 0) {
@@ -251,18 +266,26 @@ export default class Window_Message extends Window_Base {
     }
 
     public isTriggered() {
-        return (Input.isRepeated("ok") || Input.isRepeated("cancel") ||
-                TouchInput.isRepeated());
+        return (
+            Input.isRepeated("ok") ||
+            Input.isRepeated("cancel") ||
+            TouchInput.isRepeated()
+        );
     }
 
     public doesContinue() {
-        return ($gameMessage.hasText() && !$gameMessage.scrollMode() &&
-                !this.areSettingsChanged());
+        return (
+            $gameMessage.hasText() &&
+            !$gameMessage.scrollMode() &&
+            !this.areSettingsChanged()
+        );
     }
 
     public areSettingsChanged() {
-        return (this._background !== $gameMessage.background() ||
-                this._positionType !== $gameMessage.positionType());
+        return (
+            this._background !== $gameMessage.background() ||
+            this._positionType !== $gameMessage.positionType()
+        );
     }
 
     public updateShowFast() {
@@ -283,7 +306,11 @@ export default class Window_Message extends Window_Base {
     }
 
     public loadMessageFace() {
-        this._faceBitmap = ImageManager.reserveFace($gameMessage.faceName(), 0, this._imageReservationId);
+        this._faceBitmap = ImageManager.reserveFace(
+            $gameMessage.faceName(),
+            0,
+            this._imageReservationId
+        );
     }
 
     public drawMessageFace() {
@@ -317,39 +344,41 @@ export default class Window_Message extends Window_Base {
     }
 
     public needsNewPage(textState) {
-        return (!this.isEndOfText(textState) &&
-                textState.y + textState.height > this.contents.height);
+        return (
+            !this.isEndOfText(textState) &&
+            textState.y + textState.height > this.contents.height
+        );
     }
 
     public processEscapeCharacter(code, textState) {
         switch (code) {
-        case "$":
-            this._goldWindow.open();
-            break;
-        case ".":
-            this.startWait(15);
-            break;
-        case "|":
-            this.startWait(60);
-            break;
-        case "!":
-            this.startPause();
-            break;
-        case ">":
-            this._lineShowFast = true;
-            break;
-        case "<":
-            this._lineShowFast = false;
-            break;
-        case "^":
-            this._pauseSkip = true;
-            break;
-        case "S":
-            this._textSpeed = this.obtainEscapeParam(textState) - 1;
-            break;
-        default:
-            super.processEscapeCharacter(code, textState);
-            break;
+            case "$":
+                this._goldWindow.open();
+                break;
+            case ".":
+                this.startWait(15);
+                break;
+            case "|":
+                this.startWait(60);
+                break;
+            case "!":
+                this.startPause();
+                break;
+            case ">":
+                this._lineShowFast = true;
+                break;
+            case "<":
+                this._lineShowFast = false;
+                break;
+            case "^":
+                this._pauseSkip = true;
+                break;
+            case "S":
+                this._textSpeed = this.obtainEscapeParam(textState) - 1;
+                break;
+            default:
+                super.processEscapeCharacter(code, textState);
+                break;
         }
     }
 
@@ -361,5 +390,4 @@ export default class Window_Message extends Window_Base {
         this.startWait(10);
         this.pause = true;
     }
-
 }

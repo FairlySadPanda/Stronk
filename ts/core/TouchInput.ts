@@ -1,19 +1,18 @@
+import Graphics from "./Graphics";
+import Utils from "./Utils";
+
 interface TouchInputEvent {
-    "triggered": boolean;
-    "cancelled": boolean;
-    "moved": boolean;
-    "released": boolean;
-    "wheelX": number;
-    "wheelY": number;
+    triggered: boolean;
+    cancelled: boolean;
+    moved: boolean;
+    released: boolean;
+    wheelX: number;
+    wheelY: number;
 }
 
 declare let window: any;
 
-import Graphics from "./Graphics";
-import Utils from "./Utils";
-
 export default class TouchInput {
-
     public static get wheelX(): number {
         return this._wheelX;
     }
@@ -47,12 +46,12 @@ export default class TouchInput {
         this.screenPressed = false;
         this.pressedTime = 0;
         this.events = {
-            "triggered": false,
-            "cancelled": false,
-            "moved": false,
-            "released": false,
-            "wheelX": 0,
-            "wheelY": 0
+            triggered: false,
+            cancelled: false,
+            moved: false,
+            released: false,
+            wheelX: 0,
+            wheelY: 0
         };
         this.triggered = false;
         this.cancelled = false;
@@ -84,7 +83,7 @@ export default class TouchInput {
     }
 
     public static isPressed(): boolean {
-        return this.mousePressed || this. screenPressed;
+        return this.mousePressed || this.screenPressed;
     }
 
     public static isTriggered(): boolean {
@@ -92,7 +91,12 @@ export default class TouchInput {
     }
 
     public static isRepeated(): boolean {
-        return this.isPressed() && (this.triggered || (this.pressedTime >= this.keyRepeatWait && this.pressedTime % this.keyRepeatInterval === 0));
+        return (
+            this.isPressed() &&
+            (this.triggered ||
+                (this.pressedTime >= this.keyRepeatWait &&
+                    this.pressedTime % this.keyRepeatInterval === 0))
+        );
     }
 
     public static isLongPressed(): boolean {
@@ -131,8 +135,16 @@ export default class TouchInput {
         document.addEventListener("mousemove", this.onMouseMove.bind(this));
         document.addEventListener("mouseup", this.onMouseUp.bind(this));
         document.addEventListener("wheel", this.onWheel.bind(this));
-        document.addEventListener("touchstart", this.onTouchStart.bind(this), isSupportPassive ? {"passive": false} : false);
-        document.addEventListener("touchmove", this.onTouchMove.bind(this), isSupportPassive ? {"passive": false} : false);
+        document.addEventListener(
+            "touchstart",
+            this.onTouchStart.bind(this),
+            isSupportPassive ? { passive: false } : false
+        );
+        document.addEventListener(
+            "touchmove",
+            this.onTouchMove.bind(this),
+            isSupportPassive ? { passive: false } : false
+        );
         document.addEventListener("touchend", this.onTouchEnd.bind(this));
         document.addEventListener("touchcancel", this.onTouchCancel.bind(this));
         document.addEventListener("pointerdown", this.onPointerDown.bind(this));
@@ -158,9 +170,7 @@ export default class TouchInput {
         }
     }
 
-    private static onMiddleButtonDown(event: MouseEvent) {
-        return;
-    }
+    private static onMiddleButtonDown(event: MouseEvent) {}
 
     private static onRightButtonDown(event: MouseEvent) {
         const x = Graphics.pageToCanvasX(event.pageX);
@@ -194,7 +204,7 @@ export default class TouchInput {
     }
 
     private static onTouchStart(event: TouchEvent) {
-        //@ts-ignore
+        // @ts-ignore
         for (const touch of event.changedTouches) {
             const x = Graphics.pageToCanvasX(touch.pageX);
             const y = Graphics.pageToCanvasY(touch.pageY);
@@ -216,7 +226,7 @@ export default class TouchInput {
     }
 
     private static onTouchMove(event: TouchEvent) {
-        //@ts-ignore
+        // @ts-ignore
         for (const touch of event.changedTouches) {
             const x = Graphics.pageToCanvasX(touch.pageX);
             const y = Graphics.pageToCanvasY(touch.pageY);
@@ -225,7 +235,7 @@ export default class TouchInput {
     }
 
     private static onTouchEnd(event: TouchEvent) {
-        //@ts-ignore
+        // @ts-ignore
         for (const touch of event.changedTouches) {
             const x = Graphics.pageToCanvasX(touch.pageX);
             const y = Graphics.pageToCanvasY(touch.pageY);
@@ -274,5 +284,4 @@ export default class TouchInput {
         this._x = x;
         this._y = y;
     }
-
 }

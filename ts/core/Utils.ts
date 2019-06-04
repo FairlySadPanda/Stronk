@@ -1,7 +1,6 @@
 declare const nw: any;
 
 export default abstract class Utils {
-
     public static get RPGMAKER_NAME() {
         return "MV";
     }
@@ -11,8 +10,15 @@ export default abstract class Utils {
     }
 
     public static isOptionValid(name: string): boolean {
-        return (location.search.slice(1).split("&").indexOf(name) > -1)
-            || (typeof nw !== "undefined" && nw.App.argv.length > 0 && nw.App.argv[0].split("&").indexOf(name) > -1);
+        return (
+            location.search
+                .slice(1)
+                .split("&")
+                .indexOf(name) > -1 ||
+            (typeof nw !== "undefined" &&
+                nw.App.argv.length > 0 &&
+                nw.App.argv[0].split("&").indexOf(name) > -1)
+        );
     }
 
     public static isNwjs(): boolean {
@@ -36,7 +42,7 @@ export default abstract class Utils {
     }
 
     public static format(baseString: string, ...strings: any[]) {
-        return baseString.replace(/%([0-9]+)/g, function (s, n) {
+        return baseString.replace(/%([0-9]+)/g, function(s, n) {
             return strings[Number(n) - 1];
         });
     }
@@ -62,7 +68,7 @@ export default abstract class Utils {
     }
 
     public static padZero(input: string | number, length: number): string {
-        let returnString = typeof input === "number"? input.toString() : input;
+        let returnString = typeof input === "number" ? input.toString() : input;
 
         while (returnString.length < length) {
             returnString = "0" + returnString;
@@ -105,7 +111,9 @@ export default abstract class Utils {
         }
         let passive = false;
         const options = Object.defineProperty({}, "passive", {
-            "get"() { passive = true; }
+            get() {
+                passive = true;
+            }
         });
         window.addEventListener("test", null, options);
         this.supportPassiveEvent = passive;

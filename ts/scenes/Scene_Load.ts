@@ -6,7 +6,6 @@ import Scene_File from "./Scene_File";
 import Scene_Map from "./Scene_Map";
 
 export default class Scene_Load extends Scene_File {
-
     private _loadSuccess: boolean;
 
     public constructor() {
@@ -57,9 +56,12 @@ export default class Scene_Load extends Scene_File {
 
     public reloadMapIfUpdated() {
         if ($gameSystem.versionId() !== $dataSystem.versionId) {
-            $gamePlayer.reserveTransfer($gameMap.mapId(), $gamePlayer.x, $gamePlayer.y);
+            $gamePlayer.reserveTransfer(
+                $gameMap.mapId(),
+                $gamePlayer.x,
+                $gamePlayer.y
+            );
             $gamePlayer.requestMapReload();
         }
     }
-
 }

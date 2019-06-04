@@ -8,7 +8,7 @@ import Sprite_Actor from "./Sprite_Actor";
 import Sprite_Enemy from "./Sprite_Enemy";
 import Spriteset_Base from "./Spriteset_Base";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Spriteset_Battle
 //
 // The set of sprites on the battle screen.
@@ -28,8 +28,28 @@ export default class Spriteset_Battle extends Spriteset_Base {
     public overworldBattleback2Name: () => any;
     public normalBattleback1Name: () => any;
     public normalBattleback2Name: () => any;
-    public terrainBattleback1Name: (type: any) => "Wasteland" | "DirtField" | "Desert" | "Lava1" | "Lava2" | "Snowfield" | "Clouds" | "PoisonSwamp";
-    public terrainBattleback2Name: (type: any) => "Wasteland" | "Desert" | "Snowfield" | "Clouds" | "PoisonSwamp" | "Forest" | "Cliff" | "Lava";
+    public terrainBattleback1Name: (
+        type: any
+    ) =>
+        | "Wasteland"
+        | "DirtField"
+        | "Desert"
+        | "Lava1"
+        | "Lava2"
+        | "Snowfield"
+        | "Clouds"
+        | "PoisonSwamp";
+    public terrainBattleback2Name: (
+        type: any
+    ) =>
+        | "Wasteland"
+        | "Desert"
+        | "Snowfield"
+        | "Clouds"
+        | "PoisonSwamp"
+        | "Forest"
+        | "Cliff"
+        | "Lava";
     public defaultBattleback1Name: () => string;
     public defaultBattleback2Name: () => string;
     public shipBattleback1Name: () => string;
@@ -50,7 +70,7 @@ export default class Spriteset_Battle extends Spriteset_Base {
     }
 }
 
-Spriteset_Battle.prototype.createLowerLayer = function () {
+Spriteset_Battle.prototype.createLowerLayer = function() {
     Spriteset_Base.prototype.createLowerLayer.call(this);
     this.createBackground();
     this.createBattleField();
@@ -59,19 +79,19 @@ Spriteset_Battle.prototype.createLowerLayer = function () {
     this.createActors();
 };
 
-Spriteset_Battle.prototype.createBackground = function () {
+Spriteset_Battle.prototype.createBackground = function() {
     this._backgroundSprite = new Sprite();
     this._backgroundSprite.bitmap = SceneManager.backgroundBitmap();
     this._baseSprite.addChild(this._backgroundSprite);
 };
 
-Spriteset_Battle.prototype.update = function () {
+Spriteset_Battle.prototype.update = function() {
     Spriteset_Base.prototype.update.call(this);
     this.updateActors();
     this.updateBattleback();
 };
 
-Spriteset_Battle.prototype.createBattleField = function () {
+Spriteset_Battle.prototype.createBattleField = function() {
     const width = Graphics.boxWidth;
     const height = Graphics.boxHeight;
     const x = (Graphics.width - width) / 2;
@@ -83,7 +103,7 @@ Spriteset_Battle.prototype.createBattleField = function () {
     this._baseSprite.addChild(this._battleField);
 };
 
-Spriteset_Battle.prototype.createBattleback = function () {
+Spriteset_Battle.prototype.createBattleback = function() {
     const margin = 32;
     const x = -this._battleField.x - margin;
     const y = -this._battleField.y - margin;
@@ -99,14 +119,14 @@ Spriteset_Battle.prototype.createBattleback = function () {
     this._battleField.addChild(this._back2Sprite);
 };
 
-Spriteset_Battle.prototype.updateBattleback = function () {
+Spriteset_Battle.prototype.updateBattleback = function() {
     if (!this._battlebackLocated) {
         this.locateBattleback();
         this._battlebackLocated = true;
     }
 };
 
-Spriteset_Battle.prototype.locateBattleback = function () {
+Spriteset_Battle.prototype.locateBattleback = function() {
     const width = this._battleField.width;
     const height = this._battleField.height;
     const sprite1 = this._back1Sprite;
@@ -119,15 +139,15 @@ Spriteset_Battle.prototype.locateBattleback = function () {
     }
 };
 
-Spriteset_Battle.prototype.battleback1Bitmap = function () {
+Spriteset_Battle.prototype.battleback1Bitmap = function() {
     return ImageManager.loadBattleback1(this.battleback1Name());
 };
 
-Spriteset_Battle.prototype.battleback2Bitmap = function () {
+Spriteset_Battle.prototype.battleback2Bitmap = function() {
     return ImageManager.loadBattleback2(this.battleback2Name());
 };
 
-Spriteset_Battle.prototype.battleback1Name = function () {
+Spriteset_Battle.prototype.battleback1Name = function() {
     if (BattleManager.isBattleTest()) {
         return $dataSystem.battleback1Name;
     } else if ($gameMap.battleback1Name()) {
@@ -139,7 +159,7 @@ Spriteset_Battle.prototype.battleback1Name = function () {
     }
 };
 
-Spriteset_Battle.prototype.battleback2Name = function () {
+Spriteset_Battle.prototype.battleback2Name = function() {
     if (BattleManager.isBattleTest()) {
         return $dataSystem.battleback2Name;
     } else if ($gameMap.battleback2Name()) {
@@ -151,8 +171,10 @@ Spriteset_Battle.prototype.battleback2Name = function () {
     }
 };
 
-Spriteset_Battle.prototype.overworldBattleback1Name = function () {
-    if ($gameMap.battleback1Name() === "") { return ""; }
+Spriteset_Battle.prototype.overworldBattleback1Name = function() {
+    if ($gameMap.battleback1Name() === "") {
+        return "";
+    }
     if ($gamePlayer.isInVehicle()) {
         return this.shipBattleback1Name();
     } else {
@@ -160,8 +182,10 @@ Spriteset_Battle.prototype.overworldBattleback1Name = function () {
     }
 };
 
-Spriteset_Battle.prototype.overworldBattleback2Name = function () {
-    if ($gameMap.battleback2Name() === "") { return ""; }
+Spriteset_Battle.prototype.overworldBattleback2Name = function() {
+    if ($gameMap.battleback2Name() === "") {
+        return "";
+    }
     if ($gamePlayer.isInVehicle()) {
         return this.shipBattleback2Name();
     } else {
@@ -169,83 +193,102 @@ Spriteset_Battle.prototype.overworldBattleback2Name = function () {
     }
 };
 
-Spriteset_Battle.prototype.normalBattleback1Name = function () {
-    return (this.terrainBattleback1Name(this.autotileType(1)) ||
-            this.terrainBattleback1Name(this.autotileType(0)) ||
-            this.defaultBattleback1Name());
+Spriteset_Battle.prototype.normalBattleback1Name = function() {
+    return (
+        this.terrainBattleback1Name(this.autotileType(1)) ||
+        this.terrainBattleback1Name(this.autotileType(0)) ||
+        this.defaultBattleback1Name()
+    );
 };
 
-Spriteset_Battle.prototype.normalBattleback2Name = function () {
-    return (this.terrainBattleback2Name(this.autotileType(1)) ||
-            this.terrainBattleback2Name(this.autotileType(0)) ||
-            this.defaultBattleback2Name());
+Spriteset_Battle.prototype.normalBattleback2Name = function() {
+    return (
+        this.terrainBattleback2Name(this.autotileType(1)) ||
+        this.terrainBattleback2Name(this.autotileType(0)) ||
+        this.defaultBattleback2Name()
+    );
 };
 
-Spriteset_Battle.prototype.terrainBattleback1Name = function (type) {
+Spriteset_Battle.prototype.terrainBattleback1Name = function(type) {
     switch (type) {
-    case 24: case 25:
-        return "Wasteland";
-    case 26: case 27:
-        return "DirtField";
-    case 32: case 33:
-        return "Desert";
-    case 34:
-        return "Lava1";
-    case 35:
-        return "Lava2";
-    case 40: case 41:
-        return "Snowfield";
-    case 42:
-        return "Clouds";
-    case 4: case 5:
-        return "PoisonSwamp";
-    default:
-        return null;
+        case 24:
+        case 25:
+            return "Wasteland";
+        case 26:
+        case 27:
+            return "DirtField";
+        case 32:
+        case 33:
+            return "Desert";
+        case 34:
+            return "Lava1";
+        case 35:
+            return "Lava2";
+        case 40:
+        case 41:
+            return "Snowfield";
+        case 42:
+            return "Clouds";
+        case 4:
+        case 5:
+            return "PoisonSwamp";
+        default:
+            return null;
     }
 };
 
-Spriteset_Battle.prototype.terrainBattleback2Name = function (type) {
+Spriteset_Battle.prototype.terrainBattleback2Name = function(type) {
     switch (type) {
-    case 20: case 21:
-        return "Forest";
-    case 22: case 30: case 38:
-        return "Cliff";
-    case 24: case 25: case 26: case 27:
-        return "Wasteland";
-    case 32: case 33:
-        return "Desert";
-    case 34: case 35:
-        return "Lava";
-    case 40: case 41:
-        return "Snowfield";
-    case 42:
-        return "Clouds";
-    case 4: case 5:
-        return "PoisonSwamp";
+        case 20:
+        case 21:
+            return "Forest";
+        case 22:
+        case 30:
+        case 38:
+            return "Cliff";
+        case 24:
+        case 25:
+        case 26:
+        case 27:
+            return "Wasteland";
+        case 32:
+        case 33:
+            return "Desert";
+        case 34:
+        case 35:
+            return "Lava";
+        case 40:
+        case 41:
+            return "Snowfield";
+        case 42:
+            return "Clouds";
+        case 4:
+        case 5:
+            return "PoisonSwamp";
     }
 };
 
-Spriteset_Battle.prototype.defaultBattleback1Name = function () {
+Spriteset_Battle.prototype.defaultBattleback1Name = function() {
     return "Grassland";
 };
 
-Spriteset_Battle.prototype.defaultBattleback2Name = function () {
+Spriteset_Battle.prototype.defaultBattleback2Name = function() {
     return "Grassland";
 };
 
-Spriteset_Battle.prototype.shipBattleback1Name = function () {
+Spriteset_Battle.prototype.shipBattleback1Name = function() {
     return "Ship";
 };
 
-Spriteset_Battle.prototype.shipBattleback2Name = function () {
+Spriteset_Battle.prototype.shipBattleback2Name = function() {
     return "Ship";
 };
 
-Spriteset_Battle.prototype.autotileType = function (z) {
+Spriteset_Battle.prototype.autotileType = function(z) {
     return $gameMap.autotileType($gamePlayer.x, $gamePlayer.y, z);
 };
 
-Spriteset_Battle.prototype.createEnemies = function () {
+Spriteset_Battle.prototype.createEnemies = function() {
     const enemies = $gameTroop.members();
     const sprites = [];
     for (let i = 0; i < enemies.length; i++) {
@@ -258,7 +301,7 @@ Spriteset_Battle.prototype.createEnemies = function () {
     this._enemySprites = sprites;
 };
 
-Spriteset_Battle.prototype.compareEnemySprite = function (a, b) {
+Spriteset_Battle.prototype.compareEnemySprite = function(a, b) {
     if (a.y !== b.y) {
         return a.y - b.y;
     } else {
@@ -266,7 +309,7 @@ Spriteset_Battle.prototype.compareEnemySprite = function (a, b) {
     }
 };
 
-Spriteset_Battle.prototype.createActors = function () {
+Spriteset_Battle.prototype.createActors = function() {
     this._actorSprites = [];
     for (let i = 0; i < $gameParty.maxBattleMembers(); i++) {
         this._actorSprites[i] = new Sprite_Actor();
@@ -274,35 +317,35 @@ Spriteset_Battle.prototype.createActors = function () {
     }
 };
 
-Spriteset_Battle.prototype.updateActors = function () {
+Spriteset_Battle.prototype.updateActors = function() {
     const members = $gameParty.battleMembers();
     for (let i = 0; i < this._actorSprites.length; i++) {
         this._actorSprites[i].setBattler(members[i]);
     }
 };
 
-Spriteset_Battle.prototype.battlerSprites = function () {
+Spriteset_Battle.prototype.battlerSprites = function() {
     return this._enemySprites.concat(this._actorSprites);
 };
 
-Spriteset_Battle.prototype.isAnimationPlaying = function () {
-    return this.battlerSprites().some(function (sprite) {
+Spriteset_Battle.prototype.isAnimationPlaying = function() {
+    return this.battlerSprites().some(function(sprite) {
         return sprite.isAnimationPlaying();
     });
 };
 
-Spriteset_Battle.prototype.isEffecting = function () {
-    return this.battlerSprites().some(function (sprite) {
+Spriteset_Battle.prototype.isEffecting = function() {
+    return this.battlerSprites().some(function(sprite) {
         return sprite.isEffecting();
     });
 };
 
-Spriteset_Battle.prototype.isAnyoneMoving = function () {
-    return this.battlerSprites().some(function (sprite) {
+Spriteset_Battle.prototype.isAnyoneMoving = function() {
+    return this.battlerSprites().some(function(sprite) {
         return sprite.isMoving();
     });
 };
 
-Spriteset_Battle.prototype.isBusy = function () {
+Spriteset_Battle.prototype.isBusy = function() {
     return this.isAnimationPlaying() || this.isAnyoneMoving();
 };

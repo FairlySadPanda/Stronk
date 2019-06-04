@@ -1,6 +1,6 @@
 import Window_Selectable from "./Window_Selectable";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_SkillList
 //
 // The window for selecting a skill on the skill screen.
@@ -26,7 +26,7 @@ export default class Window_SkillList extends Window_Selectable {
     }
 }
 
-Window_SkillList.prototype.setActor = function (actor) {
+Window_SkillList.prototype.setActor = function(actor) {
     if (this._actor !== actor) {
         this._actor = actor;
         this.refresh();
@@ -34,7 +34,7 @@ Window_SkillList.prototype.setActor = function (actor) {
     }
 };
 
-Window_SkillList.prototype.setStypeId = function (stypeId) {
+Window_SkillList.prototype.setStypeId = function(stypeId) {
     if (this._stypeId !== stypeId) {
         this._stypeId = stypeId;
         this.refresh();
@@ -42,37 +42,37 @@ Window_SkillList.prototype.setStypeId = function (stypeId) {
     }
 };
 
-Window_SkillList.prototype.maxCols = function () {
+Window_SkillList.prototype.maxCols = function() {
     return 2;
 };
 
-Window_SkillList.prototype.spacing = function () {
+Window_SkillList.prototype.spacing = function() {
     return 48;
 };
 
-Window_SkillList.prototype.maxItems = function () {
+Window_SkillList.prototype.maxItems = function() {
     return this._data ? this._data.length : 1;
 };
 
-Window_SkillList.prototype.item = function () {
+Window_SkillList.prototype.item = function() {
     return this._data && this.index() >= 0 ? this._data[this.index()] : null;
 };
 
-Window_SkillList.prototype.isCurrentItemEnabled = function () {
+Window_SkillList.prototype.isCurrentItemEnabled = function() {
     return this.isEnabled(this._data[this.index()]);
 };
 
-Window_SkillList.prototype.includes = function (item) {
+Window_SkillList.prototype.includes = function(item) {
     return item && item.stypeId === this._stypeId;
 };
 
-Window_SkillList.prototype.isEnabled = function (item) {
+Window_SkillList.prototype.isEnabled = function(item) {
     return this._actor && this._actor.canUse(item);
 };
 
-Window_SkillList.prototype.makeItemList = function () {
+Window_SkillList.prototype.makeItemList = function() {
     if (this._actor) {
-        this._data = this._actor.skills().filter(function (item) {
+        this._data = this._actor.skills().filter(function(item) {
             return this.includes(item);
         }, this);
     } else {
@@ -80,7 +80,7 @@ Window_SkillList.prototype.makeItemList = function () {
     }
 };
 
-Window_SkillList.prototype.selectLast = function () {
+Window_SkillList.prototype.selectLast = function() {
     let skill;
     if ($gameParty.inBattle()) {
         skill = this._actor.lastBattleSkill();
@@ -91,7 +91,7 @@ Window_SkillList.prototype.selectLast = function () {
     this.select(index >= 0 ? index : 0);
 };
 
-Window_SkillList.prototype.drawItem = function (index) {
+Window_SkillList.prototype.drawItem = function(index) {
     const skill = this._data[index];
     if (skill) {
         const costWidth = this.costWidth();
@@ -104,11 +104,11 @@ Window_SkillList.prototype.drawItem = function (index) {
     }
 };
 
-Window_SkillList.prototype.costWidth = function () {
+Window_SkillList.prototype.costWidth = function() {
     return this.textWidth("000");
 };
 
-Window_SkillList.prototype.drawSkillCost = function (skill, x, y, width) {
+Window_SkillList.prototype.drawSkillCost = function(skill, x, y, width) {
     if (this._actor.skillTpCost(skill) > 0) {
         this.changeTextColor(this.tpCostColor());
         this.drawText(this._actor.skillTpCost(skill), x, y, width, "right");
@@ -118,11 +118,11 @@ Window_SkillList.prototype.drawSkillCost = function (skill, x, y, width) {
     }
 };
 
-Window_SkillList.prototype.updateHelp = function () {
+Window_SkillList.prototype.updateHelp = function() {
     this.setHelpWindowItem(this.item());
 };
 
-Window_SkillList.prototype.refresh = function () {
+Window_SkillList.prototype.refresh = function() {
     this.makeItemList();
     this.createContents();
     this.drawAllItems();

@@ -1,5 +1,6 @@
 export default class PluginManager {
-    public static _path: string;    public static _scripts: any[];
+    public static _path: string;
+    public static _scripts: any[];
     public static _errorUrls: any[];
     public static _parameters: {};
     public static setup: (plugins: any) => void;
@@ -9,13 +10,13 @@ export default class PluginManager {
     public static loadScript: (name: any) => void;
     public static onError: (e: any) => void;
 }
-PluginManager._path         = "js/plugins/";
-PluginManager._scripts      = [];
-PluginManager._errorUrls    = [];
-PluginManager._parameters   = {};
+PluginManager._path = "js/plugins/";
+PluginManager._scripts = [];
+PluginManager._errorUrls = [];
+PluginManager._parameters = {};
 
-PluginManager.setup = function (plugins) {
-    plugins.forEach(function (plugin) {
+PluginManager.setup = function(plugins) {
+    plugins.forEach(function(plugin) {
         if (plugin.status && !(this._scripts.indexOf(plugin.name) > -1)) {
             this.setParameters(plugin.name, plugin.parameters);
             this.loadScript(plugin.name + ".js");
@@ -24,22 +25,22 @@ PluginManager.setup = function (plugins) {
     }, this);
 };
 
-PluginManager.checkErrors = function () {
+PluginManager.checkErrors = function() {
     const url = this._errorUrls.shift();
     if (url) {
         throw new Error("Failed to load: " + url);
     }
 };
 
-PluginManager.parameters = function (name) {
+PluginManager.parameters = function(name) {
     return this._parameters[name.toLowerCase()] || {};
 };
 
-PluginManager.setParameters = function (name, parameters) {
+PluginManager.setParameters = function(name, parameters) {
     this._parameters[name.toLowerCase()] = parameters;
 };
 
-PluginManager.loadScript = function (name) {
+PluginManager.loadScript = function(name) {
     const url = this._path + name;
     const script = document.createElement("script");
     script.type = "text/javascript";
@@ -50,6 +51,6 @@ PluginManager.loadScript = function (name) {
     document.body.appendChild(script);
 };
 
-PluginManager.onError = function (e) {
+PluginManager.onError = function(e) {
     this._errorUrls.push(e.target._url);
 };

@@ -25,7 +25,6 @@ export interface Game_Player_OnLoad extends Game_Character_OnLoad {
 }
 
 export default class Game_Player extends Game_Character {
-
     private _followers: Game_Followers;
     private _vehicleType: string;
     private _vehicleGettingOn: boolean;
@@ -230,7 +229,7 @@ export default class Game_Player extends Game_Character {
     public makeEncounterTroopId() {
         const encounterList = [];
         let weightSum = 0;
-        $gameMap.encounterList().forEach(function (encounter) {
+        $gameMap.encounterList().forEach(function(encounter) {
             if (this.meetsEncounterConditions(encounter)) {
                 encounterList.push(encounter);
                 weightSum += encounter.weight;
@@ -249,8 +248,10 @@ export default class Game_Player extends Game_Character {
     }
 
     public meetsEncounterConditions(encounter) {
-        return (encounter.regionSet.length === 0 ||
-                encounter.regionSet.indexOf(this.regionId()) > -1);
+        return (
+            encounter.regionSet.length === 0 ||
+            encounter.regionSet.indexOf(this.regionId()) > -1
+        );
     }
 
     public executeEncounter() {
@@ -271,8 +272,11 @@ export default class Game_Player extends Game_Character {
 
     public startMapEvent(x, y, triggers, normal) {
         if (!$gameMap.isEventRunning()) {
-            $gameMap.eventsXy(x, y).forEach(function (event) {
-                if (event.isTriggerIn(triggers) && event.isNormalPriority() === normal) {
+            $gameMap.eventsXy(x, y).forEach(function(event) {
+                if (
+                    event.isTriggerIn(triggers) &&
+                    event.isNormalPriority() === normal
+                ) {
                     event.start();
                 }
             });
@@ -284,7 +288,7 @@ export default class Game_Player extends Game_Character {
             let direction = this.getInputDirection();
             if (direction > 0) {
                 $gameTemp.clearDestination();
-            } else if ($gameTemp.isDestinationValid()){
+            } else if ($gameTemp.isDestinationValid()) {
                 const x = $gameTemp.destinationX();
                 const y = $gameTemp.destinationY();
                 direction = this.findDirectionTo(x, y);
@@ -340,8 +344,13 @@ export default class Game_Player extends Game_Character {
         if (this.isMoving()) {
             return;
         }
-        if (this.canMove() && !this.isInVehicle() && !$gameMap.isDashDisabled()) {
-            this._dashing = this.isDashButtonPressed() || $gameTemp.isDestinationValid();
+        if (
+            this.canMove() &&
+            !this.isInVehicle() &&
+            !$gameMap.isDashDisabled()
+        ) {
+            this._dashing =
+                this.isDashButtonPressed() || $gameTemp.isDestinationValid();
         } else {
             this._dashing = false;
         }
@@ -412,7 +421,7 @@ export default class Game_Player extends Game_Character {
         if (!$gameMap.isEventRunning()) {
             if (wasMoving) {
                 $gameParty.onPlayerWalk();
-                this.checkEventTriggerHere([1,2]);
+                this.checkEventTriggerHere([1, 2]);
                 if ($gameMap.setupStartingEvent()) {
                     return;
                 }
@@ -449,7 +458,7 @@ export default class Game_Player extends Game_Character {
             if ($gameMap.setupStartingEvent()) {
                 return true;
             }
-            this.checkEventTriggerThere([0,1,2]);
+            this.checkEventTriggerThere([0, 1, 2]);
             if ($gameMap.setupStartingEvent()) {
                 return true;
             }
@@ -458,7 +467,7 @@ export default class Game_Player extends Game_Character {
     }
 
     public triggerTouchAction() {
-        if ($gameTemp.isDestinationValid()){
+        if ($gameTemp.isDestinationValid()) {
             const direction = this.direction();
             const x1 = this.x;
             const y1 = this.y;
@@ -500,13 +509,13 @@ export default class Game_Player extends Game_Character {
                 return true;
             }
         }
-        this.checkEventTriggerThere([0,1,2]);
+        this.checkEventTriggerThere([0, 1, 2]);
         return $gameMap.setupStartingEvent();
     }
 
     public triggerTouchActionD3(x2, y2) {
         if ($gameMap.isCounter(x2, y2)) {
-            this.checkEventTriggerThere([0,1,2]);
+            this.checkEventTriggerThere([0, 1, 2]);
         }
         return $gameMap.setupStartingEvent();
     }
@@ -518,8 +527,13 @@ export default class Game_Player extends Game_Character {
     }
 
     public canEncounter() {
-        return (!$gameParty.hasEncounterNone() && $gameSystem.isEncounterEnabled() &&
-                !this.isInAirship() && !this.isMoveRouteForcing() && !this.isDebugThrough());
+        return (
+            !$gameParty.hasEncounterNone() &&
+            $gameSystem.isEncounterEnabled() &&
+            !this.isInAirship() &&
+            !this.isMoveRouteForcing() &&
+            !this.isDebugThrough()
+        );
     }
 
     public encounterProgressValue() {
@@ -557,7 +571,7 @@ export default class Game_Player extends Game_Character {
 
     public checkEventTriggerTouch(x, y) {
         if (this.canStartLocalEvents()) {
-            this.startMapEvent(x, y, [1,2], true);
+            this.startMapEvent(x, y, [1, 2], true);
         }
     }
 
@@ -664,5 +678,4 @@ export default class Game_Player extends Game_Character {
     public areFollowersGathered() {
         return this._followers.areGathered();
     }
-
 }

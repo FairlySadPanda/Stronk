@@ -182,8 +182,12 @@ export default class Game_Message {
     }
 
     public isBusy() {
-        return (this.hasText() || this.isChoice() ||
-                this.isNumberInput() || this.isItemChoice());
+        return (
+            this.hasText() ||
+            this.isChoice() ||
+            this.isNumberInput() ||
+            this.isItemChoice()
+        );
     }
 
     public newPage() {
@@ -195,5 +199,4 @@ export default class Game_Message {
     public allText() {
         return this._texts.join("\n");
     }
-
 }

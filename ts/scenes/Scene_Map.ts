@@ -42,7 +42,9 @@ export default class Scene_Map extends Scene_Base {
     public create() {
         super.create();
         this._transfer = $gamePlayer.isTransferring();
-        const mapId = this._transfer ? $gamePlayer.newMapId() : $gameMap.mapId();
+        const mapId = this._transfer
+            ? $gamePlayer.newMapId()
+            : $gameMap.mapId();
         DataManager.loadMapData(mapId);
     }
 
@@ -105,8 +107,11 @@ export default class Scene_Map extends Scene_Base {
     }
 
     public isFastForward() {
-        return ($gameMap.isEventRunning() && !SceneManager.isSceneChanging() &&
-                (Input.isLongPressed("ok") || TouchInput.isLongPressed()));
+        return (
+            $gameMap.isEventRunning() &&
+            !SceneManager.isSceneChanging() &&
+            (Input.isLongPressed("ok") || TouchInput.isLongPressed())
+        );
     }
 
     public stop() {
@@ -123,9 +128,12 @@ export default class Scene_Map extends Scene_Base {
     }
 
     public isBusy() {
-        return ((this._messageWindow && this._messageWindow.isClosing()) ||
-                this._waitCount > 0 || this._encounterEffectDuration > 0 ||
-                super.isBusy());
+        return (
+            (this._messageWindow && this._messageWindow.isClosing()) ||
+            this._waitCount > 0 ||
+            this._encounterEffectDuration > 0 ||
+            super.isBusy()
+        );
     }
 
     public terminate() {
@@ -151,13 +159,17 @@ export default class Scene_Map extends Scene_Base {
     }
 
     public needsFadeIn() {
-        return (SceneManager.isPreviousScene(Scene_Battle) ||
-                SceneManager.isPreviousScene(Scene_Load));
+        return (
+            SceneManager.isPreviousScene(Scene_Battle) ||
+            SceneManager.isPreviousScene(Scene_Load)
+        );
     }
 
     public needsSlowFadeOut() {
-        return (SceneManager.isNextScene(Scene_Title) ||
-                SceneManager.isNextScene(Scene_Gameover));
+        return (
+            SceneManager.isNextScene(Scene_Title) ||
+            SceneManager.isNextScene(Scene_Gameover)
+        );
     }
 
     public updateWaitCount() {
@@ -241,7 +253,7 @@ export default class Scene_Map extends Scene_Base {
     public createMessageWindow() {
         this._messageWindow = new Window_Message();
         this.addWindow(this._messageWindow);
-        this._messageWindow.subWindows().forEach(function (window) {
+        this._messageWindow.subWindows().forEach(function(window) {
             this.addWindow(window);
         }, this);
     }
@@ -258,9 +270,9 @@ export default class Scene_Map extends Scene_Base {
     }
 
     public updateEncounter() {
-    if ($gamePlayer.executeEncounter()) {
-        SceneManager.push(Scene_Battle);
-    }
+        if ($gamePlayer.executeEncounter()) {
+            SceneManager.push(Scene_Battle);
+        }
     }
 
     public updateCallMenu() {
@@ -306,18 +318,20 @@ export default class Scene_Map extends Scene_Base {
     public fadeInForTransfer() {
         const fadeType = $gamePlayer.fadeType();
         switch (fadeType) {
-        case 0: case 1:
-            this.startFadeIn(this.fadeSpeed(), fadeType === 1);
-            break;
+            case 0:
+            case 1:
+                this.startFadeIn(this.fadeSpeed(), fadeType === 1);
+                break;
         }
     }
 
     public fadeOutForTransfer() {
         const fadeType = $gamePlayer.fadeType();
         switch (fadeType) {
-        case 0: case 1:
-            this.startFadeOut(this.fadeSpeed(), fadeType === 1);
-            break;
+            case 0:
+            case 1:
+                this.startFadeOut(this.fadeSpeed(), fadeType === 1);
+                break;
         }
     }
 
@@ -382,5 +396,4 @@ export default class Scene_Map extends Scene_Base {
     public encounterEffectSpeed() {
         return 60;
     }
-
 }

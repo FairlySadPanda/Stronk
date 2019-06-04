@@ -1,4 +1,3 @@
-
 import Game_Follower from "./Game_Follower";
 
 export interface Game_Followers_OnLoad {
@@ -7,7 +6,7 @@ export interface Game_Followers_OnLoad {
     _data: any[];
 }
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Game_Followers
 //
 // The wrapper class for a follower array.
@@ -62,7 +61,7 @@ export default class Game_Followers {
     }
 
     public refresh() {
-        this.forEach(function (follower) {
+        this.forEach(function(follower) {
             return follower.refresh();
         }, this);
     }
@@ -76,14 +75,14 @@ export default class Game_Followers {
                 this._gathering = false;
             }
         }
-        this.forEach(function (follower) {
+        this.forEach(function(follower) {
             follower.update();
         }, this);
     }
 
     public updateMove() {
         for (let i = this._data.length - 1; i >= 0; i--) {
-            const precedingCharacter = (i > 0 ? this._data[i - 1] : $gamePlayer);
+            const precedingCharacter = i > 0 ? this._data[i - 1] : $gamePlayer;
             this._data[i].chaseCharacter(precedingCharacter);
         }
     }
@@ -100,7 +99,7 @@ export default class Game_Followers {
     }
 
     public synchronize(x, y, d) {
-        this.forEach(function (follower) {
+        this.forEach(function(follower) {
             follower.locate(x, y);
             follower.setDirection(d);
         }, this);
@@ -115,25 +114,28 @@ export default class Game_Followers {
     }
 
     public visibleFollowers() {
-        return this._data.filter(function (follower) {
+        return this._data.filter(function(follower) {
             return follower.isVisible();
         }, this);
     }
 
     public areMoving() {
-        return this.visibleFollowers().some(function (follower) {
+        return this.visibleFollowers().some(function(follower) {
             return follower.isMoving();
         }, this);
     }
 
     public areGathered() {
-        return this.visibleFollowers().every(function (follower) {
-            return !follower.isMoving() && follower.pos($gamePlayer.x, $gamePlayer.y);
+        return this.visibleFollowers().every(function(follower) {
+            return (
+                !follower.isMoving() &&
+                follower.pos($gamePlayer.x, $gamePlayer.y)
+            );
         }, this);
     }
 
     public isSomeoneCollided(x, y) {
-        return this.visibleFollowers().some(function (follower) {
+        return this.visibleFollowers().some(function(follower) {
             return follower.pos(x, y);
         }, this);
     }

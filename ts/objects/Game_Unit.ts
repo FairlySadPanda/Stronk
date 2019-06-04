@@ -22,25 +22,25 @@ export default class Game_Unit {
     }
 
     public aliveMembers() {
-        return this.members().filter(function (member) {
+        return this.members().filter(function(member) {
             return member.isAlive();
         });
     }
 
     public deadMembers() {
-        return this.members().filter(function (member) {
+        return this.members().filter(function(member) {
             return member.isDead();
         });
     }
 
     public movableMembers() {
-        return this.members().filter(function (member) {
+        return this.members().filter(function(member) {
             return member.canMove();
         });
     }
 
     public clearActions() {
-        return this.members().forEach(function (member) {
+        return this.members().forEach(function(member) {
             return member.clearActions();
         });
     }
@@ -50,14 +50,14 @@ export default class Game_Unit {
         if (members.length === 0) {
             return 1;
         }
-        const sum = members.reduce(function (r, member) {
+        const sum = members.reduce(function(r, member) {
             return r + member.agi;
         }, 0);
         return sum / members.length;
     }
 
     public tgrSum() {
-        return this.aliveMembers().reduce(function (r, member) {
+        return this.aliveMembers().reduce(function(r, member) {
             return r + member.tgr;
         }, 0);
     }
@@ -65,7 +65,7 @@ export default class Game_Unit {
     public randomTarget() {
         let tgrRand = Math.random() * this.tgrSum();
         let target = null;
-        this.aliveMembers().forEach(function (member) {
+        this.aliveMembers().forEach(function(member) {
             tgrRand -= member.tgr;
             if (tgrRand <= 0 && !target) {
                 target = member;
@@ -87,7 +87,7 @@ export default class Game_Unit {
             index = 0;
         }
         const member = this.members()[index];
-        return (member && member.isAlive()) ? member : this.aliveMembers()[0];
+        return member && member.isAlive() ? member : this.aliveMembers()[0];
     }
 
     public smoothDeadTarget(index) {
@@ -95,17 +95,17 @@ export default class Game_Unit {
             index = 0;
         }
         const member = this.members()[index];
-        return (member && member.isDead()) ? member : this.deadMembers()[0];
+        return member && member.isDead() ? member : this.deadMembers()[0];
     }
 
     public clearResults() {
-        this.members().forEach(function (member) {
+        this.members().forEach(function(member) {
             member.clearResult();
         });
     }
 
     public onBattleStart() {
-        this.members().forEach(function (member) {
+        this.members().forEach(function(member) {
             member.onBattleStart();
         });
         this._inBattle = true;
@@ -113,19 +113,19 @@ export default class Game_Unit {
 
     public onBattleEnd() {
         this._inBattle = false;
-        this.members().forEach(function (member) {
+        this.members().forEach(function(member) {
             member.onBattleEnd();
         });
     }
 
     public makeActions() {
-        this.members().forEach(function (member) {
+        this.members().forEach(function(member) {
             member.makeActions();
         });
     }
 
     public select(activeMember) {
-        this.members().forEach(function (member) {
+        this.members().forEach(function(member) {
             if (member === activeMember) {
                 member.select();
             } else {
@@ -146,5 +146,4 @@ export default class Game_Unit {
             }
         }
     }
-
 }

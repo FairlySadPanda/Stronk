@@ -23,47 +23,44 @@ export default class Scene_ItemBase extends Scene_MenuBase {
     public isItemEffectsValid: () => any;
     public applyItem: () => void;
     public checkCommonEvent: () => void;
-    public constructor() {
-        super();
-    }
 }
 
-Scene_ItemBase.prototype.create = function () {
+Scene_ItemBase.prototype.create = function() {
     Scene_MenuBase.prototype.create.call(this);
 };
 
-Scene_ItemBase.prototype.createActorWindow = function () {
+Scene_ItemBase.prototype.createActorWindow = function() {
     this._actorWindow = new Window_MenuActor();
-    this._actorWindow.setHandler("ok",     this.onActorOk.bind(this));
+    this._actorWindow.setHandler("ok", this.onActorOk.bind(this));
     this._actorWindow.setHandler("cancel", this.onActorCancel.bind(this));
     this.addWindow(this._actorWindow);
 };
 
-Scene_ItemBase.prototype.item = function () {
+Scene_ItemBase.prototype.item = function() {
     return this._itemWindow.item();
 };
 
-Scene_ItemBase.prototype.user = function () {
+Scene_ItemBase.prototype.user = function() {
     return null;
 };
 
-Scene_ItemBase.prototype.isCursorLeft = function () {
+Scene_ItemBase.prototype.isCursorLeft = function() {
     return this._itemWindow.index() % 2 === 0;
 };
 
-Scene_ItemBase.prototype.showSubWindow = function (window) {
+Scene_ItemBase.prototype.showSubWindow = function(window) {
     window.x = this.isCursorLeft() ? Graphics.boxWidth - window.width : 0;
     window.show();
     window.activate();
 };
 
-Scene_ItemBase.prototype.hideSubWindow = function (window) {
+Scene_ItemBase.prototype.hideSubWindow = function(window) {
     window.hide();
     window.deactivate();
     this.activateItemWindow();
 };
 
-Scene_ItemBase.prototype.onActorOk = function () {
+Scene_ItemBase.prototype.onActorOk = function() {
     if (this.canUse()) {
         this.useItem();
     } else {
@@ -71,11 +68,11 @@ Scene_ItemBase.prototype.onActorOk = function () {
     }
 };
 
-Scene_ItemBase.prototype.onActorCancel = function () {
+Scene_ItemBase.prototype.onActorCancel = function() {
     this.hideSubWindow(this._actorWindow);
 };
 
-Scene_ItemBase.prototype.determineItem = function () {
+Scene_ItemBase.prototype.determineItem = function() {
     const action = new Game_Action(this.user());
     const item = this.item();
     action.setItemObject(item);
@@ -88,7 +85,7 @@ Scene_ItemBase.prototype.determineItem = function () {
     }
 };
 
-Scene_ItemBase.prototype.useItem = function () {
+Scene_ItemBase.prototype.useItem = function() {
     this.playSeForItem();
     this.user().useItem(this.item());
     this.applyItem();
@@ -97,12 +94,12 @@ Scene_ItemBase.prototype.useItem = function () {
     this._actorWindow.refresh();
 };
 
-Scene_ItemBase.prototype.activateItemWindow = function () {
+Scene_ItemBase.prototype.activateItemWindow = function() {
     this._itemWindow.refresh();
     this._itemWindow.activate();
 };
 
-Scene_ItemBase.prototype.itemTargetActors = function () {
+Scene_ItemBase.prototype.itemTargetActors = function() {
     const action = new Game_Action(this.user());
     action.setItemObject(this.item());
     if (!action.isForFriend()) {
@@ -114,22 +111,22 @@ Scene_ItemBase.prototype.itemTargetActors = function () {
     }
 };
 
-Scene_ItemBase.prototype.canUse = function () {
+Scene_ItemBase.prototype.canUse = function() {
     return this.user().canUse(this.item()) && this.isItemEffectsValid();
 };
 
-Scene_ItemBase.prototype.isItemEffectsValid = function () {
+Scene_ItemBase.prototype.isItemEffectsValid = function() {
     const action = new Game_Action(this.user());
     action.setItemObject(this.item());
-    return this.itemTargetActors().some(function (target) {
+    return this.itemTargetActors().some(function(target) {
         return action.testApply(target);
     }, this);
 };
 
-Scene_ItemBase.prototype.applyItem = function () {
+Scene_ItemBase.prototype.applyItem = function() {
     const action = new Game_Action(this.user());
     action.setItemObject(this.item());
-    this.itemTargetActors().forEach(function (target) {
+    this.itemTargetActors().forEach(function(target) {
         for (let i = 0; i < action.numRepeats(); i++) {
             action.apply(target);
         }
@@ -137,7 +134,7 @@ Scene_ItemBase.prototype.applyItem = function () {
     action.applyGlobal();
 };
 
-Scene_ItemBase.prototype.checkCommonEvent = function () {
+Scene_ItemBase.prototype.checkCommonEvent = function() {
     if ($gameTemp.isCommonEventReserved()) {
         SceneManager.goto(Scene_Map);
     }

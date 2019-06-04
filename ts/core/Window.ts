@@ -1,3 +1,4 @@
+import * as PIXI from "pixi.js";
 import Bitmap from "./Bitmap";
 import Point from "./Point";
 import Rectangle from "./Rectangle";
@@ -5,7 +6,6 @@ import Sprite from "./Sprite";
 import Utils from "./Utils";
 
 export default class Window extends PIXI.Container {
-
     public origin: Point;
     public active: boolean;
     public downArrowVisible: boolean;
@@ -106,7 +106,7 @@ export default class Window extends PIXI.Container {
         if (this.active) {
             this._animationCount++;
         }
-        this.children.forEach(function (child) {
+        this.children.forEach(function(child) {
             if (child.update) {
                 child.update();
             }
@@ -165,7 +165,12 @@ export default class Window extends PIXI.Container {
         const cw = Math.floor(width || 0);
         const ch = Math.floor(height || 0);
         const rect = this._cursorRect;
-        if (rect.x !== cx || rect.y !== cy || rect.width !== cw || rect.height !== ch) {
+        if (
+            rect.x !== cx ||
+            rect.y !== cy ||
+            rect.width !== cw ||
+            rect.height !== ch
+        ) {
             this._cursorRect.x = cx;
             this._cursorRect.y = cy;
             this._cursorRect.width = cw;
@@ -198,7 +203,9 @@ export default class Window extends PIXI.Container {
      * @return {Object} The child that was added
      */
     public addChildToBack(child) {
-        const containerIndex = this.children.indexOf(this._windowSpriteContainer);
+        const containerIndex = this.children.indexOf(
+            this._windowSpriteContainer
+        );
         return this.addChildAt(child, containerIndex + 1);
     }
 
@@ -304,14 +311,34 @@ export default class Window extends PIXI.Container {
             const skin = this._windowskin;
             const p = 96;
             const q = 96;
-            bitmap.blt(skin, p+m, 0+0, p-m*2, m, m, 0, w-m*2, m);
-            bitmap.blt(skin, p+m, 0+q-m, p-m*2, m, m, h-m, w-m*2, m);
-            bitmap.blt(skin, p+0, 0+m, m, p-m*2, 0, m, m, h-m*2);
-            bitmap.blt(skin, p+q-m, 0+m, m, p-m*2, w-m, m, m, h-m*2);
-            bitmap.blt(skin, p+0, 0+0, m, m, 0, 0, m, m);
-            bitmap.blt(skin, p+q-m, 0+0, m, m, w-m, 0, m, m);
-            bitmap.blt(skin, p+0, 0+q-m, m, m, 0, h-m, m, m);
-            bitmap.blt(skin, p+q-m, 0+q-m, m, m, w-m, h-m, m, m);
+            bitmap.blt(skin, p + m, 0 + 0, p - m * 2, m, m, 0, w - m * 2, m);
+            bitmap.blt(
+                skin,
+                p + m,
+                0 + q - m,
+                p - m * 2,
+                m,
+                m,
+                h - m,
+                w - m * 2,
+                m
+            );
+            bitmap.blt(skin, p + 0, 0 + m, m, p - m * 2, 0, m, m, h - m * 2);
+            bitmap.blt(
+                skin,
+                p + q - m,
+                0 + m,
+                m,
+                p - m * 2,
+                w - m,
+                m,
+                m,
+                h - m * 2
+            );
+            bitmap.blt(skin, p + 0, 0 + 0, m, m, 0, 0, m, m);
+            bitmap.blt(skin, p + q - m, 0 + 0, m, m, w - m, 0, m, m);
+            bitmap.blt(skin, p + 0, 0 + q - m, m, m, 0, h - m, m, m);
+            bitmap.blt(skin, p + q - m, 0 + q - m, m, m, w - m, h - m, m, m);
         }
     }
 
@@ -342,15 +369,75 @@ export default class Window extends PIXI.Container {
             const skin = this._windowskin;
             const p = 96;
             const q = 48;
-            bitmap.blt(skin, p+m, p+m, q-m*2, q-m*2, ox+m, oy+m, w-m*2, h-m*2);
-            bitmap.blt(skin, p+m, p+0, q-m*2, m, ox+m, oy+0, w-m*2, m);
-            bitmap.blt(skin, p+m, p+q-m, q-m*2, m, ox+m, oy+h-m, w-m*2, m);
-            bitmap.blt(skin, p+0, p+m, m, q-m*2, ox+0, oy+m, m, h-m*2);
-            bitmap.blt(skin, p+q-m, p+m, m, q-m*2, ox+w-m, oy+m, m, h-m*2);
-            bitmap.blt(skin, p+0, p+0, m, m, ox+0, oy+0, m, m);
-            bitmap.blt(skin, p+q-m, p+0, m, m, ox+w-m, oy+0, m, m);
-            bitmap.blt(skin, p+0, p+q-m, m, m, ox+0, oy+h-m, m, m);
-            bitmap.blt(skin, p+q-m, p+q-m, m, m, ox+w-m, oy+h-m, m, m);
+            bitmap.blt(
+                skin,
+                p + m,
+                p + m,
+                q - m * 2,
+                q - m * 2,
+                ox + m,
+                oy + m,
+                w - m * 2,
+                h - m * 2
+            );
+            bitmap.blt(
+                skin,
+                p + m,
+                p + 0,
+                q - m * 2,
+                m,
+                ox + m,
+                oy + 0,
+                w - m * 2,
+                m
+            );
+            bitmap.blt(
+                skin,
+                p + m,
+                p + q - m,
+                q - m * 2,
+                m,
+                ox + m,
+                oy + h - m,
+                w - m * 2,
+                m
+            );
+            bitmap.blt(
+                skin,
+                p + 0,
+                p + m,
+                m,
+                q - m * 2,
+                ox + 0,
+                oy + m,
+                m,
+                h - m * 2
+            );
+            bitmap.blt(
+                skin,
+                p + q - m,
+                p + m,
+                m,
+                q - m * 2,
+                ox + w - m,
+                oy + m,
+                m,
+                h - m * 2
+            );
+            bitmap.blt(skin, p + 0, p + 0, m, m, ox + 0, oy + 0, m, m);
+            bitmap.blt(skin, p + q - m, p + 0, m, m, ox + w - m, oy + 0, m, m);
+            bitmap.blt(skin, p + 0, p + q - m, m, m, ox + 0, oy + h - m, m, m);
+            bitmap.blt(
+                skin,
+                p + q - m,
+                p + q - m,
+                m,
+                m,
+                ox + w - m,
+                oy + h - m,
+                m,
+                m
+            );
         }
     }
 
@@ -370,19 +457,19 @@ export default class Window extends PIXI.Container {
         const w = this._width;
         const h = this._height;
         const p = 24;
-        const q = p/2;
-        const sx = 96+p;
-        const sy = 0+p;
+        const q = p / 2;
+        const sx = 96 + p;
+        const sy = 0 + p;
         this._downArrowSprite.bitmap = this._windowskin;
         this._downArrowSprite.anchor.x = 0.5;
         this._downArrowSprite.anchor.y = 0.5;
-        this._downArrowSprite.setFrame(sx+q, sy+q+p, p, q);
-        this._downArrowSprite.move(w/2, h-q);
+        this._downArrowSprite.setFrame(sx + q, sy + q + p, p, q);
+        this._downArrowSprite.move(w / 2, h - q);
         this._upArrowSprite.bitmap = this._windowskin;
         this._upArrowSprite.anchor.x = 0.5;
         this._upArrowSprite.anchor.y = 0.5;
-        this._upArrowSprite.setFrame(sx+q, sy, p, q);
-        this._upArrowSprite.move(w/2, q);
+        this._upArrowSprite.setFrame(sx + q, sy, p, q);
+        this._upArrowSprite.move(w / 2, q);
     }
 
     /**
@@ -427,7 +514,12 @@ export default class Window extends PIXI.Container {
         const w = this._width - this._padding * 2;
         const h = this._height - this._padding * 2;
         if (w > 0 && h > 0) {
-            this._windowContentsSprite.setFrame(this.origin.x, this.origin.y, w, h);
+            this._windowContentsSprite.setFrame(
+                this.origin.x,
+                this.origin.y,
+                w,
+                h
+            );
             this._windowContentsSprite.visible = this.isOpen();
         } else {
             this._windowContentsSprite.visible = false;
@@ -459,7 +551,7 @@ export default class Window extends PIXI.Container {
         } else if (sprite.alpha < 1) {
             sprite.alpha = Math.min(sprite.alpha + 0.1, 1);
         }
-        sprite.setFrame(sx+x*p, sy+y*p, p, p);
+        sprite.setFrame(sx + x * p, sy + y * p, p, p);
         sprite.visible = this.isOpen();
     }
 }
@@ -471,16 +563,16 @@ export default class Window extends PIXI.Container {
  * @type Bitmap
  */
 Object.defineProperty(Window.prototype, "windowskin", {
-    "get"() {
+    get() {
         return this._windowskin;
     },
-    "set"(value) {
+    set(value) {
         if (this._windowskin !== value) {
             this._windowskin = value;
             this._windowskin.addLoadListener(this._onWindowskinLoad.bind(this));
         }
     },
-    "configurable": true
+    configurable: true
 });
 
 /**
@@ -490,13 +582,13 @@ Object.defineProperty(Window.prototype, "windowskin", {
  * @type Bitmap
  */
 Object.defineProperty(Window.prototype, "contents", {
-    "get"() {
+    get() {
         return this._windowContentsSprite.bitmap;
     },
-    "set"(value) {
+    set(value) {
         this._windowContentsSprite.bitmap = value;
     },
-    "configurable": true
+    configurable: true
 });
 
 /**
@@ -506,14 +598,14 @@ Object.defineProperty(Window.prototype, "contents", {
  * @type Number
  */
 Object.defineProperty(Window.prototype, "width", {
-    "get"() {
+    get() {
         return this._width;
     },
-    "set"(value) {
+    set(value) {
         this._width = value;
         this._refreshAllParts();
     },
-    "configurable": true
+    configurable: true
 });
 
 /**
@@ -523,14 +615,14 @@ Object.defineProperty(Window.prototype, "width", {
  * @type Number
  */
 Object.defineProperty(Window.prototype, "height", {
-    "get"() {
+    get() {
         return this._height;
     },
-    "set"(value) {
+    set(value) {
         this._height = value;
         this._refreshAllParts();
     },
-    "configurable": true
+    configurable: true
 });
 
 /**
@@ -540,14 +632,14 @@ Object.defineProperty(Window.prototype, "height", {
  * @type Number
  */
 Object.defineProperty(Window.prototype, "padding", {
-    "get"() {
+    get() {
         return this._padding;
     },
-    "set"(value) {
+    set(value) {
         this._padding = value;
         this._refreshAllParts();
     },
-    "configurable": true
+    configurable: true
 });
 
 /**
@@ -557,14 +649,14 @@ Object.defineProperty(Window.prototype, "padding", {
  * @type Number
  */
 Object.defineProperty(Window.prototype, "margin", {
-    "get"() {
+    get() {
         return this._margin;
     },
-    "set"(value) {
+    set(value) {
         this._margin = value;
         this._refreshAllParts();
     },
-    "configurable": true
+    configurable: true
 });
 
 /**
@@ -574,13 +666,13 @@ Object.defineProperty(Window.prototype, "margin", {
  * @type Number
  */
 Object.defineProperty(Window.prototype, "opacity", {
-    "get"() {
+    get() {
         return this._windowSpriteContainer.alpha * 255;
     },
-    "set"(value) {
+    set(value) {
         this._windowSpriteContainer.alpha = Utils.clamp(value, 0, 255) / 255;
     },
-    "configurable": true
+    configurable: true
 });
 
 /**
@@ -590,13 +682,13 @@ Object.defineProperty(Window.prototype, "opacity", {
  * @type Number
  */
 Object.defineProperty(Window.prototype, "backOpacity", {
-    "get"() {
+    get() {
         return this._windowBackSprite.alpha * 255;
     },
-    "set"(value) {
+    set(value) {
         this._windowBackSprite.alpha = Utils.clamp(value, 0, 255) / 255;
     },
-    "configurable": true
+    configurable: true
 });
 
 /**
@@ -606,13 +698,13 @@ Object.defineProperty(Window.prototype, "backOpacity", {
  * @type Number
  */
 Object.defineProperty(Window.prototype, "contentsOpacity", {
-    "get"() {
+    get() {
         return this._windowContentsSprite.alpha * 255;
     },
-    "set"(value) {
+    set(value) {
         this._windowContentsSprite.alpha = Utils.clamp(value, 0, 255) / 255;
     },
-    "configurable": true
+    configurable: true
 });
 
 /**
@@ -622,15 +714,16 @@ Object.defineProperty(Window.prototype, "contentsOpacity", {
  * @type Number
  */
 Object.defineProperty(Window.prototype, "openness", {
-    "get"() {
+    get() {
         return this._openness;
     },
-    "set"(value) {
+    set(value) {
         if (this._openness !== value) {
             this._openness = Utils.clamp(value, 0, 255);
             this._windowSpriteContainer.scale.y = this._openness / 255;
-            this._windowSpriteContainer.y = this.height / 2 * (1 - this._openness / 255);
+            this._windowSpriteContainer.y =
+                (this.height / 2) * (1 - this._openness / 255);
         }
     },
-    "configurable": true
+    configurable: true
 });

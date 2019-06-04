@@ -173,7 +173,7 @@ export default class Game_Vehicle extends Game_Character {
     }
 
     public shadowOpacity() {
-        return 255 * this._altitude / this.maxAltitude();
+        return (255 * this._altitude) / this.maxAltitude();
     }
 
     public canMove() {
@@ -245,5 +245,4 @@ export default class Game_Vehicle extends Game_Character {
         }
         return true;
     }
-
 }

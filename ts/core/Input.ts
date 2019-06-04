@@ -3,7 +3,6 @@ import ResourceHandler from "./ResourceHandler";
 import Utils from "./Utils";
 
 export default class Input {
-
     public static get dir4(): number {
         return this._dir4;
     }
@@ -19,43 +18,43 @@ export default class Input {
     public static keyRepeatWait = 24;
     public static keyRepeatInterval = 6;
     public static keyMapper = {
-        "9": "tab",       // tab
-        "13": "ok",       // enter
-        "16": "shift",    // shift
-        "17": "control",  // control
-        "18": "control",  // alt
-        "27": "escape",   // escape
-        "32": "ok",       // space
-        "33": "pageup",   // pageup
+        "9": "tab", // tab
+        "13": "ok", // enter
+        "16": "shift", // shift
+        "17": "control", // control
+        "18": "control", // alt
+        "27": "escape", // escape
+        "32": "ok", // space
+        "33": "pageup", // pageup
         "34": "pagedown", // pagedown
-        "37": "left",     // left arrow
-        "38": "up",       // up arrow
-        "39": "right",    // right arrow
-        "40": "down",     // down arrow
-        "45": "escape",   // insert
-        "81": "pageup",   // Q
+        "37": "left", // left arrow
+        "38": "up", // up arrow
+        "39": "right", // right arrow
+        "40": "down", // down arrow
+        "45": "escape", // insert
+        "81": "pageup", // Q
         "87": "pagedown", // W
-        "88": "escape",   // X
-        "90": "ok",       // Z
-        "96": "escape",   // numpad 0
-        "98": "down",     // numpad 2
-        "100": "left",    // numpad 4
-        "102": "right",   // numpad 6
-        "104": "up",      // numpad 8
-        "120": "debug"    // F9
+        "88": "escape", // X
+        "90": "ok", // Z
+        "96": "escape", // numpad 0
+        "98": "down", // numpad 2
+        "100": "left", // numpad 4
+        "102": "right", // numpad 6
+        "104": "up", // numpad 8
+        "120": "debug" // F9
     };
 
     public static gamepadMapper = {
-        "0": "ok",        // A
-        "1": "cancel",    // B
-        "2": "shift",     // X
-        "3": "menu",      // Y
-        "4": "pageup",    // LB
-        "5": "pagedown",  // RB
-        "12": "up",       // D-pad up
-        "13": "down",     // D-pad down
-        "14": "left",     // D-pad left
-        "15": "right"    // D-pad right
+        "0": "ok", // A
+        "1": "cancel", // B
+        "2": "shift", // X
+        "3": "menu", // Y
+        "4": "pageup", // LB
+        "5": "pagedown", // RB
+        "12": "up", // D-pad up
+        "13": "down", // D-pad down
+        "14": "left", // D-pad left
+        "15": "right" // D-pad right
     };
 
     public static initialize() {
@@ -64,7 +63,7 @@ export default class Input {
         this.setupEventHandlers();
     }
 
-    public static clear = function () {
+    public static clear = function() {
         Input.currentState = [];
         Input.previousState = [];
         Input.gamepadStates = [];
@@ -116,10 +115,12 @@ export default class Input {
         if (this.isEscapeCompatible(keyName) && this.isRepeated("escape")) {
             return true;
         } else {
-            return (this.latestButton === keyName &&
-                    (this.pressedTime === 0 ||
-                     (this.pressedTime >= this.keyRepeatWait &&
-                      this.pressedTime % this.keyRepeatInterval === 0)));
+            return (
+                this.latestButton === keyName &&
+                (this.pressedTime === 0 ||
+                    (this.pressedTime >= this.keyRepeatWait &&
+                        this.pressedTime % this.keyRepeatInterval === 0))
+            );
         }
     }
 
@@ -127,8 +128,10 @@ export default class Input {
         if (this.isEscapeCompatible(keyName) && this.isLongPressed("escape")) {
             return true;
         } else {
-            return (this.latestButton === keyName &&
-                    this.pressedTime >= this.keyRepeatWait);
+            return (
+                this.latestButton === keyName &&
+                this.pressedTime >= this.keyRepeatWait
+            );
         }
     }
 
@@ -145,7 +148,7 @@ export default class Input {
     private static wrapNwjsAlert() {
         if (Utils.isNwjs()) {
             const alert = window.alert;
-            window.alert = function () {
+            window.alert = function() {
                 const win = gui.Window.get();
                 alert.apply(this, arguments);
                 win.focus();
@@ -164,7 +167,8 @@ export default class Input {
         if (this.shouldPreventDefault(event.keyCode)) {
             event.preventDefault();
         }
-        if (event.keyCode === 144) {    // Numlock
+        if (event.keyCode === 144) {
+            // Numlock
             this.clear();
         }
         const buttonName = this.keyMapper[event.keyCode];
@@ -177,16 +181,16 @@ export default class Input {
 
     private static shouldPreventDefault(keycode: number): boolean {
         switch (keycode) {
-            case 8:     // backspace
-            case 33:    // pageup
-            case 34:    // pagedown
-            case 37:    // left arrow
-            case 38:    // up arrow
-            case 39:    // right arrow
-            case 40:    // down arrow
+            case 8: // backspace
+            case 33: // pageup
+            case 34: // pagedown
+            case 37: // left arrow
+            case 38: // up arrow
+            case 39: // right arrow
+            case 40: // down arrow
                 return true;
-            }
-            return false;
+        }
+        return false;
     }
 
     private static onKeyUp(event: KeyboardEvent) {
@@ -194,7 +198,8 @@ export default class Input {
         if (buttonName) {
             this.currentState[buttonName] = false;
         }
-        if (event.keyCode === 0) {  // For QtWebEngine on OS X
+        if (event.keyCode === 0) {
+            // For QtWebEngine on OS X
             this.clear();
         }
     }
@@ -207,7 +212,7 @@ export default class Input {
         if (navigator.getGamepads) {
             const gamepads = navigator.getGamepads();
             if (gamepads) {
-                for(const gamepad of gamepads) {
+                for (const gamepad of gamepads) {
                     if (gamepad && gamepad.connected) {
                         this.updateGamepadState(gamepad);
                     }
@@ -230,14 +235,14 @@ export default class Input {
             newState[i] = buttons[i].pressed;
         }
         if (axes[1] < -threshold) {
-            newState[12] = true;    // up
+            newState[12] = true; // up
         } else if (axes[1] > threshold) {
-            newState[13] = true;    // down
+            newState[13] = true; // down
         }
         if (axes[0] < -threshold) {
-            newState[14] = true;    // left
+            newState[14] = true; // left
         } else if (axes[0] > threshold) {
-            newState[15] = true;    // right
+            newState[15] = true; // right
         }
         for (let j = 0; j < newState.length; j++) {
             if (newState[j] !== lastState[j]) {
@@ -297,7 +302,7 @@ export default class Input {
 
     private static makeNumpadDirection(x: number, y: number): number {
         if (x !== 0 || y !== 0) {
-            return  5 - y * 3 + x;
+            return 5 - y * 3 + x;
         }
         return 0;
     }

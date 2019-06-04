@@ -68,7 +68,7 @@ export default class Game_CharacterBase {
 
     public constructor(gameLoadInput?: Game_CharacterBase_OnLoad) {
         this.initMembers();
-        //TODO: Write this out properly. This is very lazy and unsafe.
+        // TODO: Write this out properly. This is very lazy and unsafe.
         if (gameLoadInput) {
             for (const key of Object.keys(gameLoadInput)) {
                 this[key] = gameLoadInput[key];
@@ -175,8 +175,11 @@ export default class Game_CharacterBase {
     }
 
     public jumpHeight() {
-        return (this._jumpPeak * this._jumpPeak -
-                Math.pow(Math.abs(this._jumpCount - this._jumpPeak), 2)) / 2;
+        return (
+            (this._jumpPeak * this._jumpPeak -
+                Math.pow(Math.abs(this._jumpCount - this._jumpPeak), 2)) /
+            2
+        );
     }
 
     public isStopping() {
@@ -256,12 +259,14 @@ export default class Game_CharacterBase {
     }
 
     public isCollidedWithCharacters(x, y) {
-        return this.isCollidedWithEvents(x, y) || this.isCollidedWithVehicles(x, y);
+        return (
+            this.isCollidedWithEvents(x, y) || this.isCollidedWithVehicles(x, y)
+        );
     }
 
     public isCollidedWithEvents(x, y) {
         const events = $gameMap.eventsXyNt(x, y);
-        return events.some(function (event) {
+        return events.some(function(event) {
             return event.isNormalPriority();
         });
     }
@@ -329,8 +334,9 @@ export default class Game_CharacterBase {
 
     public screenY() {
         const th = $gameMap.tileHeight();
-        return Math.round(this.scrolledY() * th + th -
-                        this.shiftY() - this.jumpHeight());
+        return Math.round(
+            this.scrolledY() * th + th - this.shiftY() - this.jumpHeight()
+        );
     }
 
     public screenZ() {
@@ -365,8 +371,10 @@ export default class Game_CharacterBase {
 
     public updateJump() {
         this._jumpCount--;
-        this._realX = (this._realX * this._jumpCount + this._x) / (this._jumpCount + 1.0);
-        this._realY = (this._realY * this._jumpCount + this._y) / (this._jumpCount + 1.0);
+        this._realX =
+            (this._realX * this._jumpCount + this._x) / (this._jumpCount + 1.0);
+        this._realY =
+            (this._realY * this._jumpCount + this._y) / (this._jumpCount + 1.0);
         this.refreshBushDepth();
         if (this._jumpCount === 0) {
             this._realX = this._x = $gameMap.roundX(this._x);
@@ -376,16 +384,28 @@ export default class Game_CharacterBase {
 
     public updateMove() {
         if (this._x < this._realX) {
-            this._realX = Math.max(this._realX - this.distancePerFrame(), this._x);
+            this._realX = Math.max(
+                this._realX - this.distancePerFrame(),
+                this._x
+            );
         }
         if (this._x > this._realX) {
-            this._realX = Math.min(this._realX + this.distancePerFrame(), this._x);
+            this._realX = Math.min(
+                this._realX + this.distancePerFrame(),
+                this._x
+            );
         }
         if (this._y < this._realY) {
-            this._realY = Math.max(this._realY - this.distancePerFrame(), this._y);
+            this._realY = Math.max(
+                this._realY - this.distancePerFrame(),
+                this._y
+            );
         }
         if (this._y > this._realY) {
-            this._realY = Math.min(this._realY + this.distancePerFrame(), this._y);
+            this._realY = Math.min(
+                this._realY + this.distancePerFrame(),
+                this._y
+            );
         }
         if (!this.isMoving()) {
             this.refreshBushDepth();
@@ -441,8 +461,12 @@ export default class Game_CharacterBase {
     }
 
     public refreshBushDepth() {
-        if (this.isNormalPriority() && !this.isObjectCharacter() &&
-                this.isOnBush() && !this.isJumping()) {
+        if (
+            this.isNormalPriority() &&
+            !this.isObjectCharacter() &&
+            this.isOnBush() &&
+            !this.isJumping()
+        ) {
             if (!this.isMoving()) {
                 this._bushDepth = 12;
             }
@@ -535,12 +559,20 @@ export default class Game_CharacterBase {
     }
 
     public moveDiagonally(horz, vert) {
-        this.setMovementSuccess(this.canPassDiagonally(this._x, this._y, horz, vert));
+        this.setMovementSuccess(
+            this.canPassDiagonally(this._x, this._y, horz, vert)
+        );
         if (this.isMovementSucceeded()) {
             this._x = $gameMap.roundXWithDirection(this._x, horz);
             this._y = $gameMap.roundYWithDirection(this._y, vert);
-            this._realX = $gameMap.xWithDirection(this._x, this.reverseDir(horz));
-            this._realY = $gameMap.yWithDirection(this._y, this.reverseDir(vert));
+            this._realX = $gameMap.xWithDirection(
+                this._x,
+                this.reverseDir(horz)
+            );
+            this._realY = $gameMap.yWithDirection(
+                this._y,
+                this.reverseDir(vert)
+            );
             this.increaseSteps();
         }
         if (this._direction === this.reverseDir(horz)) {
@@ -655,5 +687,4 @@ export default class Game_CharacterBase {
     public endBalloon() {
         this._balloonPlaying = false;
     }
-
 }

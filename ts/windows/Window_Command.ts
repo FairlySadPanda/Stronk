@@ -1,7 +1,7 @@
 import Window_Message from "./Window_Message";
 import Window_Selectable from "./Window_Selectable";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_Command
 //
 // The superclass of windows for selecting a command.
@@ -41,8 +41,7 @@ export default class Window_Command extends Window_Selectable {
         this._list = [];
     }
 
-    public makeCommandList() {
-    }
+    public makeCommandList() {}
 
     public addCommand(name, symbol, enabled?, ext?) {
         if (enabled === undefined) {
@@ -51,7 +50,12 @@ export default class Window_Command extends Window_Selectable {
         if (ext === undefined) {
             ext = null;
         }
-        this._list.push({ "name": name, "symbol": symbol, "enabled": enabled, "ext": ext});
+        this._list.push({
+            name: name,
+            symbol: symbol,
+            enabled: enabled,
+            ext: ext
+        });
     }
 
     public commandName(index) {
@@ -123,7 +127,13 @@ export default class Window_Command extends Window_Selectable {
         const align = this.itemTextAlign();
         this.resetTextColor();
         this.changePaintOpacity(this.isCommandEnabled(index));
-        this.drawText(this.commandName(index), rect.x, rect.y, rect.width, align);
+        this.drawText(
+            this.commandName(index),
+            rect.x,
+            rect.y,
+            rect.width,
+            align
+        );
     }
 
     public itemTextAlign() {
@@ -151,5 +161,4 @@ export default class Window_Command extends Window_Selectable {
         this.createContents();
         Window_Selectable.prototype.refresh.call(this);
     }
-
 }

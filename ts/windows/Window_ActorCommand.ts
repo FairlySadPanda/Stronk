@@ -5,7 +5,7 @@ import TextManager from "../managers/TextManager";
 import Game_Actor from "../objects/Game_Actor";
 import Window_Command from "./Window_Command";
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Window_ActorCommand
 //
 // The window for selecting an actor's action on the battle screen.
@@ -15,7 +15,10 @@ export default class Window_ActorCommand extends Window_Command {
     private _actor: Game_Actor;
 
     public constructor() {
-        super(0, Graphics.boxHeight - Window_ActorCommand.prototype.windowHeight());
+        super(
+            0,
+            Graphics.boxHeight - Window_ActorCommand.prototype.windowHeight()
+        );
         this.openness = 0;
         this.deactivate();
         this._actor = null;
@@ -44,10 +47,10 @@ export default class Window_ActorCommand extends Window_Command {
 
     public addSkillCommands() {
         const skillTypes = this._actor.addedSkillTypes();
-        skillTypes.sort(function (a: number, b: number) {
+        skillTypes.sort(function(a: number, b: number) {
             return a - b;
         });
-        skillTypes.forEach(function (stypeId: string | number) {
+        skillTypes.forEach(function(stypeId: string | number) {
             const name = $dataSystem.skillTypes[stypeId];
             this.addCommand(name, "skill", true, stypeId);
         }, this);
@@ -95,5 +98,4 @@ export default class Window_ActorCommand extends Window_Command {
             }
         }
     }
-
 }

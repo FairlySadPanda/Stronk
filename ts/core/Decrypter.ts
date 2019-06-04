@@ -4,16 +4,13 @@ import Bitmap from "./Bitmap";
 declare var $dataSystem: any;
 
 export default class Decrypter {
-
     public static hasEncryptedImages: boolean = false;
     public static hasEncryptedAudio: boolean = false;
     public static _requestImgFile: any[] = [];
     public static _headerlength: number = 16;
     public static _xhrOk: number = 400;
     public static _encryptionKey: string = "";
-    public static _ignoreList: string[] = [
-        "img/system/Window.png"
-    ];
+    public static _ignoreList: string[] = ["img/system/Window.png"];
     public static SIGNATURE: string = "5250474d56000000";
     public static VER: string = "000301";
     public static REMAIN: string = "0000000000";
@@ -29,17 +26,18 @@ export default class Decrypter {
     public static createBlobUrl(arrayBuffer: any): any {
         throw new Error("Method not implemented.");
     }
-
 }
 
-Decrypter.checkImgIgnore = function (url){
-    for(let cnt = 0; cnt < this._ignoreList.length; cnt++) {
-        if(url === this._ignoreList[cnt]) { return true; }
+Decrypter.checkImgIgnore = function(url) {
+    for (let cnt = 0; cnt < this._ignoreList.length; cnt++) {
+        if (url === this._ignoreList[cnt]) {
+            return true;
+        }
     }
     return false;
 };
 
-Decrypter.decryptImg = function (url, bitmap) {
+Decrypter.decryptImg = function(url, bitmap) {
     url = this.extToEncryptExt(url);
 
     const requestFile = new XMLHttpRequest();
@@ -47,16 +45,25 @@ Decrypter.decryptImg = function (url, bitmap) {
     requestFile.responseType = "arraybuffer";
     requestFile.send();
 
-    requestFile.onload = function () {
-        if(this.status < Decrypter._xhrOk) {
-            const arrayBuffer = Decrypter.decryptArrayBuffer(requestFile.response);
+    requestFile.onload = function() {
+        if (this.status < Decrypter._xhrOk) {
+            const arrayBuffer = Decrypter.decryptArrayBuffer(
+                requestFile.response
+            );
             bitmap._image.src = Decrypter.createBlobUrl(arrayBuffer);
-            bitmap._image.addEventListener("load", bitmap._loadListener = Bitmap.prototype._onLoad.bind(bitmap));
-            bitmap._image.addEventListener("error", bitmap._errorListener = bitmap._loader || Bitmap.prototype._onError.bind(bitmap));
+            bitmap._image.addEventListener(
+                "load",
+                (bitmap._loadListener = Bitmap.prototype._onLoad.bind(bitmap))
+            );
+            bitmap._image.addEventListener(
+                "error",
+                (bitmap._errorListener =
+                    bitmap._loader || Bitmap.prototype._onError.bind(bitmap))
+            );
         }
     };
 
-    requestFile.onerror = function () {
+    requestFile.onerror = function() {
         if (bitmap._loader) {
             bitmap._loader();
         } else {
@@ -65,27 +72,31 @@ Decrypter.decryptImg = function (url, bitmap) {
     };
 };
 
-Decrypter.decryptHTML5Audio = function (url, bgm, pos) {
+Decrypter.decryptHTML5Audio = function(url, bgm, pos) {
     const requestFile = new XMLHttpRequest();
     requestFile.open("GET", url);
     requestFile.responseType = "arraybuffer";
     requestFile.send();
 
-    requestFile.onload = function () {
-        if(this.status < Decrypter._xhrOk) {
-            const arrayBuffer = Decrypter.decryptArrayBuffer(requestFile.response);
+    requestFile.onload = function() {
+        if (this.status < Decrypter._xhrOk) {
+            const arrayBuffer = Decrypter.decryptArrayBuffer(
+                requestFile.response
+            );
             const url = Decrypter.createBlobUrl(arrayBuffer);
             AudioManager.createDecryptBuffer(url, bgm, pos);
         }
     };
 };
 
-Decrypter.cutArrayHeader = function (arrayBuffer, length) {
+Decrypter.cutArrayHeader = function(arrayBuffer, length) {
     return arrayBuffer.slice(length);
 };
 
-Decrypter.decryptArrayBuffer = function (arrayBuffer) {
-    if (!arrayBuffer) { return null; }
+Decrypter.decryptArrayBuffer = function(arrayBuffer) {
+    if (!arrayBuffer) {
+        return null;
+    }
     const header = new Uint8Array(arrayBuffer, 0, this._headerlength);
 
     let i;
@@ -106,7 +117,8 @@ Decrypter.decryptArrayBuffer = function (arrayBuffer) {
     if (arrayBuffer) {
         const byteArray = new Uint8Array(arrayBuffer);
         for (i = 0; i < this._headerlength; i++) {
-            byteArray[i] = byteArray[i] ^ parseInt(Decrypter._encryptionKey[i], 16);
+            byteArray[i] =
+                byteArray[i] ^ parseInt(Decrypter._encryptionKey[i], 16);
             view.setUint8(i, byteArray[i]);
         }
     }
@@ -114,23 +126,30 @@ Decrypter.decryptArrayBuffer = function (arrayBuffer) {
     return arrayBuffer;
 };
 
-Decrypter.createBlobUrl = function (arrayBuffer){
+Decrypter.createBlobUrl = function(arrayBuffer) {
     const blob = new Blob([arrayBuffer]);
     return window.URL.createObjectURL(blob);
 };
 
-Decrypter.extToEncryptExt = function (url) {
+Decrypter.extToEncryptExt = function(url) {
     const ext = url.split(".").pop();
     let encryptedExt = ext;
 
-    if(ext === "ogg") { encryptedExt = ".rpgmvo"; }
-    else if(ext === "m4a") { encryptedExt = ".rpgmvm"; }
-    else if(ext === "png") { encryptedExt = ".rpgmvp"; }
-    else { encryptedExt = ext; }
+    if (ext === "ogg") {
+        encryptedExt = ".rpgmvo";
+    } else if (ext === "m4a") {
+        encryptedExt = ".rpgmvm";
+    } else if (ext === "png") {
+        encryptedExt = ".rpgmvp";
+    } else {
+        encryptedExt = ext;
+    }
 
     return url.slice(0, url.lastIndexOf(ext) - 1) + encryptedExt;
 };
 
-Decrypter.readEncryptionkey = function (){
-    this._encryptionKey = $dataSystem.encryptionKey.split(/(.{2})/).filter(Boolean);
+Decrypter.readEncryptionkey = function() {
+    this._encryptionKey = $dataSystem.encryptionKey
+        .split(/(.{2})/)
+        .filter(Boolean);
 };

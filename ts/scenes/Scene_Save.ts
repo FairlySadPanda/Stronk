@@ -10,24 +10,21 @@ export default class Scene_Save extends Scene_File {
     public firstSavefileIndex: () => number;
     public onSaveSuccess: () => void;
     public onSaveFailure: () => void;
-    public constructor() {
-        super();
-    }
 }
 
-Scene_Save.prototype.mode = function () {
+Scene_Save.prototype.mode = function() {
     return "save";
 };
 
-Scene_Save.prototype.helpWindowText = function () {
+Scene_Save.prototype.helpWindowText = function() {
     return TextManager.saveMessage;
 };
 
-Scene_Save.prototype.firstSavefileIndex = function () {
+Scene_Save.prototype.firstSavefileIndex = function() {
     return DataManager.lastAccessedSavefileId() - 1;
 };
 
-Scene_Save.prototype.onSavefileOk = function () {
+Scene_Save.prototype.onSavefileOk = function() {
     Scene_File.prototype.onSavefileOk.call(this);
     $gameSystem.onBeforeSave();
     if (DataManager.saveGame(this.savefileId())) {
@@ -37,13 +34,13 @@ Scene_Save.prototype.onSavefileOk = function () {
     }
 };
 
-Scene_Save.prototype.onSaveSuccess = function () {
+Scene_Save.prototype.onSaveSuccess = function() {
     SoundManager.playSave();
-	StorageManager.cleanBackup(this.savefileId());
+    StorageManager.cleanBackup(this.savefileId());
     this.popScene();
 };
 
-Scene_Save.prototype.onSaveFailure = function () {
+Scene_Save.prototype.onSaveFailure = function() {
     SoundManager.playBuzzer();
     this.activateListWindow();
 };
