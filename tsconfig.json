@@ -1,20 +1,14 @@
 {
-    "compilerOptions": {
-      "module": "commonjs",
-      "target": "es2018",
-      "noImplicitAny": false,
-      "strictNullChecks": false,
-      "moduleResolution": "node",
-      "sourceMap": false,
-      "outDir": "js"
-    },
-    "include": [
-      "./**/*"
-    ],
-    "exclude": [
-      "./ts/plugins.ts"
-    ],
-    "files": [
-      "./ts/globals.d.ts"
-    ]
-  }
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2018",
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "outDir": "js"
+  },
+  "include": ["./**/*"],
+  "exclude": ["./ts/plugins.ts"],
+  "files": ["./ts/globals.d.ts"]
+}
