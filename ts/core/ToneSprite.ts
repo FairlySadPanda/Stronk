@@ -3,20 +3,17 @@ import Graphics from "./Graphics";
 import Utils from "./Utils";
 
 export default class ToneSprite extends PIXI.Container {
-    public setTone: (r: any, g: any, b: any, gray: any) => void;
+    private _red: number;
+    private _green: number;
+    private _blue: number;
+    private _gray: number;
+
     public constructor() {
         super();
         this.clear();
     }
-    public clear(): any {
-        throw new Error("Method not implemented.");
-    }
 
-    public _renderWebGL(renderer) {
-        // Not supported
-    }
-
-    protected _renderCanvas = function(renderer) {
+    protected _renderCanvas(renderer) {
         if (this.visible) {
             const context = renderer.context;
             const t = this.worldTransform;
@@ -58,41 +55,41 @@ export default class ToneSprite extends PIXI.Container {
             }
             context.restore();
         }
-    };
+    }
+    /**
+     * Clears the tone.
+     *
+     * @method reset
+     */
+    public clear() {
+        this._red = 0;
+        this._green = 0;
+        this._blue = 0;
+        this._gray = 0;
+    }
+
+    /**
+     * Sets the tone.
+     *
+     * @method setTone
+     * @param {Number} r The red strength in the range (-255, 255)
+     * @param {Number} g The green strength in the range (-255, 255)
+     * @param {Number} b The blue strength in the range (-255, 255)
+     * @param {Number} gray The grayscale level in the range (0, 255)
+     */
+    public setTone(r: number, g: number, b: number, gray: number) {
+        this._red = Utils.clamp(Math.round(r || 0), -255, 255);
+        this._green = Utils.clamp(Math.round(g || 0), -255, 255);
+        this._blue = Utils.clamp(Math.round(b || 0), -255, 255);
+        this._gray = Utils.clamp(Math.round(gray || 0), 0, 255);
+    }
+
+    /**
+     * @method _renderWebGL
+     * @param {Object} renderSession
+     * @private
+     */
+    public _renderWebGL(renderer) {
+        // Not supported
+    }
 }
-/**
- * Clears the tone.
- *
- * @method reset
- */
-ToneSprite.prototype.clear = function() {
-    this._red = 0;
-    this._green = 0;
-    this._blue = 0;
-    this._gray = 0;
-};
-
-/**
- * Sets the tone.
- *
- * @method setTone
- * @param {Number} r The red strength in the range (-255, 255)
- * @param {Number} g The green strength in the range (-255, 255)
- * @param {Number} b The blue strength in the range (-255, 255)
- * @param {Number} gray The grayscale level in the range (0, 255)
- */
-ToneSprite.prototype.setTone = function(r, g, b, gray) {
-    this._red = Utils.clamp(Math.round(r || 0), -255, 255);
-    this._green = Utils.clamp(Math.round(g || 0), -255, 255);
-    this._blue = Utils.clamp(Math.round(b || 0), -255, 255);
-    this._gray = Utils.clamp(Math.round(gray || 0), 0, 255);
-};
-
-/**
- * @method _renderWebGL
- * @param {Object} renderSession
- * @private
- */
-ToneSprite.prototype._renderWebGL = function(renderer) {
-    // Not supported
-};
