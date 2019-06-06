@@ -1,146 +1,118 @@
 import AudioManager from "./AudioManager";
 
 export default abstract class SoundManager {
-    public static preloadImportantSounds: () => void;
-    public static loadSystemSound: (n: any) => void;
-    public static playSystemSound: (n: any) => void;
-    public static playCursor: () => void;
-    public static playOk: () => void;
-    public static playCancel: () => void;
-    public static playBuzzer: () => void;
-    public static playEquip: () => void;
-    public static playSave: () => void;
-    public static playLoad: () => void;
-    public static playBattleStart: () => void;
-    public static playEscape: () => void;
-    public static playEnemyAttack: () => void;
-    public static playEnemyDamage: () => void;
-    public static playEnemyCollapse: () => void;
-    public static playBossCollapse1: () => void;
-    public static playBossCollapse2: () => void;
-    public static playActorDamage: () => void;
-    public static playActorCollapse: () => void;
-    public static playRecovery: () => void;
-    public static playMiss: () => void;
-    public static playEvasion: () => void;
-    public static playMagicEvasion: () => void;
-    public static playReflection: () => void;
-    public static playShop: () => void;
-    public static playUseItem: () => void;
-    public static playUseSkill: () => void;
+    public static preloadImportantSounds() {
+        this.loadSystemSound(0);
+        this.loadSystemSound(1);
+        this.loadSystemSound(2);
+        this.loadSystemSound(3);
+    }
+
+    public static loadSystemSound(n) {
+        if ($dataSystem) {
+            AudioManager.loadStaticSe($dataSystem.sounds[n]);
+        }
+    }
+
+    public static playSystemSound(n) {
+        if ($dataSystem) {
+            AudioManager.playStaticSe($dataSystem.sounds[n]);
+        }
+    }
+
+    public static playCursor() {
+        this.playSystemSound(0);
+    }
+
+    public static playOk() {
+        this.playSystemSound(1);
+    }
+
+    public static playCancel() {
+        this.playSystemSound(2);
+    }
+
+    public static playBuzzer() {
+        this.playSystemSound(3);
+    }
+
+    public static playEquip() {
+        this.playSystemSound(4);
+    }
+
+    public static playSave() {
+        this.playSystemSound(5);
+    }
+
+    public static playLoad() {
+        this.playSystemSound(6);
+    }
+
+    public static playBattleStart() {
+        this.playSystemSound(7);
+    }
+
+    public static playEscape() {
+        this.playSystemSound(8);
+    }
+
+    public static playEnemyAttack() {
+        this.playSystemSound(9);
+    }
+
+    public static playEnemyDamage() {
+        this.playSystemSound(10);
+    }
+
+    public static playEnemyCollapse() {
+        this.playSystemSound(11);
+    }
+
+    public static playBossCollapse1() {
+        this.playSystemSound(12);
+    }
+
+    public static playBossCollapse2() {
+        this.playSystemSound(13);
+    }
+
+    public static playActorDamage() {
+        this.playSystemSound(14);
+    }
+
+    public static playActorCollapse() {
+        this.playSystemSound(15);
+    }
+
+    public static playRecovery() {
+        this.playSystemSound(16);
+    }
+
+    public static playMiss() {
+        this.playSystemSound(17);
+    }
+
+    public static playEvasion() {
+        this.playSystemSound(18);
+    }
+
+    public static playMagicEvasion() {
+        this.playSystemSound(19);
+    }
+
+    public static playReflection() {
+        this.playSystemSound(20);
+    }
+
+    public static playShop() {
+        this.playSystemSound(21);
+    }
+
+    public static playUseItem() {
+        this.playSystemSound(22);
+    }
+
+    public static playUseSkill() {
+        this.playSystemSound(23);
+    }
 }
-
-SoundManager.preloadImportantSounds = function() {
-    this.loadSystemSound(0);
-    this.loadSystemSound(1);
-    this.loadSystemSound(2);
-    this.loadSystemSound(3);
-};
-
-SoundManager.loadSystemSound = function(n) {
-    if ($dataSystem) {
-        AudioManager.loadStaticSe($dataSystem.sounds[n]);
-    }
-};
-
-SoundManager.playSystemSound = function(n) {
-    if ($dataSystem) {
-        AudioManager.playStaticSe($dataSystem.sounds[n]);
-    }
-};
-
-SoundManager.playCursor = function() {
-    this.playSystemSound(0);
-};
-
-SoundManager.playOk = function() {
-    this.playSystemSound(1);
-};
-
-SoundManager.playCancel = function() {
-    this.playSystemSound(2);
-};
-
-SoundManager.playBuzzer = function() {
-    this.playSystemSound(3);
-};
-
-SoundManager.playEquip = function() {
-    this.playSystemSound(4);
-};
-
-SoundManager.playSave = function() {
-    this.playSystemSound(5);
-};
-
-SoundManager.playLoad = function() {
-    this.playSystemSound(6);
-};
-
-SoundManager.playBattleStart = function() {
-    this.playSystemSound(7);
-};
-
-SoundManager.playEscape = function() {
-    this.playSystemSound(8);
-};
-
-SoundManager.playEnemyAttack = function() {
-    this.playSystemSound(9);
-};
-
-SoundManager.playEnemyDamage = function() {
-    this.playSystemSound(10);
-};
-
-SoundManager.playEnemyCollapse = function() {
-    this.playSystemSound(11);
-};
-
-SoundManager.playBossCollapse1 = function() {
-    this.playSystemSound(12);
-};
-
-SoundManager.playBossCollapse2 = function() {
-    this.playSystemSound(13);
-};
-
-SoundManager.playActorDamage = function() {
-    this.playSystemSound(14);
-};
-
-SoundManager.playActorCollapse = function() {
-    this.playSystemSound(15);
-};
-
-SoundManager.playRecovery = function() {
-    this.playSystemSound(16);
-};
-
-SoundManager.playMiss = function() {
-    this.playSystemSound(17);
-};
-
-SoundManager.playEvasion = function() {
-    this.playSystemSound(18);
-};
-
-SoundManager.playMagicEvasion = function() {
-    this.playSystemSound(19);
-};
-
-SoundManager.playReflection = function() {
-    this.playSystemSound(20);
-};
-
-SoundManager.playShop = function() {
-    this.playSystemSound(21);
-};
-
-SoundManager.playUseItem = function() {
-    this.playSystemSound(22);
-};
-
-SoundManager.playUseSkill = function() {
-    this.playSystemSound(23);
-};

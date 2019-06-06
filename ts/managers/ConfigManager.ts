@@ -3,113 +3,89 @@ import AudioManager from "./AudioManager";
 import StorageManager from "./StorageManager";
 
 export default abstract class ConfigManager {
-    public static alwaysDash: boolean;
-    public static commandRemember: boolean;
-    public static load: () => void;
-    public static save: () => void;
-    public static makeData: () => {
-        alwaysDash: any;
-        commandRemember: any;
-        bgmVolume: any;
-        bgsVolume: any;
-        meVolume: any;
-        seVolume: any;
-    };
-    public static applyData: (config: any) => void;
-    public static readFlag: (config: any, name: any) => boolean;
-    public static readVolume: (config: any, name: any) => number;
-}
+    public static alwaysDash = false;
+    public static commandRemember = false;
 
-ConfigManager.alwaysDash = false;
-ConfigManager.commandRemember = false;
+    public static load() {
+        let json;
+        let config = {};
+        try {
+            json = StorageManager.load(-1);
+        } catch (e) {
+            console.error(e);
+        }
+        if (json) {
+            config = JSON.parse(json);
+        }
+        this.applyData(config);
+    }
 
-Object.defineProperty(ConfigManager, "bgmVolume", {
-    get() {
-        return AudioManager._bgmVolume;
-    },
-    set(value) {
+    public static save() {
+        StorageManager.save(-1, JSON.stringify(this.makeData()));
+    }
+
+    public static makeData() {
+        return {
+            alwaysDash: this.alwaysDash,
+            commandRemember: this.commandRemember,
+            bgmVolume: this.bgmVolume,
+            bgsVolume: this.bgsVolume,
+            meVolume: this.meVolume,
+            seVolume: this.seVolume
+        };
+    }
+
+    public static applyData(config) {
+        this.alwaysDash = this.readFlag(config, "alwaysDash");
+        this.commandRemember = this.readFlag(config, "commandRemember");
+        this.bgmVolume = this.readVolume(config, "bgmVolume");
+        this.bgsVolume = this.readVolume(config, "bgsVolume");
+        this.meVolume = this.readVolume(config, "meVolume");
+        this.seVolume = this.readVolume(config, "seVolume");
+    }
+
+    public static readFlag(config, name) {
+        return !!config[name];
+    }
+
+    public static readVolume(config, name) {
+        const value = config[name];
+        if (value !== undefined) {
+            return Utils.clamp(Number(value), 0, 100);
+        } else {
+            return 100;
+        }
+    }
+
+    public static get bgmVolume() {
+        return AudioManager.bgmVolume;
+    }
+
+    public static set bgmVolume(value) {
         AudioManager.bgmVolume = value;
-    },
-    configurable: true
-});
+    }
 
-Object.defineProperty(ConfigManager, "bgsVolume", {
-    get() {
+    public static get bgsVolume() {
         return AudioManager.bgsVolume;
-    },
-    set(value) {
+    }
+
+    public static set bgsVolume(value) {
         AudioManager.bgsVolume = value;
-    },
-    configurable: true
-});
+    }
 
-Object.defineProperty(ConfigManager, "meVolume", {
-    get() {
+    public static get meVolume() {
         return AudioManager.meVolume;
-    },
-    set(value) {
+    }
+
+    public static set meVolume(value) {
         AudioManager.meVolume = value;
-    },
-    configurable: true
-});
+    }
 
-Object.defineProperty(ConfigManager, "seVolume", {
-    get() {
+    public static get seVolume() {
         return AudioManager.seVolume;
-    },
-    set(value) {
+    }
+
+    public static set seVolume(value) {
         AudioManager.seVolume = value;
-    },
-    configurable: true
-});
-
-ConfigManager.load = function() {
-    let json;
-    let config = {};
-    try {
-        json = StorageManager.load(-1);
-    } catch (e) {
-        console.error(e);
     }
-    if (json) {
-        config = JSON.parse(json);
-    }
-    this.applyData(config);
-};
-
-ConfigManager.save = function() {
-    StorageManager.save(-1, JSON.stringify(this.makeData()));
-};
-
-ConfigManager.makeData = function() {
-    return {
-        alwaysDash: this.alwaysDash,
-        commandRemember: this.commandRemember,
-        bgmVolume: this.bgmVolume,
-        bgsVolume: this.bgsVolume,
-        meVolume: this.meVolume,
-        seVolume: this.seVolume
-    };
-};
-
-ConfigManager.applyData = function(config) {
-    this.alwaysDash = this.readFlag(config, "alwaysDash");
-    this.commandRemember = this.readFlag(config, "commandRemember");
-    this.bgmVolume = this.readVolume(config, "bgmVolume");
-    this.bgsVolume = this.readVolume(config, "bgsVolume");
-    this.meVolume = this.readVolume(config, "meVolume");
-    this.seVolume = this.readVolume(config, "seVolume");
-};
-
-ConfigManager.readFlag = function(config, name) {
-    return !!config[name];
-};
-
-ConfigManager.readVolume = function(config, name) {
-    const value = config[name];
-    if (value !== undefined) {
-        return Utils.clamp(Number(value), 0, 100);
-    } else {
-        return 100;
-    }
-};
+}

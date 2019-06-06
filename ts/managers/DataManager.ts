@@ -21,10 +21,25 @@ import ImageManager from "./ImageManager";
 import StorageManager from "./StorageManager";
 
 export default abstract class DataManager {
-    public static _windowId: string;
-    public static _lastAccessedId: number;
-    public static _errorUrl: any;
-    public static _databaseFiles: { name: string; src: string }[];
+    private static _windowId = "RPGMV";
+    private static _lastAccessedId = 1;
+    private static _errorUrl = null;
+    private static _databaseFiles = [
+        { name: "$dataActors", src: "Actors.json" },
+        { name: "$dataClasses", src: "Classes.json" },
+        { name: "$dataSkills", src: "Skills.json" },
+        { name: "$dataItems", src: "Items.json" },
+        { name: "$dataWeapons", src: "Weapons.json" },
+        { name: "$dataArmors", src: "Armors.json" },
+        { name: "$dataEnemies", src: "Enemies.json" },
+        { name: "$dataTroops", src: "Troops.json" },
+        { name: "$dataStates", src: "States.json" },
+        { name: "$dataAnimations", src: "Animations.json" },
+        { name: "$dataTilesets", src: "Tilesets.json" },
+        { name: "$dataCommonEvents", src: "CommonEvents.json" },
+        { name: "$dataSystem", src: "System.json" },
+        { name: "$dataMapInfos", src: "MapInfos.json" }
+    ];
 
     public static _autoSaveFileId: any;
     public static _mapLoader: (this: XMLHttpRequest) => void;
@@ -463,23 +478,3 @@ export default abstract class DataManager {
         }
     };
 }
-DataManager._windowId = "RPGMV";
-DataManager._lastAccessedId = 1;
-DataManager._errorUrl = null;
-
-DataManager._databaseFiles = [
-    { name: "$dataActors", src: "Actors.json" },
-    { name: "$dataClasses", src: "Classes.json" },
-    { name: "$dataSkills", src: "Skills.json" },
-    { name: "$dataItems", src: "Items.json" },
-    { name: "$dataWeapons", src: "Weapons.json" },
-    { name: "$dataArmors", src: "Armors.json" },
-    { name: "$dataEnemies", src: "Enemies.json" },
-    { name: "$dataTroops", src: "Troops.json" },
-    { name: "$dataStates", src: "States.json" },
-    { name: "$dataAnimations", src: "Animations.json" },
-    { name: "$dataTilesets", src: "Tilesets.json" },
-    { name: "$dataCommonEvents", src: "CommonEvents.json" },
-    { name: "$dataSystem", src: "System.json" },
-    { name: "$dataMapInfos", src: "MapInfos.json" }
-];
