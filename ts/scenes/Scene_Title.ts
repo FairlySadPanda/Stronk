@@ -42,10 +42,7 @@ export default class Scene_Title extends Scene_Base {
     }
 
     public isBusy() {
-        return (
-            this._commandWindow.isClosing() ||
-            Scene_Base.prototype.isBusy.call(this)
-        );
+        return this._commandWindow.isClosing() || super.isBusy();
     }
 
     public terminate() {

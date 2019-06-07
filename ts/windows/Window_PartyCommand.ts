@@ -9,8 +9,8 @@ import Window_Command from "./Window_Command";
 // The window for selecting whether to fight or escape on the battle screen.
 
 export default class Window_PartyCommand extends Window_Command {
-    public setup: () => void;
     public openness: number;
+
     public constructor() {
         super(
             0,
@@ -19,26 +19,30 @@ export default class Window_PartyCommand extends Window_Command {
         this.openness = 0;
         this.deactivate();
     }
+
+    public windowWidth() {
+        return 192;
+    }
+
+    public numVisibleRows() {
+        return 4;
+    }
+
+    public makeCommandList() {
+        this.addCommand(TextManager.fight, "fight");
+        this.addCommand(
+            TextManager.escape,
+            "escape",
+            BattleManager.canEscape()
+        );
+    }
+
+    public setup() {
+        this.clearCommandList();
+        this.makeCommandList();
+        this.refresh();
+        this.select(0);
+        this.activate();
+        this.open();
+    }
 }
-
-Window_PartyCommand.prototype.windowWidth = function() {
-    return 192;
-};
-
-Window_PartyCommand.prototype.numVisibleRows = function() {
-    return 4;
-};
-
-Window_PartyCommand.prototype.makeCommandList = function() {
-    this.addCommand(TextManager.fight, "fight");
-    this.addCommand(TextManager.escape, "escape", BattleManager.canEscape());
-};
-
-Window_PartyCommand.prototype.setup = function() {
-    this.clearCommandList();
-    this.makeCommandList();
-    this.refresh();
-    this.select(0);
-    this.activate();
-    this.open();
-};
