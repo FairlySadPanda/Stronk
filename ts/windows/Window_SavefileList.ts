@@ -93,7 +93,7 @@ export default class Window_SavefileList extends Window_Selectable {
 
     public drawPlaytime(info, x, y, width) {
         if (info.playtime) {
-            this.drawText(info.playtime, x, y, width, "right");
+            this.drawText(info.playtime, x, y, width, undefined, "right");
         }
     }
 

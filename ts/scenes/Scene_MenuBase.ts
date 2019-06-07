@@ -1,16 +1,16 @@
 import Sprite from "../core/Sprite";
-
 import SceneManager from "../managers/SceneManager";
+import Game_Actor from "../objects/Game_Actor";
 import Window_Help from "../windows/Window_Help";
 import Scene_Base from "./Scene_Base";
 
-export default class Scene_MenuBase extends Scene_Base {
+export default abstract class Scene_MenuBase extends Scene_Base {
     protected _helpWindow: Window_Help;
-    private _actor: any;
-    private _backgroundSprite: Sprite;
+    protected _actor: Game_Actor;
+    protected _backgroundSprite: Sprite;
 
     public create() {
-        Scene_Base.prototype.create.call(this);
+        super.create();
         this.createBackground();
         this.updateActor();
         this.createWindowLayer();

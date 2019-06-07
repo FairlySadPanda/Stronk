@@ -223,7 +223,7 @@ export default class Game_Actor extends Game_Battler {
         this._exp[this._classId] = this.currentLevelExp();
     }
 
-    public currentExp() {
+    public currentExp(): number {
         return this._exp[this._classId];
     }
 

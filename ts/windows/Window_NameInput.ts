@@ -91,6 +91,7 @@ export default class Window_NameInput extends Window_Selectable {
                 rect.x,
                 rect.y,
                 rect.width,
+                undefined,
                 "center"
             );
         }

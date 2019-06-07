@@ -1,10 +1,10 @@
 import Bitmap from "../core/Bitmap";
 import Sprite from "../core/Sprite";
 import Window from "../core/Window";
+import Item from "../interfaces/Item";
 import ImageManager from "../managers/ImageManager";
 import TextManager from "../managers/TextManager";
 import Game_Actor from "../objects/Game_Actor";
-import Item from "../interfaces/Item";
 
 export default class Window_Base extends Window {
     public static _iconWidth: number = 32;
@@ -259,7 +259,7 @@ export default class Window_Base extends Window {
         text: string,
         x: number,
         y: number,
-        maxWidth: number,
+        maxWidth?: number,
         lineHeight?: number,
         align?: string
     ) {
@@ -547,7 +547,7 @@ export default class Window_Base extends Window {
         this.drawCharacter(actor.characterName(), actor.characterIndex(), x, y);
     }
 
-    public drawActorFace(actor, x, y, width, height) {
+    public drawActorFace(actor, x, y, width?, height?) {
         this.drawFace(actor.faceName(), actor.faceIndex(), x, y, width, height);
     }
 
@@ -573,7 +573,7 @@ export default class Window_Base extends Window {
         this.drawText(actor.currentClass().name, x, y, width);
     }
 
-    public drawActorNickname(actor, x, y, width) {
+    public drawActorNickname(actor, x, y, width?) {
         width = width || 270;
         this.resetTextColor();
         this.drawText(actor.nickname(), x, y, width);
@@ -627,7 +627,12 @@ export default class Window_Base extends Window {
         }
     }
 
-    public drawActorHp(actor, x, y, width) {
+    public drawActorHp(
+        actor: Game_Actor,
+        x: number,
+        y: number,
+        width?: number
+    ) {
         width = width || 186;
         const color1 = this.hpGaugeColor1();
         const color2 = this.hpGaugeColor2();
@@ -645,7 +650,12 @@ export default class Window_Base extends Window {
         );
     }
 
-    public drawActorMp(actor, x, y, width) {
+    public drawActorMp(
+        actor: Game_Actor,
+        x: number,
+        y: number,
+        width?: number
+    ) {
         width = width || 186;
         const color1 = this.mpGaugeColor1();
         const color2 = this.mpGaugeColor2();

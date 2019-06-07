@@ -1,17 +1,17 @@
-import CommonEvent from "./interfaces/CommonEvent";
-import Class from "./interfaces/Class";
-import Skill from "./interfaces/Skill";
-import Item from "./interfaces/Actor";
-import Weapon from "./interfaces/Weapon";
-import Armor from "./interfaces/Armor";
-import Enemy from "./interfaces/Enemy";
-import Troop from "./interfaces/Troop";
-import State from "./interfaces/State";
-import Tileset from "./interfaces/Tileset";
-import System from "./interfaces/System";
-import MapInfo from "./interfaces/MapInfo";
 import Actor from "./interfaces/Actor";
+import Armor from "./interfaces/Armor";
+import Class from "./interfaces/Class";
+import CommonEvent from "./interfaces/CommonEvent";
+import Enemy from "./interfaces/Enemy";
+import Item from "./interfaces/Item";
 import Map from "./interfaces/Map";
+import MapInfo from "./interfaces/MapInfo";
+import Skill from "./interfaces/Skill";
+import State from "./interfaces/State";
+import System from "./interfaces/System";
+import Tileset from "./interfaces/Tileset";
+import Troop from "./interfaces/Troop";
+import Weapon from "./interfaces/Weapon";
 
 interface Window {
     $dataActors: Actor[];

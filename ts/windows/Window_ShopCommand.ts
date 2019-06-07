@@ -14,17 +14,18 @@ export default class Window_ShopCommand extends Window_HorzCommand {
         this._windowWidth = width;
         this._purchaseOnly = purchaseOnly;
     }
+
+    public windowWidth() {
+        return this._windowWidth;
+    }
+
+    public maxCols() {
+        return 3;
+    }
+
+    public makeCommandList() {
+        this.addCommand(TextManager.buy, "buy");
+        this.addCommand(TextManager.sell, "sell", !this._purchaseOnly);
+        this.addCommand(TextManager.cancel, "cancel");
+    }
 }
-Window_ShopCommand.prototype.windowWidth = function() {
-    return this._windowWidth;
-};
-
-Window_ShopCommand.prototype.maxCols = function() {
-    return 3;
-};
-
-Window_ShopCommand.prototype.makeCommandList = function() {
-    this.addCommand(TextManager.buy, "buy");
-    this.addCommand(TextManager.sell, "sell", !this._purchaseOnly);
-    this.addCommand(TextManager.cancel, "cancel");
-};
