@@ -4,6 +4,7 @@ import Window from "../core/Window";
 import ImageManager from "../managers/ImageManager";
 import TextManager from "../managers/TextManager";
 import Game_Actor from "../objects/Game_Actor";
+import Item from "../interfaces/Item";
 
 export default class Window_Base extends Window {
     public static _iconWidth: number = 32;
@@ -259,9 +260,17 @@ export default class Window_Base extends Window {
         x: number,
         y: number,
         maxWidth: number,
+        lineHeight?: number,
         align?: string
     ) {
-        this.contents.drawText(text, x, y, maxWidth, this.lineHeight(), align);
+        this.contents.drawText(
+            text,
+            x,
+            y,
+            maxWidth,
+            lineHeight || this.lineHeight(),
+            align
+        );
     }
 
     public textWidth(text) {
@@ -570,11 +579,18 @@ export default class Window_Base extends Window {
         this.drawText(actor.nickname(), x, y, width);
     }
 
-    public drawActorLevel(actor, x, y) {
+    public drawActorLevel(actor: Game_Actor, x, y) {
         this.changeTextColor(this.systemColor());
         this.drawText(TextManager.levelA, x, y, 48);
         this.resetTextColor();
-        this.drawText(actor.level, x + 84, y, 36, "right");
+        this.drawText(
+            actor.level.toString(),
+            x + 84,
+            y,
+            36,
+            undefined,
+            "right"
+        );
     }
 
     public drawActorIcons(
@@ -601,13 +617,13 @@ export default class Window_Base extends Window {
         const x3 = x2 - valueWidth;
         if (x3 >= x + labelWidth) {
             this.changeTextColor(color1);
-            this.drawText(current, x3, y, valueWidth, "right");
+            this.drawText(current, x3, y, valueWidth, undefined, "right");
             this.changeTextColor(color2);
-            this.drawText("/", x2, y, slashWidth, "right");
-            this.drawText(max, x1, y, valueWidth, "right");
+            this.drawText("/", x2, y, slashWidth, undefined, "right");
+            this.drawText(max, x1, y, valueWidth, undefined, "right");
         } else {
             this.changeTextColor(color1);
-            this.drawText(current, x1, y, valueWidth, "right");
+            this.drawText(current, x1, y, valueWidth, undefined, "right");
         }
     }
 
@@ -655,7 +671,7 @@ export default class Window_Base extends Window {
         this.changeTextColor(this.systemColor());
         this.drawText(TextManager.tpA, x, y, 44);
         this.changeTextColor(this.tpColor(actor));
-        this.drawText(actor.tp, x + width - 64, y, 64, "right");
+        this.drawText(actor.tp, x + width - 64, y, 64, undefined, "right");
     }
 
     public drawActorSimpleStatus(actor, x, y, width) {
@@ -670,7 +686,7 @@ export default class Window_Base extends Window {
         this.drawActorMp(actor, x2, y + lineHeight * 2, width2);
     }
 
-    public drawItemName(item, x, y, width) {
+    public drawItemName(item: Item, x: number, y: number, width?: number) {
         width = width || 312;
         if (item) {
             const iconBoxWidth = Window_Base._iconWidth + 4;
@@ -683,9 +699,16 @@ export default class Window_Base extends Window {
     public drawCurrencyValue(value, unit, x, y, width) {
         const unitWidth = Math.min(80, this.textWidth(unit));
         this.resetTextColor();
-        this.drawText(value, x, y, width - unitWidth - 6, "right");
+        this.drawText(value, x, y, width - unitWidth - 6, undefined, "right");
         this.changeTextColor(this.systemColor());
-        this.drawText(unit, x + width - unitWidth, y, unitWidth, "right");
+        this.drawText(
+            unit,
+            x + width - unitWidth,
+            y,
+            unitWidth,
+            undefined,
+            "right"
+        );
     }
 
     public paramchangeTextColor(change) {

@@ -132,6 +132,7 @@ export default class Window_Command extends Window_Selectable {
             rect.x,
             rect.y,
             rect.width,
+            undefined,
             align
         );
     }

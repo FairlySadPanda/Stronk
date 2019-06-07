@@ -1,6 +1,6 @@
 import DataManager from "../managers/DataManager";
-import Game_Item from "../objects/Game_Item";
 import Window_Selectable from "./Window_Selectable";
+import Item from "../interfaces/Item";
 
 // -----------------------------------------------------------------------------
 // Window_ItemList
@@ -9,7 +9,7 @@ import Window_Selectable from "./Window_Selectable";
 
 export default class Window_ItemList extends Window_Selectable {
     public _category: string;
-    public _data: Game_Item[];
+    public _data: Item[];
 
     public constructor(x: number, y: number, width: number, height: number) {
         super(x, y, width, height);

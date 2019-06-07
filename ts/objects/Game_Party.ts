@@ -1,9 +1,9 @@
 import Utils from "../core/Utils";
 import DataManager from "../managers/DataManager";
 import TextManager from "../managers/TextManager";
-import Game_Actor, { Game_Actor_OnLoad } from "./Game_Actor";
-import Game_Item, { Game_Item_OnLoad } from "./Game_Item";
+import Item from "../interfaces/Item";
 import Game_Unit, { Game_Unit_OnLoad } from "./Game_Unit";
+import Game_Item, { Game_Item_OnLoad } from "./Game_Item";
 
 export interface Game_Party_Onload extends Game_Unit_OnLoad {
     _gold: number;
@@ -12,9 +12,9 @@ export interface Game_Party_Onload extends Game_Unit_OnLoad {
     _menuActorId: number;
     _targetActorId: number;
     _actors: number[];
-    _items: {};
-    _weapons: {};
-    _armors: {};
+    _items: number[];
+    _weapons: number[];
+    _armors: number[];
 }
 
 export default class Game_Party extends Game_Unit {
@@ -31,9 +31,9 @@ export default class Game_Party extends Game_Unit {
     private _menuActorId: number;
     private _targetActorId: number;
     private _actors: number[];
-    private _items: {};
-    private _weapons: {};
-    private _armors: {};
+    private _items: number[];
+    private _weapons: number[];
+    private _armors: number[];
 
     public constructor(gameLoadInput?: Game_Party_Onload) {
         super(gameLoadInput);
@@ -50,7 +50,7 @@ export default class Game_Party extends Game_Unit {
         } else {
             this._gold = 0;
             this._steps = 0;
-            this._lastItem = new Game_Item();
+            this._lastItem = null;
             this._menuActorId = 0;
             this._targetActorId = 0;
             this._actors = [];
@@ -59,9 +59,9 @@ export default class Game_Party extends Game_Unit {
     }
 
     public initAllItems() {
-        this._items = {};
-        this._weapons = {};
-        this._armors = {};
+        this._items = [];
+        this._weapons = [];
+        this._armors = [];
     }
 
     public exists() {

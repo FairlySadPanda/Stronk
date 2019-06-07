@@ -10,15 +10,15 @@ export default class Window_BattleSkill extends Window_SkillList {
         super(x, y, width, height);
         this.hide();
     }
+
+    public show() {
+        this.selectLast();
+        this.showHelpWindow();
+        super.show();
+    }
+
+    public hide() {
+        this.hideHelpWindow();
+        super.hide();
+    }
 }
-
-Window_BattleSkill.prototype.show = function() {
-    this.selectLast();
-    this.showHelpWindow();
-    Window_SkillList.prototype.show.call(this);
-};
-
-Window_BattleSkill.prototype.hide = function() {
-    this.hideHelpWindow();
-    Window_SkillList.prototype.hide.call(this);
-};

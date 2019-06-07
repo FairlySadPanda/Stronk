@@ -7,84 +7,85 @@ import Window_Selectable from "./Window_Selectable";
 
 export default class Window_EquipSlot extends Window_Selectable {
     public _actor: any;
-    public setActor: (actor: any) => void;
-    public item: () => any;
-    public slotName: (index: any) => any;
-    public isEnabled: (index: any) => any;
-    public setStatusWindow: (statusWindow: any) => void;
-    public setItemWindow: (itemWindow: any) => void;
+    private _itemWindow: any;
+    private _statusWindow: any;
+
     public constructor(x, y, width, height) {
         super(x, y, width, height);
         this._actor = null;
         this.refresh();
     }
+
+    public setActor(actor) {
+        if (this._actor !== actor) {
+            this._actor = actor;
+            this.refresh();
+        }
+    }
+
+    public update() {
+        super.update.call(this);
+        if (this._itemWindow) {
+            this._itemWindow.setSlotId(this.index());
+        }
+    }
+
+    public maxItems() {
+        return this._actor ? this._actor.equipSlots().length : 0;
+    }
+
+    public item() {
+        return this._actor ? this._actor.equips()[this.index()] : null;
+    }
+
+    public drawItem(index) {
+        if (this._actor) {
+            const rect = this.itemRectForText(index);
+            this.changeTextColor(this.systemColor());
+            this.changePaintOpacity(this.isEnabled(index));
+            this.drawText(
+                this.slotName(index),
+                rect.x,
+                rect.y,
+                138,
+                this.lineHeight()
+            );
+            this.drawItemName(
+                this._actor.equips()[index],
+                rect.x + 138,
+                rect.y
+            );
+            this.changePaintOpacity(true);
+        }
+    }
+
+    public slotName(index) {
+        const slots = this._actor.equipSlots();
+        return this._actor ? $dataSystem.equipTypes[slots[index]] : "";
+    }
+
+    public isEnabled(index) {
+        return this._actor ? this._actor.isEquipChangeOk(index) : false;
+    }
+
+    public isCurrentItemEnabled() {
+        return this.isEnabled(this.index());
+    }
+
+    public setStatusWindow(statusWindow) {
+        this._statusWindow = statusWindow;
+        this.callUpdateHelp();
+    }
+
+    public setItemWindow(itemWindow) {
+        this._itemWindow = itemWindow;
+    }
+
+    public updateHelp() {
+        super.updateHelp.call(this);
+        this.setHelpWindowItem(this.item());
+        if (this._statusWindow) {
+            this._statusWindow.setTempActor(null);
+        }
+    }
 }
-
-Window_EquipSlot.prototype.setActor = function(actor) {
-    if (this._actor !== actor) {
-        this._actor = actor;
-        this.refresh();
-    }
-};
-
-Window_EquipSlot.prototype.update = function() {
-    Window_Selectable.prototype.update.call(this);
-    if (this._itemWindow) {
-        this._itemWindow.setSlotId(this.index());
-    }
-};
-
-Window_EquipSlot.prototype.maxItems = function() {
-    return this._actor ? this._actor.equipSlots().length : 0;
-};
-
-Window_EquipSlot.prototype.item = function() {
-    return this._actor ? this._actor.equips()[this.index()] : null;
-};
-
-Window_EquipSlot.prototype.drawItem = function(index) {
-    if (this._actor) {
-        const rect = this.itemRectForText(index);
-        this.changeTextColor(this.systemColor());
-        this.changePaintOpacity(this.isEnabled(index));
-        this.drawText(
-            this.slotName(index),
-            rect.x,
-            rect.y,
-            138,
-            this.lineHeight()
-        );
-        this.drawItemName(this._actor.equips()[index], rect.x + 138, rect.y);
-        this.changePaintOpacity(true);
-    }
-};
-
-Window_EquipSlot.prototype.slotName = function(index) {
-    const slots = this._actor.equipSlots();
-    return this._actor ? $dataSystem.equipTypes[slots[index]] : "";
-};
-
-Window_EquipSlot.prototype.isEnabled = function(index) {
-    return this._actor ? this._actor.isEquipChangeOk(index) : false;
-};
-
-Window_EquipSlot.prototype.isCurrentItemEnabled = function() {
-    return this.isEnabled(this.index());
-};
-
-Window_EquipSlot.prototype.setStatusWindow = function(statusWindow) {
-    this._statusWindow = statusWindow;
-    this.callUpdateHelp();
-};
-
-Window_EquipSlot.prototype.setItemWindow = function(itemWindow) {
-    this._itemWindow = itemWindow;
-};
-
-Window_EquipSlot.prototype.updateHelp = function() {
-    Window_Selectable.prototype.updateHelp.call(this);
-    this.setHelpWindowItem(this.item());
-    if (this._statusWindow) {
-        this._statusWindow.setTempActor(null);
-    }
-};

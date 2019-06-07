@@ -10,19 +10,19 @@ export default class Window_BattleItem extends Window_ItemList {
         super(x, y, width, height);
         this.hide();
     }
+
+    public includes(item) {
+        return $gameParty.canUse(item);
+    }
+
+    public show() {
+        this.selectLast();
+        this.showHelpWindow();
+        super.show();
+    }
+
+    public hide() {
+        this.hideHelpWindow();
+        super.hide();
+    }
 }
-
-Window_BattleItem.prototype.includes = function(item) {
-    return $gameParty.canUse(item);
-};
-
-Window_BattleItem.prototype.show = function() {
-    this.selectLast();
-    this.showHelpWindow();
-    Window_ItemList.prototype.show.call(this);
-};
-
-Window_BattleItem.prototype.hide = function() {
-    this.hideHelpWindow();
-    Window_ItemList.prototype.hide.call(this);
-};

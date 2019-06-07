@@ -9,9 +9,7 @@ export default class Window_BattleActor extends Window_BattleStatus {
     public x: any;
     public y: any;
     public openness: number;
-    public show: () => void;
-    public select: (index: any) => void;
-    public actor: () => any;
+
     public constructor(x, y) {
         super();
         this.x = x;
@@ -19,23 +17,23 @@ export default class Window_BattleActor extends Window_BattleStatus {
         this.openness = 255;
         this.hide();
     }
+
+    public show() {
+        this.select(0);
+        super.show();
+    }
+
+    public hide() {
+        super.hide();
+        $gameParty.select(null);
+    }
+
+    public select(index) {
+        super.select(index);
+        $gameParty.select(this.actor());
+    }
+
+    public actor() {
+        return $gameParty.members()[this.index()];
+    }
 }
-
-Window_BattleActor.prototype.show = function() {
-    this.select(0);
-    Window_BattleStatus.prototype.show.call(this);
-};
-
-Window_BattleActor.prototype.hide = function() {
-    Window_BattleStatus.prototype.hide.call(this);
-    $gameParty.select(null);
-};
-
-Window_BattleActor.prototype.select = function(index) {
-    Window_BattleStatus.prototype.select.call(this, index);
-    $gameParty.select(this.actor());
-};
-
-Window_BattleActor.prototype.actor = function() {
-    return $gameParty.members()[this.index()];
-};
