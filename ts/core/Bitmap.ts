@@ -1077,7 +1077,7 @@ export default class Bitmap {
         this._dirty = true;
     }
 
-    private _requestImage(url) {
+    private _requestImage(url: string) {
         if (Bitmap._reuseImages.length !== 0) {
             this._image = Bitmap._reuseImages.pop();
         } else {
