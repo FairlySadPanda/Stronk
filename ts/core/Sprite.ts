@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import Bitmap from "./Bitmap";
 import Graphics from "./Graphics";
 import Rectangle from "./Rectangle";
 import Utils from "./Utils";
@@ -9,11 +10,11 @@ import Utils from "./Utils";
  *
  */
 export default class Sprite extends PIXI.Sprite {
-    public get bitmap() {
+    public get bitmap(): Bitmap {
         return this._bitmap;
     }
 
-    public set bitmap(value) {
+    public set bitmap(value: Bitmap) {
         if (this._bitmap !== value) {
             this._bitmap = value;
 
@@ -59,6 +60,7 @@ export default class Sprite extends PIXI.Sprite {
     public spriteId: number;
     public opaque: boolean;
     public ry: number;
+    public dy: number;
 
     public _renderWebGL_PIXI = PIXI.WebGLRenderer.prototype.render;
     protected _isPicture: boolean;

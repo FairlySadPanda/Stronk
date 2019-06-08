@@ -176,7 +176,7 @@ export default class Window_ShopNumber extends Window_Selectable {
     }
 
     public update() {
-        Window_Selectable.prototype.update.call(this);
+        super.update();
         this.processNumberChange();
     }
 

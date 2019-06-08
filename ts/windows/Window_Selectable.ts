@@ -20,6 +20,7 @@ export default class Window_Selectable extends Window_Base {
     private _touching: boolean;
     private _scrollX: number;
     private _scrollY: number;
+
     public constructor(x, y, width, height) {
         super(x, y, width, height);
         this._index = -1;
@@ -82,12 +83,12 @@ export default class Window_Selectable extends Window_Base {
     }
 
     public activate() {
-        Window_Base.prototype.activate.call(this);
+        super.activate();
         this.reselect();
     }
 
     public deactivate() {
-        Window_Base.prototype.deactivate.call(this);
+        super.deactivate();
         this.reselect();
     }
 
@@ -289,7 +290,7 @@ export default class Window_Selectable extends Window_Base {
     }
 
     public update() {
-        Window_Base.prototype.update.call(this);
+        super.update();
         this.updateArrows();
         this.processCursorMove();
         this.processHandling();

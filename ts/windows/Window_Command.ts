@@ -150,7 +150,7 @@ export default class Window_Command extends Window_Selectable {
         if (this.isHandled(symbol)) {
             this.callHandler(symbol);
         } else if (this.isHandled("ok")) {
-            Window_Selectable.prototype.callOkHandler.call(this);
+            super.callOkHandler();
         } else {
             this.activate();
         }
@@ -160,6 +160,6 @@ export default class Window_Command extends Window_Selectable {
         this.clearCommandList();
         this.makeCommandList();
         this.createContents();
-        Window_Selectable.prototype.refresh.call(this);
+        super.refresh();
     }
 }

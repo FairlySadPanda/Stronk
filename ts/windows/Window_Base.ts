@@ -21,6 +21,7 @@ export default class Window_Base extends Window {
     private _opening: boolean;
     private _closing: boolean;
     private _dimmerSprite: Sprite;
+
     public constructor(x, y, width, height) {
         super();
         this._list = [];
@@ -78,11 +79,11 @@ export default class Window_Base extends Window {
     }
 
     public contentsWidth() {
-        return this.width - this.standardPadding() * 2;
+        return this._width - this.standardPadding() * 2;
     }
 
     public contentsHeight() {
-        return this.height - this.standardPadding() * 2;
+        return this._height - this.standardPadding() * 2;
     }
 
     public fittingHeight(numLines) {

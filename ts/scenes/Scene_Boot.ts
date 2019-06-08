@@ -1,6 +1,5 @@
 import Graphics from "../core/Graphics";
 import ConfigManager from "../managers/ConfigManager";
-
 import DataManager from "../managers/DataManager";
 import ImageManager from "../managers/ImageManager";
 import SceneManager from "../managers/SceneManager";
@@ -25,7 +24,8 @@ export default class Scene_Boot extends Scene_Base {
         ImageManager.reserveSystem("ButtonSet");
     }
 
-    public _startDate: number;
+    private _startDate: number;
+
     public constructor() {
         super();
         this._startDate = Date.now();

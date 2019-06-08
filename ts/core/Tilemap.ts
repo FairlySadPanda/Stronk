@@ -443,7 +443,7 @@ export default class Tilemap extends PIXI.Container {
      */
     public renderCanvas(renderer) {
         this._hackRenderer(renderer);
-        PIXI.Container.prototype.renderCanvas.call(this, renderer);
+        super.renderCanvas(renderer);
     }
 
     /**
@@ -454,7 +454,7 @@ export default class Tilemap extends PIXI.Container {
      */
     public renderWebGL(renderer) {
         this._hackRenderer(renderer);
-        PIXI.Container.prototype.renderWebGL.call(this, renderer);
+        super.renderWebGL(renderer);
     }
 
     /**
@@ -511,7 +511,7 @@ export default class Tilemap extends PIXI.Container {
             this._needsRepaint = false;
         }
         this._sortChildren();
-        PIXI.Container.prototype.updateTransform.call(this);
+        super.updateTransform();
     }
 
     /**

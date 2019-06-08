@@ -7,9 +7,10 @@ import Window_HorzCommand from "./Window_HorzCommand";
 // The window for selecting buy/sell on the shop screen.
 
 export default class Window_ShopCommand extends Window_HorzCommand {
-    public _windowWidth: any;
-    public _purchaseOnly: any;
-    public constructor(width, purchaseOnly) {
+    private _windowWidth: number;
+    private _purchaseOnly: boolean;
+
+    public constructor(width: number, purchaseOnly: boolean) {
         super(0, 0);
         this._windowWidth = width;
         this._purchaseOnly = purchaseOnly;

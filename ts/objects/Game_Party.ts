@@ -1,9 +1,8 @@
 import Utils from "../core/Utils";
 import DataManager from "../managers/DataManager";
 import TextManager from "../managers/TextManager";
-import Item from "../interfaces/Item";
-import Game_Unit, { Game_Unit_OnLoad } from "./Game_Unit";
 import Game_Item, { Game_Item_OnLoad } from "./Game_Item";
+import Game_Unit, { Game_Unit_OnLoad } from "./Game_Unit";
 
 export interface Game_Party_Onload extends Game_Unit_OnLoad {
     _gold: number;
@@ -331,7 +330,7 @@ export default class Game_Party extends Game_Unit {
     }
 
     public isAllDead() {
-        if (Game_Unit.prototype.isAllDead.call(this)) {
+        if (super.isAllDead()) {
             return this.inBattle() || !this.isEmpty();
         } else {
             return false;

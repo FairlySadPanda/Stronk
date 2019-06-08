@@ -147,7 +147,7 @@ export default class Window_NameInput extends Window_Selectable {
 
     public processCursorMove() {
         const lastPage = this._page;
-        Window_Selectable.prototype.processCursorMove.call(this);
+        super.processCursorMove();
         this.updateCursor();
         if (this._page !== lastPage) {
             SoundManager.playCursor();

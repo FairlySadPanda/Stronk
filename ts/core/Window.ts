@@ -14,8 +14,8 @@ export default class Window extends PIXI.Container {
     public contentsOpacity: any;
     public _isWindow: boolean;
     private _windowskin: Bitmap;
-    private _width: number;
-    private _height: number;
+    protected _width: number;
+    protected _height: number;
     private _cursorRect: Rectangle;
     private _openness: number;
     private _animationCount: number;

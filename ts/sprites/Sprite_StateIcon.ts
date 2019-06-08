@@ -7,81 +7,74 @@ import ImageManager from "../managers/ImageManager";
 // The sprite for displaying state icons.
 
 export default class Sprite_StateIcon extends Sprite {
-    public static _iconWidth: number;
-    public static _iconHeight: number;
-    public setup: (battler: any) => void;
-    public animationWait: () => number;
-    public updateIcon: () => void;
-    public updateFrame: () => void;
+    private static _iconWidth = 32;
+    private static _iconHeight = 32;
+
+    private _battler: any;
+    private _iconIndex: number;
+    private _animationCount: number;
+    private _animationIndex: number;
+
     public constructor() {
         super();
         this.initMembers();
         this.loadBitmap();
     }
-    public initMembers(): any {
-        throw new Error("Method not implemented.");
+
+    public initMembers() {
+        this._battler = null;
+        this._iconIndex = 0;
+        this._animationCount = 0;
+        this._animationIndex = 0;
+        this.anchor.x = 0.5;
+        this.anchor.y = 0.5;
     }
-    public loadBitmap(): any {
-        throw new Error("Method not implemented.");
+
+    public loadBitmap() {
+        this.bitmap = ImageManager.loadSystem("IconSet");
+        this.setFrame(0, 0, 0, 0);
+    }
+
+    public setup(battler) {
+        this._battler = battler;
+    }
+
+    public update() {
+        super.update();
+        this._animationCount++;
+        if (this._animationCount >= this.animationWait()) {
+            this.updateIcon();
+            this.updateFrame();
+            this._animationCount = 0;
+        }
+    }
+
+    public animationWait() {
+        return 40;
+    }
+
+    public updateIcon() {
+        let icons = [];
+        if (this._battler && this._battler.isAlive()) {
+            icons = this._battler.allIcons();
+        }
+        if (icons.length > 0) {
+            this._animationIndex++;
+            if (this._animationIndex >= icons.length) {
+                this._animationIndex = 0;
+            }
+            this._iconIndex = icons[this._animationIndex];
+        } else {
+            this._animationIndex = 0;
+            this._iconIndex = 0;
+        }
+    }
+
+    public updateFrame() {
+        const pw = Sprite_StateIcon._iconWidth;
+        const ph = Sprite_StateIcon._iconHeight;
+        const sx = (this._iconIndex % 16) * pw;
+        const sy = Math.floor(this._iconIndex / 16) * ph;
+        this.setFrame(sx, sy, pw, ph);
     }
 }
-
-Sprite_StateIcon._iconWidth = 32;
-Sprite_StateIcon._iconHeight = 32;
-
-Sprite_StateIcon.prototype.initMembers = function() {
-    this._battler = null;
-    this._iconIndex = 0;
-    this._animationCount = 0;
-    this._animationIndex = 0;
-    this.anchor.x = 0.5;
-    this.anchor.y = 0.5;
-};
-
-Sprite_StateIcon.prototype.loadBitmap = function() {
-    this.bitmap = ImageManager.loadSystem("IconSet");
-    this.setFrame(0, 0, 0, 0);
-};
-
-Sprite_StateIcon.prototype.setup = function(battler) {
-    this._battler = battler;
-};
-
-Sprite_StateIcon.prototype.update = function() {
-    Sprite.prototype.update.call(this);
-    this._animationCount++;
-    if (this._animationCount >= this.animationWait()) {
-        this.updateIcon();
-        this.updateFrame();
-        this._animationCount = 0;
-    }
-};
-
-Sprite_StateIcon.prototype.animationWait = function() {
-    return 40;
-};
-
-Sprite_StateIcon.prototype.updateIcon = function() {
-    let icons = [];
-    if (this._battler && this._battler.isAlive()) {
-        icons = this._battler.allIcons();
-    }
-    if (icons.length > 0) {
-        this._animationIndex++;
-        if (this._animationIndex >= icons.length) {
-            this._animationIndex = 0;
-        }
-        this._iconIndex = icons[this._animationIndex];
-    } else {
-        this._animationIndex = 0;
-        this._iconIndex = 0;
-    }
-};
-
-Sprite_StateIcon.prototype.updateFrame = function() {
-    const pw = Sprite_StateIcon._iconWidth;
-    const ph = Sprite_StateIcon._iconHeight;
-    const sx = (this._iconIndex % 16) * pw;
-    const sy = Math.floor(this._iconIndex / 16) * ph;
-    this.setFrame(sx, sy, pw, ph);
-};

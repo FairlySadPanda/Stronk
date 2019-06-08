@@ -15,7 +15,7 @@ export default class Game_Enemy extends Game_Battler {
     }
 
     public initMembers() {
-        Game_Battler.prototype.initMembers.call(this);
+        super.initMembers();
         this._enemyId = 0;
         this._letter = "";
         this._plural = false;
@@ -59,9 +59,7 @@ export default class Game_Enemy extends Game_Battler {
     }
 
     public traitObjects() {
-        return Game_Battler.prototype.traitObjects
-            .call(this)
-            .concat(this.enemy());
+        return super.traitObjects().concat(this.enemy());
     }
 
     public paramBase(paramId) {
@@ -149,26 +147,26 @@ export default class Game_Enemy extends Game_Battler {
     }
 
     public performActionStart(action) {
-        Game_Battler.prototype.performActionStart.call(this, action);
+        super.performActionStart(action);
         this.requestEffect("whiten");
     }
 
     public performAction(action) {
-        Game_Battler.prototype.performAction.call(this, action);
+        super.performAction(action);
     }
 
     public performActionEnd() {
-        Game_Battler.prototype.performActionEnd.call(this);
+        super.performActionEnd();
     }
 
     public performDamage() {
-        Game_Battler.prototype.performDamage.call(this);
+        super.performDamage();
         SoundManager.playEnemyDamage();
         this.requestEffect("blink");
     }
 
     public performCollapse() {
-        Game_Battler.prototype.performCollapse.call(this);
+        super.performCollapse();
         switch (this.collapseType()) {
             case 0:
                 this.requestEffect("collapse");
@@ -291,7 +289,7 @@ export default class Game_Enemy extends Game_Battler {
     }
 
     public makeActions() {
-        Game_Battler.prototype.makeActions.call(this);
+        super.makeActions();
         if (this.numActions() > 0) {
             const actionList = this.enemy().actions.filter(function(a) {
                 return this.isActionValid(a);

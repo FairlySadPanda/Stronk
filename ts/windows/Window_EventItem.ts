@@ -10,11 +10,7 @@ import Window_ItemList from "./Window_ItemList";
 export default class Window_EventItem extends Window_ItemList {
     public _messageWindow: any;
     public openness: number;
-    public onOk: any;
-    public onCancel: any;
-    public numVisibleRows: () => number;
-    public start: () => void;
-    public updatePlacement: () => void;
+
     public constructor(messageWindow) {
         super(
             0,
@@ -28,54 +24,51 @@ export default class Window_EventItem extends Window_ItemList {
         this.setHandler("ok", this.onOk.bind(this));
         this.setHandler("cancel", this.onCancel.bind(this));
     }
-    public windowHeight(): any {
-        throw new Error("Method not implemented.");
+
+    public windowHeight() {
+        return this.fittingHeight(this.numVisibleRows());
+    }
+
+    public numVisibleRows() {
+        return 4;
+    }
+
+    public start() {
+        this.refresh();
+        this.updatePlacement();
+        this.select(0);
+        this.open();
+        this.activate();
+    }
+
+    public updatePlacement() {
+        if (this._messageWindow.y >= Graphics.boxHeight / 2) {
+            this.y = 0;
+        } else {
+            this.y = Graphics.boxHeight - this.height;
+        }
+    }
+
+    public includes(item) {
+        const itypeId = $gameMessage.itemChoiceItypeId();
+        return DataManager.isItem(item) && item.itypeId === itypeId;
+    }
+
+    public isEnabled(item) {
+        return true;
+    }
+
+    public onOk() {
+        const item = this.item();
+        const itemId = item ? item.id : 0;
+        $gameVariables.setValue($gameMessage.itemChoiceVariableId(), itemId);
+        this._messageWindow.terminateMessage();
+        this.close();
+    }
+
+    public onCancel() {
+        $gameVariables.setValue($gameMessage.itemChoiceVariableId(), 0);
+        this._messageWindow.terminateMessage();
+        this.close();
     }
 }
-
-Window_EventItem.prototype.windowHeight = function() {
-    return this.fittingHeight(this.numVisibleRows());
-};
-
-Window_EventItem.prototype.numVisibleRows = function() {
-    return 4;
-};
-
-Window_EventItem.prototype.start = function() {
-    this.refresh();
-    this.updatePlacement();
-    this.select(0);
-    this.open();
-    this.activate();
-};
-
-Window_EventItem.prototype.updatePlacement = function() {
-    if (this._messageWindow.y >= Graphics.boxHeight / 2) {
-        this.y = 0;
-    } else {
-        this.y = Graphics.boxHeight - this.height;
-    }
-};
-
-Window_EventItem.prototype.includes = function(item) {
-    const itypeId = $gameMessage.itemChoiceItypeId();
-    return DataManager.isItem(item) && item.itypeId === itypeId;
-};
-
-Window_EventItem.prototype.isEnabled = function(item) {
-    return true;
-};
-
-Window_EventItem.prototype.onOk = function() {
-    const item = this.item();
-    const itemId = item ? item.id : 0;
-    $gameVariables.setValue($gameMessage.itemChoiceVariableId(), itemId);
-    this._messageWindow.terminateMessage();
-    this.close();
-};
-
-Window_EventItem.prototype.onCancel = function() {
-    $gameVariables.setValue($gameMessage.itemChoiceVariableId(), 0);
-    this._messageWindow.terminateMessage();
-    this.close();
-};

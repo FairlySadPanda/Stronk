@@ -111,7 +111,7 @@ export default class Window_ItemList extends Window_Selectable {
                 "right"
             );
             this.drawText(
-                $gameParty.numItems(item),
+                $gameParty.numItems(item).toString(),
                 x,
                 y,
                 width,

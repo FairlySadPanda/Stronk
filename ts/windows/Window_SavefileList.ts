@@ -8,7 +8,7 @@ import Window_Selectable from "./Window_Selectable";
 // The window for selecting a save file on the save and load screens.
 
 export default class Window_SavefileList extends Window_Selectable {
-    public _mode: any;
+    private _mode: any;
 
     public constructor(x, y, width, height) {
         super(x, y, width, height);

@@ -7,14 +7,6 @@ import ImageManager from "../managers/ImageManager";
 // The sprite for displaying a picture.
 
 export default class Sprite_Picture extends Sprite {
-    public picture: () => any;
-    public updateBitmap: () => void;
-    public updateOrigin: () => void;
-    public updatePosition: () => void;
-    public updateScale: () => void;
-    public updateTone: () => void;
-    public updateOther: () => void;
-    public loadBitmap: () => void;
     private _pictureName: string;
     private _pictureId: any;
     public constructor(pictureId) {
@@ -24,79 +16,79 @@ export default class Sprite_Picture extends Sprite {
         this._isPicture = true;
         this.update();
     }
-}
 
-Sprite_Picture.prototype.picture = function() {
-    return $gameScreen.picture(this._pictureId);
-};
-
-Sprite_Picture.prototype.update = function() {
-    Sprite.prototype.update.call(this);
-    this.updateBitmap();
-    if (this.visible) {
-        this.updateOrigin();
-        this.updatePosition();
-        this.updateScale();
-        this.updateTone();
-        this.updateOther();
+    public picture() {
+        return $gameScreen.picture(this._pictureId);
     }
-};
 
-Sprite_Picture.prototype.updateBitmap = function() {
-    const picture = this.picture();
-    if (picture) {
-        const pictureName = picture.name();
-        if (this._pictureName !== pictureName) {
-            this._pictureName = pictureName;
-            this.loadBitmap();
+    public update() {
+        super.update();
+        this.updateBitmap();
+        if (this.visible) {
+            this.updateOrigin();
+            this.updatePosition();
+            this.updateScale();
+            this.updateTone();
+            this.updateOther();
         }
-        this.visible = true;
-    } else {
-        this._pictureName = "";
-        this.bitmap = null;
-        this.visible = false;
     }
-};
 
-Sprite_Picture.prototype.updateOrigin = function() {
-    const picture = this.picture();
-    if (picture.origin() === 0) {
-        this.anchor.x = 0;
-        this.anchor.y = 0;
-    } else {
-        this.anchor.x = 0.5;
-        this.anchor.y = 0.5;
+    public updateBitmap() {
+        const picture = this.picture();
+        if (picture) {
+            const pictureName = picture.name();
+            if (this._pictureName !== pictureName) {
+                this._pictureName = pictureName;
+                this.loadBitmap();
+            }
+            this.visible = true;
+        } else {
+            this._pictureName = "";
+            this.bitmap = null;
+            this.visible = false;
+        }
     }
-};
 
-Sprite_Picture.prototype.updatePosition = function() {
-    const picture = this.picture();
-    this.x = Math.floor(picture.x());
-    this.y = Math.floor(picture.y());
-};
-
-Sprite_Picture.prototype.updateScale = function() {
-    const picture = this.picture();
-    this.scale.x = picture.scaleX() / 100;
-    this.scale.y = picture.scaleY() / 100;
-};
-
-Sprite_Picture.prototype.updateTone = function() {
-    const picture = this.picture();
-    if (picture.tone()) {
-        this.setColorTone(picture.tone());
-    } else {
-        this.setColorTone([0, 0, 0, 0]);
+    public updateOrigin() {
+        const picture = this.picture();
+        if (picture.origin() === 0) {
+            this.anchor.x = 0;
+            this.anchor.y = 0;
+        } else {
+            this.anchor.x = 0.5;
+            this.anchor.y = 0.5;
+        }
     }
-};
 
-Sprite_Picture.prototype.updateOther = function() {
-    const picture = this.picture();
-    this.opacity = picture.opacity();
-    this.blendMode = picture.blendMode();
-    this.rotation = (picture.angle() * Math.PI) / 180;
-};
+    public updatePosition() {
+        const picture = this.picture();
+        this.x = Math.floor(picture.x());
+        this.y = Math.floor(picture.y());
+    }
 
-Sprite_Picture.prototype.loadBitmap = function() {
-    this.bitmap = ImageManager.loadPicture(this._pictureName);
-};
+    public updateScale() {
+        const picture = this.picture();
+        this.scale.x = picture.scaleX() / 100;
+        this.scale.y = picture.scaleY() / 100;
+    }
+
+    public updateTone() {
+        const picture = this.picture();
+        if (picture.tone()) {
+            this.setColorTone(picture.tone());
+        } else {
+            this.setColorTone([0, 0, 0, 0]);
+        }
+    }
+
+    public updateOther() {
+        const picture = this.picture();
+        this.opacity = picture.opacity();
+        this.blendMode = picture.blendMode();
+        this.rotation = (picture.angle() * Math.PI) / 180;
+    }
+
+    public loadBitmap() {
+        this.bitmap = ImageManager.loadPicture(this._pictureName);
+    }
+}

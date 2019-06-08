@@ -8,9 +8,10 @@ import Sprite_Animation from "./Sprite_Animation";
 // The sprite class with a feature which displays animations.
 
 export default class Sprite_Base extends Sprite {
-    private _animationSprites: any[];
-    private _effectTarget: this;
+    protected _animationSprites: any[];
+    protected _effectTarget: Sprite_Base;
     private _hiding: boolean;
+
     public constructor() {
         super();
         this._animationSprites = [];
@@ -19,7 +20,7 @@ export default class Sprite_Base extends Sprite {
     }
 
     public update() {
-        Sprite.prototype.update.call(this);
+        super.update();
         this.updateVisibility();
         this.updateAnimationSprites();
     }

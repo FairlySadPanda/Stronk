@@ -193,7 +193,7 @@ export default class Game_Battler extends Game_BattlerBase {
     }
 
     public refresh() {
-        Game_BattlerBase.prototype.refresh.call(this);
+        super.refresh();
         if (this.hp === 0) {
             this.addState(this.deathStateId());
         } else {
@@ -227,7 +227,7 @@ export default class Game_Battler extends Game_BattlerBase {
     }
 
     public onRestrict() {
-        Game_BattlerBase.prototype.onRestrict.call(this);
+        super.onRestrict();
         this.clearActions();
         this.states().forEach(function(state) {
             if (state.removeByRestriction) {

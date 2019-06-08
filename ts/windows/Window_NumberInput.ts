@@ -13,24 +13,12 @@ import Window_Selectable from "./Window_Selectable";
 // The window used for the event command [Input Number].
 
 export default class Window_NumberInput extends Window_Selectable {
-    public _messageWindow: any;
-    public _number: number;
-    public _maxDigits: number;
+    private _messageWindow: any;
+    private _number: number;
+    private _maxDigits: number;
     public openness: number;
-    public start: () => void;
-    public updatePlacement: () => void;
-    public windowWidth: () => number;
-    public windowHeight: () => any;
-    public placeButtons: () => void;
-    public updateButtonsVisiblity: () => void;
-    public showButtons: () => void;
-    public hideButtons: () => void;
-    public buttonY: () => any;
-    public processDigitChange: () => void;
-    public changeDigit: (up: any) => void;
-    public onButtonUp: () => void;
-    public onButtonDown: () => void;
-    public onButtonOk: () => void;
+    private _buttons: any[];
+
     public constructor(messageWindow) {
         super(0, 0, 0, 0);
         this._messageWindow = messageWindow;
@@ -40,205 +28,205 @@ export default class Window_NumberInput extends Window_Selectable {
         this.createButtons();
         this.deactivate();
     }
-    public createButtons(): any {
-        throw new Error("Method not implemented.");
+
+    public start() {
+        this._maxDigits = $gameMessage.numInputMaxDigits();
+        this._number = $gameVariables.value($gameMessage.numInputVariableId());
+        this._number = Utils.clamp(
+            this._number,
+            0,
+            Math.pow(10, this._maxDigits) - 1
+        );
+        this.updatePlacement();
+        this.placeButtons();
+        this.updateButtonsVisiblity();
+        this.createContents();
+        this.refresh();
+        this.open();
+        this.activate();
+        this.select(0);
     }
-}
 
-Window_NumberInput.prototype.start = function() {
-    this._maxDigits = $gameMessage.numInputMaxDigits();
-    this._number = $gameVariables.value($gameMessage.numInputVariableId());
-    this._number = Utils.clamp(
-        this._number,
-        0,
-        Math.pow(10, this._maxDigits) - 1
-    );
-    this.updatePlacement();
-    this.placeButtons();
-    this.updateButtonsVisiblity();
-    this.createContents();
-    this.refresh();
-    this.open();
-    this.activate();
-    this.select(0);
-};
-
-Window_NumberInput.prototype.updatePlacement = function() {
-    const messageY = this._messageWindow.y;
-    const spacing = 8;
-    this.width = this.windowWidth();
-    this.height = this.windowHeight();
-    this.x = (Graphics.boxWidth - this.width) / 2;
-    if (messageY >= Graphics.boxHeight / 2) {
-        this.y = messageY - this.height - spacing;
-    } else {
-        this.y = messageY + this._messageWindow.height + spacing;
-    }
-};
-
-Window_NumberInput.prototype.windowWidth = function() {
-    return this.maxCols() * this.itemWidth() + this.padding * 2;
-};
-
-Window_NumberInput.prototype.windowHeight = function() {
-    return this.fittingHeight(1);
-};
-
-Window_NumberInput.prototype.maxCols = function() {
-    return this._maxDigits;
-};
-
-Window_NumberInput.prototype.maxItems = function() {
-    return this._maxDigits;
-};
-
-Window_NumberInput.prototype.spacing = function() {
-    return 0;
-};
-
-Window_NumberInput.prototype.itemWidth = function() {
-    return 32;
-};
-
-Window_NumberInput.prototype.createButtons = function() {
-    const bitmap = ImageManager.loadSystem("ButtonSet");
-    const buttonWidth = 48;
-    const buttonHeight = 48;
-    this._buttons = [];
-    for (let i = 0; i < 3; i++) {
-        const button = new Sprite_Button();
-        const x = buttonWidth * [1, 2, 4][i];
-        const w = buttonWidth * (i === 2 ? 2 : 1);
-        button.bitmap = bitmap;
-        button.setColdFrame(x, 0, w, buttonHeight);
-        button.setHotFrame(x, buttonHeight, w, buttonHeight);
-        button.visible = false;
-        this._buttons.push(button);
-        this.addChild(button);
-    }
-    this._buttons[0].setClickHandler(this.onButtonDown.bind(this));
-    this._buttons[1].setClickHandler(this.onButtonUp.bind(this));
-    this._buttons[2].setClickHandler(this.onButtonOk.bind(this));
-};
-
-Window_NumberInput.prototype.placeButtons = function() {
-    const numButtons = this._buttons.length;
-    const spacing = 16;
-    let totalWidth = -spacing;
-    for (let i = 0; i < numButtons; i++) {
-        totalWidth += this._buttons[i].width + spacing;
-    }
-    let x = (this.width - totalWidth) / 2;
-    for (let j = 0; j < numButtons; j++) {
-        const button = this._buttons[j];
-        button.x = x;
-        button.y = this.buttonY();
-        x += button.width + spacing;
-    }
-};
-
-Window_NumberInput.prototype.updateButtonsVisiblity = function() {
-    if (TouchInput.date > Input.date) {
-        this.showButtons();
-    } else {
-        this.hideButtons();
-    }
-};
-
-Window_NumberInput.prototype.showButtons = function() {
-    for (let i = 0; i < this._buttons.length; i++) {
-        this._buttons[i].visible = true;
-    }
-};
-
-Window_NumberInput.prototype.hideButtons = function() {
-    for (let i = 0; i < this._buttons.length; i++) {
-        this._buttons[i].visible = false;
-    }
-};
-
-Window_NumberInput.prototype.buttonY = function() {
-    const spacing = 8;
-    if (this._messageWindow.y >= Graphics.boxHeight / 2) {
-        return 0 - this._buttons[0].height - spacing;
-    } else {
-        return this.height + spacing;
-    }
-};
-
-Window_NumberInput.prototype.update = function() {
-    Window_Selectable.prototype.update.call(this);
-    this.processDigitChange();
-};
-
-Window_NumberInput.prototype.processDigitChange = function() {
-    if (this.isOpenAndActive()) {
-        if (Input.isRepeated("up")) {
-            this.changeDigit(true);
-        } else if (Input.isRepeated("down")) {
-            this.changeDigit(false);
+    public updatePlacement() {
+        const messageY = this._messageWindow.y;
+        const spacing = 8;
+        this.width = this.windowWidth();
+        this.height = this.windowHeight();
+        this.x = (Graphics.boxWidth - this.width) / 2;
+        if (messageY >= Graphics.boxHeight / 2) {
+            this.y = messageY - this.height - spacing;
+        } else {
+            this.y = messageY + this._messageWindow.height + spacing;
         }
     }
-};
 
-Window_NumberInput.prototype.changeDigit = function(up) {
-    const index = this.index();
-    const place = Math.pow(10, this._maxDigits - 1 - index);
-    let n = Math.floor(this._number / place) % 10;
-    this._number -= n * place;
-    if (up) {
-        n = (n + 1) % 10;
-    } else {
-        n = (n + 9) % 10;
+    public windowWidth() {
+        return this.maxCols() * this.itemWidth() + this.padding * 2;
     }
-    this._number += n * place;
-    this.refresh();
-    SoundManager.playCursor();
-};
 
-Window_NumberInput.prototype.isTouchOkEnabled = function() {
-    return false;
-};
+    public windowHeight() {
+        return this.fittingHeight(1);
+    }
 
-Window_NumberInput.prototype.isOkEnabled = function() {
-    return true;
-};
+    public maxCols() {
+        return this._maxDigits;
+    }
 
-Window_NumberInput.prototype.isCancelEnabled = function() {
-    return false;
-};
+    public maxItems() {
+        return this._maxDigits;
+    }
 
-Window_NumberInput.prototype.isOkTriggered = function() {
-    return Input.isTriggered("ok");
-};
+    public spacing() {
+        return 0;
+    }
 
-Window_NumberInput.prototype.processOk = function() {
-    SoundManager.playOk();
-    $gameVariables.setValue($gameMessage.numInputVariableId(), this._number);
-    this._messageWindow.terminateMessage();
-    this.updateInputData();
-    this.deactivate();
-    this.close();
-};
+    public itemWidth() {
+        return 32;
+    }
 
-Window_NumberInput.prototype.drawItem = function(index) {
-    const rect = this.itemRect(index);
-    const align = "center";
-    const s = Utils.padZero(this._number, this._maxDigits);
-    const c = s.slice(index, index + 1);
-    this.resetTextColor();
-    this.drawText(c, rect.x, rect.y, rect.width, align);
-};
+    public createButtons() {
+        const bitmap = ImageManager.loadSystem("ButtonSet");
+        const buttonWidth = 48;
+        const buttonHeight = 48;
+        this._buttons = [];
+        for (let i = 0; i < 3; i++) {
+            const button = new Sprite_Button();
+            const x = buttonWidth * [1, 2, 4][i];
+            const w = buttonWidth * (i === 2 ? 2 : 1);
+            button.bitmap = bitmap;
+            button.setColdFrame(x, 0, w, buttonHeight);
+            button.setHotFrame(x, buttonHeight, w, buttonHeight);
+            button.visible = false;
+            this._buttons.push(button);
+            this.addChild(button);
+        }
+        this._buttons[0].setClickHandler(this.onButtonDown.bind(this));
+        this._buttons[1].setClickHandler(this.onButtonUp.bind(this));
+        this._buttons[2].setClickHandler(this.onButtonOk.bind(this));
+    }
 
-Window_NumberInput.prototype.onButtonUp = function() {
-    this.changeDigit(true);
-};
+    public placeButtons() {
+        const numButtons = this._buttons.length;
+        const spacing = 16;
+        let totalWidth = -spacing;
+        for (let i = 0; i < numButtons; i++) {
+            totalWidth += this._buttons[i].width + spacing;
+        }
+        let x = (this.width - totalWidth) / 2;
+        for (let j = 0; j < numButtons; j++) {
+            const button = this._buttons[j];
+            button.x = x;
+            button.y = this.buttonY();
+            x += button.width + spacing;
+        }
+    }
 
-Window_NumberInput.prototype.onButtonDown = function() {
-    this.changeDigit(false);
-};
+    public updateButtonsVisiblity() {
+        if (TouchInput.date > Input.date) {
+            this.showButtons();
+        } else {
+            this.hideButtons();
+        }
+    }
 
-Window_NumberInput.prototype.onButtonOk = function() {
-    this.processOk();
-    this.hideButtons();
-};
+    public showButtons() {
+        for (let i = 0; i < this._buttons.length; i++) {
+            this._buttons[i].visible = true;
+        }
+    }
+
+    public hideButtons() {
+        for (let i = 0; i < this._buttons.length; i++) {
+            this._buttons[i].visible = false;
+        }
+    }
+
+    public buttonY() {
+        const spacing = 8;
+        if (this._messageWindow.y >= Graphics.boxHeight / 2) {
+            return 0 - this._buttons[0].height - spacing;
+        } else {
+            return this.height + spacing;
+        }
+    }
+
+    public update() {
+        super.update();
+        this.processDigitChange();
+    }
+
+    public processDigitChange() {
+        if (this.isOpenAndActive()) {
+            if (Input.isRepeated("up")) {
+                this.changeDigit(true);
+            } else if (Input.isRepeated("down")) {
+                this.changeDigit(false);
+            }
+        }
+    }
+
+    public changeDigit(up) {
+        const index = this.index();
+        const place = Math.pow(10, this._maxDigits - 1 - index);
+        let n = Math.floor(this._number / place) % 10;
+        this._number -= n * place;
+        if (up) {
+            n = (n + 1) % 10;
+        } else {
+            n = (n + 9) % 10;
+        }
+        this._number += n * place;
+        this.refresh();
+        SoundManager.playCursor();
+    }
+
+    public isTouchOkEnabled() {
+        return false;
+    }
+
+    public isOkEnabled() {
+        return true;
+    }
+
+    public isCancelEnabled() {
+        return false;
+    }
+
+    public isOkTriggered() {
+        return Input.isTriggered("ok");
+    }
+
+    public processOk() {
+        SoundManager.playOk();
+        $gameVariables.setValue(
+            $gameMessage.numInputVariableId(),
+            this._number
+        );
+        this._messageWindow.terminateMessage();
+        this.updateInputData();
+        this.deactivate();
+        this.close();
+    }
+
+    public drawItem(index) {
+        const rect = this.itemRect(index);
+        const align = "center";
+        const s = Utils.padZero(this._number, this._maxDigits);
+        const c = s.slice(index, index + 1);
+        this.resetTextColor();
+        this.drawText(c, rect.x, rect.y, rect.width, undefined, align);
+    }
+
+    public onButtonUp() {
+        this.changeDigit(true);
+    }
+
+    public onButtonDown() {
+        this.changeDigit(false);
+    }
+
+    public onButtonOk() {
+        this.processOk();
+        this.hideButtons();
+    }
+}

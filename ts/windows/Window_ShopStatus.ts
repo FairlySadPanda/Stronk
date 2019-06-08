@@ -51,7 +51,7 @@ export default class Window_ShopStatus extends Window_Base {
         this.drawText(TextManager.possession, x, y, width - possessionWidth);
         this.resetTextColor();
         this.drawText(
-            $gameParty.numItems(this._item),
+            $gameParty.numItems(this._item).toString(),
             x,
             y,
             width,
