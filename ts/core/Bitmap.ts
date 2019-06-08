@@ -3,7 +3,6 @@ import Decrypter from "./Decrypter";
 import Graphics from "./Graphics";
 import Rectangle from "./Rectangle";
 import ResourceHandler from "./ResourceHandler";
-import Stage from "./Stage";
 import Utils from "./Utils";
 
 export default class Bitmap {

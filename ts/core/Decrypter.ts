@@ -1,8 +1,6 @@
 import AudioManager from "../managers/AudioManager";
 import Bitmap from "./Bitmap";
 
-declare var $dataSystem: any;
-
 export default class Decrypter {
     private static _ignoreList: any;
     public static status: any;
@@ -12,6 +10,8 @@ export default class Decrypter {
     public static VER: any;
     public static REMAIN: any;
     private static _encryptionKey: any;
+    public static hasEncryptedImages: boolean;
+    public static hasEncryptedAudio: boolean;
 
     public static checkImgIgnore(url) {
         for (let cnt = 0; cnt < this._ignoreList.length; cnt++) {
