@@ -1,6 +1,8 @@
+import * as PIXI from "pixi.js";
+
 import "pixi-picture";
 import "pixi-tilemap";
-import * as PIXI from "pixi.js";
+
 import PluginManager from "./managers/PluginManager";
 import SceneManager from "./managers/SceneManager";
 import Scene_Boot from "./scenes/Scene_Boot";

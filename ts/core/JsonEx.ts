@@ -109,12 +109,12 @@ export default abstract class JsonEx {
      * @return {Object}
      * @private
      */
-    private static _encode(value, circular, depth) {
+    private static _encode(value: object, circular: any[], depth: number) {
         depth = depth || 0;
         if (++depth >= this.maxDepth) {
             throw new Error("Object too deep");
         }
-        const type = value.toString();
+        const type = String(value);
         if (type === "[object Object]" || type === "[object Array]") {
             value["@c"] = JsonEx._generateId();
 
@@ -169,7 +169,7 @@ export default abstract class JsonEx {
      * @private
      */
     private static _decode(value, circular, registry) {
-        const type = value.toString();
+        const type = String(value);
         if (type === "[object Object]" || type === "[object Array]") {
             registry[value["@c"]] = value;
 

@@ -80,7 +80,7 @@ export default class Window_MenuCommand extends Window_Command {
         this.addCommand(TextManager.gameEnd, "gameEnd", enabled);
     }
 
-    public needsCommand = function(name) {
+    public needsCommand(name: string): boolean {
         const flags = $dataSystem.menuCommands;
         if (flags) {
             switch (name) {
@@ -99,7 +99,7 @@ export default class Window_MenuCommand extends Window_Command {
             }
         }
         return true;
-    };
+    }
 
     public areMainCommandsEnabled() {
         return $gameParty.exists();
