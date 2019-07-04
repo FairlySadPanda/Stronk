@@ -516,7 +516,9 @@ export default class Window_Base extends Window {
         const n = big ? 0 : characterIndex;
         const sx = ((n % 4) * 3 + 1) * pw;
         const sy = Math.floor(n / 4) * 4 * ph;
-        this.contents.blt(bitmap, sx, sy, pw, ph, x - pw / 2, y - ph);
+        bitmap.imagePromise.then(() => {
+            this.contents.blt(bitmap, sx, sy, pw, ph, x - pw / 2, y - ph);
+        });
     }
 
     public drawGauge(x, y, width, rate, color1, color2) {
