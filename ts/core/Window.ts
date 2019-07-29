@@ -11,7 +11,6 @@ export default class Window extends PIXI.Container {
     public downArrowVisible: boolean;
     public upArrowVisible: boolean;
     public pause: boolean;
-    public contentsOpacity: any;
     public _isWindow: boolean;
     private _windowskin: Bitmap;
     protected _width: number;
@@ -554,176 +553,156 @@ export default class Window extends PIXI.Container {
         sprite.setFrame(sx + x * p, sy + y * p, p, p);
         sprite.visible = this.isOpen();
     }
-}
 
-/**
- * The image used as a window skin.
- *
- * @property windowskin
- * @type Bitmap
- */
-Object.defineProperty(Window.prototype, "windowskin", {
-    get() {
+    /**
+     * The image used as a window skin.
+     *
+     * @property windowskin
+     * @type Bitmap
+     */
+    public get windowskin() {
         return this._windowskin;
-    },
-    set(value) {
+    }
+
+    public set windowskin(value) {
         if (this._windowskin !== value) {
             this._windowskin = value;
             this._windowskin.addLoadListener(this._onWindowskinLoad.bind(this));
         }
-    },
-    configurable: true
-});
+    }
 
-/**
- * The bitmap used for the window contents.
- *
- * @property contents
- * @type Bitmap
- */
-Object.defineProperty(Window.prototype, "contents", {
-    get() {
+    /**
+     * The bitmap used for the window contents.
+     *
+     * @property contents
+     * @type Bitmap
+     */
+    public get contents() {
         return this._windowContentsSprite.bitmap;
-    },
-    set(value) {
-        this._windowContentsSprite.bitmap = value;
-    },
-    configurable: true
-});
+    }
 
-/**
- * The width of the window in pixels.
- *
- * @property width
- * @type Number
- */
-Object.defineProperty(Window.prototype, "width", {
-    get() {
+    public set contents(value) {
+        this._windowContentsSprite.bitmap = value;
+    }
+
+    /**
+     * The width of the window in pixels.
+     *
+     * @property width
+     * @type Number
+     */
+    public get width() {
         return this._width;
-    },
-    set(value) {
+    }
+
+    public set(value) {
         this._width = value;
         this._refreshAllParts();
-    },
-    configurable: true
-});
+    }
 
-/**
- * The height of the window in pixels.
- *
- * @property height
- * @type Number
- */
-Object.defineProperty(Window.prototype, "height", {
-    get() {
+    /**
+     * The height of the window in pixels.
+     *
+     * @property height
+     * @type Number
+     */
+    public get height() {
         return this._height;
-    },
-    set(value) {
+    }
+
+    public set height(value) {
         this._height = value;
         this._refreshAllParts();
-    },
-    configurable: true
-});
+    }
 
-/**
- * The size of the padding between the frame and contents.
- *
- * @property padding
- * @type Number
- */
-Object.defineProperty(Window.prototype, "padding", {
-    get() {
+    /**
+     * The size of the padding between the frame and contents.
+     *
+     * @property padding
+     * @type Number
+     */
+    public get padding() {
         return this._padding;
-    },
-    set(value) {
+    }
+
+    public set padding(value) {
         this._padding = value;
         this._refreshAllParts();
-    },
-    configurable: true
-});
+    }
 
-/**
- * The size of the margin for the window background.
- *
- * @property margin
- * @type Number
- */
-Object.defineProperty(Window.prototype, "margin", {
-    get() {
+    /**
+     * The size of the margin for the window background.
+     *
+     * @property margin
+     * @type Number
+     */
+    public get margin() {
         return this._margin;
-    },
-    set(value) {
+    }
+
+    public set margin(value) {
         this._margin = value;
         this._refreshAllParts();
-    },
-    configurable: true
-});
+    }
 
-/**
- * The opacity of the window without contents (0 to 255).
- *
- * @property opacity
- * @type Number
- */
-Object.defineProperty(Window.prototype, "opacity", {
-    get() {
+    /**
+     * The opacity of the window without contents (0 to 255).
+     *
+     * @property opacity
+     * @type Number
+     */
+    public get opacity() {
         return this._windowSpriteContainer.alpha * 255;
-    },
-    set(value) {
+    }
+
+    public set opacity(value) {
         this._windowSpriteContainer.alpha = Utils.clamp(value, 0, 255) / 255;
-    },
-    configurable: true
-});
+    }
 
-/**
- * The opacity of the window background (0 to 255).
- *
- * @property backOpacity
- * @type Number
- */
-Object.defineProperty(Window.prototype, "backOpacity", {
-    get() {
+    /**
+     * The opacity of the window background (0 to 255).
+     *
+     * @property backOpacity
+     * @type Number
+     */
+    public get backOpacity() {
         return this._windowBackSprite.alpha * 255;
-    },
-    set(value) {
+    }
+
+    public set backOpacity(value) {
         this._windowBackSprite.alpha = Utils.clamp(value, 0, 255) / 255;
-    },
-    configurable: true
-});
+    }
 
-/**
- * The opacity of the window contents (0 to 255).
- *
- * @property contentsOpacity
- * @type Number
- */
-Object.defineProperty(Window.prototype, "contentsOpacity", {
-    get() {
+    /**
+     * The opacity of the window contents (0 to 255).
+     *
+     * @property contentsOpacity
+     * @type Number
+     */
+    public get contentsOpacity() {
         return this._windowContentsSprite.alpha * 255;
-    },
-    set(value) {
-        this._windowContentsSprite.alpha = Utils.clamp(value, 0, 255) / 255;
-    },
-    configurable: true
-});
+    }
 
-/**
- * The openness of the window (0 to 255).
- *
- * @property openness
- * @type Number
- */
-Object.defineProperty(Window.prototype, "openness", {
-    get() {
+    public set contentsOpacity(value) {
+        this._windowContentsSprite.alpha = Utils.clamp(value, 0, 255) / 255;
+    }
+
+    /**
+     * The openness of the window (0 to 255).
+     *
+     * @property openness
+     * @type Number
+     */
+    public get openness() {
         return this._openness;
-    },
-    set(value) {
+    }
+
+    public set openness(value) {
         if (this._openness !== value) {
             this._openness = Utils.clamp(value, 0, 255);
             this._windowSpriteContainer.scale.y = this._openness / 255;
             this._windowSpriteContainer.y =
                 (this.height / 2) * (1 - this._openness / 255);
         }
-    },
-    configurable: true
-});
+    }
+}

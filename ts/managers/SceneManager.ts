@@ -1,4 +1,3 @@
-import nw from "nw";
 import Bitmap from "../core/Bitmap";
 import Graphics from "../core/Graphics";
 import Input from "../core/Input";
@@ -8,6 +7,9 @@ import WebAudio from "../core/WebAudio";
 import AudioManager from "./AudioManager";
 import ImageManager from "./ImageManager";
 import PluginManager from "./PluginManager";
+
+// NW is a global, you don't import it like an NPM module
+declare const nw: any;
 
 export default abstract class SceneManager {
     private static _scene = null;
