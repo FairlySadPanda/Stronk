@@ -571,17 +571,19 @@ export default class Window_Selectable extends Window_Base {
         return true;
     }
 
-    public drawAllItems() {
+    public async drawAllItems() {
         const topIndex = this.topIndex();
+        const promises = [];
         for (let i = 0; i < this.maxPageItems(); i++) {
             const index = topIndex + i;
             if (index < this.maxItems()) {
-                this.drawItem(index);
+                promises.push(this.drawItem(index));
             }
         }
+        await Promise.all(promises);
     }
 
-    public drawItem(index) {}
+    public async drawItem(index) {}
 
     public clearItem(index) {
         const rect = this.itemRect(index);
@@ -599,10 +601,10 @@ export default class Window_Selectable extends Window_Base {
         this.redrawItem(this.index());
     }
 
-    public refresh() {
+    public async refresh() {
         if (this.contents) {
             this.contents.clear();
-            this.drawAllItems();
+            await this.drawAllItems();
         }
     }
 }

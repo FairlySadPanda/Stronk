@@ -595,7 +595,7 @@ export default class Window extends PIXI.Container {
         return this._width;
     }
 
-    public set(value) {
+    public set width(value) {
         this._width = value;
         this._refreshAllParts();
     }

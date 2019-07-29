@@ -33,7 +33,7 @@ export default class Window_SavefileList extends Window_Selectable {
         return Math.floor(innerHeight / this.maxVisibleItems());
     }
 
-    public drawItem(index) {
+    public async drawItem(index) {
         const id = index + 1;
         const valid = DataManager.isThisGameFile(id);
         const info = DataManager.loadSavefileInfo(id);
@@ -45,7 +45,7 @@ export default class Window_SavefileList extends Window_Selectable {
         this.drawFileId(id, rect.x, rect.y);
         if (info) {
             this.changePaintOpacity(valid);
-            this.drawContents(info, rect, valid);
+            await this.drawContents(info, rect, valid);
             this.changePaintOpacity(true);
         }
     }
@@ -61,39 +61,48 @@ export default class Window_SavefileList extends Window_Selectable {
         }
     }
 
-    public drawContents(info, rect, valid) {
+    public async drawContents(info, rect, valid) {
         const bottom = rect.y + rect.height;
         if (rect.width >= 420) {
-            this.drawGameTitle(info, rect.x + 192, rect.y, rect.width - 192);
+            await this.drawGameTitle(
+                info,
+                rect.x + 192,
+                rect.y,
+                rect.width - 192
+            );
             if (valid) {
-                this.drawPartyCharacters(info, rect.x + 220, bottom - 4);
+                await this.drawPartyCharacters(info, rect.x + 220, bottom - 4);
             }
         }
         const lineHeight = this.lineHeight();
         const y2 = bottom - lineHeight;
         if (y2 >= lineHeight) {
-            this.drawPlaytime(info, rect.x, y2, rect.width);
+            await this.drawPlaytime(info, rect.x, y2, rect.width);
         }
     }
 
-    public drawGameTitle(info, x, y, width) {
+    public async drawGameTitle(info, x, y, width) {
         if (info.title) {
-            this.drawText(info.title, x, y, width);
+            await this.drawText(info.title, x, y, width);
         }
     }
 
-    public drawPartyCharacters(info, x, y) {
+    public async drawPartyCharacters(info, x, y) {
         if (info.characters) {
+            const promises = [];
             for (let i = 0; i < info.characters.length; i++) {
                 const data = info.characters[i];
-                this.drawCharacter(data[0], data[1], x + i * 48, y);
+                promises.push(
+                    this.drawCharacter(data[0], data[1], x + i * 48, y)
+                );
             }
+            await Promise.all(promises);
         }
     }
 
-    public drawPlaytime(info, x, y, width) {
+    public async drawPlaytime(info, x, y, width) {
         if (info.playtime) {
-            this.drawText(info.playtime, x, y, width, undefined, "right");
+            await this.drawText(info.playtime, x, y, width, undefined, "right");
         }
     }
 

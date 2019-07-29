@@ -557,7 +557,7 @@ export default class Bitmap {
      * @param {Number} lineHeight The height of the text line
      * @param {String} align The alignment of the text
      */
-    public drawText(
+    public async drawText(
         text: string,
         x: number,
         y: number,
@@ -569,7 +569,14 @@ export default class Bitmap {
         //       So we use 'alphabetic' here.
         if (text !== undefined) {
             if (this.fontSize < Bitmap.minFontSize) {
-                this.drawSmallText(text, x, y, maxWidth, lineHeight, align);
+                await this.drawSmallText(
+                    text,
+                    x,
+                    y,
+                    maxWidth,
+                    lineHeight,
+                    align
+                );
                 return;
             }
             let tx = x;
@@ -591,9 +598,9 @@ export default class Bitmap {
             context.textAlign = align;
             context.textBaseline = "alphabetic";
             context.globalAlpha = 1;
-            this._drawTextOutline(text, tx, ty, maxWidth);
+            await this._drawTextOutline(text, tx, ty, maxWidth);
             context.globalAlpha = alpha;
-            this._drawTextBody(text, tx, ty, maxWidth);
+            await this._drawTextBody(text, tx, ty, maxWidth);
             context.restore();
             this._setDirty();
         }
@@ -610,7 +617,7 @@ export default class Bitmap {
      * @param {Number} lineHeight The height of the text line
      * @param {String} align The alignment of the text
      */
-    public drawSmallText(
+    public async drawSmallText(
         text: string,
         x: number,
         y: number,
@@ -646,7 +653,7 @@ export default class Bitmap {
             bitmap.resize(bitmapWidth, bitmapHeight);
         }
 
-        bitmap.drawText(
+        await bitmap.drawText(
             text,
             bitmap.outlineWidth,
             bitmap.outlineWidth,

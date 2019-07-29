@@ -23,12 +23,12 @@ export default class Window_DebugEdit extends Window_Selectable {
         return 10;
     }
 
-    public refresh() {
+    public async refresh() {
         this.contents.clear();
-        this.drawAllItems();
+        await this.drawAllItems();
     }
 
-    public drawItem(index) {
+    public async drawItem(index) {
         const dataId = this._topId + index;
         const idText = Utils.padZero(dataId, 4) + ":";
         const idWidth = this.textWidth(idText);
@@ -37,11 +37,11 @@ export default class Window_DebugEdit extends Window_Selectable {
         const status = this.itemStatus(dataId);
         const rect = this.itemRectForText(index);
         this.resetTextColor();
-        this.drawText(idText, rect.x, rect.y, rect.width);
+        await this.drawText(idText, rect.x, rect.y, rect.width);
         rect.x += idWidth;
         rect.width -= idWidth + statusWidth;
-        this.drawText(name, rect.x, rect.y, rect.width);
-        this.drawText(
+        await this.drawText(name, rect.x, rect.y, rect.width);
+        await this.drawText(
             status,
             rect.x + rect.width,
             rect.y,

@@ -256,7 +256,7 @@ export default class Window_Base extends Window {
         this.contents.paintOpacity = enabled ? 255 : this.translucentOpacity();
     }
 
-    public drawText(
+    public async drawText(
         text: string,
         x: number,
         y: number,
@@ -264,7 +264,7 @@ export default class Window_Base extends Window {
         lineHeight?: number,
         align?: string
     ) {
-        this.contents.drawText(
+        await this.contents.drawText(
             text,
             x,
             y,
@@ -278,7 +278,7 @@ export default class Window_Base extends Window {
         return this.contents.measureTextWidth(text);
     }
 
-    public drawTextEx(text, x, y) {
+    public async drawTextEx(text, x, y) {
         if (text) {
             const textState = {
                 index: 0,
@@ -292,7 +292,7 @@ export default class Window_Base extends Window {
             textState.height = this.calcTextHeight(textState, false);
             this.resetFontSettings();
             while (textState.index < textState.text.length) {
-                this.processCharacter(textState);
+                await this.processCharacter(textState);
             }
             return textState.x - x;
         } else {
@@ -503,7 +503,7 @@ export default class Window_Base extends Window {
         this.contents.blt(bitmap, sx, sy, sw, sh, dx, dy);
     }
 
-    public drawCharacter(
+    public async drawCharacter(
         characterName: string,
         characterIndex: number,
         x: number,
@@ -516,13 +516,8 @@ export default class Window_Base extends Window {
         const n = big ? 0 : characterIndex;
         const sx = ((n % 4) * 3 + 1) * pw;
         const sy = Math.floor(n / 4) * 4 * ph;
-        bitmap.imagePromise.then(() => {
-            console.log("drawCharacter() concluded retrieving a bitmap.");
-            console.log(
-                `BITMAP WIDTH: ${bitmap.width}, HEIGHT: ${bitmap.height}`
-            );
-            this.contents.blt(bitmap, sx, sy, pw, ph, x - pw / 2, y - ph);
-        });
+        await bitmap.imagePromise;
+        this.contents.blt(bitmap, sx, sy, pw, ph, x - pw / 2, y - ph);
     }
 
     public drawGauge(x, y, width, rate, color1, color2) {

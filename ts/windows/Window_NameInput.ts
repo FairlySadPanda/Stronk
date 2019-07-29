@@ -78,23 +78,27 @@ export default class Window_NameInput extends Window_Selectable {
         );
     }
 
-    public refresh() {
+    public async refresh() {
         const table = this.table();
         this.contents.clear();
         this.resetTextColor();
+        const promises = [];
         for (let i = 0; i < 90; i++) {
             const rect = this.itemRect(i);
             rect.x += 3;
             rect.width -= 6;
-            this.drawText(
-                table[this._page][i],
-                rect.x,
-                rect.y,
-                rect.width,
-                undefined,
-                "center"
+            promises.push(
+                this.drawText(
+                    table[this._page][i],
+                    rect.x,
+                    rect.y,
+                    rect.width,
+                    undefined,
+                    "center"
+                )
             );
         }
+        await Promise.all(promises);
     }
 
     public updateCursor() {

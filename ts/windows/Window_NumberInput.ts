@@ -208,13 +208,13 @@ export default class Window_NumberInput extends Window_Selectable {
         this.close();
     }
 
-    public drawItem(index) {
+    public async drawItem(index) {
         const rect = this.itemRect(index);
         const align = "center";
         const s = Utils.padZero(this._number, this._maxDigits);
         const c = s.slice(index, index + 1);
         this.resetTextColor();
-        this.drawText(c, rect.x, rect.y, rect.width, undefined, align);
+        await this.drawText(c, rect.x, rect.y, rect.width, undefined, align);
     }
 
     public onButtonUp() {

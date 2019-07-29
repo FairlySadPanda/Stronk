@@ -293,12 +293,14 @@ export default class Window_BattleLog extends Window_Selectable {
         return 12;
     }
 
-    public refresh() {
+    public async refresh() {
         this.drawBackground();
         this.contents.clear();
+        const promises = [];
         for (let i = 0; i < this._lines.length; i++) {
-            this.drawLineText(i);
+            promises.push(this.drawLineText(i));
         }
+        await Promise.all(promises);
     }
 
     public drawBackground() {

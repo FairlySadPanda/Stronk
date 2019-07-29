@@ -113,35 +113,42 @@ export default class Window_ShopNumber extends Window_Selectable {
         }
     }
 
-    public refresh() {
+    public async refresh() {
         this.contents.clear();
-        this.drawItemName(this._item, 0, this.itemY());
-        this.drawMultiplicationSign();
-        this.drawNumber();
-        this.drawTotalPrice();
+        await this.drawItemName(this._item, 0, this.itemY());
+        await this.drawMultiplicationSign();
+        await this.drawNumber();
+        await this.drawTotalPrice();
     }
 
-    public drawMultiplicationSign() {
+    public async drawMultiplicationSign() {
         const sign = "\u00d7";
         const width = this.textWidth(sign);
         const x = this.cursorX() - width * 2;
         const y = this.itemY();
         this.resetTextColor();
-        this.drawText(sign, x, y, width);
+        await this.drawText(sign, x, y, width);
     }
 
-    public drawNumber() {
+    public async drawNumber() {
         const x = this.cursorX();
         const y = this.itemY();
         const width = this.cursorWidth() - this.textPadding();
         this.resetTextColor();
-        this.drawText(this._number.toString(), x, y, width, undefined, "right");
+        await this.drawText(
+            this._number.toString(),
+            x,
+            y,
+            width,
+            undefined,
+            "right"
+        );
     }
 
-    public drawTotalPrice() {
+    public async drawTotalPrice() {
         const total = this._price * this._number;
         const width = this.contentsWidth() - this.textPadding();
-        this.drawCurrencyValue(
+        await this.drawCurrencyValue(
             total,
             this._currencyUnit,
             0,

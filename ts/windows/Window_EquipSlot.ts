@@ -38,19 +38,19 @@ export default class Window_EquipSlot extends Window_Selectable {
         return this._actor ? this._actor.equips()[this.index()] : null;
     }
 
-    public drawItem(index) {
+    public async drawItem(index) {
         if (this._actor) {
             const rect = this.itemRectForText(index);
             this.changeTextColor(this.systemColor());
             this.changePaintOpacity(this.isEnabled(index));
-            this.drawText(
+            await this.drawText(
                 this.slotName(index),
                 rect.x,
                 rect.y,
                 138,
                 this.lineHeight()
             );
-            this.drawItemName(
+            await this.drawItemName(
                 this._actor.equips()[index],
                 rect.x + 138,
                 rect.y

@@ -36,15 +36,15 @@ export default class Window_BattleStatus extends Window_Selectable {
         return $gameParty.battleMembers().length;
     }
 
-    public refresh() {
+    public async refresh() {
         this.contents.clear();
-        this.drawAllItems();
+        await this.drawAllItems();
     }
 
-    public drawItem(index) {
+    public async drawItem(index) {
         const actor = $gameParty.battleMembers()[index];
-        this.drawBasicArea(this.basicAreaRect(index), actor);
-        this.drawGaugeArea(this.gaugeAreaRect(index), actor);
+        await this.drawBasicArea(this.basicAreaRect(index), actor);
+        await this.drawGaugeArea(this.gaugeAreaRect(index), actor);
     }
 
     public basicAreaRect(index) {

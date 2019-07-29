@@ -122,12 +122,12 @@ export default class Window_Command extends Window_Selectable {
         }
     }
 
-    public drawItem(index) {
+    public async drawItem(index) {
         const rect = this.itemRectForText(index);
         const align = this.itemTextAlign();
         this.resetTextColor();
         this.changePaintOpacity(this.isCommandEnabled(index));
-        this.drawText(
+        await this.drawText(
             this.commandName(index),
             rect.x,
             rect.y,
@@ -156,10 +156,10 @@ export default class Window_Command extends Window_Selectable {
         }
     }
 
-    public refresh() {
+    public async refresh() {
         this.clearCommandList();
         this.makeCommandList();
         this.createContents();
-        super.refresh();
+        await super.refresh();
     }
 }

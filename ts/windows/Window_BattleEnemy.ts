@@ -57,11 +57,11 @@ export default class Window_BattleEnemy extends Window_Selectable {
         return enemy ? enemy.index() : -1;
     }
 
-    public drawItem(index) {
+    public async drawItem(index) {
         this.resetTextColor();
         const name = this._enemies[index].name();
         const rect = this.itemRectForText(index);
-        this.drawText(name, rect.x, rect.y, rect.width);
+        await this.drawText(name, rect.x, rect.y, rect.width);
     }
 
     public show() {
@@ -75,9 +75,9 @@ export default class Window_BattleEnemy extends Window_Selectable {
         $gameTroop.select(null);
     }
 
-    public refresh() {
+    public async refresh() {
         this.__enemies = $gameTroop.aliveMembers();
-        super.refresh();
+        await super.refresh();
     }
 
     public select(index) {
