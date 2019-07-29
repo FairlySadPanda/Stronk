@@ -517,6 +517,10 @@ export default class Window_Base extends Window {
         const sx = ((n % 4) * 3 + 1) * pw;
         const sy = Math.floor(n / 4) * 4 * ph;
         bitmap.imagePromise.then(() => {
+            console.log("drawCharacter() concluded retrieving a bitmap.");
+            console.log(
+                `BITMAP WIDTH: ${bitmap.width}, HEIGHT: ${bitmap.height}`
+            );
             this.contents.blt(bitmap, sx, sy, pw, ph, x - pw / 2, y - ph);
         });
     }

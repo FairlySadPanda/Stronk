@@ -3,7 +3,6 @@ import Graphics from "../core/Graphics";
 import Input from "../core/Input";
 import Sprite from "../core/Sprite";
 import TouchInput from "../core/TouchInput";
-
 import Utils from "../core/Utils";
 import DataManager from "../managers/DataManager";
 import SoundManager from "../managers/SoundManager";

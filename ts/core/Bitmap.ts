@@ -131,6 +131,7 @@ export default class Bitmap {
         const context = bitmap._context;
         const renderTexture = PIXI.RenderTexture.create(width, height);
         if (stage) {
+            // @ts-ignore
             Graphics.renderer.render(stage, renderTexture);
             stage.worldTransform.identity();
             context.drawImage(
@@ -179,7 +180,7 @@ export default class Bitmap {
     private _errorListener: EventListener;
     private _imagePromise: Promise<void>;
 
-    public constructor(width?, height?, defer?) {
+    public constructor(width?: number, height?: number, defer?: boolean) {
         this._defer = defer;
         if (!this._defer) {
             this._createCanvas(width, height);
