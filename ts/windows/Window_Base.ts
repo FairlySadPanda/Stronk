@@ -472,8 +472,9 @@ export default class Window_Base extends Window {
         return textHeight;
     }
 
-    public drawIcon(iconIndex, x, y) {
+    public async drawIcon(iconIndex, x, y) {
         const bitmap = ImageManager.loadSystem("IconSet");
+        await bitmap.imagePromise;
         const pw = Window_Base._iconWidth;
         const ph = Window_Base._iconHeight;
         const sx = (iconIndex % 16) * pw;
@@ -481,7 +482,7 @@ export default class Window_Base extends Window {
         this.contents.blt(bitmap, sx, sy, pw, ph, x, y);
     }
 
-    public drawFace(
+    public async drawFace(
         faceName: string,
         faceIndex: number,
         x: number,
@@ -492,6 +493,7 @@ export default class Window_Base extends Window {
         width = width || Window_Base._faceWidth;
         height = height || Window_Base._faceHeight;
         const bitmap = ImageManager.loadFace(faceName);
+        await bitmap.imagePromise;
         const pw = Window_Base._faceWidth;
         const ph = Window_Base._faceHeight;
         const sw = Math.min(width, pw);
@@ -549,8 +551,15 @@ export default class Window_Base extends Window {
         this.drawCharacter(actor.characterName(), actor.characterIndex(), x, y);
     }
 
-    public drawActorFace(actor, x, y, width?, height?) {
-        this.drawFace(actor.faceName(), actor.faceIndex(), x, y, width, height);
+    public async drawActorFace(actor, x, y, width?, height?) {
+        await this.drawFace(
+            actor.faceName(),
+            actor.faceIndex(),
+            x,
+            y,
+            width,
+            height
+        );
     }
 
     public drawActorName(
@@ -595,7 +604,7 @@ export default class Window_Base extends Window {
         );
     }
 
-    public drawActorIcons(
+    public async drawActorIcons(
         actor: Game_Actor,
         x: number,
         y: number,
@@ -605,9 +614,13 @@ export default class Window_Base extends Window {
         const icons = actor
             .allIcons()
             .slice(0, Math.floor(width / Window_Base._iconWidth));
+        const promises = [];
         for (let i = 0; i < icons.length; i++) {
-            this.drawIcon(icons[i], x + Window_Base._iconWidth * i, y + 2);
+            promises.push(
+                this.drawIcon(icons[i], x + Window_Base._iconWidth * i, y + 2)
+            );
         }
+        await Promise.all(promises);
     }
 
     public drawCurrentAndMax(current, max, x, y, width, color1, color2) {
@@ -686,13 +699,13 @@ export default class Window_Base extends Window {
         this.drawText(actor.tp, x + width - 64, y, 64, undefined, "right");
     }
 
-    public drawActorSimpleStatus(actor, x, y, width) {
+    public async drawActorSimpleStatus(actor, x, y, width) {
         const lineHeight = this.lineHeight();
         const x2 = x + 180;
         const width2 = Math.min(200, width - 180 - this.textPadding());
         this.drawActorName(actor, x, y);
         this.drawActorLevel(actor, x, y + lineHeight * 1);
-        this.drawActorIcons(actor, x, y + lineHeight * 2);
+        await this.drawActorIcons(actor, x, y + lineHeight * 2);
         this.drawActorClass(actor, x2, y);
         this.drawActorHp(actor, x2, y + lineHeight * 1, width2);
         this.drawActorMp(actor, x2, y + lineHeight * 2, width2);
