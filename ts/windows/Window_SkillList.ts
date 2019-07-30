@@ -84,15 +84,20 @@ export default class Window_SkillList extends Window_Selectable {
         this.select(index >= 0 ? index : 0);
     }
 
-    public drawItem(index) {
+    public async drawItem(index) {
         const skill = this._data[index];
         if (skill) {
             const costWidth = this.costWidth();
             const rect = this.itemRect(index);
             rect.width -= this.textPadding();
             this.changePaintOpacity(this.isEnabled(skill));
-            this.drawItemName(skill, rect.x, rect.y, rect.width - costWidth);
-            this.drawSkillCost(skill, rect.x, rect.y, rect.width);
+            await this.drawItemName(
+                skill,
+                rect.x,
+                rect.y,
+                rect.width - costWidth
+            );
+            await this.drawSkillCost(skill, rect.x, rect.y, rect.width);
             this.changePaintOpacity(1);
         }
     }
@@ -129,9 +134,9 @@ export default class Window_SkillList extends Window_Selectable {
         this.setHelpWindowItem(this.item());
     }
 
-    public refresh() {
+    public async refresh() {
         this.makeItemList();
         this.createContents();
-        this.drawAllItems();
+        await this.drawAllItems();
     }
 }

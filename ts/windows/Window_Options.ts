@@ -46,13 +46,13 @@ export default class Window_Options extends Window_Command {
         this.addCommand(TextManager.seVolume, "seVolume");
     }
 
-    public drawItem(index) {
+    public async drawItem(index) {
         const rect = this.itemRectForText(index);
         const statusWidth = this.statusWidth();
         const titleWidth = rect.width - statusWidth;
         this.resetTextColor();
         this.changePaintOpacity(this.isCommandEnabled(index));
-        this.drawText(
+        await this.drawText(
             this.commandName(index),
             rect.x,
             rect.y,
@@ -60,7 +60,7 @@ export default class Window_Options extends Window_Command {
             undefined,
             "left"
         );
-        this.drawText(
+        await this.drawText(
             this.statusText(index),
             rect.x + titleWidth,
             rect.y,

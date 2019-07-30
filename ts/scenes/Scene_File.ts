@@ -5,7 +5,7 @@ import Window_SavefileList from "../windows/Window_SavefileList";
 import Scene_MenuBase from "./Scene_MenuBase";
 
 export default class Scene_File extends Scene_MenuBase {
-    private _listWindow: any;
+    private _listWindow: Window_SavefileList;
 
     public create() {
         super.create();
@@ -14,7 +14,7 @@ export default class Scene_File extends Scene_MenuBase {
         this.createListWindow();
     }
 
-    public start() {
+    public async start() {
         super.start();
         this._listWindow.refresh();
     }
@@ -40,8 +40,9 @@ export default class Scene_File extends Scene_MenuBase {
         this._listWindow.select(this.firstSavefileIndex());
         this._listWindow.setTopRow(this.firstSavefileIndex() - 2);
         this._listWindow.setMode(this.mode());
-        this._listWindow.refresh();
-        this.addWindow(this._listWindow);
+        this._listWindow.refresh().then(() => {
+            this.addWindow(this._listWindow);
+        });
     }
 
     public mode() {

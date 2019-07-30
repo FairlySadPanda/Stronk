@@ -53,10 +53,10 @@ export default class Window_ShopBuy extends Window_Selectable {
         );
     }
 
-    public refresh() {
+    public async refresh() {
         this.makeItemList();
         this.createContents();
-        this.drawAllItems();
+        await this.drawAllItems();
     }
 
     public makeItemList() {
@@ -82,14 +82,14 @@ export default class Window_ShopBuy extends Window_Selectable {
         }, this);
     }
 
-    public drawItem(index) {
+    public async drawItem(index) {
         const item = this._data[index];
         const rect = this.itemRect(index);
         const priceWidth = 96;
         rect.width -= this.textPadding();
         this.changePaintOpacity(this.isEnabled(item));
-        this.drawItemName(item, rect.x, rect.y, rect.width - priceWidth);
-        this.drawText(
+        await this.drawItemName(item, rect.x, rect.y, rect.width - priceWidth);
+        await this.drawText(
             this.price(item),
             rect.x + rect.width - priceWidth,
             rect.y,

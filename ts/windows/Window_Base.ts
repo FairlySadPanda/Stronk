@@ -256,7 +256,7 @@ export default class Window_Base extends Window {
         this.contents.paintOpacity = enabled ? 255 : this.translucentOpacity();
     }
 
-    public drawText(
+    public async drawText(
         text: string,
         x: number,
         y: number,
@@ -264,7 +264,7 @@ export default class Window_Base extends Window {
         lineHeight?: number,
         align?: string
     ) {
-        this.contents.drawText(
+        await this.contents.drawText(
             text,
             x,
             y,
@@ -503,13 +503,14 @@ export default class Window_Base extends Window {
         this.contents.blt(bitmap, sx, sy, sw, sh, dx, dy);
     }
 
-    public drawCharacter(
+    public async drawCharacter(
         characterName: string,
         characterIndex: number,
         x: number,
         y: number
     ) {
         const bitmap = ImageManager.loadCharacter(characterName);
+        await bitmap.imagePromise;
         const big = ImageManager.isBigCharacter(characterName);
         const pw = bitmap.width / (big ? 3 : 12);
         const ph = bitmap.height / (big ? 4 : 8);

@@ -15,7 +15,7 @@ import Sprite_Destination from "./Sprite_Destination";
 // The set of sprites on the map screen.
 
 export default class Spriteset_Map extends Spriteset_Base {
-    private _characterSprites: any;
+    private _characterSprites: Sprite_Character[];
     private _parallax: TilingSprite;
     private _tilemap: Tilemap;
     private _tileset: any;
@@ -69,11 +69,12 @@ export default class Spriteset_Map extends Spriteset_Base {
         );
         this._tilemap.horizontalWrap = $gameMap.isLoopHorizontal();
         this._tilemap.verticalWrap = $gameMap.isLoopVertical();
-        this.loadTileset();
-        this._baseSprite.addChild(this._tilemap);
+        this.loadTileset().then(() => {
+            this._baseSprite.addChild(this._tilemap);
+        });
     }
 
-    public loadTileset() {
+    public async loadTileset() {
         this._tileset = $gameMap.tileset();
         if (this._tileset) {
             const tilesetNames = this._tileset.tilesetNames;
@@ -82,6 +83,11 @@ export default class Spriteset_Map extends Spriteset_Base {
                     tilesetNames[i]
                 );
             }
+
+            for (const bitmap of this._tilemap.bitmaps) {
+                await bitmap.imagePromise;
+            }
+
             const newTilesetFlags = $gameMap.tilesetFlags();
             this._tilemap.refreshTileset();
             if (!Utils.arrayEquals(this._tilemap.flags, newTilesetFlags)) {

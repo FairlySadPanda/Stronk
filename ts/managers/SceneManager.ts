@@ -19,7 +19,7 @@ export default abstract class SceneManager {
     public static _sceneStarted: boolean;
     public static _exiting: boolean;
     public static _previousClass: any;
-    public static _backgroundBitmap: any;
+    public static _backgroundBitmap: Bitmap;
     public static _screenWidth: number;
     public static _screenHeight: number;
     public static _boxWidth: number;

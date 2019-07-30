@@ -3,7 +3,6 @@ import Graphics from "../core/Graphics";
 import Input from "../core/Input";
 import Sprite from "../core/Sprite";
 import TouchInput from "../core/TouchInput";
-
 import Utils from "../core/Utils";
 import DataManager from "../managers/DataManager";
 import SoundManager from "../managers/SoundManager";
@@ -294,12 +293,14 @@ export default class Window_BattleLog extends Window_Selectable {
         return 12;
     }
 
-    public refresh() {
+    public async refresh() {
         this.drawBackground();
         this.contents.clear();
+        const promises = [];
         for (let i = 0; i < this._lines.length; i++) {
-            this.drawLineText(i);
+            promises.push(this.drawLineText(i));
         }
+        await Promise.all(promises);
     }
 
     public drawBackground() {

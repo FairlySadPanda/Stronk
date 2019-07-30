@@ -83,7 +83,7 @@ export default class Window_ItemList extends Window_Selectable {
         this.select(index >= 0 ? index : 0);
     }
 
-    public drawItem(index) {
+    public async drawItem(index) {
         const item = this._data[index];
         if (item) {
             const numberWidth = this.numberWidth();
@@ -125,7 +125,7 @@ export default class Window_ItemList extends Window_Selectable {
         this.setHelpWindowItem(this.item());
     }
 
-    public refresh() {
+    public async refresh() {
         this.makeItemList();
         this.createContents();
         this.drawAllItems();

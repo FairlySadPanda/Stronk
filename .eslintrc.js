@@ -54,6 +54,7 @@ module.exports = {
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "no-control-regex": "off",
-        "no-eval": "off"
+        "no-eval": "off",
+        "no-unused-expressions": "off"
     }
 };

@@ -10,7 +10,7 @@ import Window_Command from "./Window_Command";
 export default class Window_MenuCommand extends Window_Command {
     private static _lastCommandSymbol = null;
 
-    private static initCommandPosition() {
+    public static initCommandPosition() {
         this._lastCommandSymbol = null;
     }
 
@@ -79,6 +79,7 @@ export default class Window_MenuCommand extends Window_Command {
         const enabled = this.isGameEndEnabled();
         this.addCommand(TextManager.gameEnd, "gameEnd", enabled);
     }
+
 
     public needsCommand(name: string): boolean {
         const flags = $dataSystem.menuCommands;

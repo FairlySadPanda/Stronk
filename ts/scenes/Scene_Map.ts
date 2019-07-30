@@ -168,7 +168,8 @@ export default class Scene_Map extends Scene_Base {
     public needsSlowFadeOut() {
         return (
             SceneManager.isNextScene(Scene_Title) ||
-            SceneManager.isNextScene(Scene_Gameover)
+            SceneManager.isNextScene(Scene_Gameover) ||
+            SceneManager.isNextScene(Scene_Battle)
         );
     }
 

@@ -312,7 +312,7 @@ export default class Tilemap extends PIXI.Container {
     public _layerWidth: number;
     public _layerHeight: number;
     public _lastTiles: any[];
-    public bitmaps: any[];
+    public bitmaps: Bitmap[];
     public origin: any;
     public flags: any[];
     public animationCount: number;

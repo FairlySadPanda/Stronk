@@ -1,6 +1,5 @@
 import Graphics from "../core/Graphics";
 import Input from "../core/Input";
-
 import Window_Command from "./Window_Command";
 
 // -----------------------------------------------------------------------------
@@ -108,7 +107,7 @@ export default class Window_ChoiceList extends Window_Command {
         }
     }
 
-    public drawItem(index) {
+    public async drawItem(index) {
         const rect = this.itemRectForText(index);
         this.drawTextEx(this.commandName(index), rect.x, rect.y);
     }

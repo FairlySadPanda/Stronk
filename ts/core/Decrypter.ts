@@ -2,11 +2,10 @@ import AudioManager from "../managers/AudioManager";
 import Bitmap from "./Bitmap";
 
 export default class Decrypter {
-    private static _ignoreList: any[] = [];
+    private static _ignoreList: any = [];
     private static _headerlength: number;
     private static _encryptionKey: any;
     private static _xhrOk: any;
-
     public static status: any;
     public static SIGNATURE: any;
     public static VER: any;

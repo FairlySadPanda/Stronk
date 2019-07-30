@@ -1,5 +1,4 @@
-import * as PIXI from "pixi.js";
-
+import "pixi.js";
 import "pixi-picture";
 import "pixi-tilemap";
 

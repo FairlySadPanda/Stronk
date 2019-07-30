@@ -387,8 +387,8 @@ export default class Game_Party extends Game_Unit {
         this._targetActorId = actor.actorId();
     }
 
-    public lastItem() {
-        return this._lastItem.object();
+    public lastItem(): Game_Item | null {
+        return this._lastItem ? this._lastItem.object() : null;
     }
 
     public setLastItem(item) {

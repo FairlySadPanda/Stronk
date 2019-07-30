@@ -51,13 +51,13 @@ export default class Window_MenuStatus extends Window_Selectable {
         }, this);
     }
 
-    public drawItem(index) {
-        this.drawItemBackground(index);
-        this.drawItemImage(index);
-        this.drawItemStatus(index);
+    public async drawItem(index) {
+        await this.drawItemBackground(index);
+        await this.drawItemImage(index);
+        await this.drawItemStatus(index);
     }
 
-    public drawItemBackground(index) {
+    public async drawItemBackground(index) {
         if (index === this._pendingIndex) {
             const rect = this.itemRect(index);
             const color = this.pendingColor();
@@ -73,11 +73,11 @@ export default class Window_MenuStatus extends Window_Selectable {
         }
     }
 
-    public drawItemImage(index) {
+    public async drawItemImage(index) {
         const actor = $gameParty.members()[index];
         const rect = this.itemRect(index);
         this.changePaintOpacity(actor.isBattleMember());
-        this.drawActorFace(
+        await this.drawActorFace(
             actor,
             rect.x + 1,
             rect.y + 1,
@@ -87,13 +87,13 @@ export default class Window_MenuStatus extends Window_Selectable {
         this.changePaintOpacity(true);
     }
 
-    public drawItemStatus(index) {
+    public async drawItemStatus(index) {
         const actor = $gameParty.members()[index];
         const rect = this.itemRect(index);
         const x = rect.x + 162;
         const y = rect.y + rect.height / 2 - this.lineHeight() * 1.5;
         const width = rect.width - x - this.textPadding();
-        this.drawActorSimpleStatus(actor, x, y, width);
+        await this.drawActorSimpleStatus(actor, x, y, width);
     }
 
     public processOk() {

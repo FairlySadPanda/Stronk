@@ -1,6 +1,5 @@
 import Graphics from "../core/Graphics";
 import Input from "../core/Input";
-
 import Utils from "../core/Utils";
 import Window_Selectable from "./Window_Selectable";
 
@@ -65,12 +64,12 @@ export default class Window_DebugRange extends Window_Selectable {
         }
     }
 
-    public refresh() {
+    public async refresh() {
         this.createContents();
-        this.drawAllItems();
+        await this.drawAllItems();
     }
 
-    public drawItem(index) {
+    public async drawItem(index) {
         const rect = this.itemRectForText(index);
         let start;
         let text;
@@ -84,7 +83,7 @@ export default class Window_DebugRange extends Window_Selectable {
         const end = start + 9;
         text +=
             " [" + Utils.padZero(start, 4) + "-" + Utils.padZero(end, 4) + "]";
-        this.drawText(text, rect.x, rect.y, rect.width);
+        await this.drawText(text, rect.x, rect.y, rect.width);
     }
 
     public isCancelTriggered() {

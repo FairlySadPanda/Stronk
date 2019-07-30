@@ -19,32 +19,35 @@ export default class Spriteset_Battle extends Spriteset_Base {
     private _battleField: Sprite;
     private _back1Sprite: TilingSprite;
     private _back2Sprite: TilingSprite;
-    private _enemySprites: any[];
-    private _actorSprites: any[];
+    private _enemySprites: Sprite_Enemy[];
+    private _actorSprites: Sprite_Actor[];
+    private _loadingDone: boolean;
 
     public constructor() {
         super();
         this._battlebackLocated = false;
     }
 
-    public createLowerLayer() {
+    public async createLowerLayer() {
         super.createLowerLayer();
         this.createBackground();
         this.createBattleField();
-        this.createBattleback();
-        this.createEnemies();
-        this.createActors();
+        this.createBattleback().then(() => {
+            this.createEnemies().then(() => {
+                this._loadingDone = true;
+                this.createActors();
+            });
+        });
     }
 
     public createBackground() {
-        this._backgroundSprite = new Sprite();
-        this._backgroundSprite.bitmap = SceneManager.backgroundBitmap();
+        this._backgroundSprite = new Sprite(SceneManager.backgroundBitmap());
         this._baseSprite.addChild(this._backgroundSprite);
     }
 
     public update() {
         super.update();
-        this.updateActors();
+        this._loadingDone ? this.updateActors() : null;
         this.updateBattleback();
     }
 
@@ -60,19 +63,19 @@ export default class Spriteset_Battle extends Spriteset_Base {
         this._baseSprite.addChild(this._battleField);
     }
 
-    public createBattleback() {
+    public async createBattleback() {
         const margin = 32;
         const x = -this._battleField.x - margin;
         const y = -this._battleField.y - margin;
         const width = Graphics.width + margin * 2;
         const height = Graphics.height + margin * 2;
-        this._back1Sprite = new TilingSprite();
-        this._back2Sprite = new TilingSprite();
-        this._back1Sprite.bitmap = this.battleback1Bitmap();
-        this._back2Sprite.bitmap = this.battleback2Bitmap();
+        this._back1Sprite = new TilingSprite(this.battleback1Bitmap());
+        this._back2Sprite = new TilingSprite(this.battleback2Bitmap());
+        await this._back1Sprite.bitmap.imagePromise;
+        await this._back2Sprite.bitmap.imagePromise;
         this._back1Sprite.move(x, y, width, height);
-        this._back2Sprite.move(x, y, width, height);
         this._battleField.addChild(this._back1Sprite);
+        this._back2Sprite.move(x, y, width, height);
         this._battleField.addChild(this._back2Sprite);
     }
 
@@ -88,8 +91,13 @@ export default class Spriteset_Battle extends Spriteset_Base {
         const height = this._battleField.height;
         const sprite1 = this._back1Sprite;
         const sprite2 = this._back2Sprite;
-        sprite1.origin.x = sprite1.x + (sprite1.bitmap.width - width) / 2;
-        sprite2.origin.x = sprite1.y + (sprite2.bitmap.width - width) / 2;
+        sprite1.bitmap.imagePromise.then(() => {
+            sprite1.origin.x = sprite1.x + (sprite1.bitmap.width - width) / 2;
+        });
+        sprite2.bitmap.imagePromise.then(() => {
+            sprite2.origin.x = sprite1.y + (sprite2.bitmap.width - width) / 2;
+        });
+
         if ($gameSystem.isSideView()) {
             sprite1.origin.y = sprite1.x + sprite1.bitmap.height - height;
             sprite2.origin.y = sprite1.y + sprite2.bitmap.height - height;
@@ -245,9 +253,9 @@ export default class Spriteset_Battle extends Spriteset_Base {
         return $gameMap.autotileType($gamePlayer.x, $gamePlayer.y, z);
     }
 
-    public createEnemies() {
+    public async createEnemies() {
         const enemies = $gameTroop.members();
-        const sprites = [];
+        const sprites: Sprite_Enemy[] = [];
         for (let i = 0; i < enemies.length; i++) {
             sprites[i] = new Sprite_Enemy(enemies[i]);
         }

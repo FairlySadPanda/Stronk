@@ -2,6 +2,7 @@ import Sprite from "../core/Sprite";
 import ImageManager from "../managers/ImageManager";
 import Sprite_Balloon from "./Sprite_Balloon";
 import Sprite_Base from "./Sprite_Base";
+import Game_Character from "../objects/Game_Character";
 
 // -----------------------------------------------------------------------------
 // Sprite_Character
@@ -9,7 +10,7 @@ import Sprite_Base from "./Sprite_Base";
 // The sprite for displaying a character.
 
 export default class Sprite_Character extends Sprite_Base {
-    private _character: any;
+    private _character: Game_Character;
     private _balloonDuration: number;
     private _tilesetId: number;
     private _upperBody: any;
@@ -21,7 +22,7 @@ export default class Sprite_Character extends Sprite_Base {
     private _bushDepth: number;
     private _balloonSprite: any;
 
-    public constructor(character) {
+    public constructor(character: Game_Character) {
         super();
         this.initMembers();
         this.setCharacter(character);
@@ -59,7 +60,7 @@ export default class Sprite_Character extends Sprite_Base {
     }
 
     public isTile() {
-        return this._character.tileId > 0;
+        return this._character.tileId() > 0;
     }
 
     public tilesetBitmap(tileId) {
