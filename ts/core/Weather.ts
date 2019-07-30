@@ -58,10 +58,10 @@ export default class Weather extends PIXI.Container {
      *
      * @method update
      */
-    public update() {
+    public update = function() {
         this._updateDimmer();
         this._updateAllSprites();
-    }
+    };
 
     /**
      * @method _createBitmaps

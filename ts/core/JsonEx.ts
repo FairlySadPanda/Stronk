@@ -179,7 +179,7 @@ export default abstract class JsonEx {
             registry[value["@c"]] = value;
 
             if (value["@"]) {
-                const constructor = window[value["@"]];
+                const constructor: any = window[value["@"]];
                 if (constructor) {
                     value = this._resetPrototype(value, constructor.prototype);
                 }

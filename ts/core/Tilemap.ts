@@ -289,7 +289,7 @@ export default class Tilemap extends PIXI.Container {
     public lowerLayer: any;
     public upperLayer: any;
     public roundPixels: any;
-    public lowerZLayer: any;
+    public lowerZLayer: PIXI.tilemap.ZLayer;
     public upperZLayer: PIXI.tilemap.ZLayer;
     public animationFrame: number;
     public _needsRepaint: boolean;
@@ -477,7 +477,7 @@ export default class Tilemap extends PIXI.Container {
      */
     public refreshTileset() {
         const bitmaps = this.bitmaps.map(function(x) {
-            return x._baseTexture ? new PIXI.Texture(x._baseTexture) : x;
+            return x.baseTexture ? new PIXI.Texture(x.baseTexture) : x;
         });
         this.lowerLayer.setBitmaps(bitmaps);
         this.upperLayer.setBitmaps(bitmaps);
@@ -594,7 +594,6 @@ export default class Tilemap extends PIXI.Container {
         this._needsRepaint = true;
 
         if (!this.lowerZLayer) {
-            // @hackerham: create layers only in initialization. Doesn't depend on width/height
             this.addChild(
                 (this.lowerZLayer = new PIXI.tilemap.ZLayer(this, 0))
             );

@@ -421,7 +421,7 @@ export default class Bitmap {
      */
     public getAlphaPixel(x: number, y: number): string {
         const data = this._context.getImageData(x, y, 1, 1).data;
-        return data[3];
+        return data[3].toString();
     }
 
     /**
@@ -556,7 +556,7 @@ export default class Bitmap {
         y: number,
         maxWidth: number,
         lineHeight: number,
-        align?: string
+        align?: CanvasTextAlign
     ) {
         // Note: Firefox has a bug with textBaseline: Bug 737852
         //       So we use 'alphabetic' here.
@@ -609,7 +609,7 @@ export default class Bitmap {
         y: number,
         maxWidth: number,
         lineHeight: number,
-        align: string
+        align: CanvasTextAlign
     ) {
         const minFontSize = Bitmap.minFontSize;
         const bitmap = Bitmap.drawSmallTextBitmap;
