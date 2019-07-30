@@ -2,7 +2,7 @@ import AudioManager from "../managers/AudioManager";
 import Bitmap from "./Bitmap";
 
 export default class Decrypter {
-    private static _ignoreList: any;
+    private static _ignoreList: any = [];
     public static status: any;
     private static _xhrOk: any;
     private static _headerlength: number;

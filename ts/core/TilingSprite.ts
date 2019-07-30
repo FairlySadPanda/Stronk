@@ -4,6 +4,7 @@ import Point from "./Point";
 import Rectangle from "./Rectangle";
 import Sprite from "./Sprite";
 import Utils from "./Utils";
+import Bitmap from "./Bitmap";
 
 export default class TilingSprite extends PIXI.extras.TilingSprite {
     /**
@@ -40,10 +41,10 @@ export default class TilingSprite extends PIXI.extras.TilingSprite {
     public set opacity(value: number) {
         this.alpha = Utils.clamp(value, 0, 255) / 255;
     }
-    public tilingTexture: any;
 
-    public _bitmap: any;
-    public _frame: Rectangle;
+    private _bitmap: Bitmap;
+    private _frame: Rectangle;
+    public tilingTexture: any;
     public spriteId: number;
 
     /**
@@ -78,27 +79,18 @@ export default class TilingSprite extends PIXI.extras.TilingSprite {
         }
     }
 
-    public _renderCanvas(renderer: PIXI.CanvasRenderer) {
-        if (this._bitmap) {
-            this._bitmap.touch();
-        }
-        if (this.texture.frame.width > 0 && this.texture.frame.height > 0) {
-            super._renderCanvas(renderer);
-        }
-    }
-
     /**
      * Updates the tiling sprite for each frame.
      *
      * @method update
      */
-    public update() {
+    public update = function() {
         for (const child of this.children) {
             if (child instanceof TilingSprite) {
                 child.update();
             }
         }
-    }
+    };
     /**
      * Sets the x, y, width, and height all at once.
      *

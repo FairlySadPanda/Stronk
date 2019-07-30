@@ -14,7 +14,7 @@ export default class Bitmap {
         return this.__canvas;
     }
 
-    private get _context() {
+    private get _context(): CanvasRenderingContext2D {
         if (!this.__context) {
             this._createCanvas();
         }
@@ -40,24 +40,16 @@ export default class Bitmap {
         return this._canvas;
     }
 
-    public get context() {
+    public get context(): CanvasRenderingContext2D {
         return this._context;
     }
 
     public get width() {
-        if (this.isReady()) {
-            return this._image ? this._image.width : this._canvas.width;
-        }
-
-        return 0;
+        return this._image ? this._image.width : this._canvas.width;
     }
 
     public get height() {
-        if (this.isReady()) {
-            return this._image ? this._image.height : this._canvas.height;
-        }
-
-        return 0;
+        return this._image ? this._image.height : this._canvas.height;
     }
 
     public get rect() {
@@ -142,6 +134,7 @@ export default class Bitmap {
         }
         renderTexture.destroy(true);
         bitmap._setDirty();
+        bitmap._imagePromise = Promise.resolve();
         return bitmap;
     }
 
@@ -174,7 +167,7 @@ export default class Bitmap {
     private __canvas: HTMLCanvasElement;
     private _loader: () => void;
     private _dirty: any;
-    private __context: any;
+    private __context: CanvasRenderingContext2D;
     private __baseTexture: PIXI.BaseTexture;
     private _loadListener: EventListener;
     private _errorListener: EventListener;
@@ -557,7 +550,7 @@ export default class Bitmap {
      * @param {Number} lineHeight The height of the text line
      * @param {String} align The alignment of the text
      */
-    public async drawText(
+    public drawText(
         text: string,
         x: number,
         y: number,
@@ -569,14 +562,7 @@ export default class Bitmap {
         //       So we use 'alphabetic' here.
         if (text !== undefined) {
             if (this.fontSize < Bitmap.minFontSize) {
-                await this.drawSmallText(
-                    text,
-                    x,
-                    y,
-                    maxWidth,
-                    lineHeight,
-                    align
-                );
+                this.drawSmallText(text, x, y, maxWidth, lineHeight, align);
                 return;
             }
             let tx = x;
@@ -598,9 +584,9 @@ export default class Bitmap {
             context.textAlign = align;
             context.textBaseline = "alphabetic";
             context.globalAlpha = 1;
-            await this._drawTextOutline(text, tx, ty, maxWidth);
+            this._drawTextOutline(text, tx, ty, maxWidth);
             context.globalAlpha = alpha;
-            await this._drawTextBody(text, tx, ty, maxWidth);
+            this._drawTextBody(text, tx, ty, maxWidth);
             context.restore();
             this._setDirty();
         }

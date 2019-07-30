@@ -75,7 +75,7 @@ export default class Sprite extends PIXI.Sprite {
     private _context: any;
     private _tintTexture: any;
 
-    public constructor(bitmap?) {
+    public constructor(bitmap?: Bitmap) {
         super(new PIXI.Texture(new PIXI.BaseTexture()));
 
         this._bitmap = null;

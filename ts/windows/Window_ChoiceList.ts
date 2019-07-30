@@ -109,7 +109,7 @@ export default class Window_ChoiceList extends Window_Command {
 
     public async drawItem(index) {
         const rect = this.itemRectForText(index);
-        await this.drawTextEx(this.commandName(index), rect.x, rect.y);
+        this.drawTextEx(this.commandName(index), rect.x, rect.y);
     }
 
     public isCancelEnabled() {

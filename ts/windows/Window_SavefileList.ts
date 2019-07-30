@@ -42,7 +42,7 @@ export default class Window_SavefileList extends Window_Selectable {
         if (this._mode === "load") {
             this.changePaintOpacity(valid);
         }
-        this.drawFileId(id, rect.x, rect.y);
+        await this.drawFileId(id, rect.x, rect.y);
         if (info) {
             this.changePaintOpacity(valid);
             await this.drawContents(info, rect, valid);

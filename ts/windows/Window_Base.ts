@@ -278,7 +278,7 @@ export default class Window_Base extends Window {
         return this.contents.measureTextWidth(text);
     }
 
-    public async drawTextEx(text, x, y) {
+    public drawTextEx(text, x, y) {
         if (text) {
             const textState = {
                 index: 0,
@@ -292,7 +292,7 @@ export default class Window_Base extends Window {
             textState.height = this.calcTextHeight(textState, false);
             this.resetFontSettings();
             while (textState.index < textState.text.length) {
-                await this.processCharacter(textState);
+                this.processCharacter(textState);
             }
             return textState.x - x;
         } else {
@@ -510,13 +510,13 @@ export default class Window_Base extends Window {
         y: number
     ) {
         const bitmap = ImageManager.loadCharacter(characterName);
+        await bitmap.imagePromise;
         const big = ImageManager.isBigCharacter(characterName);
         const pw = bitmap.width / (big ? 3 : 12);
         const ph = bitmap.height / (big ? 4 : 8);
         const n = big ? 0 : characterIndex;
         const sx = ((n % 4) * 3 + 1) * pw;
         const sy = Math.floor(n / 4) * 4 * ph;
-        await bitmap.imagePromise;
         this.contents.blt(bitmap, sx, sy, pw, ph, x - pw / 2, y - ph);
     }
 

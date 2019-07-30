@@ -18,7 +18,7 @@ import Game_Character from "./Game_Character";
 export interface Game_Interpreter_OnLoad {
     _depth: any;
     _branch: {};
-    _params: any[];
+    _params: number | string[];
     _indent: number;
     _frameCount: number;
     _freezeChecker: number;
@@ -174,7 +174,7 @@ export default class Game_Interpreter {
 
     private _depth: any;
     private _branch: {};
-    private _params: any[];
+    private _params: number | string[];
     private _indent: number;
     private _frameCount: number;
     private _freezeChecker: number;

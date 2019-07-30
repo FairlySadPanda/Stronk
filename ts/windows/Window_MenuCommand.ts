@@ -10,7 +10,7 @@ import Window_Command from "./Window_Command";
 export default class Window_MenuCommand extends Window_Command {
     private static _lastCommandSymbol = null;
 
-    private static initCommandPosition() {
+    public static initCommandPosition() {
         this._lastCommandSymbol = null;
     }
 
@@ -80,7 +80,7 @@ export default class Window_MenuCommand extends Window_Command {
         this.addCommand(TextManager.gameEnd, "gameEnd", enabled);
     }
 
-    public needsCommand = function(name) {
+    public needsCommand(name: string) {
         const flags = $dataSystem.menuCommands;
         if (flags) {
             switch (name) {
@@ -99,7 +99,7 @@ export default class Window_MenuCommand extends Window_Command {
             }
         }
         return true;
-    };
+    }
 
     public areMainCommandsEnabled() {
         return $gameParty.exists();

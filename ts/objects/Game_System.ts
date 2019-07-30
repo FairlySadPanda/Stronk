@@ -13,7 +13,7 @@ interface Game_System_OnLoad {
     _framesOnSave: number;
     _bgmOnSave: any;
     _bgsOnSave: any;
-    _windowTone: any;
+    _windowTone: number[];
     _battleBgm: any;
     _victoryMe: any;
     _defeatMe: any;
@@ -34,7 +34,7 @@ export default class Game_System {
     private _framesOnSave: number;
     private _bgmOnSave: any;
     private _bgsOnSave: any;
-    private _windowTone: any;
+    private _windowTone: number[];
     private _battleBgm: any;
     private _victoryMe: any;
     private _defeatMe: any;
@@ -74,7 +74,7 @@ export default class Game_System {
             this._framesOnSave = 0;
             this._bgmOnSave = null;
             this._bgsOnSave = null;
-            this._windowTone = null;
+            this._windowTone = [0, 0, 0];
             this._battleBgm = null;
             this._victoryMe = null;
             this._defeatMe = null;
