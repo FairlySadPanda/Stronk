@@ -1,6 +1,7 @@
 import "pixi.js";
 import "pixi-picture";
 import "pixi-tilemap";
+
 import PluginManager from "./managers/PluginManager";
 import SceneManager from "./managers/SceneManager";
 import Scene_Boot from "./scenes/Scene_Boot";

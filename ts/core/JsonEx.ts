@@ -109,7 +109,7 @@ export default abstract class JsonEx {
      * @return {Object}
      * @private
      */
-    private static _encode(value, circular, depth) {
+    private static _encode(value: object, circular: any[], depth: number) {
         depth = depth || 0;
         if (++depth >= this.maxDepth) {
             throw new Error("Object too deep");
@@ -168,6 +168,7 @@ export default abstract class JsonEx {
      * @return {Object}
      * @private
      */
+
     private static _decode(
         value: object,
         circular: object[],

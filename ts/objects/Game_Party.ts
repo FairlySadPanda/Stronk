@@ -49,7 +49,7 @@ export default class Game_Party extends Game_Unit {
         } else {
             this._gold = 0;
             this._steps = 0;
-            this._lastItem = null;
+            this._lastItem = new Game_Item();
             this._menuActorId = 0;
             this._targetActorId = 0;
             this._actors = [];

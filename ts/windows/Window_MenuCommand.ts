@@ -80,7 +80,8 @@ export default class Window_MenuCommand extends Window_Command {
         this.addCommand(TextManager.gameEnd, "gameEnd", enabled);
     }
 
-    public needsCommand(name: string) {
+
+    public needsCommand(name: string): boolean {
         const flags = $dataSystem.menuCommands;
         if (flags) {
             switch (name) {
