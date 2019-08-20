@@ -41,7 +41,7 @@ export default class Window_NameEdit extends Window_Base {
         return this.fittingHeight(4);
     }
 
-    public name() {
+    public get name() {
         return this._name;
     }
 
