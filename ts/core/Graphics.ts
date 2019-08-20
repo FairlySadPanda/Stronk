@@ -1005,14 +1005,16 @@ export default abstract class Graphics {
      * @private
      */
     public static _centerElement = function(element: HTMLElement) {
+        // @ts-ignore For some reason, "width" must be used here rather than any HTMLElement widths. Presumably this is due to bad typing.
         const width = element.width * Graphics._realScale;
+        // @ts-ignore For some reason, "height" must be used here rather than any HTMLElement heights. Presumably this is due to bad typing.
         const height = element.height * Graphics._realScale;
         element.style.position = "absolute";
         element.style.margin = "auto";
-        element.style.top = 0;
-        element.style.left = 0;
-        element.style.right = 0;
-        element.style.bottom = 0;
+        element.style.top = "0";
+        element.style.left = "0";
+        element.style.right = "0";
+        element.style.bottom = "0";
         element.style.width = width + "px";
         element.style.height = height + "px";
     };
@@ -1193,10 +1195,9 @@ export default abstract class Graphics {
     /**
      * @static
      * @method _switchStretchMode
-     * @return {Boolean}
      * @private
      */
-    public static _switchStretchMode = function(): boolean {
+    public static _switchStretchMode = function() {
         Graphics._stretchEnabled = !Graphics._stretchEnabled;
         Graphics._updateAllElements();
     };
