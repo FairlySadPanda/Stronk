@@ -66,9 +66,3 @@ interface Window {
     $gamePlayer: import("./objects/Game_Player").default;
     $testEvent: any;
 }
-
-declare module "pixi.js" {
-    interface DisplayObject {
-        update?(): void;
-    }
-}
