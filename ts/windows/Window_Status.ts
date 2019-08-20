@@ -3,6 +3,7 @@ import Utils from "../core/Utils";
 import TextManager from "../managers/TextManager";
 import Game_Actor from "../objects/Game_Actor";
 import Window_Selectable from "./Window_Selectable";
+import Item from "../interfaces/Item";
 
 // -----------------------------------------------------------------------------
 // Window_Status
@@ -146,7 +147,11 @@ export default class Window_Status extends Window_Selectable {
         const promises = [];
         for (let i = 0; i < count; i++) {
             promises.push(
-                this.drawItemName(equips[i], x, y + this.lineHeight() * i)
+                this.drawItemName(
+                    equips[i] as Item,
+                    x,
+                    y + this.lineHeight() * i
+                )
             );
         }
         await Promise.all(promises);

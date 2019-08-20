@@ -256,7 +256,7 @@ export default abstract class AudioManager {
             });
             const buffer = AudioManager.createBuffer("se", se.name);
             AudioManager.updateSeParameters(buffer, se);
-            buffer.play(false);
+            buffer.play(false, 0);
             AudioManager._seBuffers.push(buffer);
         }
     }
@@ -290,10 +290,10 @@ export default abstract class AudioManager {
     public static loadStaticSe(se) {
         if (se.name && !AudioManager.isStaticSe(se)) {
             const buffer = AudioManager.createBuffer("se", se.name);
-            buffer.reservedSeName = se.name;
+            (buffer as WebAudio).reservedSeName = se.name;
             AudioManager._staticBuffers.push(buffer);
             if (AudioManager.shouldUseHtml5Audio()) {
-                Html5Audio.setStaticSe(buffer._url);
+                Html5Audio.setStaticSe((buffer as WebAudio).url);
             }
         }
     }

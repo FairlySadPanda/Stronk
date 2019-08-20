@@ -137,7 +137,7 @@ export default class Window_Command extends Window_Selectable {
         );
     }
 
-    public itemTextAlign() {
+    public itemTextAlign(): CanvasTextAlign {
         return "left";
     }
 

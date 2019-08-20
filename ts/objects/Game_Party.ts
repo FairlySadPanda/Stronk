@@ -3,6 +3,7 @@ import DataManager from "../managers/DataManager";
 import TextManager from "../managers/TextManager";
 import Game_Item, { Game_Item_OnLoad } from "./Game_Item";
 import Game_Unit, { Game_Unit_OnLoad } from "./Game_Unit";
+import Item from "../interfaces/Item";
 
 export interface Game_Party_Onload extends Game_Unit_OnLoad {
     _gold: number;
@@ -387,8 +388,8 @@ export default class Game_Party extends Game_Unit {
         this._targetActorId = actor.actorId();
     }
 
-    public lastItem(): Game_Item | null {
-        return this._lastItem ? this._lastItem.object() : null;
+    public lastItem(): Item | null {
+        return this._lastItem ? (this._lastItem.object() as Item) : null;
     }
 
     public setLastItem(item) {

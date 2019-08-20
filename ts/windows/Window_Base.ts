@@ -262,7 +262,7 @@ export default class Window_Base extends Window {
         y: number,
         maxWidth?: number,
         lineHeight?: number,
-        align?: string
+        align?: CanvasTextAlign
     ) {
         await this.contents.drawText(
             text,

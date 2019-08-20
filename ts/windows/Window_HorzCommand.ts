@@ -14,7 +14,7 @@ export default class Window_HorzCommand extends Window_Command {
         return 4;
     }
 
-    public itemTextAlign() {
+    public itemTextAlign(): CanvasTextAlign {
         return "center";
     }
 }

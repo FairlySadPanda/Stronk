@@ -6,6 +6,8 @@ import TextManager from "../managers/TextManager";
 import Game_Action from "./Game_Action";
 import Game_Battler, { Game_Battler_OnLoad } from "./Game_Battler";
 import Game_Item, { Game_Item_OnLoad } from "./Game_Item";
+import Weapon from "../interfaces/Weapon";
+import Armor from "../interfaces/Armor";
 
 export interface Game_Actor_OnLoad extends Game_Battler_OnLoad {
     _actorId: number;
@@ -371,7 +373,8 @@ export default class Game_Actor extends Game_Battler {
                 const item = equips[i];
                 if (
                     item &&
-                    (!this.canEquip(item) || item.etypeId !== slots[i])
+                    (!this.canEquip(item) ||
+                        (item as Weapon).etypeId !== slots[i])
                 ) {
                     if (!forcing) {
                         this.tradeItemWithParty(null, item);
@@ -444,7 +447,7 @@ export default class Game_Actor extends Game_Battler {
 
     public isWtypeEquipped(wtypeId) {
         return this.weapons().some(function(weapon) {
-            return weapon.wtypeId === wtypeId;
+            return (weapon as Weapon).wtypeId === wtypeId;
         });
     }
 
@@ -550,7 +553,7 @@ export default class Game_Actor extends Game_Battler {
         for (let i = 0; i < equips.length; i++) {
             const item = equips[i];
             if (item) {
-                value += item.params[paramId];
+                value += (item as Weapon | Armor).params[paramId];
             }
         }
         return value;
@@ -561,13 +564,13 @@ export default class Game_Actor extends Game_Battler {
             return this.bareHandsAnimationId();
         } else {
             const weapons = this.weapons();
-            return weapons[0] ? weapons[0].animationId : 0;
+            return weapons[0] ? (weapons[0] as Weapon).animationId : 0;
         }
     }
 
     public attackAnimationId2() {
         const weapons = this.weapons();
-        return weapons[1] ? weapons[1].animationId : 0;
+        return weapons[1] ? (weapons[1] as Weapon).animationId : 0;
     }
 
     public bareHandsAnimationId() {
@@ -734,7 +737,7 @@ export default class Game_Actor extends Game_Battler {
 
     public performAttack() {
         const weapons = this.weapons();
-        const wtypeId = weapons[0] ? weapons[0].wtypeId : 0;
+        const wtypeId = weapons[0] ? (weapons[0] as Weapon).wtypeId : 0;
         const attackMotion = $dataSystem.attackMotions[wtypeId];
         if (attackMotion) {
             if (attackMotion.type === 0) {

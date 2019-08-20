@@ -4,6 +4,7 @@ import ConfigManager from "../managers/ConfigManager";
 import TextManager from "../managers/TextManager";
 import Game_Actor from "../objects/Game_Actor";
 import Window_Command from "./Window_Command";
+import Skill from "../interfaces/Skill";
 
 // -----------------------------------------------------------------------------
 // Window_ActorCommand
@@ -93,7 +94,7 @@ export default class Window_ActorCommand extends Window_Command {
             if (symbol === "skill") {
                 const skill = this._actor.lastBattleSkill();
                 if (skill) {
-                    this.selectExt(skill.stypeId);
+                    this.selectExt((skill as Skill).stypeId);
                 }
             }
         }

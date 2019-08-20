@@ -1,5 +1,9 @@
 import Utils from "../core/Utils";
 import Game_Item from "./Game_Item";
+import Weapon from "../interfaces/Weapon";
+import Skill from "../interfaces/Skill";
+import Item from "../interfaces/Item";
+import Armor from "../interfaces/Armor";
 
 export default class Game_Action {
     public static EFFECT_RECOVER_HP = 11;
@@ -111,7 +115,7 @@ export default class Game_Action {
     }
 
     public numRepeats() {
-        let repeats = this.item().repeats;
+        let repeats = (this.item() as Skill | Item).repeats;
         if (this.isAttack()) {
             repeats += this.subject().attackTimesAdd();
         }
@@ -119,7 +123,7 @@ export default class Game_Action {
     }
 
     public checkItemScope(list) {
-        return list.indexOf(this.item().scope) > -1;
+        return list.indexOf((this.item() as Item).scope) > -1;
     }
 
     public isForOpponent() {
@@ -155,11 +159,11 @@ export default class Game_Action {
     }
 
     public numTargets() {
-        return this.isForRandom() ? this.item().scope - 2 : 0;
+        return this.isForRandom() ? (this.item() as Item).scope - 2 : 0;
     }
 
     public checkDamageType(list) {
-        return list.indexOf(this.item().damage.type) > -1;
+        return list.indexOf((this.item() as Item).damage.type) > -1;
     }
 
     public isHpEffect() {
@@ -191,15 +195,24 @@ export default class Game_Action {
     }
 
     public isCertainHit() {
-        return this.item().hitType === Game_Action.HITTYPE_CERTAIN;
+        return (
+            (this.item() as Skill | Item).hitType ===
+            Game_Action.HITTYPE_CERTAIN
+        );
     }
 
     public isPhysical() {
-        return this.item().hitType === Game_Action.HITTYPE_PHYSICAL;
+        return (
+            (this.item() as Skill | Item).hitType ===
+            Game_Action.HITTYPE_PHYSICAL
+        );
     }
 
     public isMagical() {
-        return this.item().hitType === Game_Action.HITTYPE_MAGICAL;
+        return (
+            (this.item() as Skill | Item).hitType ===
+            Game_Action.HITTYPE_MAGICAL
+        );
     }
 
     public isAttack() {
@@ -212,7 +225,11 @@ export default class Game_Action {
 
     public isMagicSkill() {
         if (this.isSkill()) {
-            return $dataSystem.magicSkills.indexOf(this.item().stypeId) > -1;
+            return (
+                $dataSystem.magicSkills.indexOf(
+                    (this.item() as Skill).stypeId
+                ) > -1
+            );
         } else {
             return false;
         }
@@ -254,7 +271,7 @@ export default class Game_Action {
         const agi = this.subject().agi;
         let speed = agi + Utils.randomInt(Math.floor(5 + agi / 4));
         if (this.item()) {
-            speed += this.item().speed;
+            speed += (this.item() as Skill | Item).speed;
         }
         if (this.isAttack()) {
             speed += this.subject().attackSpeed();
@@ -400,7 +417,7 @@ export default class Game_Action {
     }
 
     public hasItemAnyValidEffects(target) {
-        return this.item().effects.some(function(effect) {
+        return (this.item() as Skill | Item).effects.some(function(effect) {
             return this.testItemEffect(target, effect);
         }, this);
     }
@@ -458,9 +475,11 @@ export default class Game_Action {
 
     public itemHit(target) {
         if (this.isPhysical()) {
-            return this.item().successRate * 0.01 * this.subject().hit;
+            return (
+                (this.item() as Item).successRate * 0.01 * this.subject().hit
+            );
         } else {
-            return this.item().successRate * 0.01;
+            return (this.item() as Item).successRate * 0.01;
         }
     }
 
@@ -475,7 +494,7 @@ export default class Game_Action {
     }
 
     public itemCri(target) {
-        return this.item().damage.critical
+        return (this.item() as Item).damage.critical
             ? this.subject().cri * (1 - target.cev)
             : 0;
     }
@@ -490,12 +509,12 @@ export default class Game_Action {
         result.physical = this.isPhysical();
         result.drain = this.isDrain();
         if (result.isHit()) {
-            if (this.item().damage.type > 0) {
+            if ((this.item() as Skill | Item).damage.type > 0) {
                 result.critical = Math.random() < this.itemCri(target);
                 const value = this.makeDamageValue(target, result.critical);
                 this.executeDamage(target, value);
             }
-            this.item().effects.forEach(function(effect) {
+            (this.item() as Skill | Item).effects.forEach(function(effect) {
                 this.applyItemEffect(target, effect);
             }, this);
             this.applyItemUserEffect(target);
@@ -518,7 +537,10 @@ export default class Game_Action {
         if (critical) {
             value = this.applyCritical(value);
         }
-        value = this.applyVariance(value, item.damage.variance);
+        value = this.applyVariance(
+            value,
+            (item as Skill | Item).damage.variance
+        );
         value = this.applyGuard(value, target);
         value = Math.round(value);
         return value;
@@ -530,8 +552,12 @@ export default class Game_Action {
             const a = this.subject();
             const b = target;
             const v = $gameVariables._data;
-            const sign = [3, 4].indexOf(item.damage.type) > -1 ? -1 : 1;
-            let value = Math.max(eval(item.damage.formula), 0) * sign;
+            const sign =
+                [3, 4].indexOf((item as Skill | Item).damage.type) > -1
+                    ? -1
+                    : 1;
+            let value =
+                Math.max(eval((item as Skill | Item).damage.formula), 0) * sign;
             if (isNaN(value)) {
                 value = 0;
             }
@@ -542,13 +568,15 @@ export default class Game_Action {
     }
 
     public calcElementRate(target) {
-        if (this.item().damage.elementId < 0) {
+        if ((this.item() as Skill | Item).damage.elementId < 0) {
             return this.elementsMaxRate(
                 target,
                 this.subject().attackElements()
             );
         } else {
-            return target.elementRate(this.item().damage.elementId);
+            return target.elementRate(
+                (this.item() as Skill | Item).damage.elementId
+            );
         }
     }
 
@@ -813,7 +841,9 @@ export default class Game_Action {
     }
 
     public applyItemUserEffect(target) {
-        const value = Math.floor(this.item().tpGain * this.subject().tcr);
+        const value = Math.floor(
+            (this.item() as Skill | Item).tpGain * this.subject().tcr
+        );
         this.subject().gainSilentTp(value);
     }
 
@@ -822,7 +852,7 @@ export default class Game_Action {
     }
 
     public applyGlobal() {
-        this.item().effects.forEach(function(effect) {
+        (this.item() as Skill | Item).effects.forEach(function(effect) {
             if (effect.code === Game_Action.EFFECT_COMMON_EVENT) {
                 $gameTemp.reserveCommonEvent(effect.dataId);
             }

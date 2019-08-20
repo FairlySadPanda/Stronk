@@ -1,4 +1,8 @@
 import DataManager from "../managers/DataManager";
+import Item from "../interfaces/Item";
+import Skill from "../interfaces/Skill";
+import Weapon from "../interfaces/Weapon";
+import Armor from "../interfaces/Armor";
 
 export interface Game_Item_OnLoad {
     _dataClass: string;
@@ -54,7 +58,7 @@ export default class Game_Item {
         return this._itemId;
     }
 
-    public object() {
+    public object(): Skill | Item | Weapon | Armor | null {
         if (this.isSkill()) {
             return $dataSkills[this._itemId];
         } else if (this.isItem()) {
@@ -68,7 +72,7 @@ export default class Game_Item {
         }
     }
 
-    public setObject(item) {
+    public setObject(item: Skill | Item | Weapon | Armor) {
         if (DataManager.isSkill(item)) {
             this._dataClass = "skill";
         } else if (DataManager.isItem(item)) {
