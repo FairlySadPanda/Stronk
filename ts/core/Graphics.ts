@@ -108,9 +108,7 @@ export default abstract class Graphics {
     public static BLEND_SCREEN: number = 3;
 
     public static renderer: PIXI.WebGLRenderer;
-    public static render: (stage: any) => void;
-    public static isWebGL: () => boolean;
-    public static hasWebGL: () => boolean;
+
     public static canUseDifferenceBlend: () => any;
     public static canUseSaturationBlend: () => any;
     public static setLoadingImage: (src: any) => void;
@@ -295,69 +293,70 @@ export default abstract class Graphics {
             Graphics._fpsMeter.tick();
         }
     };
-}
 
-/**
- * Renders the stage to the game screen.
- *
- * @static
- * @method render
- * @param {Stage} stage The stage object to be rendered
- */
-Graphics.render = function(stage?: Stage) {
-    if (Graphics._skipCount === 0) {
-        const startTime = Date.now();
-        if (stage) {
-            Graphics.renderer.render(stage);
-            if (Graphics.renderer.gl && Graphics.renderer.gl.flush) {
-                Graphics.renderer.gl.flush();
+    /**
+     * Renders the stage to the game screen.
+     *
+     * @static
+     * @method render
+     * @param {Stage} stage The stage object to be rendered
+     */
+    public static render = function(stage?: Stage) {
+        if (Graphics._skipCount === 0) {
+            const startTime = Date.now();
+            if (stage) {
+                Graphics.renderer.render(stage);
+                if (Graphics.renderer.gl && Graphics.renderer.gl.flush) {
+                    Graphics.renderer.gl.flush();
+                }
             }
+            const endTime = Date.now();
+            const elapsed = endTime - startTime;
+            Graphics._skipCount = Math.min(
+                Math.floor(elapsed / 15),
+                Graphics._maxSkip
+            );
+            Graphics._rendered = true;
+        } else {
+            Graphics._skipCount--;
+            Graphics._rendered = false;
         }
-        const endTime = Date.now();
-        const elapsed = endTime - startTime;
-        Graphics._skipCount = Math.min(
-            Math.floor(elapsed / 15),
-            Graphics._maxSkip
-        );
-        Graphics._rendered = true;
-    } else {
-        Graphics._skipCount--;
-        Graphics._rendered = false;
-    }
-    Graphics.frameCount++;
-};
+        Graphics.frameCount++;
+    };
 
-/**
- * Checks whether the renderer type is WebGL.
- *
- * @static
- * @method isWebGL
- * @return {Boolean} True if the renderer type is WebGL
- */
-Graphics.isWebGL = function(): boolean {
-    return (
-        Graphics.renderer && Graphics.renderer.type === PIXI.RENDERER_TYPE.WEBGL
-    );
-};
-
-/**
- * Checks whether the current browser supports WebGL.
- *
- * @static
- * @method hasWebGL
- * @return {Boolean} True if the current browser supports WebGL.
- */
-Graphics.hasWebGL = function(): boolean {
-    try {
-        const canvas = document.createElement("canvas");
-        return !!(
-            canvas.getContext("webgl") ||
-            canvas.getContext("experimental-webgl")
+    /**
+     * Checks whether the renderer type is WebGL.
+     *
+     * @static
+     * @method isWebGL
+     * @return {Boolean} True if the renderer type is WebGL
+     */
+    public static isWebGL = function(): boolean {
+        return (
+            Graphics.renderer &&
+            Graphics.renderer.type === PIXI.RENDERER_TYPE.WEBGL
         );
-    } catch (e) {
-        return false;
-    }
-};
+    };
+
+    /**
+     * Checks whether the current browser supports WebGL.
+     *
+     * @static
+     * @method hasWebGL
+     * @return {Boolean} True if the current browser supports WebGL.
+     */
+    public static hasWebGL = function(): boolean {
+        try {
+            const canvas = document.createElement("canvas");
+            return !!(
+                canvas.getContext("webgl") ||
+                canvas.getContext("experimental-webgl")
+            );
+        } catch (e) {
+            return false;
+        }
+    };
+}
 
 /**
  * Checks whether the canvas blend mode 'difference' is supported.
