@@ -3,7 +3,7 @@ import Decrypter from "./Decrypter";
 export default abstract class Html5Audio {
     private static _initialized = false;
     private static _unlocked = false;
-    private static _audioElement = null;
+    private static _audioElement: HTMLAudioElement = null;
     private static _gainTweenInterval = null;
     private static _tweenGain = 0;
     private static _tweenTargetGain = 0;
@@ -261,7 +261,7 @@ export default abstract class Html5Audio {
      * @param {Boolean} loop Whether the audio data play in a loop
      * @param {Number} offset The start position to play in seconds
      */
-    public static play(loop, offset) {
+    public static play(loop: boolean, offset: number) {
         if (this.isReady()) {
             offset = offset || 0;
             this._startPlaying(loop, offset);
@@ -309,7 +309,7 @@ export default abstract class Html5Audio {
      * @method fadeIn
      * @param {Number} duration Fade-in time in seconds
      */
-    public static fadeIn(duration) {
+    public static fadeIn(duration: number) {
         if (this.isReady()) {
             if (this._audioElement) {
                 this._tweenTargetGain = this._volume;
@@ -332,7 +332,7 @@ export default abstract class Html5Audio {
      * @method fadeOut
      * @param {Number} duration Fade-out time in seconds
      */
-    public static fadeOut(duration) {
+    public static fadeOut(duration: any) {
         if (this._audioElement) {
             this._tweenTargetGain = 0;
             this._tweenGain = this._volume;
@@ -361,7 +361,7 @@ export default abstract class Html5Audio {
      * @method addLoadListener
      * @param {Function} listner The callback function
      */
-    public static addLoadListener(listner) {
+    public static addLoadListener(listner: any) {
         this._loadListeners.push(listner);
     }
 
@@ -371,7 +371,7 @@ export default abstract class Html5Audio {
      * @param {String} url
      * @private
      */
-    public static _load(url) {
+    public static _load(url: string) {
         if (this._audioElement) {
             this._isLoading = true;
             this._audioElement.src = url;
@@ -386,7 +386,7 @@ export default abstract class Html5Audio {
      * @param {Number} offset
      * @private
      */
-    public static _startPlaying(loop, offset) {
+    public static _startPlaying(loop: boolean, offset: number) {
         this._audioElement.loop = loop;
         if (this._gainTweenInterval) {
             clearInterval(this._gainTweenInterval);
@@ -418,7 +418,7 @@ export default abstract class Html5Audio {
      * @params {Number} duration
      * @private
      */
-    public static _startGainTween(duration) {
+    public static _startGainTween(duration: number) {
         this._audioElement.volume = this._tweenGain;
         if (this._gainTweenInterval) {
             clearInterval(this._gainTweenInterval);
@@ -437,7 +437,7 @@ export default abstract class Html5Audio {
      * @param {Number} volume
      * @private
      */
-    public static _applyTweenValue(volume) {
+    public static _applyTweenValue(volume: number) {
         Html5Audio._tweenGain += Html5Audio._tweenGainStep;
         if (Html5Audio._tweenGain < 0 && Html5Audio._tweenGainStep < 0) {
             Html5Audio._tweenGain = 0;
