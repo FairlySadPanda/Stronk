@@ -109,17 +109,6 @@ export default abstract class Graphics {
 
     public static renderer: PIXI.WebGLRenderer;
 
-    public static canUseDifferenceBlend: () => any;
-    public static canUseSaturationBlend: () => any;
-    public static setLoadingImage: (src: any) => void;
-    public static startLoading: () => void;
-    public static updateLoading: () => void;
-    public static endLoading: () => void;
-    public static printLoadingError: (url: any) => void;
-    public static eraseLoadingError: () => void;
-    public static printError: (name: any, message: any) => void;
-    public static showFps: () => void;
-    public static hideFps: () => void;
     public static loadFont: (name: any, url: any) => void;
     public static isFontLoaded: (name: any) => any;
     public static playVideo: (src: any) => void;
@@ -356,160 +345,160 @@ export default abstract class Graphics {
             return false;
         }
     };
+
+    /**
+     * Checks whether the canvas blend mode 'difference' is supported.
+     *
+     * @static
+     * @method canUseDifferenceBlend
+     * @return {Boolean} True if the canvas blend mode 'difference' is supported
+     */
+    public static canUseDifferenceBlend = function(): boolean {
+        return Graphics._canUseDifferenceBlend;
+    };
+
+    /**
+     * Checks whether the canvas blend mode 'saturation' is supported.
+     *
+     * @static
+     * @method canUseSaturationBlend
+     * @return {Boolean} True if the canvas blend mode 'saturation' is supported
+     */
+    public static canUseSaturationBlend = function(): boolean {
+        return Graphics._canUseSaturationBlend;
+    };
+
+    /**
+     * Sets the source of the "Now Loading" image.
+     *
+     * @static
+     * @method setLoadingImage
+     */
+    public static setLoadingImage = function(src) {
+        Graphics._loadingImage = new Image();
+        Graphics._loadingImage.src = src;
+    };
+
+    /**
+     * Initializes the counter for displaying the "Now Loading" image.
+     *
+     * @static
+     * @method startLoading
+     */
+    public static startLoading = function() {
+        Graphics._loadingCount = 0;
+    };
+
+    /**
+     * Increments the loading counter and displays the "Now Loading" image if necessary.
+     *
+     * @static
+     * @method updateLoading
+     */
+    public static updateLoading = function() {
+        Graphics._loadingCount++;
+        Graphics._paintUpperCanvas();
+        Graphics._upperCanvas.style.opacity = 1;
+    };
+
+    /**
+     * Erases the "Now Loading" image.
+     *
+     * @static
+     * @method endLoading
+     */
+    public static endLoading = function() {
+        Graphics._clearUpperCanvas();
+        Graphics._upperCanvas.style.opacity = 0;
+    };
+
+    /**
+     * Displays the loading error text to the screen.
+     *
+     * @static
+     * @method printLoadingError
+     * @param {String} url The url of the resource failed to load
+     */
+    public static printLoadingError = function(url: string) {
+        if (Graphics._errorPrinter && !Graphics._errorShowed) {
+            Graphics._errorPrinter.innerHTML = Graphics._makeErrorHtml(
+                "Loading Error",
+                "Failed to load: " + url
+            );
+            const button = document.createElement("button");
+            button.innerHTML = "Retry";
+            button.style.fontSize = "24px";
+            button.style.color = "#ffffff";
+            button.style.backgroundColor = "#000000";
+            // @ts-ignore
+            button.onmousedown = button.ontouchstart = function(event) {
+                ResourceHandler.retry();
+                event.stopPropagation();
+            };
+            Graphics._errorPrinter.appendChild(button);
+            Graphics._loadingCount = -Infinity;
+        }
+    };
+
+    /**
+     * Erases the loading error text.
+     *
+     * @static
+     * @method eraseLoadingError
+     */
+    public static eraseLoadingError = function() {
+        if (Graphics._errorPrinter && !Graphics._errorShowed) {
+            Graphics._errorPrinter.innerHTML = "";
+            Graphics.startLoading();
+        }
+    };
+
+    /**
+     * Displays the error text to the screen.
+     *
+     * @static
+     * @method printError
+     * @param {String} name The name of the error
+     * @param {String} message The message of the error
+     */
+    public static printError = function(name: string, message: string) {
+        Graphics._errorShowed = true;
+        if (Graphics._errorPrinter) {
+            Graphics._errorPrinter.innerHTML = Graphics._makeErrorHtml(
+                name,
+                message
+            );
+        }
+        Graphics._applyCanvasFilter();
+        Graphics._clearUpperCanvas();
+    };
+
+    /**
+     * Shows the FPSMeter element.
+     *
+     * @static
+     * @method showFps
+     */
+    public static showFps = function() {
+        if (Graphics._fpsMeter) {
+            Graphics._fpsMeter.show();
+            Graphics._modeBox.style.opacity = 1;
+        }
+    };
+
+    /**
+     * Hides the FPSMeter element.
+     *
+     * @static
+     * @method hideFps
+     */
+    public static hideFps = function() {
+        if (Graphics._fpsMeter) {
+            Graphics._fpsMeter.hide();
+            Graphics._modeBox.style.opacity = 0;
+        }
+    };
 }
-
-/**
- * Checks whether the canvas blend mode 'difference' is supported.
- *
- * @static
- * @method canUseDifferenceBlend
- * @return {Boolean} True if the canvas blend mode 'difference' is supported
- */
-Graphics.canUseDifferenceBlend = function(): boolean {
-    return Graphics._canUseDifferenceBlend;
-};
-
-/**
- * Checks whether the canvas blend mode 'saturation' is supported.
- *
- * @static
- * @method canUseSaturationBlend
- * @return {Boolean} True if the canvas blend mode 'saturation' is supported
- */
-Graphics.canUseSaturationBlend = function(): boolean {
-    return Graphics._canUseSaturationBlend;
-};
-
-/**
- * Sets the source of the "Now Loading" image.
- *
- * @static
- * @method setLoadingImage
- */
-Graphics.setLoadingImage = function(src) {
-    Graphics._loadingImage = new Image();
-    Graphics._loadingImage.src = src;
-};
-
-/**
- * Initializes the counter for displaying the "Now Loading" image.
- *
- * @static
- * @method startLoading
- */
-Graphics.startLoading = function() {
-    Graphics._loadingCount = 0;
-};
-
-/**
- * Increments the loading counter and displays the "Now Loading" image if necessary.
- *
- * @static
- * @method updateLoading
- */
-Graphics.updateLoading = function() {
-    Graphics._loadingCount++;
-    Graphics._paintUpperCanvas();
-    Graphics._upperCanvas.style.opacity = 1;
-};
-
-/**
- * Erases the "Now Loading" image.
- *
- * @static
- * @method endLoading
- */
-Graphics.endLoading = function() {
-    Graphics._clearUpperCanvas();
-    Graphics._upperCanvas.style.opacity = 0;
-};
-
-/**
- * Displays the loading error text to the screen.
- *
- * @static
- * @method printLoadingError
- * @param {String} url The url of the resource failed to load
- */
-Graphics.printLoadingError = function(url: string) {
-    if (Graphics._errorPrinter && !Graphics._errorShowed) {
-        Graphics._errorPrinter.innerHTML = Graphics._makeErrorHtml(
-            "Loading Error",
-            "Failed to load: " + url
-        );
-        const button = document.createElement("button");
-        button.innerHTML = "Retry";
-        button.style.fontSize = "24px";
-        button.style.color = "#ffffff";
-        button.style.backgroundColor = "#000000";
-        // @ts-ignore
-        button.onmousedown = button.ontouchstart = function(event) {
-            ResourceHandler.retry();
-            event.stopPropagation();
-        };
-        Graphics._errorPrinter.appendChild(button);
-        Graphics._loadingCount = -Infinity;
-    }
-};
-
-/**
- * Erases the loading error text.
- *
- * @static
- * @method eraseLoadingError
- */
-Graphics.eraseLoadingError = function() {
-    if (Graphics._errorPrinter && !Graphics._errorShowed) {
-        Graphics._errorPrinter.innerHTML = "";
-        Graphics.startLoading();
-    }
-};
-
-/**
- * Displays the error text to the screen.
- *
- * @static
- * @method printError
- * @param {String} name The name of the error
- * @param {String} message The message of the error
- */
-Graphics.printError = function(name: string, message: string) {
-    Graphics._errorShowed = true;
-    if (Graphics._errorPrinter) {
-        Graphics._errorPrinter.innerHTML = Graphics._makeErrorHtml(
-            name,
-            message
-        );
-    }
-    Graphics._applyCanvasFilter();
-    Graphics._clearUpperCanvas();
-};
-
-/**
- * Shows the FPSMeter element.
- *
- * @static
- * @method showFps
- */
-Graphics.showFps = function() {
-    if (Graphics._fpsMeter) {
-        Graphics._fpsMeter.show();
-        Graphics._modeBox.style.opacity = 1;
-    }
-};
-
-/**
- * Hides the FPSMeter element.
- *
- * @static
- * @method hideFps
- */
-Graphics.hideFps = function() {
-    if (Graphics._fpsMeter) {
-        Graphics._fpsMeter.hide();
-        Graphics._modeBox.style.opacity = 0;
-    }
-};
 
 /**
  * Loads a font file.
