@@ -7,6 +7,7 @@ import SceneManager from "../managers/SceneManager";
 import Spriteset_Base from "./Spriteset_Base";
 import Sprite_Actor from "./Sprite_Actor";
 import Sprite_Enemy from "./Sprite_Enemy";
+import Sprite_Battler from "./Sprite_Battler";
 
 // -----------------------------------------------------------------------------
 // Spriteset_Battle
@@ -289,8 +290,8 @@ export default class Spriteset_Battle extends Spriteset_Base {
         }
     }
 
-    public battlerSprites() {
-        return this._enemySprites.concat(this._actorSprites);
+    public battlerSprites(): Sprite_Battler[] {
+        return [...this._enemySprites, ...this._actorSprites];
     }
 
     public isAnimationPlaying() {
