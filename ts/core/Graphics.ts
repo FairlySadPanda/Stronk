@@ -5,6 +5,12 @@ import ResourceHandler from "./ResourceHandler";
 import Stage from "./Stage";
 import Utils from "./Utils";
 
+/**
+ * The Graphics master class for CoreEngine.
+ * This class has a lot of functions which are class properties rather than class methods.
+ * This does not change the functionality of the class, but is indicative of the laziness
+ * of the programmer who ported all the functions into the class definition. - HD, Aug 2019
+ */
 export default abstract class Graphics {
     public static get width(): number {
         return Graphics._width;
