@@ -107,9 +107,8 @@ export default class Sprite extends PIXI.Sprite {
      */
     public update() {
         this.children.forEach(function(child) {
-            if (child.update) {
-                child.update();
-            }
+            // @ts-ignore
+            child.update ? child.update() : null;
         });
     }
 
@@ -265,8 +264,10 @@ export default class Sprite extends PIXI.Sprite {
             );
             this.texture.frame = this._frame;
         }
+        // @ts-ignore Normally this is done via updateUVs but that function causes graphical corruption
         this.texture._updateID++;
     }
+
     /**
      * @method _isInBitmapRect
      * @param {Number} x

@@ -106,9 +106,8 @@ export default class Window extends PIXI.Container {
             this._animationCount++;
         }
         this.children.forEach(function(child) {
-            if (child.update) {
-                child.update();
-            }
+            // @ts-ignore
+            child.update ? child.update() : null;
         });
     }
 
