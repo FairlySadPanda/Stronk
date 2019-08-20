@@ -37,7 +37,7 @@ export default class Scene_Name extends Scene_MenuBase {
     }
 
     public onInputOk() {
-        this._actor.setName(this._editWindow.name());
+        this._actor.setName(this._editWindow.name);
         this.popScene();
     }
 }
