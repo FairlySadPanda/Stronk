@@ -109,59 +109,6 @@ export default abstract class Graphics {
 
     public static renderer: PIXI.WebGLRenderer;
 
-    public static loadFont: (name: any, url: any) => void;
-    public static isFontLoaded: (name: any) => any;
-    public static playVideo: (src: any) => void;
-    public static _playVideo: (src: any) => void;
-    public static isVideoPlaying: () => any;
-    public static canPlayVideoType: (type: any) => any;
-    public static setVideoVolume: (value: any) => void;
-    public static pageToCanvasX: (x: any) => number;
-    public static pageToCanvasY: (y: any) => number;
-    public static isInsideCanvas: (x: any, y: any) => boolean;
-    public static callGC: () => void;
-    public static _createAllElements: () => void;
-    public static _updateAllElements: () => void;
-    public static _updateRealScale: () => void;
-    public static _makeErrorHtml: (name: any, message: any) => string;
-    public static _defaultStretchMode: () => any;
-    public static _testCanvasBlendModes: () => void;
-    public static _modifyExistingElements: () => void;
-    public static _createErrorPrinter: () => void;
-    public static _updateErrorPrinter: () => void;
-    public static _createCanvas: () => void;
-    public static _updateCanvas: () => void;
-    public static _createVideo: () => void;
-    public static _updateVideo: () => void;
-    public static _createUpperCanvas: () => void;
-    public static _updateUpperCanvas: () => void;
-    public static _clearUpperCanvas: () => void;
-    public static _paintUpperCanvas: () => void;
-    public static _createRenderer: () => void;
-    public static _updateRenderer: () => void;
-    public static _createFPSMeter: () => void;
-    public static _createModeBox: () => void;
-    public static _createGameFontLoader: () => void;
-    public static _createFontLoader: (name: any) => void;
-    public static _centerElement: (element: any) => void;
-    public static _disableTextSelection: () => void;
-    public static _disableContextMenu: () => void;
-    public static _applyCanvasFilter: () => void;
-    public static _onVideoLoad: () => void;
-    public static _onVideoError: () => void;
-    public static _onVideoEnd: () => void;
-    public static _updateVisibility: (videoVisible: any) => void;
-    public static _isVideoVisible: () => boolean;
-    public static _setupEventHandlers: () => void;
-    public static _onWindowResize: () => void;
-    public static _onKeyDown: (event: any) => void;
-    public static _onTouchEnd: (event: any) => void;
-    public static _switchFPSMeter: () => void;
-    public static _switchStretchMode: () => void;
-    public static _switchFullScreen: () => void;
-    public static _isFullScreen: () => boolean;
-    public static _requestFullScreen: () => void;
-    public static _cancelFullScreen: () => void;
     public static _rendererType: any;
     public static _boxWidth: any;
     public static _boxHeight: any;
@@ -498,794 +445,800 @@ export default abstract class Graphics {
             Graphics._modeBox.style.opacity = 0;
         }
     };
-}
-
-/**
- * Loads a font file.
- *
- * @static
- * @method loadFont
- * @param {String} name The face name of the font
- * @param {String} url The url of the font file
- */
-Graphics.loadFont = function(name: string, url: string) {
-    const style = document.createElement("style");
-    const head = document.getElementsByTagName("head");
-    const rule =
-        '@font-face { font-family: "' + name + '"; src: url("' + url + '"); }';
-    style.type = "text/css";
-    head.item(0).appendChild(style);
-    if (style.sheet instanceof CSSStyleSheet) {
-        style.sheet.insertRule(rule, 0);
-    }
-    Graphics._createFontLoader(name);
-};
-
-/**
- * Checks whether the font file is loaded.
- *
- * @static
- * @method isFontLoaded
- * @param {String} name The face name of the font
- * @return {Boolean} True if the font file is loaded
- */
-Graphics.isFontLoaded = function(name: string): boolean {
-    if (Graphics._cssFontLoading) {
-        if (Graphics._fontLoaded) {
-            return Graphics._fontLoaded.check('10px "' + name + '"');
+    /**
+     * Loads a font file.
+     *
+     * @static
+     * @method loadFont
+     * @param {String} name The face name of the font
+     * @param {String} url The url of the font file
+     */
+    public static loadFont = function(name: string, url: string) {
+        const style = document.createElement("style");
+        const head = document.getElementsByTagName("head");
+        const rule =
+            '@font-face { font-family: "' +
+            name +
+            '"; src: url("' +
+            url +
+            '"); }';
+        style.type = "text/css";
+        head.item(0).appendChild(style);
+        if (style.sheet instanceof CSSStyleSheet) {
+            style.sheet.insertRule(rule, 0);
         }
+        Graphics._createFontLoader(name);
+    };
 
-        return false;
-    } else {
-        if (!Graphics._hiddenCanvas) {
-            Graphics._hiddenCanvas = document.createElement("canvas");
+    /**
+     * Checks whether the font file is loaded.
+     *
+     * @static
+     * @method isFontLoaded
+     * @param {String} name The face name of the font
+     * @return {Boolean} True if the font file is loaded
+     */
+    public static isFontLoaded = function(name: string): boolean {
+        if (Graphics._cssFontLoading) {
+            if (Graphics._fontLoaded) {
+                return Graphics._fontLoaded.check('10px "' + name + '"');
+            }
+
+            return false;
+        } else {
+            if (!Graphics._hiddenCanvas) {
+                Graphics._hiddenCanvas = document.createElement("canvas");
+            }
+            const context = Graphics._hiddenCanvas.getContext("2d");
+            const text = "abcdefghijklmnopqrstuvwxyz";
+            let width1, width2;
+            context.font = "40px " + name + ", sans-serif";
+            width1 = context.measureText(text).width;
+            context.font = "40px sans-serif";
+            width2 = context.measureText(text).width;
+            return width1 !== width2;
         }
-        const context = Graphics._hiddenCanvas.getContext("2d");
-        const text = "abcdefghijklmnopqrstuvwxyz";
-        let width1, width2;
-        context.font = "40px " + name + ", sans-serif";
-        width1 = context.measureText(text).width;
-        context.font = "40px sans-serif";
-        width2 = context.measureText(text).width;
-        return width1 !== width2;
-    }
-};
+    };
 
-/**
- * Starts playback of a video.
- *
- * @static
- * @method playVideo
- * @param {String} src
- */
-Graphics.playVideo = function(src: string) {
-    Graphics._videoLoader = ResourceHandler.createLoader(
-        null,
-        Graphics._playVideo.bind(this, src),
-        Graphics._onVideoError.bind(this)
-    );
-    Graphics._playVideo(src);
-};
+    /**
+     * Starts playback of a video.
+     *
+     * @static
+     * @method playVideo
+     * @param {String} src
+     */
+    public static playVideo = function(src: string) {
+        Graphics._videoLoader = ResourceHandler.createLoader(
+            null,
+            Graphics._playVideo.bind(this, src),
+            Graphics._onVideoError.bind(this)
+        );
+        Graphics._playVideo(src);
+    };
 
-/**
- * @static
- * @method _playVideo
- * @param {String} src
- * @private
- */
-Graphics._playVideo = function(src: string) {
-    Graphics._video.src = src;
-    Graphics._video.onloadeddata = Graphics._onVideoLoad.bind(this);
-    Graphics._video.onerror = Graphics._videoLoader;
-    Graphics._video.onended = Graphics._onVideoEnd.bind(this);
-    Graphics._video.load();
-    Graphics._videoLoading = true;
-};
+    /**
+     * @static
+     * @method _playVideo
+     * @param {String} src
+     * @private
+     */
+    public static _playVideo = function(src: string) {
+        Graphics._video.src = src;
+        Graphics._video.onloadeddata = Graphics._onVideoLoad.bind(this);
+        Graphics._video.onerror = Graphics._videoLoader;
+        Graphics._video.onended = Graphics._onVideoEnd.bind(this);
+        Graphics._video.load();
+        Graphics._videoLoading = true;
+    };
 
-/**
- * Checks whether the video is playing.
- *
- * @static
- * @method isVideoPlaying
- * @return {Boolean} True if the video is playing
- */
-Graphics.isVideoPlaying = function(): boolean {
-    return Graphics._videoLoading || Graphics._isVideoVisible();
-};
+    /**
+     * Checks whether the video is playing.
+     *
+     * @static
+     * @method isVideoPlaying
+     * @return {Boolean} True if the video is playing
+     */
+    public static isVideoPlaying = function(): boolean {
+        return Graphics._videoLoading || Graphics._isVideoVisible();
+    };
 
-/**
- * Checks whether the browser can play the specified video type.
- *
- * @static
- * @method canPlayVideoType
- * @param {String} type The video type to test support for
- * @return {Boolean} True if the browser can play the specified video type
- */
-Graphics.canPlayVideoType = function(type: string): boolean {
-    return Graphics._video && Graphics._video.canPlayType(type);
-};
+    /**
+     * Checks whether the browser can play the specified video type.
+     *
+     * @static
+     * @method canPlayVideoType
+     * @param {String} type The video type to test support for
+     * @return {Boolean} True if the browser can play the specified video type
+     */
+    public static canPlayVideoType = function(type: string): boolean {
+        return Graphics._video && Graphics._video.canPlayType(type);
+    };
 
-/**
- * Sets volume of a video.
- *
- * @static
- * @method setVideoVolume
- * @param {Number} value
- */
-Graphics.setVideoVolume = function(value: number) {
-    Graphics._videoVolume = value;
-    if (Graphics._video) {
+    /**
+     * Sets volume of a video.
+     *
+     * @static
+     * @method setVideoVolume
+     * @param {Number} value
+     */
+    public static setVideoVolume = function(value: number) {
+        Graphics._videoVolume = value;
+        if (Graphics._video) {
+            Graphics._video.volume = Graphics._videoVolume;
+        }
+    };
+
+    /**
+     * Converts an x coordinate on the page to the corresponding
+     * x coordinate on the canvas area.
+     *
+     * @static
+     * @method pageToCanvasX
+     * @param {Number} x The x coordinate on the page to be converted
+     * @return {Number} The x coordinate on the canvas area
+     */
+    public static pageToCanvasX = function(x: number): number {
+        if (Graphics._canvas) {
+            const left = Graphics._canvas.offsetLeft;
+            return Math.round((x - left) / Graphics._realScale);
+        } else {
+            return 0;
+        }
+    };
+
+    /**
+     * Converts a y coordinate on the page to the corresponding
+     * y coordinate on the canvas area.
+     *
+     * @static
+     * @method pageToCanvasY
+     * @param {Number} y The y coordinate on the page to be converted
+     * @return {Number} The y coordinate on the canvas area
+     */
+    public static pageToCanvasY = function(y: number): number {
+        if (Graphics._canvas) {
+            const top = Graphics._canvas.offsetTop;
+            return Math.round((y - top) / Graphics._realScale);
+        } else {
+            return 0;
+        }
+    };
+
+    /**
+     * Checks whether the specified point is inside the game canvas area.
+     *
+     * @static
+     * @method isInsideCanvas
+     * @param {Number} x The x coordinate on the canvas area
+     * @param {Number} y The y coordinate on the canvas area
+     * @return {Boolean} True if the specified point is inside the game canvas area
+     */
+    public static isInsideCanvas = function(x: number, y: number): boolean {
+        return x >= 0 && x < Graphics.width && y >= 0 && y < Graphics.height;
+    };
+
+    /**
+     * Calls pixi.js garbage collector
+     */
+    public static callGC = function() {
+        if (Graphics.isWebGL()) {
+            Graphics.renderer.textureGC.run();
+        }
+    };
+
+    /**
+     * @static
+     * @method _createAllElements
+     * @private
+     */
+    public static _createAllElements = function() {
+        Graphics._createErrorPrinter();
+        Graphics._createCanvas();
+        Graphics._createVideo();
+        Graphics._createUpperCanvas();
+        Graphics._createRenderer();
+        Graphics._createFPSMeter();
+        Graphics._createModeBox();
+        Graphics._createGameFontLoader();
+    };
+
+    /**
+     * @static
+     * @method _updateAllElements
+     * @private
+     */
+    public static _updateAllElements = function() {
+        Graphics._updateRealScale();
+        Graphics._updateErrorPrinter();
+        Graphics._updateCanvas();
+        Graphics._updateVideo();
+        Graphics._updateUpperCanvas();
+        Graphics._updateRenderer();
+        Graphics._paintUpperCanvas();
+    };
+
+    /**
+     * @static
+     * @method _updateRealScale
+     * @private
+     */
+    public static _updateRealScale = function() {
+        if (Graphics._stretchEnabled) {
+            let h = window.innerWidth / Graphics.width;
+            let v = window.innerHeight / Graphics.height;
+            if (h >= 1 && h - 0.01 <= 1) {
+                h = 1;
+            }
+            if (v >= 1 && v - 0.01 <= 1) {
+                v = 1;
+            }
+            Graphics._realScale = Math.min(h, v);
+        } else {
+            Graphics._realScale = Graphics._scale;
+        }
+    };
+
+    /**
+     * @static
+     * @method _makeErrorHtml
+     * @param {String} name
+     * @param {String} message
+     * @return {String}
+     * @private
+     */
+    public static _makeErrorHtml = function(
+        name: string,
+        message: string
+    ): string {
+        return (
+            '<font color="yellow"><b>' +
+            name +
+            "</b></font><br>" +
+            '<font color="white">' +
+            message +
+            "</font><br>"
+        );
+    };
+
+    /**
+     * @static
+     * @method _defaultStretchMode
+     * @private
+     */
+    public static _defaultStretchMode = function() {
+        return Utils.isNwjs() || Utils.isMobileDevice();
+    };
+
+    /**
+     * @static
+     * @method _testCanvasBlendModes
+     * @private
+     */
+    public static _testCanvasBlendModes = function() {
+        let canvas, context, imageData1, imageData2;
+        canvas = document.createElement("canvas");
+        canvas.width = 1;
+        canvas.height = 1;
+        context = canvas.getContext("2d");
+        context.globalCompositeOperation = "source-over";
+        context.fillStyle = "white";
+        context.fillRect(0, 0, 1, 1);
+        context.globalCompositeOperation = "difference";
+        context.fillStyle = "white";
+        context.fillRect(0, 0, 1, 1);
+        imageData1 = context.getImageData(0, 0, 1, 1);
+        context.globalCompositeOperation = "source-over";
+        context.fillStyle = "black";
+        context.fillRect(0, 0, 1, 1);
+        context.globalCompositeOperation = "saturation";
+        context.fillStyle = "white";
+        context.fillRect(0, 0, 1, 1);
+        imageData2 = context.getImageData(0, 0, 1, 1);
+        Graphics._canUseDifferenceBlend = imageData1.data[0] === 0;
+        Graphics._canUseSaturationBlend = imageData2.data[0] === 0;
+    };
+
+    /**
+     * @static
+     * @method _modifyExistingElements
+     * @private
+     */
+    public static _modifyExistingElements = function() {
+        const elements = document.getElementsByTagName("*");
+        for (const element of elements) {
+            if (
+                element instanceof HTMLElement &&
+                Number(element.style.zIndex) > 0
+            ) {
+                element.style.zIndex = "0";
+            }
+        }
+    };
+
+    /**
+     * @static
+     * @method _createErrorPrinter
+     * @private
+     */
+    public static _createErrorPrinter = function() {
+        Graphics._errorPrinter = document.createElement("p");
+        Graphics._errorPrinter.id = "ErrorPrinter";
+        Graphics._updateErrorPrinter();
+        document.body.appendChild(Graphics._errorPrinter);
+    };
+
+    /**
+     * @static
+     * @method _updateErrorPrinter
+     * @private
+     */
+    public static _updateErrorPrinter = function() {
+        Graphics._errorPrinter.width = Graphics.width * 0.9;
+        Graphics._errorPrinter.height = 40;
+        Graphics._errorPrinter.style.textAlign = "center";
+        Graphics._errorPrinter.style.textShadow = "1px 1px 3px #000";
+        Graphics._errorPrinter.style.fontSize = "20px";
+        Graphics._errorPrinter.style.zIndex = 99;
+        Graphics._centerElement(Graphics._errorPrinter);
+    };
+
+    /**
+     * @static
+     * @method _createCanvas
+     * @private
+     */
+    public static _createCanvas = function() {
+        Graphics._canvas = document.createElement("canvas");
+        Graphics._canvas.id = "GameCanvas";
+        Graphics._updateCanvas();
+        document.body.appendChild(Graphics._canvas);
+    };
+
+    /**
+     * @static
+     * @method _updateCanvas
+     * @private
+     */
+    public static _updateCanvas = function() {
+        Graphics._canvas.width = Graphics.width;
+        Graphics._canvas.height = Graphics.height;
+        Graphics._canvas.style.zIndex = 1;
+        Graphics._centerElement(Graphics._canvas);
+    };
+
+    /**
+     * @static
+     * @method _createVideo
+     * @private
+     */
+    public static _createVideo = function() {
+        Graphics._video = document.createElement("video");
+        Graphics._video.id = "GameVideo";
+        Graphics._video.style.opacity = 0;
+        Graphics._video.setAttribute("playsinline", "");
         Graphics._video.volume = Graphics._videoVolume;
-    }
-};
+        Graphics._updateVideo();
+        enableInlineVideo(Graphics._video);
+        document.body.appendChild(Graphics._video);
+    };
 
-/**
- * Converts an x coordinate on the page to the corresponding
- * x coordinate on the canvas area.
- *
- * @static
- * @method pageToCanvasX
- * @param {Number} x The x coordinate on the page to be converted
- * @return {Number} The x coordinate on the canvas area
- */
-Graphics.pageToCanvasX = function(x: number): number {
-    if (Graphics._canvas) {
-        const left = Graphics._canvas.offsetLeft;
-        return Math.round((x - left) / Graphics._realScale);
-    } else {
-        return 0;
-    }
-};
+    /**
+     * @static
+     * @method _updateVideo
+     * @private
+     */
+    public static _updateVideo = function() {
+        Graphics._video.width = Graphics.width;
+        Graphics._video.height = Graphics.height;
+        Graphics._video.style.zIndex = 2;
+        Graphics._centerElement(Graphics._video);
+    };
 
-/**
- * Converts a y coordinate on the page to the corresponding
- * y coordinate on the canvas area.
- *
- * @static
- * @method pageToCanvasY
- * @param {Number} y The y coordinate on the page to be converted
- * @return {Number} The y coordinate on the canvas area
- */
-Graphics.pageToCanvasY = function(y: number): number {
-    if (Graphics._canvas) {
-        const top = Graphics._canvas.offsetTop;
-        return Math.round((y - top) / Graphics._realScale);
-    } else {
-        return 0;
-    }
-};
+    /**
+     * @static
+     * @method _createUpperCanvas
+     * @private
+     */
+    public static _createUpperCanvas = function() {
+        Graphics._upperCanvas = document.createElement("canvas");
+        Graphics._upperCanvas.id = "UpperCanvas";
+        Graphics._updateUpperCanvas();
+        document.body.appendChild(Graphics._upperCanvas);
+    };
 
-/**
- * Checks whether the specified point is inside the game canvas area.
- *
- * @static
- * @method isInsideCanvas
- * @param {Number} x The x coordinate on the canvas area
- * @param {Number} y The y coordinate on the canvas area
- * @return {Boolean} True if the specified point is inside the game canvas area
- */
-Graphics.isInsideCanvas = function(x: number, y: number): boolean {
-    return x >= 0 && x < Graphics.width && y >= 0 && y < Graphics.height;
-};
+    /**
+     * @static
+     * @method _updateUpperCanvas
+     * @private
+     */
+    public static _updateUpperCanvas = function() {
+        Graphics._upperCanvas.width = Graphics.width;
+        Graphics._upperCanvas.height = Graphics.height;
+        Graphics._upperCanvas.style.zIndex = 3;
+        Graphics._centerElement(Graphics._upperCanvas);
+    };
 
-/**
- * Calls pixi.js garbage collector
- */
-Graphics.callGC = function() {
-    if (Graphics.isWebGL()) {
-        Graphics.renderer.textureGC.run();
-    }
-};
-
-/**
- * @static
- * @method _createAllElements
- * @private
- */
-Graphics._createAllElements = function() {
-    Graphics._createErrorPrinter();
-    Graphics._createCanvas();
-    Graphics._createVideo();
-    Graphics._createUpperCanvas();
-    Graphics._createRenderer();
-    Graphics._createFPSMeter();
-    Graphics._createModeBox();
-    Graphics._createGameFontLoader();
-};
-
-/**
- * @static
- * @method _updateAllElements
- * @private
- */
-Graphics._updateAllElements = function() {
-    Graphics._updateRealScale();
-    Graphics._updateErrorPrinter();
-    Graphics._updateCanvas();
-    Graphics._updateVideo();
-    Graphics._updateUpperCanvas();
-    Graphics._updateRenderer();
-    Graphics._paintUpperCanvas();
-};
-
-/**
- * @static
- * @method _updateRealScale
- * @private
- */
-Graphics._updateRealScale = function() {
-    if (Graphics._stretchEnabled) {
-        let h = window.innerWidth / Graphics.width;
-        let v = window.innerHeight / Graphics.height;
-        if (h >= 1 && h - 0.01 <= 1) {
-            h = 1;
-        }
-        if (v >= 1 && v - 0.01 <= 1) {
-            v = 1;
-        }
-        Graphics._realScale = Math.min(h, v);
-    } else {
-        Graphics._realScale = Graphics._scale;
-    }
-};
-
-/**
- * @static
- * @method _makeErrorHtml
- * @param {String} name
- * @param {String} message
- * @return {String}
- * @private
- */
-Graphics._makeErrorHtml = function(name: string, message: string): string {
-    return (
-        '<font color="yellow"><b>' +
-        name +
-        "</b></font><br>" +
-        '<font color="white">' +
-        message +
-        "</font><br>"
-    );
-};
-
-/**
- * @static
- * @method _defaultStretchMode
- * @private
- */
-Graphics._defaultStretchMode = function() {
-    return Utils.isNwjs() || Utils.isMobileDevice();
-};
-
-/**
- * @static
- * @method _testCanvasBlendModes
- * @private
- */
-Graphics._testCanvasBlendModes = function() {
-    let canvas, context, imageData1, imageData2;
-    canvas = document.createElement("canvas");
-    canvas.width = 1;
-    canvas.height = 1;
-    context = canvas.getContext("2d");
-    context.globalCompositeOperation = "source-over";
-    context.fillStyle = "white";
-    context.fillRect(0, 0, 1, 1);
-    context.globalCompositeOperation = "difference";
-    context.fillStyle = "white";
-    context.fillRect(0, 0, 1, 1);
-    imageData1 = context.getImageData(0, 0, 1, 1);
-    context.globalCompositeOperation = "source-over";
-    context.fillStyle = "black";
-    context.fillRect(0, 0, 1, 1);
-    context.globalCompositeOperation = "saturation";
-    context.fillStyle = "white";
-    context.fillRect(0, 0, 1, 1);
-    imageData2 = context.getImageData(0, 0, 1, 1);
-    Graphics._canUseDifferenceBlend = imageData1.data[0] === 0;
-    Graphics._canUseSaturationBlend = imageData2.data[0] === 0;
-};
-
-/**
- * @static
- * @method _modifyExistingElements
- * @private
- */
-Graphics._modifyExistingElements = function() {
-    const elements = document.getElementsByTagName("*");
-    for (const element of elements) {
-        if (
-            element instanceof HTMLElement &&
-            Number(element.style.zIndex) > 0
-        ) {
-            element.style.zIndex = "0";
-        }
-    }
-};
-
-/**
- * @static
- * @method _createErrorPrinter
- * @private
- */
-Graphics._createErrorPrinter = function() {
-    Graphics._errorPrinter = document.createElement("p");
-    Graphics._errorPrinter.id = "ErrorPrinter";
-    Graphics._updateErrorPrinter();
-    document.body.appendChild(Graphics._errorPrinter);
-};
-
-/**
- * @static
- * @method _updateErrorPrinter
- * @private
- */
-Graphics._updateErrorPrinter = function() {
-    Graphics._errorPrinter.width = Graphics.width * 0.9;
-    Graphics._errorPrinter.height = 40;
-    Graphics._errorPrinter.style.textAlign = "center";
-    Graphics._errorPrinter.style.textShadow = "1px 1px 3px #000";
-    Graphics._errorPrinter.style.fontSize = "20px";
-    Graphics._errorPrinter.style.zIndex = 99;
-    Graphics._centerElement(Graphics._errorPrinter);
-};
-
-/**
- * @static
- * @method _createCanvas
- * @private
- */
-Graphics._createCanvas = function() {
-    Graphics._canvas = document.createElement("canvas");
-    Graphics._canvas.id = "GameCanvas";
-    Graphics._updateCanvas();
-    document.body.appendChild(Graphics._canvas);
-};
-
-/**
- * @static
- * @method _updateCanvas
- * @private
- */
-Graphics._updateCanvas = function() {
-    Graphics._canvas.width = Graphics.width;
-    Graphics._canvas.height = Graphics.height;
-    Graphics._canvas.style.zIndex = 1;
-    Graphics._centerElement(Graphics._canvas);
-};
-
-/**
- * @static
- * @method _createVideo
- * @private
- */
-Graphics._createVideo = function() {
-    Graphics._video = document.createElement("video");
-    Graphics._video.id = "GameVideo";
-    Graphics._video.style.opacity = 0;
-    Graphics._video.setAttribute("playsinline", "");
-    Graphics._video.volume = Graphics._videoVolume;
-    Graphics._updateVideo();
-    enableInlineVideo(Graphics._video);
-    document.body.appendChild(Graphics._video);
-};
-
-/**
- * @static
- * @method _updateVideo
- * @private
- */
-Graphics._updateVideo = function() {
-    Graphics._video.width = Graphics.width;
-    Graphics._video.height = Graphics.height;
-    Graphics._video.style.zIndex = 2;
-    Graphics._centerElement(Graphics._video);
-};
-
-/**
- * @static
- * @method _createUpperCanvas
- * @private
- */
-Graphics._createUpperCanvas = function() {
-    Graphics._upperCanvas = document.createElement("canvas");
-    Graphics._upperCanvas.id = "UpperCanvas";
-    Graphics._updateUpperCanvas();
-    document.body.appendChild(Graphics._upperCanvas);
-};
-
-/**
- * @static
- * @method _updateUpperCanvas
- * @private
- */
-Graphics._updateUpperCanvas = function() {
-    Graphics._upperCanvas.width = Graphics.width;
-    Graphics._upperCanvas.height = Graphics.height;
-    Graphics._upperCanvas.style.zIndex = 3;
-    Graphics._centerElement(Graphics._upperCanvas);
-};
-
-/**
- * @static
- * @method _clearUpperCanvas
- * @private
- */
-Graphics._clearUpperCanvas = function() {
-    const context = Graphics._upperCanvas.getContext("2d");
-    context.clearRect(0, 0, Graphics.width, Graphics.height);
-};
-
-/**
- * @static
- * @method _paintUpperCanvas
- * @private
- */
-Graphics._paintUpperCanvas = function() {
-    Graphics._clearUpperCanvas();
-    if (Graphics._loadingImage && Graphics._loadingCount >= 20) {
+    /**
+     * @static
+     * @method _clearUpperCanvas
+     * @private
+     */
+    public static _clearUpperCanvas = function() {
         const context = Graphics._upperCanvas.getContext("2d");
-        const dx = (Graphics.width - Graphics._loadingImage.width) / 2;
-        const dy = (Graphics.height - Graphics._loadingImage.height) / 2;
-        const alpha = Utils.clamp((Graphics._loadingCount - 20) / 30, 0, 1);
-        context.save();
-        context.globalAlpha = alpha;
-        context.drawImage(Graphics._loadingImage, dx, dy);
-        context.restore();
-    }
-};
-
-/**
- * @static
- * @method _createRenderer
- * @private
- */
-Graphics._createRenderer = function() {
-    const width = Graphics.width;
-    const height = Graphics.height;
-    const options = { view: Graphics._canvas };
-    try {
-        Graphics.renderer = new PIXI.WebGLRenderer(width, height, options);
-        if (Graphics.renderer && Graphics.renderer.textureGC) {
-            Graphics.renderer.textureGC.maxIdle = 1;
-        }
-    } catch (e) {
-        Graphics.renderer = null;
-    }
-};
-
-/**
- * @static
- * @method _updateRenderer
- * @private
- */
-Graphics._updateRenderer = function() {
-    if (Graphics.renderer) {
-        Graphics.renderer.resize(Graphics.width, Graphics.height);
-    }
-};
-
-/**
- * @static
- * @method _createFPSMeter
- * @private
- */
-Graphics._createFPSMeter = function() {
-    const options = {
-        graph: 1,
-        decimals: 0,
-        theme: "transparent",
-        toggleOn: null
+        context.clearRect(0, 0, Graphics.width, Graphics.height);
     };
-};
 
-/**
- * @static
- * @method _createModeBox
- * @private
- */
-Graphics._createModeBox = function() {
-    const box = document.createElement("div");
-    box.id = "modeTextBack";
-    box.style.position = "absolute";
-    box.style.left = "5px";
-    box.style.top = "5px";
-    box.style.width = "119px";
-    box.style.height = "58px";
-    box.style.background = "rgba(0,0,0,0.2)";
-    box.style.zIndex = "9";
-    box.style.opacity = "0";
-
-    const text = document.createElement("div");
-    text.id = "modeText";
-    text.style.position = "absolute";
-    text.style.left = "0px";
-    text.style.top = "41px";
-    text.style.width = "119px";
-    text.style.fontSize = "12px";
-    text.style.fontFamily = "monospace";
-    text.style.color = "white";
-    text.style.textAlign = "center";
-    text.style.textShadow = "1px 1px 0 rgba(0,0,0,0.5)";
-    text.innerHTML = Graphics.isWebGL() ? "WebGL mode" : "Canvas mode";
-
-    document.body.appendChild(box);
-    box.appendChild(text);
-
-    Graphics._modeBox = box;
-};
-
-/**
- * @static
- * @method _createGameFontLoader
- * @private
- */
-Graphics._createGameFontLoader = function() {
-    Graphics._createFontLoader("GameFont");
-};
-
-/**
- * @static
- * @method _createFontLoader
- * @param {String} name
- * @private
- */
-Graphics._createFontLoader = function(name: string) {
-    const div = document.createElement("div");
-    const text = document.createTextNode(".");
-    div.style.fontFamily = name;
-    div.style.fontSize = "0px";
-    div.style.color = "transparent";
-    div.style.position = "absolute";
-    div.style.margin = "auto";
-    div.style.top = "0px";
-    div.style.left = "0px";
-    div.style.width = "1px";
-    div.style.height = "1px";
-    div.appendChild(text);
-    document.body.appendChild(div);
-};
-
-/**
- * @static
- * @method _centerElement
- * @param {HTMLElement} element
- * @private
- */
-Graphics._centerElement = function(element: HTMLElement) {
-    const width = element.width * Graphics._realScale;
-    const height = element.height * Graphics._realScale;
-    element.style.position = "absolute";
-    element.style.margin = "auto";
-    element.style.top = 0;
-    element.style.left = 0;
-    element.style.right = 0;
-    element.style.bottom = 0;
-    element.style.width = width + "px";
-    element.style.height = height + "px";
-};
-
-/**
- * @static
- * @method _disableTextSelection
- * @private
- */
-Graphics._disableTextSelection = function() {
-    const body = document.body;
-    body.style.userSelect = "none";
-    body.style.webkitUserSelect = "none";
-    body.style.msUserSelect = "none";
-};
-
-/**
- * @static
- * @method _disableContextMenu
- * @private
- */
-Graphics._disableContextMenu = function() {
-    const elements = document.body.getElementsByTagName("*");
-    const oncontextmenu = function() {
-        return false;
-    };
-    for (const element of elements) {
-        // @ts-ignore
-        element.oncontextmenu = oncontextmenu;
-    }
-};
-
-/**
- * @static
- * @method _applyCanvasFilter
- * @private
- */
-Graphics._applyCanvasFilter = function() {
-    if (Graphics._canvas) {
-        Graphics._canvas.style.opacity = 0.5;
-        Graphics._canvas.style.filter = "blur(8px)";
-        Graphics._canvas.style.webkitFilter = "blur(8px)";
-    }
-};
-
-/**
- * @static
- * @method _onVideoLoad
- * @private
- */
-Graphics._onVideoLoad = function() {
-    Graphics._video.play();
-    Graphics._updateVisibility(true);
-    Graphics._videoLoading = false;
-};
-
-/**
- * @static
- * @method _onVideoError
- * @private
- */
-Graphics._onVideoError = function() {
-    Graphics._updateVisibility(false);
-    Graphics._videoLoading = false;
-};
-
-/**
- * @static
- * @method _onVideoEnd
- * @private
- */
-Graphics._onVideoEnd = function() {
-    Graphics._updateVisibility(false);
-};
-
-/**
- * @static
- * @method _updateVisibility
- * @param {Boolean} videoVisible
- * @private
- */
-Graphics._updateVisibility = function(videoVisible: boolean) {
-    Graphics._video.style.opacity = videoVisible ? 1 : 0;
-    Graphics._canvas.style.opacity = videoVisible ? 0 : 1;
-};
-
-/**
- * @static
- * @method _isVideoVisible
- * @return {Boolean}
- * @private
- */
-Graphics._isVideoVisible = function(): boolean {
-    return Graphics._video.style.opacity > 0;
-};
-
-/**
- * @static
- * @method _setupEventHandlers
- * @private
- */
-Graphics._setupEventHandlers = function() {
-    window.addEventListener("resize", Graphics._onWindowResize.bind(this));
-    document.addEventListener("keydown", Graphics._onKeyDown.bind(this));
-    document.addEventListener("keydown", Graphics._onTouchEnd.bind(this));
-    document.addEventListener("mousedown", Graphics._onTouchEnd.bind(this));
-    document.addEventListener("touchend", Graphics._onTouchEnd.bind(this));
-};
-
-/**
- * @static
- * @method _onWindowResize
- * @private
- */
-Graphics._onWindowResize = function() {
-    Graphics._updateAllElements();
-};
-
-/**
- * @static
- * @method _onKeyDown
- * @param {KeyboardEvent} event
- * @private
- */
-Graphics._onKeyDown = function(event: KeyboardEvent) {
-    if (!event.ctrlKey && !event.altKey) {
-        switch (event.keyCode) {
-            case 113: // F2
-                event.preventDefault();
-                Graphics._switchFPSMeter();
-                break;
-            case 114: // F3
-                event.preventDefault();
-                Graphics._switchStretchMode();
-                break;
-            case 115: // F4
-                event.preventDefault();
-                Graphics._switchFullScreen();
-                break;
+    /**
+     * @static
+     * @method _paintUpperCanvas
+     * @private
+     */
+    public static _paintUpperCanvas = function() {
+        Graphics._clearUpperCanvas();
+        if (Graphics._loadingImage && Graphics._loadingCount >= 20) {
+            const context = Graphics._upperCanvas.getContext("2d");
+            const dx = (Graphics.width - Graphics._loadingImage.width) / 2;
+            const dy = (Graphics.height - Graphics._loadingImage.height) / 2;
+            const alpha = Utils.clamp((Graphics._loadingCount - 20) / 30, 0, 1);
+            context.save();
+            context.globalAlpha = alpha;
+            context.drawImage(Graphics._loadingImage, dx, dy);
+            context.restore();
         }
-    }
-};
+    };
 
-/**
- * @static
- * @method _onTouchEnd
- * @param {TouchEvent} event
- * @private
- */
-Graphics._onTouchEnd = function(event: TouchEvent) {
-    if (!Graphics._videoUnlocked) {
+    /**
+     * @static
+     * @method _createRenderer
+     * @private
+     */
+    public static _createRenderer = function() {
+        const width = Graphics.width;
+        const height = Graphics.height;
+        const options = { view: Graphics._canvas };
+        try {
+            Graphics.renderer = new PIXI.WebGLRenderer(width, height, options);
+            if (Graphics.renderer && Graphics.renderer.textureGC) {
+                Graphics.renderer.textureGC.maxIdle = 1;
+            }
+        } catch (e) {
+            Graphics.renderer = null;
+        }
+    };
+
+    /**
+     * @static
+     * @method _updateRenderer
+     * @private
+     */
+    public static _updateRenderer = function() {
+        if (Graphics.renderer) {
+            Graphics.renderer.resize(Graphics.width, Graphics.height);
+        }
+    };
+
+    /**
+     * @static
+     * @method _createFPSMeter
+     * @private
+     */
+    public static _createFPSMeter = function() {
+        const options = {
+            graph: 1,
+            decimals: 0,
+            theme: "transparent",
+            toggleOn: null
+        };
+    };
+
+    /**
+     * @static
+     * @method _createModeBox
+     * @private
+     */
+    public static _createModeBox = function() {
+        const box = document.createElement("div");
+        box.id = "modeTextBack";
+        box.style.position = "absolute";
+        box.style.left = "5px";
+        box.style.top = "5px";
+        box.style.width = "119px";
+        box.style.height = "58px";
+        box.style.background = "rgba(0,0,0,0.2)";
+        box.style.zIndex = "9";
+        box.style.opacity = "0";
+
+        const text = document.createElement("div");
+        text.id = "modeText";
+        text.style.position = "absolute";
+        text.style.left = "0px";
+        text.style.top = "41px";
+        text.style.width = "119px";
+        text.style.fontSize = "12px";
+        text.style.fontFamily = "monospace";
+        text.style.color = "white";
+        text.style.textAlign = "center";
+        text.style.textShadow = "1px 1px 0 rgba(0,0,0,0.5)";
+        text.innerHTML = Graphics.isWebGL() ? "WebGL mode" : "Canvas mode";
+
+        document.body.appendChild(box);
+        box.appendChild(text);
+
+        Graphics._modeBox = box;
+    };
+
+    /**
+     * @static
+     * @method _createGameFontLoader
+     * @private
+     */
+    public static _createGameFontLoader = function() {
+        Graphics._createFontLoader("GameFont");
+    };
+
+    /**
+     * @static
+     * @method _createFontLoader
+     * @param {String} name
+     * @private
+     */
+    public static _createFontLoader = function(name: string) {
+        const div = document.createElement("div");
+        const text = document.createTextNode(".");
+        div.style.fontFamily = name;
+        div.style.fontSize = "0px";
+        div.style.color = "transparent";
+        div.style.position = "absolute";
+        div.style.margin = "auto";
+        div.style.top = "0px";
+        div.style.left = "0px";
+        div.style.width = "1px";
+        div.style.height = "1px";
+        div.appendChild(text);
+        document.body.appendChild(div);
+    };
+
+    /**
+     * @static
+     * @method _centerElement
+     * @param {HTMLElement} element
+     * @private
+     */
+    public static _centerElement = function(element: HTMLElement) {
+        const width = element.width * Graphics._realScale;
+        const height = element.height * Graphics._realScale;
+        element.style.position = "absolute";
+        element.style.margin = "auto";
+        element.style.top = 0;
+        element.style.left = 0;
+        element.style.right = 0;
+        element.style.bottom = 0;
+        element.style.width = width + "px";
+        element.style.height = height + "px";
+    };
+
+    /**
+     * @static
+     * @method _disableTextSelection
+     * @private
+     */
+    public static _disableTextSelection = function() {
+        const body = document.body;
+        body.style.userSelect = "none";
+        body.style.webkitUserSelect = "none";
+        body.style.msUserSelect = "none";
+    };
+
+    /**
+     * @static
+     * @method _disableContextMenu
+     * @private
+     */
+    public static _disableContextMenu = function() {
+        const elements = document.body.getElementsByTagName("*");
+        const oncontextmenu = function() {
+            return false;
+        };
+        for (const element of elements) {
+            // @ts-ignore
+            element.oncontextmenu = oncontextmenu;
+        }
+    };
+
+    /**
+     * @static
+     * @method _applyCanvasFilter
+     * @private
+     */
+    public static _applyCanvasFilter = function() {
+        if (Graphics._canvas) {
+            Graphics._canvas.style.opacity = 0.5;
+            Graphics._canvas.style.filter = "blur(8px)";
+            Graphics._canvas.style.webkitFilter = "blur(8px)";
+        }
+    };
+
+    /**
+     * @static
+     * @method _onVideoLoad
+     * @private
+     */
+    public static _onVideoLoad = function() {
         Graphics._video.play();
-        Graphics._videoUnlocked = true;
-    }
-    if (Graphics._isVideoVisible() && Graphics._video.paused) {
-        Graphics._video.play();
-    }
-};
+        Graphics._updateVisibility(true);
+        Graphics._videoLoading = false;
+    };
 
-/**
- * @static
- * @method _switchFPSMeter
- * @private
- */
-Graphics._switchFPSMeter = function() {
-    if (Graphics._fpsMeter.isPaused) {
-        Graphics.showFps();
-        Graphics._fpsMeter.showFps();
-        Graphics._fpsMeterToggled = false;
-    } else if (!Graphics._fpsMeterToggled) {
-        Graphics._fpsMeter.showDuration();
-        Graphics._fpsMeterToggled = true;
-    } else {
-        Graphics.hideFps();
-    }
-};
+    /**
+     * @static
+     * @method _onVideoError
+     * @private
+     */
+    public static _onVideoError = function() {
+        Graphics._updateVisibility(false);
+        Graphics._videoLoading = false;
+    };
 
-/**
- * @static
- * @method _switchStretchMode
- * @return {Boolean}
- * @private
- */
-Graphics._switchStretchMode = function(): boolean {
-    Graphics._stretchEnabled = !Graphics._stretchEnabled;
-    Graphics._updateAllElements();
-};
+    /**
+     * @static
+     * @method _onVideoEnd
+     * @private
+     */
+    public static _onVideoEnd = function() {
+        Graphics._updateVisibility(false);
+    };
 
-/**
- * @static
- * @method _switchFullScreen
- * @private
- */
-Graphics._switchFullScreen = function() {
-    if (Graphics._isFullScreen()) {
-        Graphics._requestFullScreen();
-    } else {
-        Graphics._cancelFullScreen();
-    }
-};
+    /**
+     * @static
+     * @method _updateVisibility
+     * @param {Boolean} videoVisible
+     * @private
+     */
+    public static _updateVisibility = function(videoVisible: boolean) {
+        Graphics._video.style.opacity = videoVisible ? 1 : 0;
+        Graphics._canvas.style.opacity = videoVisible ? 0 : 1;
+    };
 
-/**
- * @static
- * @method _isFullScreen
- * @return {Boolean}
- * @private
- */
-Graphics._isFullScreen = function(): boolean {
-    return document.fullscreenEnabled;
-};
+    /**
+     * @static
+     * @method _isVideoVisible
+     * @return {Boolean}
+     * @private
+     */
+    public static _isVideoVisible = function(): boolean {
+        return Graphics._video.style.opacity > 0;
+    };
 
-/**
- * @static
- * @method _requestFullScreen
- * @private
- */
-Graphics._requestFullScreen = function() {
-    document.body.requestFullscreen();
-};
+    /**
+     * @static
+     * @method _setupEventHandlers
+     * @private
+     */
+    public static _setupEventHandlers = function() {
+        window.addEventListener("resize", Graphics._onWindowResize.bind(this));
+        document.addEventListener("keydown", Graphics._onKeyDown.bind(this));
+        document.addEventListener("keydown", Graphics._onTouchEnd.bind(this));
+        document.addEventListener("mousedown", Graphics._onTouchEnd.bind(this));
+        document.addEventListener("touchend", Graphics._onTouchEnd.bind(this));
+    };
 
-/**
- * @static
- * @method _cancelFullScreen
- * @private
- */
-Graphics._cancelFullScreen = function() {
-    document.exitFullscreen();
-};
+    /**
+     * @static
+     * @method _onWindowResize
+     * @private
+     */
+    public static _onWindowResize = function() {
+        Graphics._updateAllElements();
+    };
+
+    /**
+     * @static
+     * @method _onKeyDown
+     * @param {KeyboardEvent} event
+     * @private
+     */
+    public static _onKeyDown = function(event: KeyboardEvent) {
+        if (!event.ctrlKey && !event.altKey) {
+            switch (event.keyCode) {
+                case 113: // F2
+                    event.preventDefault();
+                    Graphics._switchFPSMeter();
+                    break;
+                case 114: // F3
+                    event.preventDefault();
+                    Graphics._switchStretchMode();
+                    break;
+                case 115: // F4
+                    event.preventDefault();
+                    Graphics._switchFullScreen();
+                    break;
+            }
+        }
+    };
+
+    /**
+     * @static
+     * @method _onTouchEnd
+     * @param {TouchEvent} event
+     * @private
+     */
+    public static _onTouchEnd = function(event: TouchEvent) {
+        if (!Graphics._videoUnlocked) {
+            Graphics._video.play();
+            Graphics._videoUnlocked = true;
+        }
+        if (Graphics._isVideoVisible() && Graphics._video.paused) {
+            Graphics._video.play();
+        }
+    };
+
+    /**
+     * @static
+     * @method _switchFPSMeter
+     * @private
+     */
+    public static _switchFPSMeter = function() {
+        if (Graphics._fpsMeter.isPaused) {
+            Graphics.showFps();
+            Graphics._fpsMeter.showFps();
+            Graphics._fpsMeterToggled = false;
+        } else if (!Graphics._fpsMeterToggled) {
+            Graphics._fpsMeter.showDuration();
+            Graphics._fpsMeterToggled = true;
+        } else {
+            Graphics.hideFps();
+        }
+    };
+
+    /**
+     * @static
+     * @method _switchStretchMode
+     * @return {Boolean}
+     * @private
+     */
+    public static _switchStretchMode = function(): boolean {
+        Graphics._stretchEnabled = !Graphics._stretchEnabled;
+        Graphics._updateAllElements();
+    };
+
+    /**
+     * @static
+     * @method _switchFullScreen
+     * @private
+     */
+    public static _switchFullScreen = function() {
+        if (Graphics._isFullScreen()) {
+            Graphics._requestFullScreen();
+        } else {
+            Graphics._cancelFullScreen();
+        }
+    };
+
+    /**
+     * @static
+     * @method _isFullScreen
+     * @return {Boolean}
+     * @private
+     */
+    public static _isFullScreen = function(): boolean {
+        return document.fullscreenEnabled;
+    };
+
+    /**
+     * @static
+     * @method _requestFullScreen
+     * @private
+     */
+    public static _requestFullScreen = function() {
+        document.body.requestFullscreen();
+    };
+
+    /**
+     * @static
+     * @method _cancelFullScreen
+     * @private
+     */
+    public static _cancelFullScreen = function() {
+        document.exitFullscreen();
+    };
+}
