@@ -108,10 +108,6 @@ export default abstract class Graphics {
     public static BLEND_SCREEN: number = 3;
 
     public static renderer: PIXI.WebGLRenderer;
-    public static _setupCssFontLoading: () => void;
-    public static canUseCssFontLoading: () => boolean;
-    public static tickStart: () => void;
-    public static tickEnd: () => void;
     public static render: (stage: any) => void;
     public static isWebGL: () => boolean;
     public static hasWebGL: () => boolean;
@@ -258,48 +254,48 @@ export default abstract class Graphics {
     }
     private static _width: any;
     private static _height: any;
+
+    private static _setupCssFontLoading = function() {
+        if (Graphics._cssFontLoading) {
+            // @ts-ignore
+            document.fonts.ready
+                .then(function(fonts) {
+                    Graphics._fontLoaded = fonts;
+                })
+                .catch(function(error) {
+                    SceneManager.onError(error);
+                });
+        }
+    };
+
+    public static canUseCssFontLoading = function() {
+        return !!Graphics._cssFontLoading;
+    };
+
+    /**
+     * Marks the beginning of each frame for FPSMeter.
+     *
+     * @static
+     * @method tickStart
+     */
+    public static tickStart = function() {
+        if (Graphics._fpsMeter) {
+            Graphics._fpsMeter.tickStart();
+        }
+    };
+
+    /**
+     * Marks the end of each frame for FPSMeter.
+     *
+     * @static
+     * @method tickEnd
+     */
+    public static tickEnd = function() {
+        if (Graphics._fpsMeter && Graphics._rendered) {
+            Graphics._fpsMeter.tick();
+        }
+    };
 }
-
-Graphics._setupCssFontLoading = function() {
-    if (Graphics._cssFontLoading) {
-        // @ts-ignore
-        document.fonts.ready
-            .then(function(fonts) {
-                Graphics._fontLoaded = fonts;
-            })
-            .catch(function(error) {
-                SceneManager.onError(error);
-            });
-    }
-};
-
-Graphics.canUseCssFontLoading = function() {
-    return !!Graphics._cssFontLoading;
-};
-
-/**
- * Marks the beginning of each frame for FPSMeter.
- *
- * @static
- * @method tickStart
- */
-Graphics.tickStart = function() {
-    if (Graphics._fpsMeter) {
-        Graphics._fpsMeter.tickStart();
-    }
-};
-
-/**
- * Marks the end of each frame for FPSMeter.
- *
- * @static
- * @method tickEnd
- */
-Graphics.tickEnd = function() {
-    if (Graphics._fpsMeter && Graphics._rendered) {
-        Graphics._fpsMeter.tick();
-    }
-};
 
 /**
  * Renders the stage to the game screen.
