@@ -52,11 +52,12 @@ export default abstract class Graphics {
         Graphics._scale = input;
     }
 
-    // @ts-ignore fonts does not exist on the normal Document type (MS is dragging its feet)
-    public static _cssFontLoading: any = document.fonts && document.fonts.ready;
+    private static _cssFontLoading: boolean =
+        // @ts-ignore fonts does not exist on the normal Document type (MS is dragging its feet)
+        document.fonts && document.fonts.ready;
 
-    public static _fontLoaded: any = null;
-    public static _videoVolume: number = 1;
+    private static _fontLoaded: any = null;
+    private static _videoVolume: number = 1;
 
     /**
      * The total frame count of the game screen.
@@ -109,31 +110,31 @@ export default abstract class Graphics {
 
     public static renderer: PIXI.WebGLRenderer;
 
-    public static _rendererType: any;
-    public static _boxWidth: any;
-    public static _boxHeight: any;
-    public static _scale: number;
-    public static _realScale: number;
-    public static _errorShowed: boolean;
-    public static _errorPrinter: any;
-    public static _canvas: any;
-    public static _video: any;
-    public static _videoUnlocked: boolean;
-    public static _videoLoading: boolean;
-    public static _upperCanvas: any;
-    public static _fpsMeter: any;
-    public static _modeBox: any;
-    public static _skipCount: number;
-    public static _maxSkip: number;
-    public static _rendered: boolean;
-    public static _loadingImage: any;
-    public static _loadingCount: number;
-    public static _fpsMeterToggled: boolean;
-    public static _stretchEnabled: any;
-    public static _canUseDifferenceBlend: boolean;
-    public static _canUseSaturationBlend: boolean;
-    public static _hiddenCanvas: any;
-    public static _videoLoader: () => void;
+    private static _rendererType: any;
+    private static _boxWidth: any;
+    private static _boxHeight: any;
+    private static _scale: number;
+    private static _realScale: number;
+    private static _errorShowed: boolean;
+    private static _errorPrinter: any;
+    private static _canvas: any;
+    private static _video: any;
+    private static _videoUnlocked: boolean;
+    private static _videoLoading: boolean;
+    private static _upperCanvas: any;
+    private static _fpsMeter: any;
+    private static _modeBox: any;
+    private static _skipCount: number;
+    private static _maxSkip: number;
+    private static _rendered: boolean;
+    private static _loadingImage: any;
+    private static _loadingCount: number;
+    private static _fpsMeterToggled: boolean;
+    private static _stretchEnabled: any;
+    private static _canUseDifferenceBlend: boolean;
+    private static _canUseSaturationBlend: boolean;
+    private static _hiddenCanvas: any;
+    private static _videoLoader: () => void;
 
     /**
      * Initializes the graphics system.
@@ -522,7 +523,7 @@ export default abstract class Graphics {
      * @param {String} src
      * @private
      */
-    public static _playVideo = function(src: string) {
+    private static _playVideo = function(src: string) {
         Graphics._video.src = src;
         Graphics._video.onloadeddata = Graphics._onVideoLoad.bind(this);
         Graphics._video.onerror = Graphics._videoLoader;
@@ -631,7 +632,7 @@ export default abstract class Graphics {
      * @method _createAllElements
      * @private
      */
-    public static _createAllElements = function() {
+    private static _createAllElements = function() {
         Graphics._createErrorPrinter();
         Graphics._createCanvas();
         Graphics._createVideo();
@@ -647,7 +648,7 @@ export default abstract class Graphics {
      * @method _updateAllElements
      * @private
      */
-    public static _updateAllElements = function() {
+    private static _updateAllElements = function() {
         Graphics._updateRealScale();
         Graphics._updateErrorPrinter();
         Graphics._updateCanvas();
@@ -662,7 +663,7 @@ export default abstract class Graphics {
      * @method _updateRealScale
      * @private
      */
-    public static _updateRealScale = function() {
+    private static _updateRealScale = function() {
         if (Graphics._stretchEnabled) {
             let h = window.innerWidth / Graphics.width;
             let v = window.innerHeight / Graphics.height;
@@ -686,7 +687,7 @@ export default abstract class Graphics {
      * @return {String}
      * @private
      */
-    public static _makeErrorHtml = function(
+    private static _makeErrorHtml = function(
         name: string,
         message: string
     ): string {
@@ -705,7 +706,7 @@ export default abstract class Graphics {
      * @method _defaultStretchMode
      * @private
      */
-    public static _defaultStretchMode = function() {
+    private static _defaultStretchMode = function() {
         return Utils.isNwjs() || Utils.isMobileDevice();
     };
 
@@ -714,7 +715,7 @@ export default abstract class Graphics {
      * @method _testCanvasBlendModes
      * @private
      */
-    public static _testCanvasBlendModes = function() {
+    private static _testCanvasBlendModes = function() {
         let canvas, context, imageData1, imageData2;
         canvas = document.createElement("canvas");
         canvas.width = 1;
@@ -743,7 +744,7 @@ export default abstract class Graphics {
      * @method _modifyExistingElements
      * @private
      */
-    public static _modifyExistingElements = function() {
+    private static _modifyExistingElements = function() {
         const elements = document.getElementsByTagName("*");
         for (const element of elements) {
             if (
@@ -760,7 +761,7 @@ export default abstract class Graphics {
      * @method _createErrorPrinter
      * @private
      */
-    public static _createErrorPrinter = function() {
+    private static _createErrorPrinter = function() {
         Graphics._errorPrinter = document.createElement("p");
         Graphics._errorPrinter.id = "ErrorPrinter";
         Graphics._updateErrorPrinter();
@@ -772,7 +773,7 @@ export default abstract class Graphics {
      * @method _updateErrorPrinter
      * @private
      */
-    public static _updateErrorPrinter = function() {
+    private static _updateErrorPrinter = function() {
         Graphics._errorPrinter.width = Graphics.width * 0.9;
         Graphics._errorPrinter.height = 40;
         Graphics._errorPrinter.style.textAlign = "center";
@@ -787,7 +788,7 @@ export default abstract class Graphics {
      * @method _createCanvas
      * @private
      */
-    public static _createCanvas = function() {
+    private static _createCanvas = function() {
         Graphics._canvas = document.createElement("canvas");
         Graphics._canvas.id = "GameCanvas";
         Graphics._updateCanvas();
@@ -799,7 +800,7 @@ export default abstract class Graphics {
      * @method _updateCanvas
      * @private
      */
-    public static _updateCanvas = function() {
+    private static _updateCanvas = function() {
         Graphics._canvas.width = Graphics.width;
         Graphics._canvas.height = Graphics.height;
         Graphics._canvas.style.zIndex = 1;
@@ -811,7 +812,7 @@ export default abstract class Graphics {
      * @method _createVideo
      * @private
      */
-    public static _createVideo = function() {
+    private static _createVideo = function() {
         Graphics._video = document.createElement("video");
         Graphics._video.id = "GameVideo";
         Graphics._video.style.opacity = 0;
@@ -827,7 +828,7 @@ export default abstract class Graphics {
      * @method _updateVideo
      * @private
      */
-    public static _updateVideo = function() {
+    private static _updateVideo = function() {
         Graphics._video.width = Graphics.width;
         Graphics._video.height = Graphics.height;
         Graphics._video.style.zIndex = 2;
@@ -839,7 +840,7 @@ export default abstract class Graphics {
      * @method _createUpperCanvas
      * @private
      */
-    public static _createUpperCanvas = function() {
+    private static _createUpperCanvas = function() {
         Graphics._upperCanvas = document.createElement("canvas");
         Graphics._upperCanvas.id = "UpperCanvas";
         Graphics._updateUpperCanvas();
@@ -851,7 +852,7 @@ export default abstract class Graphics {
      * @method _updateUpperCanvas
      * @private
      */
-    public static _updateUpperCanvas = function() {
+    private static _updateUpperCanvas = function() {
         Graphics._upperCanvas.width = Graphics.width;
         Graphics._upperCanvas.height = Graphics.height;
         Graphics._upperCanvas.style.zIndex = 3;
@@ -863,7 +864,7 @@ export default abstract class Graphics {
      * @method _clearUpperCanvas
      * @private
      */
-    public static _clearUpperCanvas = function() {
+    private static _clearUpperCanvas = function() {
         const context = Graphics._upperCanvas.getContext("2d");
         context.clearRect(0, 0, Graphics.width, Graphics.height);
     };
@@ -873,7 +874,7 @@ export default abstract class Graphics {
      * @method _paintUpperCanvas
      * @private
      */
-    public static _paintUpperCanvas = function() {
+    private static _paintUpperCanvas = function() {
         Graphics._clearUpperCanvas();
         if (Graphics._loadingImage && Graphics._loadingCount >= 20) {
             const context = Graphics._upperCanvas.getContext("2d");
@@ -892,7 +893,7 @@ export default abstract class Graphics {
      * @method _createRenderer
      * @private
      */
-    public static _createRenderer = function() {
+    private static _createRenderer = function() {
         const width = Graphics.width;
         const height = Graphics.height;
         const options = { view: Graphics._canvas };
@@ -911,7 +912,7 @@ export default abstract class Graphics {
      * @method _updateRenderer
      * @private
      */
-    public static _updateRenderer = function() {
+    private static _updateRenderer = function() {
         if (Graphics.renderer) {
             Graphics.renderer.resize(Graphics.width, Graphics.height);
         }
@@ -922,7 +923,7 @@ export default abstract class Graphics {
      * @method _createFPSMeter
      * @private
      */
-    public static _createFPSMeter = function() {
+    private static _createFPSMeter = function() {
         const options = {
             graph: 1,
             decimals: 0,
@@ -936,7 +937,7 @@ export default abstract class Graphics {
      * @method _createModeBox
      * @private
      */
-    public static _createModeBox = function() {
+    private static _createModeBox = function() {
         const box = document.createElement("div");
         box.id = "modeTextBack";
         box.style.position = "absolute";
@@ -972,7 +973,7 @@ export default abstract class Graphics {
      * @method _createGameFontLoader
      * @private
      */
-    public static _createGameFontLoader = function() {
+    private static _createGameFontLoader = function() {
         Graphics._createFontLoader("GameFont");
     };
 
@@ -982,7 +983,7 @@ export default abstract class Graphics {
      * @param {String} name
      * @private
      */
-    public static _createFontLoader = function(name: string) {
+    private static _createFontLoader = function(name: string) {
         const div = document.createElement("div");
         const text = document.createTextNode(".");
         div.style.fontFamily = name;
@@ -1004,7 +1005,7 @@ export default abstract class Graphics {
      * @param {HTMLElement} element
      * @private
      */
-    public static _centerElement = function(element: HTMLElement) {
+    private static _centerElement = function(element: HTMLElement) {
         // @ts-ignore For some reason, "width" must be used here rather than any HTMLElement widths. Presumably this is due to bad typing.
         const width = element.width * Graphics._realScale;
         // @ts-ignore For some reason, "height" must be used here rather than any HTMLElement heights. Presumably this is due to bad typing.
@@ -1024,7 +1025,7 @@ export default abstract class Graphics {
      * @method _disableTextSelection
      * @private
      */
-    public static _disableTextSelection = function() {
+    private static _disableTextSelection = function() {
         const body = document.body;
         body.style.userSelect = "none";
         body.style.webkitUserSelect = "none";
@@ -1036,7 +1037,7 @@ export default abstract class Graphics {
      * @method _disableContextMenu
      * @private
      */
-    public static _disableContextMenu = function() {
+    private static _disableContextMenu = function() {
         const elements = document.body.getElementsByTagName("*");
         const oncontextmenu = function() {
             return false;
@@ -1052,7 +1053,7 @@ export default abstract class Graphics {
      * @method _applyCanvasFilter
      * @private
      */
-    public static _applyCanvasFilter = function() {
+    private static _applyCanvasFilter = function() {
         if (Graphics._canvas) {
             Graphics._canvas.style.opacity = 0.5;
             Graphics._canvas.style.filter = "blur(8px)";
@@ -1065,7 +1066,7 @@ export default abstract class Graphics {
      * @method _onVideoLoad
      * @private
      */
-    public static _onVideoLoad = function() {
+    private static _onVideoLoad = function() {
         Graphics._video.play();
         Graphics._updateVisibility(true);
         Graphics._videoLoading = false;
@@ -1076,7 +1077,7 @@ export default abstract class Graphics {
      * @method _onVideoError
      * @private
      */
-    public static _onVideoError = function() {
+    private static _onVideoError = function() {
         Graphics._updateVisibility(false);
         Graphics._videoLoading = false;
     };
@@ -1086,7 +1087,7 @@ export default abstract class Graphics {
      * @method _onVideoEnd
      * @private
      */
-    public static _onVideoEnd = function() {
+    private static _onVideoEnd = function() {
         Graphics._updateVisibility(false);
     };
 
@@ -1096,7 +1097,7 @@ export default abstract class Graphics {
      * @param {Boolean} videoVisible
      * @private
      */
-    public static _updateVisibility = function(videoVisible: boolean) {
+    private static _updateVisibility = function(videoVisible: boolean) {
         Graphics._video.style.opacity = videoVisible ? 1 : 0;
         Graphics._canvas.style.opacity = videoVisible ? 0 : 1;
     };
@@ -1107,7 +1108,7 @@ export default abstract class Graphics {
      * @return {Boolean}
      * @private
      */
-    public static _isVideoVisible = function(): boolean {
+    private static _isVideoVisible = function(): boolean {
         return Graphics._video.style.opacity > 0;
     };
 
@@ -1116,7 +1117,7 @@ export default abstract class Graphics {
      * @method _setupEventHandlers
      * @private
      */
-    public static _setupEventHandlers = function() {
+    private static _setupEventHandlers = function() {
         window.addEventListener("resize", Graphics._onWindowResize.bind(this));
         document.addEventListener("keydown", Graphics._onKeyDown.bind(this));
         document.addEventListener("keydown", Graphics._onTouchEnd.bind(this));
@@ -1129,7 +1130,7 @@ export default abstract class Graphics {
      * @method _onWindowResize
      * @private
      */
-    public static _onWindowResize = function() {
+    private static _onWindowResize = function() {
         Graphics._updateAllElements();
     };
 
@@ -1139,7 +1140,7 @@ export default abstract class Graphics {
      * @param {KeyboardEvent} event
      * @private
      */
-    public static _onKeyDown = function(event: KeyboardEvent) {
+    private static _onKeyDown = function(event: KeyboardEvent) {
         if (!event.ctrlKey && !event.altKey) {
             switch (event.keyCode) {
                 case 113: // F2
@@ -1164,7 +1165,7 @@ export default abstract class Graphics {
      * @param {TouchEvent} event
      * @private
      */
-    public static _onTouchEnd = function(event: TouchEvent) {
+    private static _onTouchEnd = function(event: TouchEvent) {
         if (!Graphics._videoUnlocked) {
             Graphics._video.play();
             Graphics._videoUnlocked = true;
@@ -1179,7 +1180,7 @@ export default abstract class Graphics {
      * @method _switchFPSMeter
      * @private
      */
-    public static _switchFPSMeter = function() {
+    private static _switchFPSMeter = function() {
         if (Graphics._fpsMeter.isPaused) {
             Graphics.showFps();
             Graphics._fpsMeter.showFps();
@@ -1197,7 +1198,7 @@ export default abstract class Graphics {
      * @method _switchStretchMode
      * @private
      */
-    public static _switchStretchMode = function() {
+    private static _switchStretchMode = function() {
         Graphics._stretchEnabled = !Graphics._stretchEnabled;
         Graphics._updateAllElements();
     };
@@ -1207,7 +1208,7 @@ export default abstract class Graphics {
      * @method _switchFullScreen
      * @private
      */
-    public static _switchFullScreen = function() {
+    private static _switchFullScreen = function() {
         if (Graphics._isFullScreen()) {
             Graphics._requestFullScreen();
         } else {
@@ -1221,7 +1222,7 @@ export default abstract class Graphics {
      * @return {Boolean}
      * @private
      */
-    public static _isFullScreen = function(): boolean {
+    private static _isFullScreen = function(): boolean {
         return document.fullscreenEnabled;
     };
 
@@ -1230,7 +1231,7 @@ export default abstract class Graphics {
      * @method _requestFullScreen
      * @private
      */
-    public static _requestFullScreen = function() {
+    private static _requestFullScreen = function() {
         document.body.requestFullscreen();
     };
 
@@ -1239,7 +1240,7 @@ export default abstract class Graphics {
      * @method _cancelFullScreen
      * @private
      */
-    public static _cancelFullScreen = function() {
+    private static _cancelFullScreen = function() {
         document.exitFullscreen();
     };
 }
