@@ -51,14 +51,62 @@ export default abstract class Graphics {
     public static set scale(input: number) {
         Graphics._scale = input;
     }
-    public static _cssFontLoading: any;
-    public static _fontLoaded: any;
-    public static _videoVolume: number;
-    public static frameCount: number;
-    public static BLEND_NORMAL: number;
-    public static BLEND_ADD: number;
-    public static BLEND_MULTIPLY: number;
-    public static BLEND_SCREEN: number;
+
+    // @ts-ignore fonts does not exist on the normal Document type (MS is dragging its feet)
+    public static _cssFontLoading: any = document.fonts && document.fonts.ready;
+
+    public static _fontLoaded: any = null;
+    public static _videoVolume: number = 1;
+
+    /**
+     * The total frame count of the game screen.
+     *
+     * @static
+     * @property frameCount
+     * @type Number
+     */
+    public static frameCount: number = 0;
+
+    /**
+     * The alias of PIXI.blendModes.NORMAL.
+     *
+     * @static
+     * @property BLEND_NORMAL
+     * @type Number
+     * @final
+     */
+    public static BLEND_NORMAL: number = 0;
+
+    /**
+     * The alias of PIXI.blendModes.ADD.
+     *
+     * @static
+     * @property BLEND_ADD
+     * @type Number
+     * @final
+     */
+    public static BLEND_ADD: number = 1;
+
+    /**
+     * The alias of PIXI.blendModes.MULTIPLY.
+     *
+     * @static
+     * @property BLEND_MULTIPLY
+     * @type Number
+     * @final
+     */
+    public static BLEND_MULTIPLY: number = 2;
+
+    /**
+     * The alias of PIXI.blendModes.SCREEN.
+     *
+     * @static
+     * @property BLEND_SCREEN
+     * @type Number
+     * @final
+     */
+    public static BLEND_SCREEN: number = 3;
+
     public static renderer: PIXI.WebGLRenderer;
     public static _setupCssFontLoading: () => void;
     public static canUseCssFontLoading: () => boolean;
@@ -212,11 +260,6 @@ export default abstract class Graphics {
     private static _height: any;
 }
 
-// @ts-ignore
-Graphics._cssFontLoading = document.fonts && document.fonts.ready;
-Graphics._fontLoaded = null;
-Graphics._videoVolume = 1;
-
 Graphics._setupCssFontLoading = function() {
     if (Graphics._cssFontLoading) {
         // @ts-ignore
@@ -233,55 +276,6 @@ Graphics._setupCssFontLoading = function() {
 Graphics.canUseCssFontLoading = function() {
     return !!Graphics._cssFontLoading;
 };
-
-/**
- * The total frame count of the game screen.
- *
- * @static
- * @property frameCount
- * @type Number
- */
-Graphics.frameCount = 0;
-
-/**
- * The alias of PIXI.blendModes.NORMAL.
- *
- * @static
- * @property BLEND_NORMAL
- * @type Number
- * @final
- */
-Graphics.BLEND_NORMAL = 0;
-
-/**
- * The alias of PIXI.blendModes.ADD.
- *
- * @static
- * @property BLEND_ADD
- * @type Number
- * @final
- */
-Graphics.BLEND_ADD = 1;
-
-/**
- * The alias of PIXI.blendModes.MULTIPLY.
- *
- * @static
- * @property BLEND_MULTIPLY
- * @type Number
- * @final
- */
-Graphics.BLEND_MULTIPLY = 2;
-
-/**
- * The alias of PIXI.blendModes.SCREEN.
- *
- * @static
- * @property BLEND_SCREEN
- * @type Number
- * @final
- */
-Graphics.BLEND_SCREEN = 3;
 
 /**
  * Marks the beginning of each frame for FPSMeter.
@@ -344,7 +338,7 @@ Graphics.render = function(stage?: Stage) {
  * @method isWebGL
  * @return {Boolean} True if the renderer type is WebGL
  */
-Graphics.isWebGL = function() {
+Graphics.isWebGL = function(): boolean {
     return (
         Graphics.renderer && Graphics.renderer.type === PIXI.RENDERER_TYPE.WEBGL
     );
@@ -357,7 +351,7 @@ Graphics.isWebGL = function() {
  * @method hasWebGL
  * @return {Boolean} True if the current browser supports WebGL.
  */
-Graphics.hasWebGL = function() {
+Graphics.hasWebGL = function(): boolean {
     try {
         const canvas = document.createElement("canvas");
         return !!(
@@ -376,7 +370,7 @@ Graphics.hasWebGL = function() {
  * @method canUseDifferenceBlend
  * @return {Boolean} True if the canvas blend mode 'difference' is supported
  */
-Graphics.canUseDifferenceBlend = function() {
+Graphics.canUseDifferenceBlend = function(): boolean {
     return Graphics._canUseDifferenceBlend;
 };
 
@@ -387,7 +381,7 @@ Graphics.canUseDifferenceBlend = function() {
  * @method canUseSaturationBlend
  * @return {Boolean} True if the canvas blend mode 'saturation' is supported
  */
-Graphics.canUseSaturationBlend = function() {
+Graphics.canUseSaturationBlend = function(): boolean {
     return Graphics._canUseSaturationBlend;
 };
 
@@ -442,7 +436,7 @@ Graphics.endLoading = function() {
  * @method printLoadingError
  * @param {String} url The url of the resource failed to load
  */
-Graphics.printLoadingError = function(url) {
+Graphics.printLoadingError = function(url: string) {
     if (Graphics._errorPrinter && !Graphics._errorShowed) {
         Graphics._errorPrinter.innerHTML = Graphics._makeErrorHtml(
             "Loading Error",
@@ -484,7 +478,7 @@ Graphics.eraseLoadingError = function() {
  * @param {String} name The name of the error
  * @param {String} message The message of the error
  */
-Graphics.printError = function(name, message) {
+Graphics.printError = function(name: string, message: string) {
     Graphics._errorShowed = true;
     if (Graphics._errorPrinter) {
         Graphics._errorPrinter.innerHTML = Graphics._makeErrorHtml(
@@ -530,7 +524,7 @@ Graphics.hideFps = function() {
  * @param {String} name The face name of the font
  * @param {String} url The url of the font file
  */
-Graphics.loadFont = function(name, url) {
+Graphics.loadFont = function(name: string, url: string) {
     const style = document.createElement("style");
     const head = document.getElementsByTagName("head");
     const rule =
@@ -551,7 +545,7 @@ Graphics.loadFont = function(name, url) {
  * @param {String} name The face name of the font
  * @return {Boolean} True if the font file is loaded
  */
-Graphics.isFontLoaded = function(name) {
+Graphics.isFontLoaded = function(name: string): boolean {
     if (Graphics._cssFontLoading) {
         if (Graphics._fontLoaded) {
             return Graphics._fontLoaded.check('10px "' + name + '"');
@@ -580,7 +574,7 @@ Graphics.isFontLoaded = function(name) {
  * @method playVideo
  * @param {String} src
  */
-Graphics.playVideo = function(src) {
+Graphics.playVideo = function(src: string) {
     Graphics._videoLoader = ResourceHandler.createLoader(
         null,
         Graphics._playVideo.bind(this, src),
@@ -595,7 +589,7 @@ Graphics.playVideo = function(src) {
  * @param {String} src
  * @private
  */
-Graphics._playVideo = function(src) {
+Graphics._playVideo = function(src: string) {
     Graphics._video.src = src;
     Graphics._video.onloadeddata = Graphics._onVideoLoad.bind(this);
     Graphics._video.onerror = Graphics._videoLoader;
@@ -611,7 +605,7 @@ Graphics._playVideo = function(src) {
  * @method isVideoPlaying
  * @return {Boolean} True if the video is playing
  */
-Graphics.isVideoPlaying = function() {
+Graphics.isVideoPlaying = function(): boolean {
     return Graphics._videoLoading || Graphics._isVideoVisible();
 };
 
@@ -623,7 +617,7 @@ Graphics.isVideoPlaying = function() {
  * @param {String} type The video type to test support for
  * @return {Boolean} True if the browser can play the specified video type
  */
-Graphics.canPlayVideoType = function(type) {
+Graphics.canPlayVideoType = function(type: string): boolean {
     return Graphics._video && Graphics._video.canPlayType(type);
 };
 
@@ -634,7 +628,7 @@ Graphics.canPlayVideoType = function(type) {
  * @method setVideoVolume
  * @param {Number} value
  */
-Graphics.setVideoVolume = function(value) {
+Graphics.setVideoVolume = function(value: number) {
     Graphics._videoVolume = value;
     if (Graphics._video) {
         Graphics._video.volume = Graphics._videoVolume;
@@ -650,7 +644,7 @@ Graphics.setVideoVolume = function(value) {
  * @param {Number} x The x coordinate on the page to be converted
  * @return {Number} The x coordinate on the canvas area
  */
-Graphics.pageToCanvasX = function(x) {
+Graphics.pageToCanvasX = function(x: number): number {
     if (Graphics._canvas) {
         const left = Graphics._canvas.offsetLeft;
         return Math.round((x - left) / Graphics._realScale);
@@ -668,7 +662,7 @@ Graphics.pageToCanvasX = function(x) {
  * @param {Number} y The y coordinate on the page to be converted
  * @return {Number} The y coordinate on the canvas area
  */
-Graphics.pageToCanvasY = function(y) {
+Graphics.pageToCanvasY = function(y: number): number {
     if (Graphics._canvas) {
         const top = Graphics._canvas.offsetTop;
         return Math.round((y - top) / Graphics._realScale);
@@ -686,7 +680,7 @@ Graphics.pageToCanvasY = function(y) {
  * @param {Number} y The y coordinate on the canvas area
  * @return {Boolean} True if the specified point is inside the game canvas area
  */
-Graphics.isInsideCanvas = function(x, y) {
+Graphics.isInsideCanvas = function(x: number, y: number): boolean {
     return x >= 0 && x < Graphics.width && y >= 0 && y < Graphics.height;
 };
 
@@ -759,7 +753,7 @@ Graphics._updateRealScale = function() {
  * @return {String}
  * @private
  */
-Graphics._makeErrorHtml = function(name, message) {
+Graphics._makeErrorHtml = function(name: string, message: string): string {
     return (
         '<font color="yellow"><b>' +
         name +
@@ -1052,7 +1046,7 @@ Graphics._createGameFontLoader = function() {
  * @param {String} name
  * @private
  */
-Graphics._createFontLoader = function(name) {
+Graphics._createFontLoader = function(name: string) {
     const div = document.createElement("div");
     const text = document.createTextNode(".");
     div.style.fontFamily = name;
@@ -1074,7 +1068,7 @@ Graphics._createFontLoader = function(name) {
  * @param {HTMLElement} element
  * @private
  */
-Graphics._centerElement = function(element) {
+Graphics._centerElement = function(element: HTMLElement) {
     const width = element.width * Graphics._realScale;
     const height = element.height * Graphics._realScale;
     element.style.position = "absolute";
@@ -1164,7 +1158,7 @@ Graphics._onVideoEnd = function() {
  * @param {Boolean} videoVisible
  * @private
  */
-Graphics._updateVisibility = function(videoVisible) {
+Graphics._updateVisibility = function(videoVisible: boolean) {
     Graphics._video.style.opacity = videoVisible ? 1 : 0;
     Graphics._canvas.style.opacity = videoVisible ? 0 : 1;
 };
@@ -1175,7 +1169,7 @@ Graphics._updateVisibility = function(videoVisible) {
  * @return {Boolean}
  * @private
  */
-Graphics._isVideoVisible = function() {
+Graphics._isVideoVisible = function(): boolean {
     return Graphics._video.style.opacity > 0;
 };
 
@@ -1207,7 +1201,7 @@ Graphics._onWindowResize = function() {
  * @param {KeyboardEvent} event
  * @private
  */
-Graphics._onKeyDown = function(event) {
+Graphics._onKeyDown = function(event: KeyboardEvent) {
     if (!event.ctrlKey && !event.altKey) {
         switch (event.keyCode) {
             case 113: // F2
@@ -1232,7 +1226,7 @@ Graphics._onKeyDown = function(event) {
  * @param {TouchEvent} event
  * @private
  */
-Graphics._onTouchEnd = function(event) {
+Graphics._onTouchEnd = function(event: TouchEvent) {
     if (!Graphics._videoUnlocked) {
         Graphics._video.play();
         Graphics._videoUnlocked = true;
@@ -1266,7 +1260,7 @@ Graphics._switchFPSMeter = function() {
  * @return {Boolean}
  * @private
  */
-Graphics._switchStretchMode = function() {
+Graphics._switchStretchMode = function(): boolean {
     Graphics._stretchEnabled = !Graphics._stretchEnabled;
     Graphics._updateAllElements();
 };
@@ -1290,7 +1284,7 @@ Graphics._switchFullScreen = function() {
  * @return {Boolean}
  * @private
  */
-Graphics._isFullScreen = function() {
+Graphics._isFullScreen = function(): boolean {
     return document.fullscreenEnabled;
 };
 
