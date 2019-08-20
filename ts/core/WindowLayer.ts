@@ -102,7 +102,9 @@ export default class WindowLayer extends PIXI.Container {
         }
 
         renderer.flush();
+        // @ts-ignore
         this.filterArea.copy(this);
+        // @ts-ignore Bad PIXI typing
         renderer.filterManager.pushFilter(this, this.filters);
         renderer.currentRenderer.start();
 
@@ -121,6 +123,7 @@ export default class WindowLayer extends PIXI.Container {
             // @ts-ignore
             if (child._isWindow && child.visible && child.openness > 0) {
                 this._maskWindow(child, shift);
+                // @ts-ignore Another bad typing
                 renderer.maskManager.pushScissorMask(this, this._windowMask);
                 renderer.clear();
                 renderer.maskManager.popScissorMask();
@@ -135,6 +138,7 @@ export default class WindowLayer extends PIXI.Container {
         renderer.maskManager.popScissorMask();
 
         for (let j = 0; j < this.children.length; j++) {
+            // @ts-ignore
             if (!this.children[j]._isWindow) {
                 this.children[j].renderWebGL(renderer);
             }
@@ -147,6 +151,7 @@ export default class WindowLayer extends PIXI.Container {
      * @private
      */
     private _maskWindow(window, shift) {
+        // @ts-ignore
         this._windowMask._currentBounds = null;
         this._windowMask.boundsDirty = Number(true);
         const rect = this._windowRect;
