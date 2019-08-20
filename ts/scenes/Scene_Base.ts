@@ -247,9 +247,8 @@ export default class Scene_Base extends Stage {
      */
     public updateChildren() {
         this.children.forEach(function(child) {
-            if (child.update) {
-                child.update();
-            }
+            // @ts-ignore
+            child.update ? child.update() : null;
         });
     }
 
