@@ -45,6 +45,7 @@ export default class WindowLayer extends PIXI.Container {
         this._windowMask.beginFill(0xffffff, 1);
         this._windowMask.drawRect(0, 0, 0, 0);
         this._windowMask.endFill();
+        // @ts-ignore
         this._windowRect = this._windowMask.graphicsData[0].shape;
 
         this.filterArea = new PIXI.Rectangle();
@@ -81,9 +82,8 @@ export default class WindowLayer extends PIXI.Container {
      */
     public update() {
         this.children.forEach(function(child) {
-            if (child.update) {
-                child.update();
-            }
+            // @ts-ignore
+            child.update ? child.update() : null;
         });
     }
 
@@ -118,6 +118,7 @@ export default class WindowLayer extends PIXI.Container {
 
         for (let i = 0; i < this.children.length; i++) {
             const child = this.children[i];
+            // @ts-ignore
             if (child._isWindow && child.visible && child.openness > 0) {
                 this._maskWindow(child, shift);
                 renderer.maskManager.pushScissorMask(this, this._windowMask);
