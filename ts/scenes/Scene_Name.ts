@@ -8,7 +8,7 @@ export default class Scene_Name extends Scene_MenuBase {
     private _editWindow: Window_NameEdit;
     private _inputWindow: Window_NameInput;
 
-    public prepare(actorId, maxLength) {
+    public prepare(actorId: number, maxLength: number) {
         this._actorId = actorId;
         this._maxLength = maxLength;
     }
