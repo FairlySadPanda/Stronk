@@ -19,7 +19,7 @@ export default abstract class SceneManager {
     private static _sceneStarted = false;
     private static _exiting = false;
     private static _previousClass = null;
-    private static _backgroundBitmap = null;
+    private static _backgroundBitmap: Bitmap = null;
     private static _screenWidth = 816;
     private static _screenHeight = 624;
     private static _boxWidth = 816;
@@ -361,7 +361,7 @@ export default abstract class SceneManager {
         SceneManager._backgroundBitmap.blur();
     };
 
-    public static backgroundBitmap = function() {
+    public static backgroundBitmap = function(): Bitmap {
         return SceneManager._backgroundBitmap;
     };
 

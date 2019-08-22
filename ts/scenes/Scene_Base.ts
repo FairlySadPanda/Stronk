@@ -24,6 +24,7 @@ export default class Scene_Base extends Stage {
         this._fadeDuration = 0;
         this._fadeSprite = null;
         this._imageReservationId = Utils.generateRuntimeId();
+        this.importantBitmapsAreLoaded = false;
     }
 
     /**

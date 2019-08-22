@@ -21,7 +21,7 @@ export interface Game_Battler_OnLoad extends Game_BattlerBase_OnLoad {
     _selected: boolean;
 }
 
-export default class Game_Battler extends Game_BattlerBase {
+export default abstract class Game_Battler extends Game_BattlerBase {
     private _actions: any[];
     private _speed: number;
     private _result: Game_ActionResult;
@@ -588,4 +588,6 @@ export default class Game_Battler extends Game_BattlerBase {
     public performSubstitute(target) {}
 
     public performCollapse() {}
+
+    public abstract isSpriteVisible(): boolean;
 }

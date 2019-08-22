@@ -37,7 +37,6 @@ export default class Scene_Map extends Scene_Base {
         this._encounterEffectDuration = 0;
         this._mapLoaded = false;
         this._touchCount = 0;
-        this.importantBitmapsAreLoaded = false;
     }
 
     public create() {

@@ -1,5 +1,6 @@
 import Sprite_Base from "./Sprite_Base";
 import Sprite_Damage from "./Sprite_Damage";
+import Game_Battler from "../objects/Game_Battler";
 
 // -----------------------------------------------------------------------------
 // Sprite_Battler
@@ -7,8 +8,8 @@ import Sprite_Damage from "./Sprite_Damage";
 // The superclass of Sprite_Actor and Sprite_Enemy.
 
 export default class Sprite_Battler extends Sprite_Base {
-    private _battler: any;
-    private _damages: any[];
+    private _battler: Game_Battler;
+    private _damages: Sprite_Damage[];
     private _homeX: number;
     private _homeY: number;
     private _offsetX: number;
