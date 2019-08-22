@@ -315,4 +315,6 @@ export default class Scene_Base extends Stage {
     public slowFadeSpeed() {
         return this.fadeSpeed() * 2;
     }
+
+    public prepare(...args: any[]): void {}
 }
