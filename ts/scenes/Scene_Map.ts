@@ -30,7 +30,7 @@ export default class Scene_Map extends Scene_Base {
     private _encounterEffectDuration: number;
     private _mapLoaded: boolean;
     private _touchCount: number;
-    private spriteSetIsLoaded: boolean;
+    private importantBitmapsAreLoaded: boolean;
 
     public constructor() {
         super();
@@ -38,7 +38,7 @@ export default class Scene_Map extends Scene_Base {
         this._encounterEffectDuration = 0;
         this._mapLoaded = false;
         this._touchCount = 0;
-        this.spriteSetIsLoaded = false;
+        this.importantBitmapsAreLoaded = false;
     }
 
     public create() {
@@ -55,7 +55,9 @@ export default class Scene_Map extends Scene_Base {
             this.onMapLoaded();
             this._mapLoaded = true;
         }
-        return this._mapLoaded && super.isReady() && this.spriteSetIsLoaded;
+        return (
+            this._mapLoaded && super.isReady() && this.importantBitmapsAreLoaded
+        );
     }
 
     public onMapLoaded() {
@@ -241,7 +243,7 @@ export default class Scene_Map extends Scene_Base {
     public createSpriteset() {
         this._spriteset = new Spriteset_Map();
         this._spriteset.waitForloadingComplete().then(() => {
-            this.spriteSetIsLoaded = true;
+            this.importantBitmapsAreLoaded = true;
         });
         this.addChild(this._spriteset);
     }
