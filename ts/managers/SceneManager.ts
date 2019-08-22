@@ -11,22 +11,24 @@ import PluginManager from "./PluginManager";
 declare const nw: any;
 
 export default abstract class SceneManager {
-    public static _getTimeInMsWithoutMobileSafari: () => number;
-    public static _scene: any;
-    public static _nextScene: any;
-    public static _stack: any[];
-    public static _stopped: boolean;
-    public static _sceneStarted: boolean;
-    public static _exiting: boolean;
-    public static _previousClass: any;
-    public static _backgroundBitmap: Bitmap;
-    public static _screenWidth: number;
-    public static _screenHeight: number;
-    public static _boxWidth: number;
-    public static _boxHeight: number;
-    public static _deltaTime: number;
-    public static _currentTime: any;
-    public static _accumulator: number;
+    private static _getTimeInMsWithoutMobileSafari = function() {
+        return performance.now();
+    };
+    private static _scene = null;
+    private static _nextScene = null;
+    private static _stack = [];
+    private static _stopped = false;
+    private static _sceneStarted = false;
+    private static _exiting = false;
+    private static _previousClass = null;
+    private static _backgroundBitmap = null;
+    private static _screenWidth = 816;
+    private static _screenHeight = 624;
+    private static _boxWidth = 816;
+    private static _boxHeight = 624;
+    private static _deltaTime = 1.0 / 60.0;
+    private static _accumulator = 0.0;
+    private static _currentTime = SceneManager._getTimeInMsWithoutMobileSafari();
     public static run: (sceneClass: any) => void;
     public static initialize: () => void;
     public static initGraphics: () => void;
@@ -75,28 +77,6 @@ export default abstract class SceneManager {
  * Gets the current time in ms without on iOS Safari.
  * @private
  */
-SceneManager._getTimeInMsWithoutMobileSafari = function() {
-    return performance.now();
-};
-
-SceneManager._scene = null;
-SceneManager._nextScene = null;
-SceneManager._stack = [];
-SceneManager._stopped = false;
-SceneManager._sceneStarted = false;
-SceneManager._exiting = false;
-SceneManager._previousClass = null;
-SceneManager._backgroundBitmap = null;
-SceneManager._screenWidth = 816;
-SceneManager._screenHeight = 624;
-SceneManager._boxWidth = 816;
-SceneManager._boxHeight = 624;
-SceneManager._deltaTime = 1.0 / 60.0;
-
-if (!Utils.isMobileSafari()) {
-    SceneManager._currentTime = SceneManager._getTimeInMsWithoutMobileSafari();
-}
-SceneManager._accumulator = 0.0;
 
 SceneManager.run = function(sceneClass) {
     try {
