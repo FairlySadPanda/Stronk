@@ -64,7 +64,7 @@ export default class Scene_Base extends Stage {
      * @memberof Scene_Base
      * @return {Boolean} return true if the scene is active
      */
-    public isActive() {
+    public isActive(): boolean {
         return this._active;
     }
 
@@ -76,7 +76,7 @@ export default class Scene_Base extends Stage {
      * @memberof Scene_Base
      * @return {Boolean} Return true if the scene is ready to start
      */
-    public isReady() {
+    public isReady(): boolean {
         return ImageManager.isReady();
     }
 
@@ -122,7 +122,7 @@ export default class Scene_Base extends Stage {
      * @memberof Scene_Base
      * @return {Boolean} Return true if the scene is currently busy
      */
-    public isBusy() {
+    public isBusy(): boolean {
         return this._fadeDuration > 0;
     }
 
@@ -174,7 +174,7 @@ export default class Scene_Base extends Stage {
      * @instance
      * @memberof Scene_Base
      */
-    public startFadeIn(duration, white) {
+    public startFadeIn(duration: number, white: boolean) {
         this.createFadeSprite(white);
         this._fadeSign = 1;
         this._fadeDuration = duration || 30;
@@ -191,7 +191,7 @@ export default class Scene_Base extends Stage {
      * @instance
      * @memberof Scene_Base
      */
-    public startFadeOut(duration, white?) {
+    public startFadeOut(duration: number, white?: boolean) {
         this.createFadeSprite(white);
         this._fadeSign = -1;
         this._fadeDuration = duration || 30;
@@ -206,7 +206,7 @@ export default class Scene_Base extends Stage {
      * @instance
      * @memberof Scene_Base
      */
-    public createFadeSprite(white) {
+    public createFadeSprite(white: boolean) {
         if (!this._fadeSprite) {
             this._fadeSprite = new ScreenSprite();
             this.addChild(this._fadeSprite);
@@ -300,7 +300,7 @@ export default class Scene_Base extends Stage {
      * @memberof Scene_Base
      * @return {Number} Return the fade speed
      */
-    public fadeSpeed() {
+    public fadeSpeed(): number {
         return 24;
     }
 
@@ -312,7 +312,7 @@ export default class Scene_Base extends Stage {
      * @memberof Scene_Base
      * @return {Number} Return the fade speed
      */
-    public slowFadeSpeed() {
+    public slowFadeSpeed(): number {
         return this.fadeSpeed() * 2;
     }
 
