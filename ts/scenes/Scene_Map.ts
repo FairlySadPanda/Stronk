@@ -21,15 +21,16 @@ import Scene_Title from "./Scene_Title";
 
 export default class Scene_Map extends Scene_Base {
     public menuCalling: boolean;
-    private _transfer: any;
-    private _mapNameWindow: any;
-    private _messageWindow: any;
-    private _spriteset: any;
+    private _transfer: boolean;
+    private _mapNameWindow: Window_MapName;
+    private _messageWindow: Window_Message;
+    private _spriteset: Spriteset_Map;
     private _scrollTextWindow: Window_ScrollText;
     private _waitCount: number;
     private _encounterEffectDuration: number;
     private _mapLoaded: boolean;
     private _touchCount: number;
+    private spriteSetIsLoaded: boolean;
 
     public constructor() {
         super();
@@ -37,6 +38,7 @@ export default class Scene_Map extends Scene_Base {
         this._encounterEffectDuration = 0;
         this._mapLoaded = false;
         this._touchCount = 0;
+        this.spriteSetIsLoaded = false;
     }
 
     public create() {
@@ -53,7 +55,7 @@ export default class Scene_Map extends Scene_Base {
             this.onMapLoaded();
             this._mapLoaded = true;
         }
-        return this._mapLoaded && super.isReady();
+        return this._mapLoaded && super.isReady() && this.spriteSetIsLoaded;
     }
 
     public onMapLoaded() {
@@ -238,6 +240,9 @@ export default class Scene_Map extends Scene_Base {
 
     public createSpriteset() {
         this._spriteset = new Spriteset_Map();
+        this._spriteset.waitForloadingComplete().then(() => {
+            this.spriteSetIsLoaded = true;
+        });
         this.addChild(this._spriteset);
     }
 
@@ -317,13 +322,7 @@ export default class Scene_Map extends Scene_Base {
     }
 
     public fadeInForTransfer() {
-        const fadeType = $gamePlayer.fadeType();
-        switch (fadeType) {
-            case 0:
-            case 1:
-                this.startFadeIn(this.fadeSpeed(), fadeType === 1);
-                break;
-        }
+        this.startFadeIn(this.fadeSpeed(), $gamePlayer.fadeType() === 1);
     }
 
     public fadeOutForTransfer() {

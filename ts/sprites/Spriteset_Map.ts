@@ -22,8 +22,15 @@ export default class Spriteset_Map extends Spriteset_Base {
     private _shadowSprite: Sprite;
     private _destinationSprite: Sprite_Destination;
     private _weather: Weather;
-
     private _parallaxName: string;
+    private _bitmapPromises: Promise<void>[];
+
+    private get bitmapPromises(): Promise<void>[] {
+        if (!this._bitmapPromises) {
+            this._bitmapPromises = [];
+        }
+        return this._bitmapPromises;
+    }
 
     public createLowerLayer() {
         super.createLowerLayer();
@@ -69,25 +76,19 @@ export default class Spriteset_Map extends Spriteset_Base {
         );
         this._tilemap.horizontalWrap = $gameMap.isLoopHorizontal();
         this._tilemap.verticalWrap = $gameMap.isLoopVertical();
-        this.loadTileset().then(() => {
-            this._baseSprite.addChild(this._tilemap);
-        });
+        this.loadTileset();
+        this._baseSprite.addChild(this._tilemap);
     }
 
-    public async loadTileset() {
+    public loadTileset() {
         this._tileset = $gameMap.tileset();
         if (this._tileset) {
             const tilesetNames = this._tileset.tilesetNames;
-            for (let i = 0; i < tilesetNames.length; i++) {
-                this._tilemap.bitmaps[i] = ImageManager.loadTileset(
-                    tilesetNames[i]
-                );
+            for (const name of tilesetNames) {
+                const bitmap = ImageManager.loadTileset(name);
+                this.bitmapPromises.push(bitmap.imagePromise);
+                this._tilemap.bitmaps.push(bitmap);
             }
-
-            for (const bitmap of this._tilemap.bitmaps) {
-                await bitmap.imagePromise;
-            }
-
             const newTilesetFlags = $gameMap.tilesetFlags();
             this._tilemap.refreshTileset();
             if (!Utils.arrayEquals(this._tilemap.flags, newTilesetFlags)) {
@@ -99,24 +100,34 @@ export default class Spriteset_Map extends Spriteset_Base {
 
     public createCharacters() {
         this._characterSprites = [];
-        $gameMap.events().forEach(function(event) {
-            this._characterSprites.push(new Sprite_Character(event));
+        for (const event of $gameMap.events()) {
+            const character = new Sprite_Character(event);
+            // this.bitmapPromises.push(character.bitmap.imagePromise);
+            this._characterSprites.push(character);
+        }
+        for (const event of $gameMap.vehicles()) {
+            const vehicle = new Sprite_Character(event);
+            // this.bitmapPromises.push(vehicle.bitmap.imagePromise);
+            this._characterSprites.push(vehicle);
+        }
+        $gamePlayer.followers().reverseEach(function(event) {
+            const follower = new Sprite_Character(event);
+            // this.bitmapPromises.push(follower.bitmap.imagePromise);
+            this._characterSprites.push(follower);
         }, this);
-        $gameMap.vehicles().forEach(function(vehicle) {
-            this._characterSprites.push(new Sprite_Character(vehicle));
-        }, this);
-        $gamePlayer.followers().reverseEach(function(follower) {
-            this._characterSprites.push(new Sprite_Character(follower));
-        }, this);
-        this._characterSprites.push(new Sprite_Character($gamePlayer));
-        for (let i = 0; i < this._characterSprites.length; i++) {
-            this._tilemap.addChild(this._characterSprites[i]);
+        const player = new Sprite_Character($gamePlayer);
+        // this.bitmapPromises.push(player.bitmap.imagePromise);
+        this._characterSprites.push(player);
+        for (const characterSprite of this._characterSprites) {
+            this._tilemap.addChild(characterSprite);
         }
     }
 
     public createShadow() {
         this._shadowSprite = new Sprite();
-        this._shadowSprite.bitmap = ImageManager.loadSystem("Shadow1");
+        const sprite = ImageManager.loadSystem("Shadow1");
+        // this.bitmapPromises.push(sprite.imagePromise);
+        this._shadowSprite.bitmap = sprite;
         this._shadowSprite.anchor.x = 0.5;
         this._shadowSprite.anchor.y = 1;
         this._shadowSprite.z = 6;
@@ -125,6 +136,7 @@ export default class Spriteset_Map extends Spriteset_Base {
 
     public createDestination() {
         this._destinationSprite = new Sprite_Destination();
+        // this.bitmapPromises.push(this._destinationSprite.bitmap.imagePromise);
         this._destinationSprite.z = 9;
         this._tilemap.addChild(this._destinationSprite);
     }
@@ -187,5 +199,16 @@ export default class Spriteset_Map extends Spriteset_Base {
         this._weather.power = $gameScreen.weatherPower();
         this._weather.origin.x = $gameMap.displayX() * $gameMap.tileWidth();
         this._weather.origin.y = $gameMap.displayY() * $gameMap.tileHeight();
+    }
+
+    public async waitForloadingComplete(): Promise<void> {
+        console.log(
+            `There are ${this.bitmapPromises.length} promises to resolve...`
+        );
+        for (const promise of this.bitmapPromises) {
+            await promise;
+            console.log("Done!");
+        }
+        // await Promise.all(this.bitmapPromises);
     }
 }
