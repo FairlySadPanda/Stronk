@@ -15,6 +15,7 @@ export default class Scene_Base extends Stage {
     protected _fadeSign: number;
     protected _fadeDuration: number;
     protected _imageReservationId: number;
+    protected importantBitmapsAreLoaded: boolean;
 
     public constructor() {
         super();

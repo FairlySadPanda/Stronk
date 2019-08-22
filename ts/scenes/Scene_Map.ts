@@ -30,7 +30,6 @@ export default class Scene_Map extends Scene_Base {
     private _encounterEffectDuration: number;
     private _mapLoaded: boolean;
     private _touchCount: number;
-    private importantBitmapsAreLoaded: boolean;
 
     public constructor() {
         super();
