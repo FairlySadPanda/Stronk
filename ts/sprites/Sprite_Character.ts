@@ -3,6 +3,7 @@ import ImageManager from "../managers/ImageManager";
 import Sprite_Balloon from "./Sprite_Balloon";
 import Sprite_Base from "./Sprite_Base";
 import Game_Character from "../objects/Game_Character";
+import TilingSprite from "../core/TilingSprite";
 
 // -----------------------------------------------------------------------------
 // Sprite_Character
@@ -13,14 +14,14 @@ export default class Sprite_Character extends Sprite_Base {
     private _character: Game_Character;
     private _balloonDuration: number;
     private _tilesetId: number;
-    private _upperBody: any;
-    private _lowerBody: any;
-    private _tileId: any;
-    private _characterName: any;
-    private _characterIndex: any;
-    private _isBigCharacter: any;
+    private _upperBody: Sprite;
+    private _lowerBody: Sprite;
+    private _tileId: number;
+    private _characterName: string;
+    private _characterIndex: number;
+    private _isBigCharacter: boolean;
     private _bushDepth: number;
-    private _balloonSprite: any;
+    private _balloonSprite: Sprite_Balloon;
 
     public constructor(character: Game_Character) {
         super();
