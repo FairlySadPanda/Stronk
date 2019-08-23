@@ -23,6 +23,14 @@ export default class Spriteset_Base extends Sprite {
     private _timerSprite: Sprite_Timer;
     private _flashSprite: ScreenSprite;
     private _fadeSprite: ScreenSprite;
+    private _bitmapPromises: Promise<void>[];
+
+    protected get bitmapPromises(): Promise<void>[] {
+        if (!this._bitmapPromises) {
+            this._bitmapPromises = [];
+        }
+        return this._bitmapPromises;
+    }
 
     public constructor() {
         super();
@@ -140,5 +148,13 @@ export default class Spriteset_Base extends Sprite {
         this.x = Math.round(-screen.zoomX() * (scale - 1));
         this.y = Math.round(-screen.zoomY() * (scale - 1));
         this.x += Math.round(screen.shake());
+    }
+
+    public async waitForloadingComplete(): Promise<void> {
+        console.log(
+            "There are currently the following number of promises to await: " +
+                this.bitmapPromises.length
+        );
+        await Promise.all(this.bitmapPromises);
     }
 }

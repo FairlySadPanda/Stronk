@@ -153,17 +153,19 @@ export default class Scene_Battle extends Scene_Base {
     }
 
     public createDisplayObjects() {
-        this.createSpriteset();
-        this.createWindowLayer();
-        this.createAllWindows();
-        BattleManager.setLogWindow(this._logWindow);
-        BattleManager.setStatusWindow(this._statusWindow);
-        BattleManager.setSpriteset(this._spriteset);
-        this._logWindow.setSpriteset(this._spriteset);
+        this.createSpriteset().then(() => {
+            this.createWindowLayer();
+            this.createAllWindows();
+            BattleManager.setLogWindow(this._logWindow);
+            BattleManager.setStatusWindow(this._statusWindow);
+            BattleManager.setSpriteset(this._spriteset);
+            this._logWindow.setSpriteset(this._spriteset);
+        });
     }
 
-    public createSpriteset() {
+    public async createSpriteset() {
         this._spriteset = new Spriteset_Battle();
+        await this._spriteset.waitForloadingComplete();
         this.addChild(this._spriteset);
     }
 

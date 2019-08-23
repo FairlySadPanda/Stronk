@@ -29,7 +29,7 @@ export default class Spriteset_Battle extends Spriteset_Base {
         this._battlebackLocated = false;
     }
 
-    public async createLowerLayer() {
+    public createLowerLayer() {
         super.createLowerLayer();
         this.createBackground();
         this.createBattleField();
@@ -257,14 +257,18 @@ export default class Spriteset_Battle extends Spriteset_Base {
     public async createEnemies() {
         const enemies = $gameTroop.members();
         const sprites: Sprite_Enemy[] = [];
+        const promises = [];
         for (let i = 0; i < enemies.length; i++) {
             sprites[i] = new Sprite_Enemy(enemies[i]);
+            sprites[i].update();
+            promises.push(sprites[i].bitmap.imagePromise);
         }
         sprites.sort(this.compareEnemySprite.bind(this));
         for (let j = 0; j < sprites.length; j++) {
             this._battleField.addChild(sprites[j]);
         }
         this._enemySprites = sprites;
+        await Promise.all(promises);
     }
 
     public compareEnemySprite(a, b) {

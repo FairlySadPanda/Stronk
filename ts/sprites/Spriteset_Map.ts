@@ -23,14 +23,6 @@ export default class Spriteset_Map extends Spriteset_Base {
     private _destinationSprite: Sprite_Destination;
     private _weather: Weather;
     private _parallaxName: string;
-    private _bitmapPromises: Promise<void>[];
-
-    private get bitmapPromises(): Promise<void>[] {
-        if (!this._bitmapPromises) {
-            this._bitmapPromises = [];
-        }
-        return this._bitmapPromises;
-    }
 
     public createLowerLayer() {
         super.createLowerLayer();
@@ -199,16 +191,5 @@ export default class Spriteset_Map extends Spriteset_Base {
         this._weather.power = $gameScreen.weatherPower();
         this._weather.origin.x = $gameMap.displayX() * $gameMap.tileWidth();
         this._weather.origin.y = $gameMap.displayY() * $gameMap.tileHeight();
-    }
-
-    public async waitForloadingComplete(): Promise<void> {
-        console.log(
-            `There are ${this.bitmapPromises.length} promises to resolve...`
-        );
-        for (const promise of this.bitmapPromises) {
-            await promise;
-            console.log("Done!");
-        }
-        // await Promise.all(this.bitmapPromises);
     }
 }

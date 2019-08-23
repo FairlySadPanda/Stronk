@@ -15,12 +15,13 @@ export default class ImageCache {
         this.truncateCache();
     }
 
-    public get(key: string): Bitmap {
+    public get(key: string): Bitmap | null {
         if (this.items[key]) {
             const item = this.items[key];
             item.touch = Date.now();
             return item.bitmap;
         }
+        return null;
     }
 
     public reserve(key: string, value: Bitmap, reservationId: string): void {
@@ -36,27 +37,40 @@ export default class ImageCache {
     }
 
     public releaseReservation(reservationId): void {
-        for (const item of this.items) {
-            if (item.reservationId === reservationId) {
-                item.reservationId = undefined;
-            }
-        }
+        const items = this.items;
+        Object.keys(items)
+            .map(function(key) {
+                return items[key];
+            })
+            .forEach(function(item) {
+                if (item.reservationId === reservationId) {
+                    delete item.reservationId;
+                }
+            });
     }
 
     public isReady(): boolean {
-        for (const item of this.items) {
-            if (!item.bitmap.isRequestOnly() && !item.bitmap.isReady()) {
-                return false;
-            }
-        }
-        return true;
+        const items = this.items;
+        return !Object.keys(items).some(function(key) {
+            return (
+                !items[key].bitmap.isRequestOnly() &&
+                !items[key].bitmap.isReady()
+            );
+        });
     }
 
     public getErrorBitmap(): Bitmap {
-        for (const item of this.items) {
-            if (item.bitmap.isError()) {
-                return item.bitmap;
-            }
+        let bitmap = null;
+        if (
+            Object.keys(this.items).some(function(key) {
+                if (this.items[key].bitmap.isError()) {
+                    bitmap = this.items[key].bitmap;
+                    return true;
+                }
+                return false;
+            })
+        ) {
+            return bitmap;
         }
 
         return null;
@@ -77,7 +91,7 @@ export default class ImageCache {
             })
             .forEach(
                 function(item) {
-                    if (sizeLeft > 0 || this._mustBeHeld(item)) {
+                    if (sizeLeft > 0 || this.mustBeHeld(item)) {
                         const bitmap = item.bitmap;
                         sizeLeft -= bitmap.width * bitmap.height;
                     } else {
