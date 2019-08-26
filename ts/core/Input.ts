@@ -95,7 +95,7 @@ export default class Input {
         Input.updateDirection();
     }
 
-    public static isPressed(keyName) {
+    public static isPressed(keyName: string) {
         if (Input.isEscapeCompatible(keyName) && Input.isPressed("escape")) {
             return true;
         } else {
@@ -103,7 +103,7 @@ export default class Input {
         }
     }
 
-    public static isTriggered(keyName) {
+    public static isTriggered(keyName: string) {
         if (Input.isEscapeCompatible(keyName) && Input.isTriggered("escape")) {
             return true;
         } else {
@@ -111,7 +111,7 @@ export default class Input {
         }
     }
 
-    public static isRepeated(keyName) {
+    public static isRepeated(keyName: string) {
         if (Input.isEscapeCompatible(keyName) && Input.isRepeated("escape")) {
             return true;
         } else {
@@ -124,7 +124,7 @@ export default class Input {
         }
     }
 
-    public static isLongPressed(keyName) {
+    public static isLongPressed(keyName: string) {
         if (
             Input.isEscapeCompatible(keyName) &&
             Input.isLongPressed("escape")
