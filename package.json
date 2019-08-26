@@ -4,10 +4,10 @@
     "js-flags": "--expose-gc",
     "chromium-args": "--mixed-context --remote-debugging-port=9223 --load-extension=chrome",
     "window": {
-        "title": "",
+        "title": "STRONK! v.0.1.0",
         "toolbar": false,
-        "width": 816,
-        "height": 624,
+        "width": 1920,
+        "height": 1080,
         "icon": "icon/icon.png"
     },
     "devDependencies": {

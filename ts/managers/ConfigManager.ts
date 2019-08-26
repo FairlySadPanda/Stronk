@@ -2,9 +2,23 @@ import Utils from "../core/Utils";
 import AudioManager from "./AudioManager";
 import StorageManager from "./StorageManager";
 
+declare const nw: any;
+
 export default abstract class ConfigManager {
     public static alwaysDash = false;
     public static commandRemember = false;
+    private static _isFullScreen = false;
+
+    public static get isFullScreen(): boolean {
+        return this._isFullScreen;
+    }
+
+    public static set isFullScreen(value: boolean) {
+        value
+            ? nw.Window.get().enterKioskMode()
+            : nw.Window.get().leaveKioskMode();
+        this._isFullScreen = value;
+    }
 
     public static load() {
         let json;
@@ -28,6 +42,7 @@ export default abstract class ConfigManager {
         return {
             alwaysDash: this.alwaysDash,
             commandRemember: this.commandRemember,
+            isFullScreen: this.isFullScreen,
             bgmVolume: this.bgmVolume,
             bgsVolume: this.bgsVolume,
             meVolume: this.meVolume,
@@ -38,6 +53,7 @@ export default abstract class ConfigManager {
     public static applyData(config) {
         this.alwaysDash = this.readFlag(config, "alwaysDash");
         this.commandRemember = this.readFlag(config, "commandRemember");
+        this.isFullScreen = this.readFlag(config, "isFullScreen");
         this.bgmVolume = this.readVolume(config, "bgmVolume");
         this.bgsVolume = this.readVolume(config, "bgsVolume");
         this.meVolume = this.readVolume(config, "meVolume");

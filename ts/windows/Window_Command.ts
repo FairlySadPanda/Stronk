@@ -8,7 +8,7 @@ import Window_Selectable from "./Window_Selectable";
 
 export default class Window_Command extends Window_Selectable {
     protected _messageWindow: Window_Message;
-    public constructor(x, y, messageWindow?: Window_Message) {
+    public constructor(x: any, y: any, messageWindow?: Window_Message) {
         super(0, 0, 0, 0);
         this._messageWindow = messageWindow;
         this.clearCommandList();
@@ -43,7 +43,12 @@ export default class Window_Command extends Window_Selectable {
 
     public makeCommandList() {}
 
-    public addCommand(name, symbol, enabled?, ext?) {
+    public addCommand(
+        name: any,
+        symbol: string,
+        enabled?: boolean,
+        ext?: null
+    ) {
         if (enabled === undefined) {
             enabled = true;
         }
@@ -58,15 +63,15 @@ export default class Window_Command extends Window_Selectable {
         });
     }
 
-    public commandName(index) {
+    public commandName(index: string | number) {
         return this._list[index].name;
     }
 
-    public commandSymbol(index) {
+    public commandSymbol(index: number) {
         return this._list[index].symbol;
     }
 
-    public isCommandEnabled(index) {
+    public isCommandEnabled(index: string | number) {
         return this._list[index].enabled;
     }
 
@@ -86,7 +91,7 @@ export default class Window_Command extends Window_Selectable {
         return this.currentData() ? this.currentData().ext : null;
     }
 
-    public findSymbol(symbol) {
+    public findSymbol(symbol: any) {
         for (let i = 0; i < this._list.length; i++) {
             if (this._list[i].symbol === symbol) {
                 return i;
@@ -95,7 +100,7 @@ export default class Window_Command extends Window_Selectable {
         return -1;
     }
 
-    public selectSymbol(symbol) {
+    public selectSymbol(symbol: string) {
         const index = this.findSymbol(symbol);
         if (index >= 0) {
             this.select(index);
@@ -104,7 +109,7 @@ export default class Window_Command extends Window_Selectable {
         }
     }
 
-    public findExt(ext) {
+    public findExt(ext: any) {
         for (let i = 0; i < this._list.length; i++) {
             if (this._list[i].ext === ext) {
                 return i;
@@ -113,7 +118,7 @@ export default class Window_Command extends Window_Selectable {
         return -1;
     }
 
-    public selectExt(ext) {
+    public selectExt(ext: number) {
         const index = this.findExt(ext);
         if (index >= 0) {
             this.select(index);
@@ -122,7 +127,7 @@ export default class Window_Command extends Window_Selectable {
         }
     }
 
-    public async drawItem(index) {
+    public async drawItem(index: number) {
         const rect = this.itemRectForText(index);
         const align = this.itemTextAlign();
         this.resetTextColor();

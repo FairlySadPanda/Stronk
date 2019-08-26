@@ -117,8 +117,8 @@ export default abstract class Graphics {
     public static renderer: PIXI.WebGLRenderer;
 
     private static _rendererType: any;
-    private static _boxWidth: any;
-    private static _boxHeight: any;
+    private static _boxWidth: number;
+    private static _boxHeight: number;
     private static _scale: number;
     private static _realScale: number;
     private static _errorShowed: boolean;
@@ -152,7 +152,11 @@ export default abstract class Graphics {
      * @param {String} type The type of the renderer.
      *                 'canvas', 'webgl', or 'auto'.
      */
-    public static initialize(width: any, height: any, type: any): void {
+    public static initialize(
+        width: number,
+        height: number,
+        type: string
+    ): void {
         Graphics._width = width || 800;
         Graphics._height = height || 600;
         Graphics._rendererType = "webgl";
@@ -193,8 +197,9 @@ export default abstract class Graphics {
         Graphics._setupEventHandlers();
         Graphics._setupCssFontLoading();
     }
-    private static _width: any;
-    private static _height: any;
+
+    private static _width: number;
+    private static _height: number;
 
     private static _setupCssFontLoading = function() {
         if (Graphics._cssFontLoading) {

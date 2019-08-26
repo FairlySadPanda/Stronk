@@ -6,6 +6,13 @@ import ImageManager from "../managers/ImageManager";
 import TextManager from "../managers/TextManager";
 import Game_Actor from "../objects/Game_Actor";
 
+interface ListItem {
+    name: string;
+    symbol: string;
+    enabled: boolean;
+    ext: any;
+}
+
 export default class Window_Base extends Window {
     public static _iconWidth: number = 32;
     public static _iconHeight: number = 32;
@@ -17,7 +24,7 @@ export default class Window_Base extends Window {
     public openness: number;
     public opacity: number;
     public contents: Bitmap;
-    protected _list: any[];
+    protected _list: ListItem[];
     private _opening: boolean;
     private _closing: boolean;
     private _dimmerSprite: Sprite;

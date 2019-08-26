@@ -20,10 +20,10 @@ export default abstract class SceneManager {
     private static _exiting = false;
     private static _previousClass = null;
     private static _backgroundBitmap: Bitmap = null;
-    private static _screenWidth = 816;
-    private static _screenHeight = 624;
-    private static _boxWidth = 816;
-    private static _boxHeight = 624;
+    private static _screenWidth = 1920;
+    private static _screenHeight = 1080;
+    private static _boxWidth = 1920;
+    private static _boxHeight = 1080;
     private static _deltaTime = 1.0 / 60.0;
     private static _accumulator = 0.0;
     private static _currentTime = performance.now();
@@ -33,7 +33,7 @@ export default abstract class SceneManager {
      * @private
      */
 
-    public static run = function(sceneClass: any) {
+    public static run(sceneClass: any) {
         try {
             SceneManager.initialize();
             SceneManager.goto(sceneClass);
@@ -41,9 +41,9 @@ export default abstract class SceneManager {
         } catch (e) {
             SceneManager.catchException(e);
         }
-    };
+    }
 
-    public static initialize = function() {
+    public static initialize() {
         SceneManager.initGraphics();
         SceneManager.checkFileAccess();
         SceneManager.initAudio();
@@ -51,9 +51,9 @@ export default abstract class SceneManager {
         SceneManager.initNwjs();
         SceneManager.checkPluginErrors();
         SceneManager.setupErrorHandlers();
-    };
+    }
 
-    public static initGraphics = function() {
+    public static initGraphics() {
         const type = SceneManager.preferableRendererType();
         Graphics.initialize(
             SceneManager._screenWidth,
@@ -66,9 +66,9 @@ export default abstract class SceneManager {
         if (type === "webgl") {
             SceneManager.checkWebGL();
         }
-    };
+    }
 
-    public static preferableRendererType = function() {
+    public static preferableRendererType() {
         if (Utils.isOptionValid("canvas")) {
             return "canvas";
         } else if (Utils.isOptionValid("webgl")) {
@@ -76,37 +76,37 @@ export default abstract class SceneManager {
         } else {
             return "auto";
         }
-    };
+    }
 
-    public static shouldUseCanvasRenderer = function() {
+    public static shouldUseCanvasRenderer() {
         return Utils.isMobileDevice();
-    };
+    }
 
-    public static checkWebGL = function() {
+    public static checkWebGL() {
         if (!Graphics.hasWebGL()) {
             throw new Error("Your browser does not support WebGL.");
         }
-    };
+    }
 
-    public static checkFileAccess = function() {
+    public static checkFileAccess() {
         if (!Utils.canReadGameFiles()) {
             throw new Error("Your browser does not allow to read local files.");
         }
-    };
+    }
 
-    public static initAudio = function() {
+    public static initAudio() {
         const noAudio = Utils.isOptionValid("noaudio");
         if (!WebAudio.initialize(noAudio) && !noAudio) {
             throw new Error("Your browser does not support Web Audio API.");
         }
-    };
+    }
 
-    public static initInput = function() {
+    public static initInput() {
         Input.initialize();
         TouchInput.initialize();
-    };
+    }
 
-    public static initNwjs = function() {
+    public static initNwjs() {
         if (Utils.isNwjs()) {
             const win = nw.Window.get();
             if (process.platform === "darwin" && !win.menu) {
@@ -116,13 +116,13 @@ export default abstract class SceneManager {
                 win.menu = menubar;
             }
         }
-    };
+    }
 
-    public static checkPluginErrors = function() {
+    public static checkPluginErrors() {
         PluginManager.checkErrors();
-    };
+    }
 
-    public static setupErrorHandlers = function() {
+    public static setupErrorHandlers() {
         window.addEventListener(
             "error",
             SceneManager.onError.bind(SceneManager)
@@ -131,15 +131,15 @@ export default abstract class SceneManager {
             "keydown",
             SceneManager.onKeyDown.bind(SceneManager)
         );
-    };
+    }
 
-    public static requestUpdate = function() {
+    public static requestUpdate() {
         if (!SceneManager._stopped) {
             requestAnimationFrame(SceneManager.update.bind(SceneManager));
         }
-    };
+    }
 
-    public static update = function() {
+    public static update() {
         try {
             if (Utils.isMobileSafari()) {
                 SceneManager.updateInputData();
@@ -149,17 +149,13 @@ export default abstract class SceneManager {
         } catch (e) {
             SceneManager.catchException(e);
         }
-    };
+    }
 
-    public static terminate = function() {
+    public static terminate() {
         window.close();
-    };
+    }
 
-    public static onError = function(e: {
-        message: string;
-        filename: any;
-        lineno: any;
-    }) {
+    public static onError(e: { message: string; filename: any; lineno: any }) {
         console.error(e.message);
         console.error(e.filename, e.lineno);
         try {
@@ -167,9 +163,9 @@ export default abstract class SceneManager {
             Graphics.printError("Error", e.message);
             AudioManager.stopAll();
         } catch (e2) {}
-    };
+    }
 
-    public static onKeyDown = function(event: {
+    public static onKeyDown(event: {
         ctrlKey: any;
         altKey: any;
         keyCode: any;
@@ -188,9 +184,9 @@ export default abstract class SceneManager {
                     break;
             }
         }
-    };
+    }
 
-    public static catchException = function(e: Error) {
+    public static catchException(e: Error) {
         if (e instanceof Error) {
             Graphics.printError(e.name, e.message);
             console.error(e.stack);
@@ -199,14 +195,14 @@ export default abstract class SceneManager {
         }
         AudioManager.stopAll();
         SceneManager.stop();
-    };
+    }
 
-    public static updateInputData = function() {
+    public static updateInputData() {
         Input.update();
         TouchInput.update();
-    };
+    }
 
-    public static updateMain = function() {
+    public static updateMain() {
         if (Utils.isMobileSafari()) {
             SceneManager.changeScene();
             SceneManager.updateScene();
@@ -227,13 +223,13 @@ export default abstract class SceneManager {
         }
         SceneManager.renderScene();
         SceneManager.requestUpdate();
-    };
+    }
 
-    public static updateManagers = function() {
+    public static updateManagers() {
         ImageManager.update();
-    };
+    }
 
-    public static changeScene = function() {
+    public static changeScene() {
         if (
             SceneManager.isSceneChanging() &&
             !SceneManager.isCurrentSceneBusy()
@@ -255,9 +251,9 @@ export default abstract class SceneManager {
                 SceneManager.terminate();
             }
         }
-    };
+    }
 
-    public static updateScene = function() {
+    public static updateScene() {
         if (SceneManager._scene) {
             if (!SceneManager._sceneStarted && SceneManager._scene.isReady()) {
                 SceneManager._scene.start();
@@ -268,109 +264,109 @@ export default abstract class SceneManager {
                 SceneManager._scene.update();
             }
         }
-    };
+    }
 
-    public static renderScene = function() {
+    public static renderScene() {
         if (SceneManager.isCurrentSceneStarted()) {
             Graphics.render(SceneManager._scene);
         } else if (SceneManager._scene) {
             SceneManager.onSceneLoading();
         }
-    };
+    }
 
-    public static onSceneCreate = function() {
+    public static onSceneCreate() {
         Graphics.startLoading();
-    };
+    }
 
-    public static onSceneStart = function() {
+    public static onSceneStart() {
         Graphics.endLoading();
-    };
+    }
 
-    public static onSceneLoading = function() {
+    public static onSceneLoading() {
         Graphics.updateLoading();
-    };
+    }
 
-    public static isSceneChanging = function() {
+    public static isSceneChanging() {
         return SceneManager._exiting || !!SceneManager._nextScene;
-    };
+    }
 
-    public static isCurrentSceneBusy = function() {
+    public static isCurrentSceneBusy() {
         return SceneManager._scene && SceneManager._scene.isBusy();
-    };
+    }
 
-    public static isCurrentSceneStarted = function() {
+    public static isCurrentSceneStarted() {
         return SceneManager._scene && SceneManager._sceneStarted;
-    };
+    }
 
-    public static isNextScene = function(sceneClass: any) {
+    public static isNextScene(sceneClass: any) {
         return (
             SceneManager._nextScene &&
             SceneManager._nextScene.constructor === sceneClass
         );
-    };
+    }
 
-    public static isPreviousScene = function(sceneClass: any) {
+    public static isPreviousScene(sceneClass: any) {
         return SceneManager._previousClass === sceneClass;
-    };
+    }
 
-    public static goto = function(SceneClass: new () => Scene_Base) {
+    public static goto(SceneClass: new () => Scene_Base) {
         if (SceneClass) {
             SceneManager._nextScene = new SceneClass();
         }
         if (SceneManager._scene) {
             SceneManager._scene.stop();
         }
-    };
+    }
 
-    public static push = function(sceneClass: any) {
+    public static push(sceneClass: any) {
         SceneManager._stack.push(SceneManager._scene.constructor);
         SceneManager.goto(sceneClass);
-    };
+    }
 
-    public static pop = function() {
+    public static pop() {
         if (SceneManager._stack.length > 0) {
             SceneManager.goto(SceneManager._stack.pop());
         } else {
             SceneManager.exit();
         }
-    };
+    }
 
-    public static exit = function() {
+    public static exit() {
         SceneManager.goto(null);
         SceneManager._exiting = true;
-    };
+    }
 
-    public static clearStack = function() {
+    public static clearStack() {
         SceneManager._stack = [];
-    };
+    }
 
-    public static stop = function() {
+    public static stop() {
         SceneManager._stopped = true;
-    };
+    }
 
-    public static prepareNextScene = function(...args: any) {
+    public static prepareNextScene(...args: any) {
         SceneManager._nextScene.prepare.apply(SceneManager._nextScene, args);
-    };
+    }
 
-    public static snap = function() {
+    public static snap() {
         return Bitmap.snap(SceneManager._scene);
-    };
+    }
 
-    public static snapForBackground = function() {
+    public static snapForBackground() {
         SceneManager._backgroundBitmap = SceneManager.snap();
         SceneManager._backgroundBitmap.blur();
-    };
+    }
 
-    public static backgroundBitmap = function(): Bitmap {
+    public static backgroundBitmap(): Bitmap {
         return SceneManager._backgroundBitmap;
-    };
+    }
 
-    public static resume = function() {
+    public static resume() {
         SceneManager._stopped = false;
         SceneManager.requestUpdate();
         if (!Utils.isMobileSafari()) {
             SceneManager._currentTime = performance.now();
             SceneManager._accumulator = 0;
         }
-    };
+    }
 }

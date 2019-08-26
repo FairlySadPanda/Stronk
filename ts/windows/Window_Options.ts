@@ -30,6 +30,7 @@ export default class Window_Options extends Window_Command {
     }
 
     public makeCommandList() {
+        this.addDisplayOptions();
         this.addGeneralOptions();
         this.addVolumeOptions();
     }
@@ -44,6 +45,10 @@ export default class Window_Options extends Window_Command {
         this.addCommand(TextManager.bgsVolume, "bgsVolume");
         this.addCommand(TextManager.meVolume, "meVolume");
         this.addCommand(TextManager.seVolume, "seVolume");
+    }
+
+    public addDisplayOptions() {
+        this.addCommand("Fullscreen", "isFullScreen");
     }
 
     public async drawItem(index) {
