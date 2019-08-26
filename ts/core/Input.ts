@@ -64,9 +64,9 @@ export default class Input {
     }
 
     public static clear = function() {
-        Input.currentState = [];
-        Input.previousState = [];
-        Input.gamepadStates = [];
+        Input.currentState = {};
+        Input.previousState = {};
+        Input.gamepadStates = {};
         Input.latestButton = null;
         Input.pressedTime = 0;
         Input._dir4 = 0;
@@ -138,9 +138,9 @@ export default class Input {
         }
     }
 
-    private static currentState: boolean[];
-    private static previousState: boolean[];
-    private static gamepadStates: any[];
+    private static currentState: {};
+    private static previousState: {};
+    private static gamepadStates: {};
     private static latestButton: string;
     private static pressedTime: number;
     private static _dir4: number;
