@@ -1219,11 +1219,11 @@ export default abstract class Graphics {
      * @method _switchFullScreen
      * @private
      */
-    private static _switchFullScreen = function() {
-        if (Graphics._isFullScreen()) {
-            Graphics._requestFullScreen();
+    public static _switchFullScreen = function() {
+        if (Graphics.isFullScreen()) {
+            Graphics.requestFullScreen();
         } else {
-            Graphics._cancelFullScreen();
+            Graphics.cancelFullScreen();
         }
     };
 
@@ -1233,25 +1233,27 @@ export default abstract class Graphics {
      * @return {Boolean}
      * @private
      */
-    private static _isFullScreen = function(): boolean {
-        return document.fullscreenEnabled;
-    };
+    public static isFullScreen(): boolean {
+        return document.fullscreenElement !== null;
+    }
 
     /**
      * @static
      * @method _requestFullScreen
      * @private
      */
-    private static _requestFullScreen = function() {
+    public static requestFullScreen() {
         document.body.requestFullscreen();
-    };
+    }
 
     /**
      * @static
      * @method _cancelFullScreen
      * @private
      */
-    private static _cancelFullScreen = function() {
-        document.exitFullscreen();
-    };
+    public static cancelFullScreen() {
+        if (Graphics.isFullScreen()) {
+            document.exitFullscreen();
+        }
+    }
 }

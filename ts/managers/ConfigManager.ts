@@ -1,6 +1,7 @@
 import Utils from "../core/Utils";
 import AudioManager from "./AudioManager";
 import StorageManager from "./StorageManager";
+import Graphics from "../core/Graphics";
 
 declare const nw: any;
 
@@ -14,10 +15,8 @@ export default abstract class ConfigManager {
     }
 
     public static set isFullScreen(value: boolean) {
-        value
-            ? nw.Window.get().enterKioskMode()
-            : nw.Window.get().leaveKioskMode();
-        this._isFullScreen = value;
+        value ? Graphics.requestFullScreen() : Graphics.cancelFullScreen();
+        ConfigManager._isFullScreen = value;
     }
 
     public static load() {
