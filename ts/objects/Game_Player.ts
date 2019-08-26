@@ -105,7 +105,13 @@ export default class Game_Player extends Game_Character {
         return super.isStopping();
     }
 
-    public reserveTransfer(mapId, x, y, d?, fadeType?) {
+    public reserveTransfer(
+        mapId: number,
+        x: number,
+        y: number,
+        d?: number,
+        fadeType?: number
+    ) {
         this._transferring = true;
         this._newMapId = mapId;
         this._newX = x;
@@ -143,7 +149,7 @@ export default class Game_Player extends Game_Character {
         }
     }
 
-    public isMapPassable(x, y, d) {
+    public isMapPassable(x: any, y: any, d: any) {
         const vehicle = this.vehicle();
         if (vehicle) {
             return vehicle.isMapPassable(x, y, d);
@@ -184,7 +190,7 @@ export default class Game_Player extends Game_Character {
         return Input.isPressed("control") && $gameTemp.isPlaytest();
     }
 
-    public isCollided(x, y) {
+    public isCollided(x: any, y: any) {
         if (this.isThrough()) {
             return false;
         } else {
@@ -200,11 +206,11 @@ export default class Game_Player extends Game_Character {
         return (Graphics.height / $gameMap.tileHeight() - 1) / 2.0;
     }
 
-    public center(x, y) {
+    public center(x: number, y: number) {
         return $gameMap.setDisplayPos(x - this.centerX(), y - this.centerY());
     }
 
-    public locate(x, y) {
+    public locate(x: number, y: number) {
         super.locate(x, y);
         this.center(x, y);
         this.makeEncounterCount();
@@ -229,12 +235,14 @@ export default class Game_Player extends Game_Character {
     public makeEncounterTroopId() {
         const encounterList = [];
         let weightSum = 0;
-        $gameMap.encounterList().forEach(function(encounter) {
-            if (this.meetsEncounterConditions(encounter)) {
-                encounterList.push(encounter);
-                weightSum += encounter.weight;
-            }
-        }, this);
+        $gameMap
+            .encounterList()
+            .forEach(function(encounter: { weight: number }) {
+                if (this.meetsEncounterConditions(encounter)) {
+                    encounterList.push(encounter);
+                    weightSum += encounter.weight;
+                }
+            }, this);
         if (weightSum > 0) {
             let value = Utils.randomInt(weightSum);
             for (let i = 0; i < encounterList.length; i++) {
@@ -247,7 +255,9 @@ export default class Game_Player extends Game_Character {
         return 0;
     }
 
-    public meetsEncounterConditions(encounter) {
+    public meetsEncounterConditions(encounter: {
+        regionSet: { length: number; indexOf: (arg0: any) => number };
+    }) {
         return (
             encounter.regionSet.length === 0 ||
             encounter.regionSet.indexOf(this.regionId()) > -1
@@ -270,7 +280,12 @@ export default class Game_Player extends Game_Character {
         }
     }
 
-    public startMapEvent(x, y, triggers, normal) {
+    public startMapEvent(
+        x: number,
+        y: number,
+        triggers: number[],
+        normal: boolean
+    ) {
         if (!$gameMap.isEventRunning()) {
             $gameMap.eventsXy(x, y).forEach(function(event) {
                 if (
@@ -319,11 +334,11 @@ export default class Game_Player extends Game_Character {
         return Input.dir4;
     }
 
-    public executeMove(direction) {
+    public executeMove(direction: number) {
         this.moveStraight(direction);
     }
 
-    public update(sceneActive?) {
+    public update(sceneActive?: boolean) {
         const lastScrolledX = this.scrolledX();
         const lastScrolledY = this.scrolledY();
         const wasMoving = this.isMoving();
@@ -365,7 +380,7 @@ export default class Game_Player extends Game_Character {
         }
     }
 
-    public updateScroll(lastScrolledX, lastScrolledY) {
+    public updateScroll(lastScrolledX: any, lastScrolledY: any) {
         const x1 = lastScrolledX;
         const y1 = lastScrolledY;
         const x2 = this.scrolledX();
@@ -417,7 +432,7 @@ export default class Game_Player extends Game_Character {
         }
     }
 
-    public updateNonmoving(wasMoving) {
+    public updateNonmoving(wasMoving: boolean) {
         if (!$gameMap.isEventRunning()) {
             if (wasMoving) {
                 $gameParty.onPlayerWalk();
@@ -488,7 +503,7 @@ export default class Game_Player extends Game_Character {
         return false;
     }
 
-    public triggerTouchActionD1(x1, y1) {
+    public triggerTouchActionD1(x1: number, y1: number) {
         if ($gameMap.airship().pos(x1, y1)) {
             if (TouchInput.isTriggered() && this.getOnOffVehicle()) {
                 return true;
@@ -498,7 +513,7 @@ export default class Game_Player extends Game_Character {
         return $gameMap.setupStartingEvent();
     }
 
-    public triggerTouchActionD2(x2, y2) {
+    public triggerTouchActionD2(x2: any, y2: any) {
         if ($gameMap.boat().pos(x2, y2) || $gameMap.ship().pos(x2, y2)) {
             if (TouchInput.isTriggered() && this.getOnVehicle()) {
                 return true;
@@ -513,7 +528,7 @@ export default class Game_Player extends Game_Character {
         return $gameMap.setupStartingEvent();
     }
 
-    public triggerTouchActionD3(x2, y2) {
+    public triggerTouchActionD3(x2: any, y2: any) {
         if ($gameMap.isCounter(x2, y2)) {
             this.checkEventTriggerThere([0, 1, 2]);
         }
@@ -547,13 +562,13 @@ export default class Game_Player extends Game_Character {
         return value;
     }
 
-    public checkEventTriggerHere(triggers) {
+    public checkEventTriggerHere(triggers: number[]) {
         if (this.canStartLocalEvents()) {
             this.startMapEvent(this.x, this.y, triggers, false);
         }
     }
 
-    public checkEventTriggerThere(triggers) {
+    public checkEventTriggerThere(triggers: number[]) {
         if (this.canStartLocalEvents()) {
             const direction = this.direction();
             const x1 = this.x;
@@ -569,7 +584,7 @@ export default class Game_Player extends Game_Character {
         }
     }
 
-    public checkEventTriggerTouch(x, y) {
+    public checkEventTriggerTouch(x: any, y: any) {
         if (this.canStartLocalEvents()) {
             this.startMapEvent(x, y, [1, 2], true);
         }
@@ -640,21 +655,21 @@ export default class Game_Player extends Game_Character {
         return $gameMap.isDamageFloor(this.x, this.y) && !this.isInAirship();
     }
 
-    public moveStraight(d) {
+    public moveStraight(d: number) {
         if (this.canPass(this.x, this.y, d)) {
             this._followers.updateMove();
         }
         super.moveStraight(d);
     }
 
-    public moveDiagonally(horz, vert) {
+    public moveDiagonally(horz: number, vert: number) {
         if (this.canPassDiagonally(this.x, this.y, horz, vert)) {
             this._followers.updateMove();
         }
         super.moveDiagonally(horz, vert);
     }
 
-    public jump(xPlus, yPlus) {
+    public jump(xPlus: any, yPlus: any) {
         super.jump(xPlus, yPlus);
         this._followers.jumpAll();
     }

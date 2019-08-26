@@ -4,15 +4,15 @@ import Utils from "./Utils";
 
 export default class Input {
     public static get dir4(): number {
-        return this._dir4;
+        return Input._dir4;
     }
 
     public static get dir8(): number {
-        return this._dir8;
+        return Input._dir8;
     }
 
     public static get date(): number {
-        return this._date;
+        return Input._date;
     }
 
     public static keyRepeatWait = 24;
@@ -58,9 +58,9 @@ export default class Input {
     };
 
     public static initialize() {
-        this.clear();
-        this.wrapNwjsAlert();
-        this.setupEventHandlers();
+        Input.clear();
+        Input.wrapNwjsAlert();
+        Input.setupEventHandlers();
     }
 
     public static clear = function() {
@@ -76,61 +76,64 @@ export default class Input {
     };
 
     public static update() {
-        this.pollGamepads();
-        if (this.currentState[this.latestButton]) {
-            this.pressedTime++;
+        Input.pollGamepads();
+        if (Input.currentState[Input.latestButton]) {
+            Input.pressedTime++;
         } else {
-            this.latestButton = null;
+            Input.latestButton = null;
         }
-        for (const name in this.currentState) {
-            if (this.currentState.hasOwnProperty(name)) {
-                if (this.currentState[name] && !this.previousState[name]) {
-                    this.latestButton = name;
-                    this.pressedTime = 0;
-                    this._date = Date.now();
+        for (const name in Input.currentState) {
+            if (Input.currentState.hasOwnProperty(name)) {
+                if (Input.currentState[name] && !Input.previousState[name]) {
+                    Input.latestButton = name;
+                    Input.pressedTime = 0;
+                    Input._date = Date.now();
                 }
-                this.previousState[name] = this.currentState[name];
+                Input.previousState[name] = Input.currentState[name];
             }
         }
-        this.updateDirection();
+        Input.updateDirection();
     }
 
     public static isPressed(keyName) {
-        if (this.isEscapeCompatible(keyName) && this.isPressed("escape")) {
+        if (Input.isEscapeCompatible(keyName) && Input.isPressed("escape")) {
             return true;
         } else {
-            return !!this.currentState[keyName];
+            return !!Input.currentState[keyName];
         }
     }
 
     public static isTriggered(keyName) {
-        if (this.isEscapeCompatible(keyName) && this.isTriggered("escape")) {
+        if (Input.isEscapeCompatible(keyName) && Input.isTriggered("escape")) {
             return true;
         } else {
-            return this.latestButton === keyName && this.pressedTime === 0;
+            return Input.latestButton === keyName && Input.pressedTime === 0;
         }
     }
 
     public static isRepeated(keyName) {
-        if (this.isEscapeCompatible(keyName) && this.isRepeated("escape")) {
+        if (Input.isEscapeCompatible(keyName) && Input.isRepeated("escape")) {
             return true;
         } else {
             return (
-                this.latestButton === keyName &&
-                (this.pressedTime === 0 ||
-                    (this.pressedTime >= this.keyRepeatWait &&
-                        this.pressedTime % this.keyRepeatInterval === 0))
+                Input.latestButton === keyName &&
+                (Input.pressedTime === 0 ||
+                    (Input.pressedTime >= Input.keyRepeatWait &&
+                        Input.pressedTime % Input.keyRepeatInterval === 0))
             );
         }
     }
 
     public static isLongPressed(keyName) {
-        if (this.isEscapeCompatible(keyName) && this.isLongPressed("escape")) {
+        if (
+            Input.isEscapeCompatible(keyName) &&
+            Input.isLongPressed("escape")
+        ) {
             return true;
         } else {
             return (
-                this.latestButton === keyName &&
-                this.pressedTime >= this.keyRepeatWait
+                Input.latestButton === keyName &&
+                Input.pressedTime >= Input.keyRepeatWait
             );
         }
     }
@@ -150,7 +153,7 @@ export default class Input {
             const alert = window.alert;
             window.alert = function() {
                 const win = gui.Window.get();
-                alert.apply(this, arguments);
+                alert.apply(Input, arguments);
                 win.focus();
                 Input.clear();
             };
@@ -158,24 +161,24 @@ export default class Input {
     }
 
     private static setupEventHandlers() {
-        document.addEventListener("keydown", this.onKeyDown.bind(this));
-        document.addEventListener("keyup", this.onKeyUp.bind(this));
-        window.addEventListener("blur", this.onLostFocus.bind(this));
+        document.addEventListener("keydown", Input.onKeyDown.bind(Input));
+        document.addEventListener("keyup", Input.onKeyUp.bind(Input));
+        window.addEventListener("blur", Input.onLostFocus.bind(Input));
     }
 
     private static onKeyDown(event: KeyboardEvent) {
-        if (this.shouldPreventDefault(event.keyCode)) {
+        if (Input.shouldPreventDefault(event.keyCode)) {
             event.preventDefault();
         }
         if (event.keyCode === 144) {
             // Numlock
-            this.clear();
+            Input.clear();
         }
-        const buttonName = this.keyMapper[event.keyCode];
+        const buttonName = Input.keyMapper[event.keyCode];
         if (ResourceHandler.exists() && buttonName === "ok") {
             ResourceHandler.retry();
         } else if (buttonName) {
-            this.currentState[buttonName] = true;
+            Input.currentState[buttonName] = true;
         }
     }
 
@@ -194,18 +197,18 @@ export default class Input {
     }
 
     private static onKeyUp(event: KeyboardEvent) {
-        const buttonName = this.keyMapper[event.keyCode];
+        const buttonName = Input.keyMapper[event.keyCode];
         if (buttonName) {
-            this.currentState[buttonName] = false;
+            Input.currentState[buttonName] = false;
         }
         if (event.keyCode === 0) {
             // For QtWebEngine on OS X
-            this.clear();
+            Input.clear();
         }
     }
 
     private static onLostFocus() {
-        this.clear();
+        Input.clear();
     }
 
     private static pollGamepads() {
@@ -214,7 +217,7 @@ export default class Input {
             if (gamepads) {
                 for (const gamepad of gamepads) {
                     if (gamepad && gamepad.connected) {
-                        this.updateGamepadState(gamepad);
+                        Input.updateGamepadState(gamepad);
                     }
                 }
             }
@@ -222,7 +225,7 @@ export default class Input {
     }
 
     private static updateGamepadState(gamepad: Gamepad) {
-        const lastState = this.gamepadStates[gamepad.index] || [];
+        const lastState = Input.gamepadStates[gamepad.index] || [];
         const newState = [];
         const buttons = gamepad.buttons;
         const axes = gamepad.axes;
@@ -246,43 +249,43 @@ export default class Input {
         }
         for (let j = 0; j < newState.length; j++) {
             if (newState[j] !== lastState[j]) {
-                const buttonName = this.gamepadMapper[j];
+                const buttonName = Input.gamepadMapper[j];
                 if (buttonName) {
-                    this.currentState[buttonName] = newState[j];
+                    Input.currentState[buttonName] = newState[j];
                 }
             }
         }
-        this.gamepadStates[gamepad.index] = newState;
+        Input.gamepadStates[gamepad.index] = newState;
     }
 
     private static updateDirection() {
-        let x = this.signX();
-        let y = this.signY();
+        let x = Input.signX();
+        let y = Input.signY();
 
-        this._dir8 = this.makeNumpadDirection(x, y);
+        Input._dir8 = Input.makeNumpadDirection(x, y);
 
         if (x !== 0 && y !== 0) {
-            if (this.preferredAxis === "x") {
+            if (Input.preferredAxis === "x") {
                 y = 0;
             } else {
                 x = 0;
             }
         } else if (x !== 0) {
-            this.preferredAxis = "y";
+            Input.preferredAxis = "y";
         } else if (y !== 0) {
-            this.preferredAxis = "x";
+            Input.preferredAxis = "x";
         }
 
-        this._dir4 = this.makeNumpadDirection(x, y);
+        Input._dir4 = Input.makeNumpadDirection(x, y);
     }
 
     private static signX(): number {
         let x = 0;
 
-        if (this.isPressed("left")) {
+        if (Input.isPressed("left")) {
             x--;
         }
-        if (this.isPressed("right")) {
+        if (Input.isPressed("right")) {
             x++;
         }
         return x;
@@ -291,10 +294,10 @@ export default class Input {
     private static signY(): number {
         let y = 0;
 
-        if (this.isPressed("up")) {
+        if (Input.isPressed("up")) {
             y--;
         }
-        if (this.isPressed("down")) {
+        if (Input.isPressed("down")) {
             y++;
         }
         return y;

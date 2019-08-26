@@ -6,7 +6,7 @@
         "noImplicitAny": false,
         "strictNullChecks": false,
         "moduleResolution": "node",
-        "sourceMap": false,
+        "sourceMap": true,
         "outDir": "js"
     },
     "include": ["./**/*"],
