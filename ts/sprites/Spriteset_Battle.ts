@@ -72,12 +72,12 @@ export default class Spriteset_Battle extends Spriteset_Base {
         const height = Graphics.height + margin * 2;
         this._back1Sprite = new TilingSprite(this.battleback1Bitmap());
         this._back2Sprite = new TilingSprite(this.battleback2Bitmap());
-        await this._back1Sprite.bitmap.imagePromise;
-        await this._back2Sprite.bitmap.imagePromise;
         this._back1Sprite.move(x, y, width, height);
         this._battleField.addChild(this._back1Sprite);
         this._back2Sprite.move(x, y, width, height);
         this._battleField.addChild(this._back2Sprite);
+        await this._back1Sprite.bitmap.imagePromise;
+        await this._back2Sprite.bitmap.imagePromise;
     }
 
     public updateBattleback() {
