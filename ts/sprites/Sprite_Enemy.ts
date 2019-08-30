@@ -3,6 +3,9 @@ import ImageManager from "../managers/ImageManager";
 import SoundManager from "../managers/SoundManager";
 import Sprite_Battler from "./Sprite_Battler";
 import Sprite_StateIcon from "./Sprite_StateIcon";
+import ConfigManager from "../managers/ConfigManager";
+import Game_Enemy from "../objects/Game_Enemy";
+import Game_Battler from "../objects/Game_Battler";
 
 // -----------------------------------------------------------------------------
 // Sprite_Enemy
@@ -10,7 +13,7 @@ import Sprite_StateIcon from "./Sprite_StateIcon";
 // The sprite for displaying an enemy.
 
 export default class Sprite_Enemy extends Sprite_Battler {
-    private _enemy: any;
+    private _enemy: Game_Enemy;
     private _appeared: boolean;
     private _battlerName: string;
     private _battlerHue: number;
@@ -41,6 +44,27 @@ export default class Sprite_Enemy extends Sprite_Battler {
         this._enemy = battler;
         this.setHome(battler.screenX(), battler.screenY());
         this._stateIconSprite.setup(battler);
+        if (
+            ConfigManager.graphicsOptions.screenResolution.reposition === true
+        ) {
+            // @ts-ignore
+            if (!this._enemy._alteredScreenY) {
+                this._homeY += Graphics.boxHeight - 624;
+                this._enemy.setScreenY(this._homeY);
+                // @ts-ignore
+                this._enemy._alteredScreenY = true;
+            }
+            if ($gameSystem.isSideView()) {
+                return;
+            }
+            // @ts-ignore
+            if (!this._enemy._alteredScreenX) {
+                this._homeX += (Graphics.boxWidth - 816) / 2;
+                this._enemy.setScreenX(this._homeX);
+                // @ts-ignore
+                this._enemy._alteredScreenX = true;
+            }
+        }
     }
 
     public update() {

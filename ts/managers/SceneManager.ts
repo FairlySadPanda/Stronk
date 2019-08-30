@@ -8,6 +8,7 @@ import AudioManager from "./AudioManager";
 import ImageManager from "./ImageManager";
 import PluginManager from "./PluginManager";
 import Scene_Base from "../scenes/Scene_Base";
+import ConfigManager from "./ConfigManager";
 
 declare const nw: any;
 
@@ -20,10 +21,14 @@ export default abstract class SceneManager {
     private static _exiting = false;
     private static _previousClass = null;
     private static _backgroundBitmap: Bitmap = null;
-    private static _screenWidth = 1920;
-    private static _screenHeight = 1080;
-    private static _boxWidth = 1920;
-    private static _boxHeight = 1080;
+    private static _screenWidth =
+        ConfigManager.graphicsOptions.screenResolution.list[0][0] + 0;
+    private static _screenHeight =
+        ConfigManager.graphicsOptions.screenResolution.list[0][1] + 0;
+    private static _boxWidth =
+        ConfigManager.graphicsOptions.screenResolution.list[0][0] + 0;
+    private static _boxHeight =
+        ConfigManager.graphicsOptions.screenResolution.list[0][1] + 0;
     private static _deltaTime = 1.0 / 60.0;
     private static _accumulator = 0.0;
     private static _currentTime = performance.now();
@@ -41,6 +46,39 @@ export default abstract class SceneManager {
         } catch (e) {
             SceneManager.catchException(e);
         }
+        if (Utils.isNwjs()) {
+            SceneManager.updateResolution();
+        }
+    }
+
+    public static updateResolution() {
+        const resizeWidth = this._screenWidth - window.innerWidth;
+        const resizeHeight = this._screenHeight - window.innerHeight;
+        window.resizeBy(resizeWidth, resizeHeight);
+        window.moveBy((-1 * resizeWidth) / 2, (-1 * resizeHeight) / 2);
+    }
+
+    public static changeGraphicResolution(width: number, height: number) {
+        SceneManager._screenWidth = width;
+        SceneManager._screenHeight = height;
+        SceneManager._boxWidth = width;
+        SceneManager._boxHeight = height;
+        if (ConfigManager.graphicsOptions.screenResolution.scale) {
+            Graphics.width =
+                ConfigManager.graphicsOptions.screenResolution.list[0][0] + 0;
+            Graphics.height =
+                ConfigManager.graphicsOptions.screenResolution.list[0][1] + 0;
+            Graphics.boxWidth =
+                ConfigManager.graphicsOptions.screenResolution.list[0][0] + 0;
+            Graphics.boxHeight =
+                ConfigManager.graphicsOptions.screenResolution.list[0][1] + 0;
+        } else {
+            Graphics.width = width;
+            Graphics.height = height;
+            Graphics.boxWidth = width;
+            Graphics.boxHeight = height;
+        }
+        SceneManager.updateResolution();
     }
 
     public static initialize() {
@@ -203,10 +241,7 @@ export default abstract class SceneManager {
     }
 
     public static updateMain() {
-        if (Utils.isMobileSafari()) {
-            SceneManager.changeScene();
-            SceneManager.updateScene();
-        } else {
+        if (ConfigManager.vSync) {
             const newTime = performance.now();
             let fTime = (newTime - SceneManager._currentTime) / 1000;
             if (fTime > 0.25) {
@@ -220,9 +255,16 @@ export default abstract class SceneManager {
                 SceneManager.updateScene();
                 SceneManager._accumulator -= SceneManager._deltaTime;
             }
+
+            SceneManager.renderScene();
+            SceneManager.requestUpdate();
+        } else {
+            this.updateInputData();
+            this.changeScene();
+            this.updateScene();
+            this.renderScene();
+            this.requestUpdate();
         }
-        SceneManager.renderScene();
-        SceneManager.requestUpdate();
     }
 
     public static updateManagers() {

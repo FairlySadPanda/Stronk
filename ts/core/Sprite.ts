@@ -77,8 +77,6 @@ export default class Sprite extends PIXI.Sprite {
 
     public constructor(bitmap?: Bitmap) {
         super(new PIXI.Texture(new PIXI.BaseTexture()));
-
-        this._bitmap = null;
         this._frame = new Rectangle();
         this._realFrame = new Rectangle();
         this._blendColor = [0, 0, 0, 0];
@@ -119,7 +117,7 @@ export default class Sprite extends PIXI.Sprite {
      * @param {Number} x The x coordinate of the sprite
      * @param {Number} y The y coordinate of the sprite
      */
-    public move(x, y) {
+    public move(x: number, y: number) {
         this.x = x;
         this.y = y;
     }
@@ -133,7 +131,7 @@ export default class Sprite extends PIXI.Sprite {
      * @param {Number} width The width of the frame
      * @param {Number} height The height of the frame
      */
-    public setFrame(x, y, width, height) {
+    public setFrame(x: number, y: number, width: number, height: number) {
         this._refreshFrame = false;
         const frame = this._frame;
         if (
@@ -166,7 +164,7 @@ export default class Sprite extends PIXI.Sprite {
      * @method setBlendColor
      * @param {Array} color The blend color [r, g, b, a]
      */
-    public setBlendColor(color) {
+    public setBlendColor(color: any[] | number[]) {
         if (!(color instanceof Array)) {
             throw new Error("Argument must be an array");
         }
@@ -191,7 +189,7 @@ export default class Sprite extends PIXI.Sprite {
      * @method setColorTone
      * @param {Array} tone The color tone [r, g, b, gray]
      */
-    public setColorTone(tone) {
+    public setColorTone(tone: any[] | number[]) {
         if (!(tone instanceof Array)) {
             throw new Error("Argument must be an array");
         }
@@ -204,7 +202,7 @@ export default class Sprite extends PIXI.Sprite {
      * @method _onBitmapLoad
      * @private
      */
-    public _onBitmapLoad(bitmapLoaded) {
+    public _onBitmapLoad(bitmapLoaded: any) {
         if (bitmapLoaded === this._bitmap) {
             if (this._refreshFrame && this._bitmap) {
                 this._refreshFrame = false;
@@ -277,7 +275,7 @@ export default class Sprite extends PIXI.Sprite {
      * @return {Boolean}
      * @private
      */
-    public _isInBitmapRect(x, y, w, h) {
+    public _isInBitmapRect(x: number, y: number, w: number, h: number) {
         return (
             this._bitmap &&
             x + w > 0 &&
@@ -303,7 +301,7 @@ export default class Sprite extends PIXI.Sprite {
      * @param {Number} h
      * @private
      */
-    public _createTinter(w, h) {
+    public _createTinter(w: number, h: number) {
         if (!this._canvas) {
             this._canvas = document.createElement("canvas");
             this._context = this._canvas.getContext("2d");
@@ -328,7 +326,7 @@ export default class Sprite extends PIXI.Sprite {
      * @param {Number} h
      * @private
      */
-    public _executeTint(x, y, w, h) {
+    public _executeTint(x: number, y: number, w: number, h: number) {
         const context = this._context;
         const tone = this._colorTone;
         const color = this._blendColor;
@@ -388,7 +386,12 @@ export default class Sprite extends PIXI.Sprite {
      * @param renderer
      * @private
      */
-    public _speedUpCustomBlendModes(renderer) {
+    public _speedUpCustomBlendModes(renderer: {
+        plugins: { picture: any };
+        renderingToScreen: any;
+        _activeRenderTarget: { root: any };
+        _lastObjectRendered: any;
+    }) {
         const picture = renderer.plugins.picture;
         const blend = this.blendMode;
         if (renderer.renderingToScreen && renderer._activeRenderTarget.root) {

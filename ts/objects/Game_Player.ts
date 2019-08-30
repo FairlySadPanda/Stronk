@@ -199,11 +199,18 @@ export default class Game_Player extends Game_Character {
     }
 
     public centerX() {
-        return (Graphics.width / $gameMap.tileWidth() - 1) / 2.0;
+        return (
+            (ConfigManager.fieldResolution.widthPx / $gameMap.tileWidth() - 1) /
+            2
+        );
     }
 
     public centerY() {
-        return (Graphics.height / $gameMap.tileHeight() - 1) / 2.0;
+        return (
+            (ConfigManager.fieldResolution.heightPx / $gameMap.tileHeight() -
+                1) /
+            2
+        );
     }
 
     public center(x: number, y: number) {

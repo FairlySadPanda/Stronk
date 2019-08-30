@@ -76,6 +76,7 @@ export default class Scene_Map extends Scene_Base {
             this.startFadeIn(this.fadeSpeed(), false);
         }
         this.menuCalling = false;
+        $gameScreen.clearZoom();
     }
 
     public update() {
@@ -200,8 +201,12 @@ export default class Scene_Map extends Scene_Base {
         if (TouchInput.isTriggered() || this._touchCount > 0) {
             if (TouchInput.isPressed()) {
                 if (this._touchCount === 0 || this._touchCount >= 15) {
-                    const x = $gameMap.canvasToMapX(TouchInput.x);
-                    const y = $gameMap.canvasToMapY(TouchInput.y);
+                    const x = $gameMap.canvasToMapX(
+                        TouchInput.x / $gameScreen.zoomScale()
+                    );
+                    const y = $gameMap.canvasToMapY(
+                        TouchInput.y / $gameScreen.zoomScale()
+                    );
                     $gameTemp.setDestination(x, y);
                 }
                 this._touchCount++;

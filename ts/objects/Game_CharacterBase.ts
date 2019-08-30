@@ -1,5 +1,6 @@
 import Graphics from "../core/Graphics";
 import ImageManager from "../managers/ImageManager";
+import ConfigManager from "../managers/ConfigManager";
 
 export interface Game_CharacterBase_OnLoad {
     _x: number;
@@ -344,8 +345,8 @@ export default class Game_CharacterBase {
     }
 
     public isNearTheScreen() {
-        const gw = Graphics.width;
-        const gh = Graphics.height;
+        const gw = ConfigManager.fieldResolution.widthPx;
+        const gh = ConfigManager.fieldResolution.heightPx;
         const tw = $gameMap.tileWidth();
         const th = $gameMap.tileHeight();
         const px = this.scrolledX() * tw + tw / 2 - gw / 2;

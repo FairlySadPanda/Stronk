@@ -7,10 +7,11 @@ import Scene_Equip from "./Scene_Equip";
 import Scene_GameEnd from "./Scene_GameEnd";
 import Scene_Item from "./Scene_Item";
 import Scene_MenuBase from "./Scene_MenuBase";
-import Scene_Options from "./Scene_Options";
 import Scene_Save from "./Scene_Save";
 import Scene_Skill from "./Scene_Skill";
 import Scene_Status from "./Scene_Status";
+import Scene_MushOptions from "./Scene_MushOptions";
+import ConfigManager from "../managers/ConfigManager";
 
 export default class Scene_Menu extends Scene_MenuBase {
     private _statusWindow: any;
@@ -103,7 +104,7 @@ export default class Scene_Menu extends Scene_MenuBase {
     }
 
     public commandOptions() {
-        SceneManager.push(Scene_Options);
+        SceneManager.push(Scene_MushOptions);
     }
 
     public commandSave() {
@@ -156,4 +157,22 @@ export default class Scene_Menu extends Scene_MenuBase {
             this._commandWindow.activate();
         }
     }
+
+    // public popScene() {
+    //     super.popScene();
+    //     if (ConfigManager.graphicsOptions.screenResolution.scale === false) {
+    //         const diff_x = Math.abs($gameMap.displayX() - $gamePlayer.x);
+    //         const diff_y = Math.abs($gameMap.displayY() - $gamePlayer.y);
+    //         const screenMaxDistance_x = Math.floor(Graphics.boxWidth / 48);
+    //         const screenMaxDistance_y = Math.floor(Graphics.boxHeight / 48);
+    //         if (diff_x > screenMaxDistance_x || diff_y > screenMaxDistance_y) {
+    //             const tileCenter_x = Math.floor(Graphics.boxWidth / 48 / 2);
+    //             const tileCenter_y = Math.floor(Graphics.boxHeight / 48 / 2);
+    //             // @ts-ignore
+    //             $gameMap._displayX = $gamePlayer.x - tileCenter_x;
+    //             // @ts-ignore
+    //             $gameMap._displayY = $gamePlayer.y - tileCenter_y;
+    //         }
+    //     }
+    // }
 }

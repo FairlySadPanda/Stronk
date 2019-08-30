@@ -8,6 +8,7 @@ import Spriteset_Base from "./Spriteset_Base";
 import Sprite_Actor from "./Sprite_Actor";
 import Sprite_Enemy from "./Sprite_Enemy";
 import Sprite_Battler from "./Sprite_Battler";
+import ConfigManager from "../managers/ConfigManager";
 
 // -----------------------------------------------------------------------------
 // Spriteset_Battle
@@ -18,8 +19,10 @@ export default class Spriteset_Battle extends Spriteset_Base {
     private _battlebackLocated: boolean;
     private _backgroundSprite: Sprite;
     private _battleField: Sprite;
-    private _back1Sprite: TilingSprite;
-    private _back2Sprite: TilingSprite;
+    private _back1Sprite: Sprite;
+    private _back2Sprite: Sprite;
+    private _back1TilingSprite: TilingSprite;
+    private _back2TilingSprite: TilingSprite;
     private _enemySprites: Sprite_Enemy[];
     private _actorSprites: Sprite_Actor[];
     private _loadingDone: boolean;
@@ -53,31 +56,64 @@ export default class Spriteset_Battle extends Spriteset_Base {
     }
 
     public createBattleField() {
-        const width = Graphics.boxWidth;
-        const height = Graphics.boxHeight;
-        const x = (Graphics.width - width) / 2;
-        const y = (Graphics.height - height) / 2;
-        this._battleField = new Sprite();
-        this._battleField.setFrame(x, y, width, height);
-        this._battleField.x = x;
-        this._battleField.y = y;
-        this._baseSprite.addChild(this._battleField);
+        if (
+            ConfigManager.graphicsOptions.screenResolution.reposition === true
+        ) {
+            const width = ConfigManager.fieldResolution.widthPx;
+            const height = ConfigManager.fieldResolution.heightPx;
+            this._battleField = new Sprite();
+            this._battleField.setFrame(0, 0, width, height);
+            this._battleField.x = 0;
+            this._battleField.y = 0;
+            this._baseSprite.addChild(this._battleField);
+        } else {
+            const width = ConfigManager.fieldResolution.widthPx;
+            const height = ConfigManager.fieldResolution.heightPx;
+            const x = (ConfigManager.fieldResolution.widthPx - width) / 2;
+            const y = (ConfigManager.fieldResolution.heightPx - height) / 2;
+            this._battleField = new Sprite();
+            this._battleField.setFrame(x, y, width, height);
+            this._battleField.x = x;
+            this._battleField.y = y;
+            this._baseSprite.addChild(this._battleField);
+        }
     }
 
     public async createBattleback() {
-        const margin = 32;
-        const x = -this._battleField.x - margin;
-        const y = -this._battleField.y - margin;
-        const width = Graphics.width + margin * 2;
-        const height = Graphics.height + margin * 2;
-        this._back1Sprite = new TilingSprite(this.battleback1Bitmap());
-        this._back2Sprite = new TilingSprite(this.battleback2Bitmap());
-        this._back1Sprite.move(x, y, width, height);
-        this._battleField.addChild(this._back1Sprite);
-        this._back2Sprite.move(x, y, width, height);
-        this._battleField.addChild(this._back2Sprite);
-        await this._back1Sprite.bitmap.imagePromise;
-        await this._back2Sprite.bitmap.imagePromise;
+        if (
+            ConfigManager.graphicsOptions.screenResolution.reposition === true
+        ) {
+            this._back1Sprite = new Sprite(this.battleback1Bitmap());
+            this._back2Sprite = new Sprite(this.battleback2Bitmap());
+            this._battleField.addChild(this._back1Sprite);
+            this._battleField.addChild(this._back2Sprite);
+            await this._back1Sprite.bitmap.imagePromise;
+            await this._back2Sprite.bitmap.imagePromise;
+        } else {
+            const margin = 32;
+            const x = -this._battleField.x - margin;
+            const y = -this._battleField.y - margin;
+            const width =
+                ConfigManager.graphicsOptions.screenResolution
+                    .internalFieldResolution.widthPx +
+                margin * 2;
+            const height =
+                ConfigManager.graphicsOptions.screenResolution
+                    .internalFieldResolution.heightPx +
+                margin * 2;
+            this._back1TilingSprite = new TilingSprite(
+                this.battleback1Bitmap()
+            );
+            this._back2TilingSprite = new TilingSprite(
+                this.battleback2Bitmap()
+            );
+            this._back1TilingSprite.move(x, y, width, height);
+            this._battleField.addChild(this._back1TilingSprite);
+            this._back2TilingSprite.move(x, y, width, height);
+            this._battleField.addChild(this._back2TilingSprite);
+            await this._back1TilingSprite.bitmap.imagePromise;
+            await this._back2TilingSprite.bitmap.imagePromise;
+        }
     }
 
     public updateBattleback() {
@@ -88,20 +124,53 @@ export default class Spriteset_Battle extends Spriteset_Base {
     }
 
     public locateBattleback() {
-        const width = this._battleField.width;
-        const height = this._battleField.height;
-        const sprite1 = this._back1Sprite;
-        const sprite2 = this._back2Sprite;
-        sprite1.bitmap.imagePromise.then(() => {
-            sprite1.origin.x = sprite1.x + (sprite1.bitmap.width - width) / 2;
-        });
-        sprite2.bitmap.imagePromise.then(() => {
-            sprite2.origin.x = sprite1.y + (sprite2.bitmap.width - width) / 2;
-        });
+        if (
+            ConfigManager.graphicsOptions.screenResolution.reposition === true
+        ) {
+            const sprite1 = this._back1Sprite;
+            const sprite2 = this._back2Sprite;
+            sprite1.bitmap.imagePromise.then(() => {
+                // const xCorrection1 = Graphics.width / sprite1.width;
+                // const yCorrection1 = Graphics.height / sprite1.height;
+                const xCorrection1 =
+                    ConfigManager.graphicsOptions.screenResolution
+                        .internalFieldResolution.widthPx / sprite1.width;
+                const yCorrection1 =
+                    ConfigManager.graphicsOptions.screenResolution
+                        .internalFieldResolution.heightPx / sprite1.height;
+                sprite1.scale.x = xCorrection1;
+                sprite1.scale.y = yCorrection1;
+            });
+            sprite2.bitmap.imagePromise.then(() => {
+                // const xCorrection2 = Graphics.width / sprite2.width;
+                // const yCorrection2 = Graphics.height / sprite2.height;
+                const xCorrection2 =
+                    ConfigManager.graphicsOptions.screenResolution
+                        .internalFieldResolution.widthPx / sprite2.width;
+                const yCorrection2 =
+                    ConfigManager.graphicsOptions.screenResolution
+                        .internalFieldResolution.heightPx / sprite2.height;
+                sprite2.scale.x = xCorrection2;
+                sprite2.scale.y = yCorrection2;
+            });
+        } else {
+            const width = this._battleField.width;
+            const height = this._battleField.height;
+            const sprite1 = this._back1TilingSprite;
+            const sprite2 = this._back2TilingSprite;
+            sprite1.bitmap.imagePromise.then(() => {
+                sprite1.origin.x =
+                    sprite1.x + (sprite1.bitmap.width - width) / 2;
+            });
+            sprite2.bitmap.imagePromise.then(() => {
+                sprite2.origin.x =
+                    sprite1.y + (sprite2.bitmap.width - width) / 2;
+            });
 
-        if ($gameSystem.isSideView()) {
-            sprite1.origin.y = sprite1.x + sprite1.bitmap.height - height;
-            sprite2.origin.y = sprite1.y + sprite2.bitmap.height - height;
+            if ($gameSystem.isSideView()) {
+                sprite1.origin.y = sprite1.x + sprite1.bitmap.height - height;
+                sprite2.origin.y = sprite1.y + sprite2.bitmap.height - height;
+            }
         }
     }
 

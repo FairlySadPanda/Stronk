@@ -5,6 +5,8 @@ import Sprite_Base from "./Sprite_Base";
 import Sprite_Battler from "./Sprite_Battler";
 import Sprite_StateOverlay from "./Sprite_StateOverlay";
 import Sprite_Weapon from "./Sprite_Weapon";
+import ConfigManager from "../managers/ConfigManager";
+import Graphics from "../core/Graphics";
 
 interface Motion {
     index: number;
@@ -132,6 +134,12 @@ export default class Sprite_Actor extends Sprite_Battler {
 
     public setActorHome(index) {
         this.setHome(600 + index * 32, 280 + index * 48);
+        if (
+            ConfigManager.graphicsOptions.screenResolution.reposition === true
+        ) {
+            this._homeX += Graphics.boxWidth - 816;
+            this._homeY += Graphics.boxHeight - 624;
+        }
     }
 
     public update() {

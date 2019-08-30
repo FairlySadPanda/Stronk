@@ -1,5 +1,6 @@
 import Utils from "../core/Utils";
 import Game_Picture, { Game_Picture_OnLoad } from "./Game_Picture";
+import ConfigManager from "../managers/ConfigManager";
 
 export interface Game_Screen_OnLoad {
     _brightness: number;
@@ -179,8 +180,12 @@ export default class Game_Screen {
     public clearZoom() {
         this._zoomX = 0;
         this._zoomY = 0;
-        this._zoomScale = 1;
-        this._zoomScaleTarget = 1;
+        this._zoomScale =
+            ConfigManager.currentResolution.heightPx /
+            ConfigManager.fieldResolution.heightPx;
+        this._zoomScaleTarget =
+            ConfigManager.currentResolution.heightPx /
+            ConfigManager.fieldResolution.heightPx;
         this._zoomDuration = 0;
     }
 
