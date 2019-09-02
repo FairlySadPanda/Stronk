@@ -139,6 +139,11 @@ export default class Sprite_Actor extends Sprite_Battler {
         ) {
             this._homeX += Graphics.boxWidth - 816;
             this._homeY += Graphics.boxHeight - 624;
+            console.log(
+                `Sprite_Actor::setActorHome() - homeX: ${this._homeX}, homeY: ${
+                    this._homeY
+                }`
+            );
         }
     }
 

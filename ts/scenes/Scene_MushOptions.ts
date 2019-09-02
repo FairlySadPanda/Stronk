@@ -10,9 +10,9 @@ import Window_MushOptionsMainBack from "../windows/Window_MushOptionsMainBack";
 
 export default class Scene_MushOptions extends Scene_MenuBase {
     private timer: number;
-    private windowSections: any;
-    private windowMainBack: any;
-    private windowMainCommand: any;
+    private windowSections: Window_MushOptionsSections;
+    private windowMainBack: Window_MushOptionsMainBack;
+    private windowMainCommand: Window_MushOptionsMainCommand;
 
     public constructor() {
         super();
@@ -246,14 +246,8 @@ export default class Scene_MushOptions extends Scene_MenuBase {
                 this.windowMainCommand.index() >= 0 &&
                 this.windowMainCommand.index() <= 2
             ) {
-                const symbol = ["_windowRed", "_windowGreen", "_windowBlue"];
-                this.windowMainCommand.changeValueWindowColor(
-                    symbol[this.windowMainCommand.index()],
-                    50
-                );
                 this.windowMainCommand.refresh();
             } else if (this.windowMainCommand.index() == 3) {
-                this.windowMainCommand.changeValueWindowOpacity(50);
                 this.windowMainCommand.refresh();
                 this.windowSections.opacity = this.windowMainCommand.getConfig(
                     "_windowOpacity"
@@ -317,16 +311,6 @@ export default class Scene_MushOptions extends Scene_MenuBase {
                 this.windowMainCommand.index() >= 0 &&
                 this.windowMainCommand.index() <= 3
             ) {
-                const symbols = [
-                    "bgmVolume",
-                    "bgsVolume",
-                    "meVolume",
-                    "seVolume"
-                ];
-                this.windowMainCommand.changeVolumeOption(
-                    20,
-                    symbols[this.windowMainCommand.index()]
-                );
                 this.windowMainCommand.refresh();
             }
         } else if (this.windowMainCommand.getSection() == 3) {

@@ -33,7 +33,7 @@ interface CosmeticsOptions {
     };
     menuBack: {
         name: string;
-        list: any[];
+        list?: any[];
         defaultName: string;
         description: string;
         stretch: boolean;
@@ -108,7 +108,6 @@ export default abstract class ConfigManager {
         menuBack: {
             defaultName: "Menu Back 1",
             description: "Menu Back 1 desc",
-            list: [],
             name: "Name",
             stretch: false
         },
@@ -147,6 +146,7 @@ export default abstract class ConfigManager {
             defaultName: "Skin def"
         }
     };
+
     public static graphicsOptions: GraphicsOptions = {
         name: "Graphics Options",
         vSync: {
@@ -157,7 +157,7 @@ export default abstract class ConfigManager {
         },
         screenResolution: {
             name: "Resolution",
-            reposition: false,
+            reposition: true,
             scale: false,
             list: [[800, 600], [1024, 768], [1280, 720], [1920, 1080]],
             internalRenderResolution: {
@@ -180,6 +180,7 @@ export default abstract class ConfigManager {
             onName: "ON"
         }
     };
+
     public static AudioSoundOptions: AudioOptions = {
         name: "Audio",
         bgm: {
@@ -195,6 +196,7 @@ export default abstract class ConfigManager {
         me: { name: "ME", barColor1: "gray", barColor2: "silver" },
         se: { name: "SE", barColor1: "gray", barColor2: "silver" }
     };
+
     public static OtherOptions: OtherOptions = {
         name: "Other",
         alwaysDash: {

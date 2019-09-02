@@ -39,32 +39,21 @@ export default class Sprite_Enemy extends Sprite_Battler {
         this.addChild(this._stateIconSprite);
     }
 
-    public setBattler(battler) {
+    public setBattler(battler: Game_Enemy) {
         super.setBattler.call(this, battler);
         this._enemy = battler;
-        this.setHome(battler.screenX(), battler.screenY());
+
+        // Figure out how to translate the screenX and screenY data, which assumes a resolution of 816 x 624, to the field's resolution.
+        const xLocAsMultipleOfDefaultWidth = battler.screenX() / 816;
+        const yLocAsMultipleOfDefaultHeight = battler.screenY() / 614;
+
+        this.setHome(
+            ConfigManager.fieldResolution.widthPx *
+                xLocAsMultipleOfDefaultWidth,
+            ConfigManager.fieldResolution.heightPx *
+                yLocAsMultipleOfDefaultHeight
+        );
         this._stateIconSprite.setup(battler);
-        if (
-            ConfigManager.graphicsOptions.screenResolution.reposition === true
-        ) {
-            // @ts-ignore
-            if (!this._enemy._alteredScreenY) {
-                this._homeY += Graphics.boxHeight - 624;
-                this._enemy.setScreenY(this._homeY);
-                // @ts-ignore
-                this._enemy._alteredScreenY = true;
-            }
-            if ($gameSystem.isSideView()) {
-                return;
-            }
-            // @ts-ignore
-            if (!this._enemy._alteredScreenX) {
-                this._homeX += (Graphics.boxWidth - 816) / 2;
-                this._enemy.setScreenX(this._homeX);
-                // @ts-ignore
-                this._enemy._alteredScreenX = true;
-            }
-        }
     }
 
     public update() {
