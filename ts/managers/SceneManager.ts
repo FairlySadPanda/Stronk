@@ -33,11 +33,6 @@ export default abstract class SceneManager {
     private static _accumulator = 0.0;
     private static _currentTime = performance.now();
 
-    /*
-     * Gets the current time in ms without on iOS Safari.
-     * @private
-     */
-
     public static run(sceneClass: any) {
         try {
             SceneManager.initialize();
