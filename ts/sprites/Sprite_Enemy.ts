@@ -40,19 +40,19 @@ export default class Sprite_Enemy extends Sprite_Battler {
     }
 
     public setBattler(battler: Game_Enemy) {
-        super.setBattler.call(this, battler);
+        super.setBattler(battler);
         this._enemy = battler;
 
         // Figure out how to translate the screenX and screenY data, which assumes a resolution of 816 x 624, to the field's resolution.
         const xLocAsMultipleOfDefaultWidth = battler.screenX() / 816;
         const yLocAsMultipleOfDefaultHeight = battler.screenY() / 614;
-
         this.setHome(
             ConfigManager.fieldResolution.widthPx *
                 xLocAsMultipleOfDefaultWidth,
             ConfigManager.fieldResolution.heightPx *
                 yLocAsMultipleOfDefaultHeight
         );
+
         this._stateIconSprite.setup(battler);
     }
 
