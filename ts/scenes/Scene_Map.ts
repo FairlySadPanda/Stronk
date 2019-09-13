@@ -171,8 +171,7 @@ export default class Scene_Map extends Scene_Base {
     public needsSlowFadeOut() {
         return (
             SceneManager.isNextScene(Scene_Title) ||
-            SceneManager.isNextScene(Scene_Gameover) ||
-            SceneManager.isNextScene(Scene_Battle)
+            SceneManager.isNextScene(Scene_Gameover)
         );
     }
 
@@ -358,7 +357,7 @@ export default class Scene_Map extends Scene_Base {
     }
 
     public startEncounterEffect() {
-        this._spriteset.hideCharacters();
+        // this._spriteset.hideCharacters();
         this._encounterEffectDuration = this.encounterEffectSpeed();
     }
 
@@ -372,11 +371,11 @@ export default class Scene_Map extends Scene_Base {
             const zoomX = $gamePlayer.screenX();
             const zoomY = $gamePlayer.screenY() - 24;
             if (n === 2) {
-                $gameScreen.setZoom(zoomX, zoomY, 1);
+                // $gameScreen.setZoom(zoomX, zoomY, 1);
                 this.snapForBattleBackground();
                 this.startFlashForEncounter(speed / 2);
             }
-            $gameScreen.setZoom(zoomX, zoomY, q);
+            // $gameScreen.setZoom(zoomX, zoomY, q);
             if (n === Math.floor(speed / 6)) {
                 this.startFlashForEncounter(speed / 2);
             }
