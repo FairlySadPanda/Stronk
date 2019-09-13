@@ -205,6 +205,7 @@ export default class Scene_MushOptions extends Scene_MenuBase {
                     );
                 }
                 this.repositionWindows();
+                this.refreshMenuBackground();
             } else if (this.windowMainCommand.index() == 1) {
                 this.windowMainCommand.changeBoolOption("_vSync");
                 this.windowMainCommand.refresh();
