@@ -114,8 +114,16 @@ export default class Game_Enemy extends Game_Battler {
         return this._screenX;
     }
 
+    public setScreenX(value: number) {
+        this._screenX = value;
+    }
+
     public screenY() {
         return this._screenY;
+    }
+
+    public setScreenY(value: number) {
+        this._screenY = value;
     }
 
     public battlerName() {

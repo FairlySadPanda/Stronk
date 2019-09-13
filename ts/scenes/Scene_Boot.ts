@@ -77,6 +77,16 @@ export default class Scene_Boot extends Scene_Base {
             Window_TitleCommand.initCommandPosition();
         }
         this.updateDocumentTitle();
+        const list = ConfigManager.graphicsOptions.screenResolution.list;
+        const value = ConfigManager["_screenResolution"];
+        if (list) {
+            if (value < list.length) {
+                SceneManager.changeGraphicResolution(
+                    list[value][0],
+                    list[value][1]
+                );
+            }
+        }
     }
 
     public updateDocumentTitle() {

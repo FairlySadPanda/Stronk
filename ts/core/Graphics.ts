@@ -142,6 +142,10 @@ export default abstract class Graphics {
     private static _hiddenCanvas: any;
     private static _videoLoader: () => void;
 
+    public static get fpsMeter() {
+        return Graphics._fpsMeter;
+    }
+
     /**
      * Initializes the graphics system.
      *
@@ -1191,7 +1195,7 @@ export default abstract class Graphics {
      * @method _switchFPSMeter
      * @private
      */
-    private static _switchFPSMeter = function() {
+    public static _switchFPSMeter = function() {
         if (Graphics._fpsMeter.isPaused) {
             Graphics.showFps();
             Graphics._fpsMeter.showFps();
@@ -1220,7 +1224,7 @@ export default abstract class Graphics {
      * @private
      */
     public static _switchFullScreen = function() {
-        if (Graphics.isFullScreen()) {
+        if (!Graphics.isFullScreen()) {
             Graphics.requestFullScreen();
         } else {
             Graphics.cancelFullScreen();

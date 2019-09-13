@@ -152,21 +152,29 @@ export default class Scene_Battle extends Scene_Base {
         }
     }
 
+    /**
+     * Create the display objects needed to run the battle.
+     * We should only await spriteset loading completion if there are any bitmaps to load.
+     */
     public createDisplayObjects() {
-        this.createSpriteset().then(() => {
-            this.createWindowLayer();
-            this.createAllWindows();
-            BattleManager.setLogWindow(this._logWindow);
-            BattleManager.setStatusWindow(this._statusWindow);
-            BattleManager.setSpriteset(this._spriteset);
-            this._logWindow.setSpriteset(this._spriteset);
-        });
+        this._spriteset = new Spriteset_Battle();
+        if (this._spriteset.isNeedToWaitForLoadingComplete()) {
+            this._spriteset.waitForloadingComplete().then(() => {
+                this.createDisplayObjectsAfterSpritesetLoaded();
+            });
+        } else {
+            this.createDisplayObjectsAfterSpritesetLoaded();
+        }
     }
 
-    public async createSpriteset() {
-        this._spriteset = new Spriteset_Battle();
-        await this._spriteset.waitForloadingComplete();
+    private createDisplayObjectsAfterSpritesetLoaded() {
         this.addChild(this._spriteset);
+        this.createWindowLayer();
+        this.createAllWindows();
+        BattleManager.setLogWindow(this._logWindow);
+        BattleManager.setStatusWindow(this._statusWindow);
+        BattleManager.setSpriteset(this._spriteset);
+        this._logWindow.setSpriteset(this._spriteset);
     }
 
     public createAllWindows() {

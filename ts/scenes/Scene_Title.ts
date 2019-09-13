@@ -9,7 +9,8 @@ import Window_TitleCommand from "../windows/Window_TitleCommand";
 import Scene_Base from "./Scene_Base";
 import Scene_Load from "./Scene_Load";
 import Scene_Map from "./Scene_Map";
-import Scene_Options from "./Scene_Options";
+import Scene_MushOptions from "./Scene_MushOptions";
+import ConfigManager from "../managers/ConfigManager";
 
 export default class Scene_Title extends Scene_Base {
     private _commandWindow: any;
@@ -90,10 +91,21 @@ export default class Scene_Title extends Scene_Base {
     }
 
     public centerSprite(sprite) {
-        sprite.x = Graphics.width / 2;
-        sprite.y = Graphics.height / 2;
-        sprite.anchor.x = 0.5;
-        sprite.anchor.y = 0.5;
+        if (
+            ConfigManager.graphicsOptions.screenResolution.list[0] !==
+                [816, 624] &&
+            ConfigManager.graphicsOptions.screenResolution.reposition === true
+        ) {
+            const xCorrection = Graphics.boxWidth / sprite.width;
+            const yCorrection = Graphics.boxHeight / sprite.height;
+            sprite.scale.x = xCorrection;
+            sprite.scale.y = yCorrection;
+        } else {
+            sprite.x = Graphics.width / 2;
+            sprite.y = Graphics.height / 2;
+            sprite.anchor.x = 0.5;
+            sprite.anchor.y = 0.5;
+        }
     }
 
     public createCommandWindow() {
@@ -127,7 +139,7 @@ export default class Scene_Title extends Scene_Base {
 
     public commandOptions() {
         this._commandWindow.close();
-        SceneManager.push(Scene_Options);
+        SceneManager.push(Scene_MushOptions);
     }
 
     public playTitleMusic() {

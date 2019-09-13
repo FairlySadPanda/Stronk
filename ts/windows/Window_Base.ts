@@ -5,6 +5,7 @@ import Item from "../interfaces/Item";
 import ImageManager from "../managers/ImageManager";
 import TextManager from "../managers/TextManager";
 import Game_Actor from "../objects/Game_Actor";
+import ConfigManager from "../managers/ConfigManager";
 
 interface ListItem {
     name: string;
@@ -41,6 +42,16 @@ export default class Window_Base extends Window {
         this._opening = false;
         this._closing = false;
         this._dimmerSprite = null;
+        const t_red = ConfigManager["_windowRed"];
+        const t_green = ConfigManager["_windowGreen"];
+        const t_blue = ConfigManager["_windowBlue"];
+        const tone = [t_red, t_green, t_blue];
+        $gameSystem.setWindowTone(tone);
+        this.opacity = ConfigManager["_windowOpacity"];
+    }
+
+    public getGameSettingsMoe(symbol: string) {
+        return ConfigManager[symbol];
     }
 
     public lineHeight() {
@@ -74,7 +85,26 @@ export default class Window_Base extends Window {
     }
 
     public loadWindowskin() {
-        this.windowskin = ImageManager.loadSystem("Window");
+        const files = ConfigManager.cosmeticsOptions.wSkin.list;
+        if (files != undefined) {
+            if (files.length > 0) {
+                const maxValue = files.length;
+                let value = this.getGameSettingsMoe("_windowskin");
+                if (Number.isInteger(value) == false) {
+                    value = 0;
+                    ConfigManager["_windowskin"] = 0;
+                }
+                if (value > maxValue - 1) {
+                    value = 0;
+                    ConfigManager["_windowskin"] = 0;
+                }
+                this.windowskin = ImageManager.loadSystem(files[value]);
+            } else {
+                this.windowskin = ImageManager.loadSystem("Window");
+            }
+        } else {
+            this.windowskin = ImageManager.loadSystem("Window");
+        }
     }
 
     public updatePadding() {

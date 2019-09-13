@@ -8,6 +8,7 @@ import ImageManager from "../managers/ImageManager";
 import Spriteset_Base from "./Spriteset_Base";
 import Sprite_Character from "./Sprite_Character";
 import Sprite_Destination from "./Sprite_Destination";
+import ConfigManager from "../managers/ConfigManager";
 
 // -----------------------------------------------------------------------------
 // Spriteset_Map
@@ -53,7 +54,13 @@ export default class Spriteset_Map extends Spriteset_Base {
 
     public createParallax() {
         this._parallax = new TilingSprite();
-        this._parallax.move(0, 0, Graphics.width, Graphics.height);
+        // this._parallax.move(0, 0, Graphics.width, Graphics.height);
+        this._parallax.move(
+            0,
+            0,
+            ConfigManager.fieldResolution.widthPx,
+            ConfigManager.fieldResolution.heightPx
+        );
         this._baseSprite.addChild(this._parallax);
     }
 
@@ -94,21 +101,17 @@ export default class Spriteset_Map extends Spriteset_Base {
         this._characterSprites = [];
         for (const event of $gameMap.events()) {
             const character = new Sprite_Character(event);
-            // this.bitmapPromises.push(character.bitmap.imagePromise);
             this._characterSprites.push(character);
         }
         for (const event of $gameMap.vehicles()) {
             const vehicle = new Sprite_Character(event);
-            // this.bitmapPromises.push(vehicle.bitmap.imagePromise);
             this._characterSprites.push(vehicle);
         }
         $gamePlayer.followers().reverseEach(function(event) {
             const follower = new Sprite_Character(event);
-            // this.bitmapPromises.push(follower.bitmap.imagePromise);
             this._characterSprites.push(follower);
         }, this);
         const player = new Sprite_Character($gamePlayer);
-        // this.bitmapPromises.push(player.bitmap.imagePromise);
         this._characterSprites.push(player);
         for (const characterSprite of this._characterSprites) {
             this._tilemap.addChild(characterSprite);
@@ -118,7 +121,6 @@ export default class Spriteset_Map extends Spriteset_Base {
     public createShadow() {
         this._shadowSprite = new Sprite();
         const sprite = ImageManager.loadSystem("Shadow1");
-        // this.bitmapPromises.push(sprite.imagePromise);
         this._shadowSprite.bitmap = sprite;
         this._shadowSprite.anchor.x = 0.5;
         this._shadowSprite.anchor.y = 1;
@@ -128,7 +130,6 @@ export default class Spriteset_Map extends Spriteset_Base {
 
     public createDestination() {
         this._destinationSprite = new Sprite_Destination();
-        // this.bitmapPromises.push(this._destinationSprite.bitmap.imagePromise);
         this._destinationSprite.z = 9;
         this._tilemap.addChild(this._destinationSprite);
     }
@@ -151,7 +152,15 @@ export default class Spriteset_Map extends Spriteset_Base {
         const index = this._baseSprite.children.indexOf(this._parallax);
         this._baseSprite.removeChild(this._parallax);
         this._parallax = new TilingSprite();
-        this._parallax.move(0, 0, Graphics.width, Graphics.height);
+        // this._parallax.move(0, 0, Graphics.width, Graphics.height);
+        this._parallax.move(
+            0,
+            0,
+            ConfigManager.graphicsOptions.screenResolution
+                .internalFieldResolution.widthPx,
+            ConfigManager.graphicsOptions.screenResolution
+                .internalFieldResolution.heightPx
+        );
         this._parallax.bitmap = ImageManager.loadParallax(this._parallaxName);
         this._baseSprite.addChildAt(this._parallax, index);
     }

@@ -3,6 +3,9 @@ import ImageManager from "../managers/ImageManager";
 import SoundManager from "../managers/SoundManager";
 import Sprite_Battler from "./Sprite_Battler";
 import Sprite_StateIcon from "./Sprite_StateIcon";
+import ConfigManager from "../managers/ConfigManager";
+import Game_Enemy from "../objects/Game_Enemy";
+import Game_Battler from "../objects/Game_Battler";
 
 // -----------------------------------------------------------------------------
 // Sprite_Enemy
@@ -10,7 +13,7 @@ import Sprite_StateIcon from "./Sprite_StateIcon";
 // The sprite for displaying an enemy.
 
 export default class Sprite_Enemy extends Sprite_Battler {
-    private _enemy: any;
+    private _enemy: Game_Enemy;
     private _appeared: boolean;
     private _battlerName: string;
     private _battlerHue: number;
@@ -36,10 +39,20 @@ export default class Sprite_Enemy extends Sprite_Battler {
         this.addChild(this._stateIconSprite);
     }
 
-    public setBattler(battler) {
-        super.setBattler.call(this, battler);
+    public setBattler(battler: Game_Enemy) {
+        super.setBattler(battler);
         this._enemy = battler;
-        this.setHome(battler.screenX(), battler.screenY());
+
+        // Figure out how to translate the screenX and screenY data, which assumes a resolution of 816 x 624, to the field's resolution.
+        const xLocAsMultipleOfDefaultWidth = battler.screenX() / 816;
+        const yLocAsMultipleOfDefaultHeight = battler.screenY() / 614;
+        this.setHome(
+            ConfigManager.fieldResolution.widthPx *
+                xLocAsMultipleOfDefaultWidth,
+            ConfigManager.fieldResolution.heightPx *
+                yLocAsMultipleOfDefaultHeight
+        );
+
         this._stateIconSprite.setup(battler);
     }
 

@@ -5,6 +5,10 @@ import Sprite_Base from "./Sprite_Base";
 import Sprite_Battler from "./Sprite_Battler";
 import Sprite_StateOverlay from "./Sprite_StateOverlay";
 import Sprite_Weapon from "./Sprite_Weapon";
+import ConfigManager from "../managers/ConfigManager";
+import Graphics from "../core/Graphics";
+import Game_Enemy from "../objects/Game_Enemy";
+import Game_Actor from "../objects/Game_Actor";
 
 interface Motion {
     index: number;
@@ -69,7 +73,7 @@ export default class Sprite_Actor extends Sprite_Battler {
     private _stateSprite: Sprite_StateOverlay;
     private _actor: any;
 
-    public constructor(battler?) {
+    public constructor(battler?: undefined) {
         super(battler);
         this.moveToStartPosition();
     }
@@ -113,7 +117,7 @@ export default class Sprite_Actor extends Sprite_Battler {
         this.addChild(this._stateSprite);
     }
 
-    public setBattler(battler) {
+    public setBattler(battler: Game_Enemy | Game_Actor) {
         super.setBattler.call(this, battler);
         const changed = battler !== this._actor;
         if (changed) {
@@ -130,8 +134,8 @@ export default class Sprite_Actor extends Sprite_Battler {
         this.startMove(300, 0, 0);
     }
 
-    public setActorHome(index) {
-        this.setHome(600 + index * 32, 280 + index * 48);
+    public setActorHome(index: number) {
+        this.setHome(800 + index * 32, 280 + index * 48);
     }
 
     public update() {
@@ -167,7 +171,7 @@ export default class Sprite_Actor extends Sprite_Battler {
         }
     }
 
-    public startMotion(motionType) {
+    public startMotion(motionType: string) {
         const newMotion = Sprite_Actor.MOTIONS[motionType];
         if (this._motion !== newMotion) {
             this._motion = newMotion;

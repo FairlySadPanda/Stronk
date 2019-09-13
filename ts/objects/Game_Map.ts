@@ -6,6 +6,7 @@ import Game_CommonEvent, { Game_CommonEvent_OnLoad } from "./Game_CommonEvent";
 import Game_Event, { Game_Event_OnLoad } from "./Game_Event";
 import Game_Interpreter, { Game_Interpreter_OnLoad } from "./Game_Interpreter";
 import Game_Vehicle, { Game_Vehicle_OnLoad } from "./Game_Vehicle";
+import ConfigManager from "../managers/ConfigManager";
 
 export interface Game_Map_OnLoad {
     tileEvents: any[];
@@ -135,7 +136,7 @@ export default class Game_Map {
         }
     }
 
-    public setup(mapId) {
+    public setup(mapId: number) {
         if (!$dataMap) {
             throw new Error("The map data is not available");
         }
@@ -155,10 +156,18 @@ export default class Game_Map {
         return this._interpreter.isRunning() || this.isAnyEventStarting();
     }
 
+    /**
+     * The assumed width of a tile in pixels
+     * @returns 48
+     */
     public tileWidth() {
         return 48;
     }
 
+    /**
+     * The assumed height of a tile in pixels
+     * @returns 48
+     */
     public tileHeight() {
         return 48;
     }
@@ -191,7 +200,7 @@ export default class Game_Map {
         return this._battleback2Name;
     }
 
-    public requestRefresh(mapId?) {
+    public requestRefresh(mapId?: undefined) {
         this._needsRefresh = true;
     }
 
@@ -224,7 +233,7 @@ export default class Game_Map {
         return this._vehicles;
     }
 
-    public vehicle(type) {
+    public vehicle(type: string | number) {
         if (type === 0 || type === "boat") {
             return this.boat();
         } else if (type === 1 || type === "ship") {
@@ -255,11 +264,11 @@ export default class Game_Map {
                 this._events[i] = new Game_Event(this._mapId, i);
             }
         }
-        this._commonEvents = this.parallelCommonEvents().map(function(
-            commonEvent
-        ) {
-            return new Game_CommonEvent(commonEvent.id);
-        });
+        this._commonEvents = this.parallelCommonEvents().map(
+            function(commonEvent: { id: number }) {
+                return new Game_CommonEvent(commonEvent.id);
+            }
+        );
         this.refreshTileEvents();
     }
 
@@ -269,16 +278,18 @@ export default class Game_Map {
         });
     }
 
-    public event(eventId) {
+    public event(eventId: string | number) {
         return this._events[eventId];
     }
 
-    public eraseEvent(eventId) {
+    public eraseEvent(eventId: number) {
         this._events[eventId].erase();
     }
 
     public parallelCommonEvents() {
-        return $dataCommonEvents.filter(function(commonEvent) {
+        return $dataCommonEvents.filter(function(commonEvent: {
+            trigger: number;
+        }) {
             return commonEvent && commonEvent.trigger === 2;
         });
     }
@@ -310,7 +321,7 @@ export default class Game_Map {
         }
     }
 
-    public setDisplayPos(x, y) {
+    public setDisplayPos(x: number, y: number) {
         if (this.isLoopHorizontal()) {
             this._displayX = x % this.width();
             this._parallaxX = x;
@@ -403,14 +414,16 @@ export default class Game_Map {
     }
 
     public screenTileX() {
-        return Graphics.width / this.tileWidth();
+        // return Graphics.width / this.tileWidth();
+        return ConfigManager.fieldResolution.widthPx / this.tileWidth();
     }
 
     public screenTileY() {
-        return Graphics.height / this.tileHeight();
+        // return Graphics.height / this.tileHeight();
+        return ConfigManager.fieldResolution.heightPx / this.tileHeight();
     }
 
-    public adjustX(x) {
+    public adjustX(x: number) {
         if (
             this.isLoopHorizontal() &&
             x < this._displayX - (this.width() - this.screenTileX()) / 2
@@ -421,7 +434,7 @@ export default class Game_Map {
         }
     }
 
-    public adjustY(y) {
+    public adjustY(y: number) {
         if (
             this.isLoopVertical() &&
             y < this._displayY - (this.height() - this.screenTileY()) / 2
@@ -432,31 +445,31 @@ export default class Game_Map {
         }
     }
 
-    public roundX(x) {
+    public roundX(x: number) {
         return this.isLoopHorizontal() ? x % this.width() : x;
     }
 
-    public roundY(y) {
+    public roundY(y: number) {
         return this.isLoopVertical() ? y % this.height() : y;
     }
 
-    public xWithDirection(x, d) {
+    public xWithDirection(x: number, d: number) {
         return x + (d === 6 ? 1 : d === 4 ? -1 : 0);
     }
 
-    public yWithDirection(y, d) {
+    public yWithDirection(y: number, d: number) {
         return y + (d === 2 ? 1 : d === 8 ? -1 : 0);
     }
 
-    public roundXWithDirection(x, d) {
+    public roundXWithDirection(x: number, d: number) {
         return this.roundX(x + (d === 6 ? 1 : d === 4 ? -1 : 0));
     }
 
-    public roundYWithDirection(y, d) {
+    public roundYWithDirection(y: number, d: number) {
         return this.roundY(y + (d === 2 ? 1 : d === 8 ? -1 : 0));
     }
 
-    public deltaX(x1, x2) {
+    public deltaX(x1: number, x2: number) {
         let result = x1 - x2;
         if (this.isLoopHorizontal() && Math.abs(result) > this.width() / 2) {
             if (result < 0) {
@@ -468,7 +481,7 @@ export default class Game_Map {
         return result;
     }
 
-    public deltaY(y1, y2) {
+    public deltaY(y1: number, y2: number) {
         let result = y1 - y2;
         if (this.isLoopVertical() && Math.abs(result) > this.height() / 2) {
             if (result < 0) {
@@ -480,18 +493,18 @@ export default class Game_Map {
         return result;
     }
 
-    public distance(x1, y1, x2, y2) {
+    public distance(x1: number, y1: number, x2: any, y2: any) {
         return Math.abs(this.deltaX(x1, x2)) + Math.abs(this.deltaY(y1, y2));
     }
 
-    public canvasToMapX(x) {
+    public canvasToMapX(x: number) {
         const tileWidth = this.tileWidth();
         const originX = this._displayX * tileWidth;
         const mapX = Math.floor((originX + x) / tileWidth);
         return this.roundX(mapX);
     }
 
-    public canvasToMapY(y) {
+    public canvasToMapY(y: number) {
         const tileHeight = this.tileHeight();
         const originY = this._displayY * tileHeight;
         const mapY = Math.floor((originY + y) / tileHeight);
@@ -534,30 +547,30 @@ export default class Game_Map {
         });
     }
 
-    public eventsXy(x, y) {
+    public eventsXy(x: number, y: number) {
         return this.events().filter(function(event) {
             return event.pos(x, y);
         });
     }
 
-    public eventsXyNt(x, y) {
+    public eventsXyNt(x: any, y: any) {
         return this.events().filter(function(event) {
             return event.posNt(x, y);
         });
     }
 
-    public tileEventsXy(x, y) {
+    public tileEventsXy(x: any, y: any) {
         return this.tileEvents.filter(function(event) {
             return event.posNt(x, y);
         });
     }
 
-    public eventIdXy(x, y) {
+    public eventIdXy(x: any, y: any) {
         const list = this.eventsXy(x, y);
         return list.length === 0 ? 0 : list[0].eventId();
     }
 
-    public scrollDown(distance) {
+    public scrollDown(distance: number) {
         if (this.isLoopVertical()) {
             this._displayY += distance;
             this._displayY %= $dataMap.height;
@@ -574,7 +587,7 @@ export default class Game_Map {
         }
     }
 
-    public scrollLeft(distance) {
+    public scrollLeft(distance: number) {
         if (this.isLoopHorizontal()) {
             this._displayX += $dataMap.width - distance;
             this._displayX %= $dataMap.width;
@@ -588,7 +601,7 @@ export default class Game_Map {
         }
     }
 
-    public scrollRight(distance) {
+    public scrollRight(distance: number) {
         if (this.isLoopHorizontal()) {
             this._displayX += distance;
             this._displayX %= $dataMap.width;
@@ -605,7 +618,7 @@ export default class Game_Map {
         }
     }
 
-    public scrollUp(distance) {
+    public scrollUp(distance: number) {
         if (this.isLoopVertical()) {
             this._displayY += $dataMap.height - distance;
             this._displayY %= $dataMap.height;
@@ -619,11 +632,11 @@ export default class Game_Map {
         }
     }
 
-    public isValid(x, y) {
+    public isValid(x: number, y: number) {
         return x >= 0 && x < this.width() && y >= 0 && y < this.height();
     }
 
-    public checkPassage(x, y, bit) {
+    public checkPassage(x: any, y: any, bit: number) {
         const flags = this.tilesetFlags();
         const tiles = this.allTiles(x, y);
         for (let i = 0; i < tiles.length; i++) {
@@ -644,13 +657,13 @@ export default class Game_Map {
         return false;
     }
 
-    public tileId(x, y, z) {
+    public tileId(x: number, y: number, z: number) {
         const width = $dataMap.width;
         const height = $dataMap.height;
         return $dataMap.data[(z * height + y) * width + x] || 0;
     }
 
-    public layeredTiles(x, y) {
+    public layeredTiles(x: any, y: any) {
         const tiles = [];
         for (let i = 0; i < 4; i++) {
             tiles.push(this.tileId(x, y, 3 - i));
@@ -658,58 +671,58 @@ export default class Game_Map {
         return tiles;
     }
 
-    public allTiles(x, y) {
+    public allTiles(x: any, y: any) {
         const tiles = this.tileEventsXy(x, y).map(function(event) {
             return event.tileId();
         });
         return tiles.concat(this.layeredTiles(x, y));
     }
 
-    public autotileType(x, y, z) {
+    public autotileType(x: number, y: number, z: any) {
         const tileId = this.tileId(x, y, z);
         return tileId >= 2048 ? Math.floor((tileId - 2048) / 48) : -1;
     }
 
-    public isPassable(x, y, d) {
+    public isPassable(x: any, y: any, d: number) {
         return this.checkPassage(x, y, (1 << (d / 2 - 1)) & 0x0f);
     }
 
-    public isBoatPassable(x, y) {
+    public isBoatPassable(x: any, y: any) {
         return this.checkPassage(x, y, 0x0200);
     }
 
-    public isShipPassable(x, y) {
+    public isShipPassable(x: any, y: any) {
         return this.checkPassage(x, y, 0x0400);
     }
 
-    public isAirshipLandOk(x, y) {
+    public isAirshipLandOk(x: any, y: any) {
         return this.checkPassage(x, y, 0x0800) && this.checkPassage(x, y, 0x0f);
     }
 
-    public checkLayeredTilesFlags(x, y, bit) {
+    public checkLayeredTilesFlags(x: any, y: any, bit: number) {
         const flags = this.tilesetFlags();
         return this.layeredTiles(x, y).some(function(tileId) {
             return (flags[tileId] & bit) !== 0;
         });
     }
 
-    public isLadder(x, y) {
+    public isLadder(x: number, y: number) {
         return this.isValid(x, y) && this.checkLayeredTilesFlags(x, y, 0x20);
     }
 
-    public isBush(x, y) {
+    public isBush(x: number, y: number) {
         return this.isValid(x, y) && this.checkLayeredTilesFlags(x, y, 0x40);
     }
 
-    public isCounter(x, y) {
+    public isCounter(x: any, y: any) {
         return this.isValid(x, y) && this.checkLayeredTilesFlags(x, y, 0x80);
     }
 
-    public isDamageFloor(x, y) {
+    public isDamageFloor(x: number, y: number) {
         return this.isValid(x, y) && this.checkLayeredTilesFlags(x, y, 0x100);
     }
 
-    public terrainTag(x, y) {
+    public terrainTag(x: number, y: number) {
         if (this.isValid(x, y)) {
             const flags = this.tilesetFlags();
             const tiles = this.layeredTiles(x, y);
@@ -723,11 +736,11 @@ export default class Game_Map {
         return 0;
     }
 
-    public regionId(x, y) {
+    public regionId(x: number, y: number) {
         return this.isValid(x, y) ? this.tileId(x, y, 5) : 0;
     }
 
-    public startScroll(direction, distance, speed) {
+    public startScroll(direction: number, distance: number, speed: number) {
         this._scrollDirection = direction;
         this._scrollRest = distance;
         this._scrollSpeed = speed;
@@ -737,7 +750,7 @@ export default class Game_Map {
         return this._scrollRest > 0;
     }
 
-    public update(sceneActive) {
+    public update(sceneActive: boolean) {
         this.refreshIfNeeded();
         if (sceneActive) {
             this.updateInterpreter();
@@ -765,7 +778,7 @@ export default class Game_Map {
         return Math.pow(2, this._scrollSpeed) / 256;
     }
 
-    public doScroll(direction, distance) {
+    public doScroll(direction: number, distance: number) {
         switch (direction) {
             case 2:
                 this.scrollDown(distance);
@@ -806,17 +819,23 @@ export default class Game_Map {
         }
     }
 
-    public changeTileset(tilesetId) {
+    public changeTileset(tilesetId: number) {
         this._tilesetId = tilesetId;
         this.refresh();
     }
 
-    public changeBattleback(battleback1Name, battleback2Name) {
+    public changeBattleback(battleback1Name: any, battleback2Name: any) {
         this._battleback1Name = battleback1Name;
         this._battleback2Name = battleback2Name;
     }
 
-    public changeParallax(name, loopX, loopY, sx, sy) {
+    public changeParallax(
+        name: string,
+        loopX: boolean,
+        loopY: boolean,
+        sx: number,
+        sy: number
+    ) {
         this._parallaxName = name;
         this._parallaxZero = ImageManager.isZeroParallax(this._parallaxName);
         if (this._parallaxLoopX && !loopX) {
@@ -847,7 +866,7 @@ export default class Game_Map {
         }
     }
 
-    public unlockEvent(eventId) {
+    public unlockEvent(eventId: number) {
         if (this._events[eventId]) {
             this._events[eventId].unlock();
         }
