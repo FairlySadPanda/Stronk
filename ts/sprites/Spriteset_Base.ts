@@ -166,6 +166,10 @@ export default abstract class Spriteset_Base extends Sprite {
         this.x += Math.round(screen.shake());
     }
 
+    public isNeedToWaitForLoadingComplete(): boolean {
+        return this.bitmapPromises.length > 0;
+    }
+
     public async waitForloadingComplete(): Promise<void> {
         await Promise.all(this.bitmapPromises);
     }
