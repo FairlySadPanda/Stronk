@@ -51,6 +51,7 @@ export default abstract class Scene_MenuBase extends Scene_Base {
             this._backgroundSprite = new Sprite();
             this._backgroundSprite.bitmap = SceneManager.backgroundBitmap();
             this.addChild(this._backgroundSprite);
+            this.refreshStretch = true;
         }
     }
 
@@ -80,20 +81,31 @@ export default abstract class Scene_MenuBase extends Scene_Base {
     public refreshMenuBackground() {
         const value = ConfigManager["_menuBack"];
         const list = ConfigManager.cosmeticsOptions.menuBack.list;
-        if (list !== undefined) {
+
+        if (Array.isArray(list) && list[value].toLowerCase() !== "default") {
             const filename = list[value];
-            if (filename === "default" || filename === "Default") {
-                this._backgroundSprite.scale.x = 1.0;
-                this._backgroundSprite.scale.y = 1.0;
-                this._backgroundSprite.bitmap = SceneManager.backgroundBitmap();
-                this.refreshStretch = true;
-            } else {
-                this._backgroundSprite.bitmap = ImageManager.loadTitle1(
-                    filename,
-                    0
-                );
-                this.refreshStretch = true;
-            }
+            this._backgroundSprite.bitmap = ImageManager.loadTitle1(
+                filename,
+                0
+            );
+            this.refreshStretch = true;
+        } else {
+            const scale =
+                ConfigManager.currentResolution.heightPx /
+                this._backgroundSprite.height;
+
+            const moveByX =
+                (ConfigManager.currentResolution.widthPx -
+                    scale * this._backgroundSprite.width) /
+                2;
+
+            this._backgroundSprite.move(moveByX, 0);
+
+            this._backgroundSprite.scale.x = scale;
+            this._backgroundSprite.scale.y = scale;
+
+            this._backgroundSprite.bitmap = SceneManager.backgroundBitmap();
+            this.refreshStretch = true;
         }
     }
 
