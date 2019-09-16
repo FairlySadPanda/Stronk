@@ -1,8 +1,8 @@
-import ConfigManager from "../managers/ConfigManager";
-import Window_Options from "../windows/Window_Options";
-import Scene_MenuBase from "./Scene_MenuBase";
+import { ConfigManager } from "../managers/ConfigManager";
+import { Window_Options } from "../windows/Window_Options";
+import { Scene_MenuBase } from "./Scene_MenuBase";
 
-export default class Scene_Options extends Scene_MenuBase {
+export class Scene_Options extends Scene_MenuBase {
     private _optionsWindow: Window_Options;
 
     public create() {

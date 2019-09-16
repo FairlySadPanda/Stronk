@@ -1,8 +1,8 @@
-import Utils from "../core/Utils";
-import SoundManager from "../managers/SoundManager";
-import Game_Battler from "./Game_Battler";
+import { Utils } from "../core/Utils";
+import { SoundManager } from "../managers/SoundManager";
+import { Game_Battler } from "./Game_Battler";
 
-export default class Game_Enemy extends Game_Battler {
+export class Game_Enemy extends Game_Battler {
     private _enemyId: number;
     private _letter: string;
     private _plural: boolean;

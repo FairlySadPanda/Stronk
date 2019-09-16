@@ -1,6 +1,6 @@
-import Trait from "./Trait";
+import { Trait } from "./Trait";
 
-export default interface State {
+export interface State {
     id: number;
     autoRemovalTiming: number;
     chanceByDamage: number;

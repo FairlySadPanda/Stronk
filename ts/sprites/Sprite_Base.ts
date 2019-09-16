@@ -1,13 +1,13 @@
-import Sprite from "../core/Sprite";
-import Utils from "../core/Utils";
-import Sprite_Animation from "./Sprite_Animation";
+import { Sprite } from "../core/Sprite";
+import { Utils } from "../core/Utils";
+import { Sprite_Animation } from "./Sprite_Animation";
 
 // -----------------------------------------------------------------------------
 // Sprite_Base
 //
 // The sprite class with a feature which displays animations.
 
-export default class Sprite_Base extends Sprite {
+export class Sprite_Base extends Sprite {
     protected _animationSprites: any[];
     protected _effectTarget: Sprite_Base;
     private _hiding: boolean;

@@ -1,12 +1,12 @@
-import ImageManager from "../managers/ImageManager";
-import Sprite_Base from "./Sprite_Base";
+import { ImageManager } from "../managers/ImageManager";
+import { Sprite_Base } from "./Sprite_Base";
 
 // -----------------------------------------------------------------------------
 // Sprite_Balloon
 //
 // The sprite for displaying a balloon icon.
 
-export default class Sprite_Balloon extends Sprite_Base {
+export class Sprite_Balloon extends Sprite_Base {
     private _balloonId: number;
     private _duration: number;
 

@@ -1,4 +1,4 @@
-export default interface Troop {
+export interface Troop {
     id: number;
     members: Member[];
     name: string;

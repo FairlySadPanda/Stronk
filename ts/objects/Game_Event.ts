@@ -1,6 +1,6 @@
-import Utils from "../core/Utils";
-import Game_Character, { Game_Character_OnLoad } from "./Game_Character";
-import Game_Interpreter, { Game_Interpreter_OnLoad } from "./Game_Interpreter";
+import { Utils } from "../core/Utils";
+import { Game_Character, Game_Character_OnLoad } from "./Game_Character";
+import { Game_Interpreter, Game_Interpreter_OnLoad } from "./Game_Interpreter";
 
 export interface Game_Event_OnLoad extends Game_Character_OnLoad {
     _mapId: number;
@@ -17,7 +17,7 @@ export interface Game_Event_OnLoad extends Game_Character_OnLoad {
     _interpreter: Game_Interpreter_OnLoad;
 }
 
-export default class Game_Event extends Game_Character {
+export class Game_Event extends Game_Character {
     private _mapId: any;
     private _eventId: any;
     private _moveType: number;

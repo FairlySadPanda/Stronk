@@ -1,12 +1,12 @@
 import * as PIXI from "pixi.js";
-import Bitmap from "./Bitmap";
-import Graphics from "./Graphics";
-import Point from "./Point";
-import ScreenSprite from "./ScreenSprite";
-import Sprite from "./Sprite";
-import Utils from "./Utils";
+import { Bitmap } from "./Bitmap";
+import { Graphics } from "./Graphics";
+import { Point } from "./Point";
+import { ScreenSprite } from "./ScreenSprite";
+import { Sprite } from "./Sprite";
+import { Utils } from "./Utils";
 
-export default class Weather extends PIXI.Container {
+export class Weather extends PIXI.Container {
     public type: string;
     public power: number;
     public origin: Point;

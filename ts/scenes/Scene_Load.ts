@@ -1,11 +1,11 @@
-import DataManager from "../managers/DataManager";
-import SceneManager from "../managers/SceneManager";
-import SoundManager from "../managers/SoundManager";
-import TextManager from "../managers/TextManager";
-import Scene_File from "./Scene_File";
-import Scene_Map from "./Scene_Map";
+import { DataManager } from "../managers/DataManager";
+import { SceneManager } from "../managers/SceneManager";
+import { SoundManager } from "../managers/SoundManager";
+import { TextManager } from "../managers/TextManager";
+import { Scene_File } from "./Scene_File";
+import { Scene_Map } from "./Scene_Map";
 
-export default class Scene_Load extends Scene_File {
+export class Scene_Load extends Scene_File {
     private _loadSuccess: boolean;
 
     public constructor() {

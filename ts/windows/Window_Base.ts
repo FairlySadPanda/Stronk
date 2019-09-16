@@ -1,11 +1,11 @@
-import Bitmap from "../core/Bitmap";
-import Sprite from "../core/Sprite";
-import Window from "../core/Window";
-import Item from "../interfaces/Item";
-import ImageManager from "../managers/ImageManager";
-import TextManager from "../managers/TextManager";
-import Game_Actor from "../objects/Game_Actor";
-import ConfigManager from "../managers/ConfigManager";
+import { Bitmap } from "../core/Bitmap";
+import { Sprite } from "../core/Sprite";
+import { Window } from "../core/Window";
+import { Item } from "../interfaces/Item";
+import { ImageManager } from "../managers/ImageManager";
+import { TextManager } from "../managers/TextManager";
+import { Game_Actor } from "../objects/Game_Actor";
+import { ConfigManager } from "../managers/ConfigManager";
 
 interface ListItem {
     name: string;
@@ -14,12 +14,12 @@ interface ListItem {
     ext: any;
 }
 
-export default class Window_Base extends Window {
+export class Window_Base extends Window {
     public static _iconWidth: number = 32;
     public static _iconHeight: number = 32;
     public static _faceWidth: number = 144;
     public static _faceHeight: number = 144;
-    public windowskin: any;
+    public windowskin: Bitmap;
     public padding: number;
     public backOpacity: number;
     public openness: number;

@@ -1,11 +1,11 @@
-import Window_Base from "./Window_Base";
+import { Window_Base } from "./Window_Base";
 
 // -----------------------------------------------------------------------------
 // Window_SkillStatus
 //
 // The window for displaying the skill user's status on the skill screen.
 
-export default class Window_SkillStatus extends Window_Base {
+export class Window_SkillStatus extends Window_Base {
     private _actor: any;
 
     public constructor(x: number, y: number, width: number, height: number) {

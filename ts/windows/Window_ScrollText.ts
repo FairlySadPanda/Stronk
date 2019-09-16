@@ -1,7 +1,7 @@
-import Graphics from "../core/Graphics";
-import Input from "../core/Input";
-import TouchInput from "../core/TouchInput";
-import Window_Base from "./Window_Base";
+import { Graphics } from "../core/Graphics";
+import { Input } from "../core/Input";
+import { TouchInput } from "../core/TouchInput";
+import { Window_Base } from "./Window_Base";
 
 // -----------------------------------------------------------------------------
 // Window_ScrollText
@@ -9,7 +9,7 @@ import Window_Base from "./Window_Base";
 // The window for displaying scrolling text. No frame is displayed, but it
 // is handled as a window for convenience.
 
-export default class Window_ScrollText extends Window_Base {
+export class Window_ScrollText extends Window_Base {
     public opacity: number;
     private _text: string;
     private _allTextHeight: number;

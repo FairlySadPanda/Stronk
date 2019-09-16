@@ -1,20 +1,20 @@
-import Graphics from "../core/Graphics";
-import Rectangle from "../core/Rectangle";
-import ScreenSprite from "../core/ScreenSprite";
-import Sprite from "../core/Sprite";
-import ToneFilter from "../core/ToneFilter";
-import ToneSprite from "../core/ToneSprite";
-import Utils from "../core/Utils";
-import Sprite_Picture from "./Sprite_Picture";
-import Sprite_Timer from "./Sprite_Timer";
-import ConfigManager from "../managers/ConfigManager";
+import { Graphics } from "../core/Graphics";
+import { Rectangle } from "../core/Rectangle";
+import { ScreenSprite } from "../core/ScreenSprite";
+import { Sprite } from "../core/Sprite";
+import { ToneFilter } from "../core/ToneFilter";
+import { ToneSprite } from "../core/ToneSprite";
+import { Utils } from "../core/Utils";
+import { Sprite_Picture } from "./Sprite_Picture";
+import { Sprite_Timer } from "./Sprite_Timer";
+import { ConfigManager } from "../managers/ConfigManager";
 
 // -----------------------------------------------------------------------------
 // Spriteset_Base
 //
 // The superclass of Spriteset_Map and Spriteset_Battle.
 
-export default abstract class Spriteset_Base extends Sprite {
+export abstract class Spriteset_Base extends Sprite {
     protected _baseSprite: Sprite;
     private _tone: number[];
     private _blackScreen: ScreenSprite;

@@ -1,12 +1,12 @@
-import TextManager from "../managers/TextManager";
-import Window_Base from "./Window_Base";
+import { TextManager } from "../managers/TextManager";
+import { Window_Base } from "./Window_Base";
 
 // -----------------------------------------------------------------------------
 // Window_Gold
 //
 // The window for displaying the party's gold.
 
-export default class Window_Gold extends Window_Base {
+export class Window_Gold extends Window_Base {
     public constructor(x, y) {
         const width = Window_Gold.prototype.windowWidth();
         const height = Window_Gold.prototype.windowHeight();

@@ -1,4 +1,4 @@
-export default class Game_Message {
+export class Game_Message {
     private _texts: any[];
     private _choices: any[];
     private _faceName: string;

@@ -1,6 +1,6 @@
-import Trait from "./Trait";
+import { Trait } from "./Trait";
 
-export default interface Class {
+export interface Class {
     id: number;
     expParams: number[];
     traits: Trait[];

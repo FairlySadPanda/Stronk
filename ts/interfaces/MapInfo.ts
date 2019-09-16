@@ -1,4 +1,4 @@
-export default interface MapInfo {
+export interface MapInfo {
     id: number;
     expanded: boolean;
     name: string;

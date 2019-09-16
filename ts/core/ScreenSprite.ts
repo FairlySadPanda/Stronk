@@ -1,15 +1,14 @@
 import * as PIXI from "pixi.js";
-import Graphics from "./Graphics";
-import Point from "./Point";
-import Utils from "./Utils";
+import { Graphics } from "./Graphics";
+import { Point } from "./Point";
+import { Utils } from "./Utils";
 
-export default class ScreenSprite extends PIXI.Container {
+export class ScreenSprite extends PIXI.Container {
     public _graphics: PIXI.Graphics;
     public _red: number;
     public _green: number;
     public _blue: number;
     public _colorText: string;
-    public initialize: () => void;
 
     public static YEPWarned = false;
     public static warnYep() {

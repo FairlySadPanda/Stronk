@@ -1,12 +1,12 @@
-import Graphics from "../core/Graphics";
-import SoundManager from "../managers/SoundManager";
-import Window_EquipCommand from "../windows/Window_EquipCommand";
-import Window_EquipItem from "../windows/Window_EquipItem";
-import Window_EquipSlot from "../windows/Window_EquipSlot";
-import Window_EquipStatus from "../windows/Window_EquipStatus";
-import Scene_MenuBase from "./Scene_MenuBase";
+import { Graphics } from "../core/Graphics";
+import { SoundManager } from "../managers/SoundManager";
+import { Window_EquipCommand } from "../windows/Window_EquipCommand";
+import { Window_EquipItem } from "../windows/Window_EquipItem";
+import { Window_EquipSlot } from "../windows/Window_EquipSlot";
+import { Window_EquipStatus } from "../windows/Window_EquipStatus";
+import { Scene_MenuBase } from "./Scene_MenuBase";
 
-export default class Scene_Equip extends Scene_MenuBase {
+export class Scene_Equip extends Scene_MenuBase {
     private _statusWindow: Window_EquipStatus;
     private _commandWindow: Window_EquipCommand;
     private _slotWindow: Window_EquipSlot;

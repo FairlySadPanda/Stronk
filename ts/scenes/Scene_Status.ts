@@ -1,7 +1,7 @@
-import Window_Status from "../windows/Window_Status";
-import Scene_MenuBase from "./Scene_MenuBase";
+import { Window_Status } from "../windows/Window_Status";
+import { Scene_MenuBase } from "./Scene_MenuBase";
 
-export default class Scene_Status extends Scene_MenuBase {
+export class Scene_Status extends Scene_MenuBase {
     private _statusWindow: Window_Status;
 
     public create() {

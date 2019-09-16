@@ -17,7 +17,7 @@ export interface Game_ActionResult_OnLoad {
     removedBuffs: any[];
 }
 
-export default class Game_ActionResult {
+export class Game_ActionResult {
     public used: boolean;
     public missed: boolean;
     public evaded: boolean;

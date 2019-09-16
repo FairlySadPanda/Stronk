@@ -1,6 +1,6 @@
-import Audio from "./Audio";
+import { Audio } from "./Audio";
 
-export default interface Map {
+export interface Map {
     autoplayBgm: boolean;
     autoplayBgs: boolean;
     battleback1Name: string;

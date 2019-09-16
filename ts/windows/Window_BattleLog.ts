@@ -1,13 +1,13 @@
-import Bitmap from "../core/Bitmap";
-import Graphics from "../core/Graphics";
-import Input from "../core/Input";
-import Sprite from "../core/Sprite";
-import TouchInput from "../core/TouchInput";
-import Utils from "../core/Utils";
-import DataManager from "../managers/DataManager";
-import SoundManager from "../managers/SoundManager";
-import TextManager from "../managers/TextManager";
-import Window_Selectable from "./Window_Selectable";
+import { Bitmap } from "../core/Bitmap";
+import { Graphics } from "../core/Graphics";
+import { Input } from "../core/Input";
+import { Sprite } from "../core/Sprite";
+import { TouchInput } from "../core/TouchInput";
+import { Utils } from "../core/Utils";
+import { DataManager } from "../managers/DataManager";
+import { SoundManager } from "../managers/SoundManager";
+import { TextManager } from "../managers/TextManager";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_BattleLog
@@ -15,7 +15,7 @@ import Window_Selectable from "./Window_Selectable";
 // The window for displaying battle progress. No frame is displayed, but it is
 // handled as a window for convenience.
 
-export default class Window_BattleLog extends Window_Selectable {
+export class Window_BattleLog extends Window_Selectable {
     public opacity: number;
     private _lines: any[];
     private _methods: any[];

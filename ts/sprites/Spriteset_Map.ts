@@ -1,21 +1,21 @@
-import Graphics from "../core/Graphics";
-import Sprite from "../core/Sprite";
-import Tilemap from "../core/Tilemap";
-import TilingSprite from "../core/TilingSprite";
-import Utils from "../core/Utils";
-import Weather from "../core/Weather";
-import ImageManager from "../managers/ImageManager";
-import Spriteset_Base from "./Spriteset_Base";
-import Sprite_Character from "./Sprite_Character";
-import Sprite_Destination from "./Sprite_Destination";
-import ConfigManager from "../managers/ConfigManager";
+import { Graphics } from "../core/Graphics";
+import { Sprite } from "../core/Sprite";
+import { Tilemap } from "../core/Tilemap";
+import { TilingSprite } from "../core/TilingSprite";
+import { Utils } from "../core/Utils";
+import { Weather } from "../core/Weather";
+import { ImageManager } from "../managers/ImageManager";
+import { Spriteset_Base } from "./Spriteset_Base";
+import { Sprite_Character } from "./Sprite_Character";
+import { Sprite_Destination } from "./Sprite_Destination";
+import { ConfigManager } from "../managers/ConfigManager";
 
 // -----------------------------------------------------------------------------
 // Spriteset_Map
 //
 // The set of sprites on the map screen.
 
-export default class Spriteset_Map extends Spriteset_Base {
+export class Spriteset_Map extends Spriteset_Base {
     private _characterSprites: Sprite_Character[];
     private _parallax: TilingSprite;
     private _tilemap: Tilemap;
@@ -24,6 +24,13 @@ export default class Spriteset_Map extends Spriteset_Base {
     private _destinationSprite: Sprite_Destination;
     private _weather: Weather;
     private _parallaxName: string;
+
+    public get tilemap(): Tilemap {
+        return this._tilemap;
+    }
+    public set tilemap(value: Tilemap) {
+        this._tilemap = value;
+    }
 
     public createLowerLayer() {
         super.createLowerLayer();

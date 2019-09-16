@@ -1,4 +1,4 @@
-export default interface Audio {
+export interface Audio {
     name: string;
     pan: number;
     pitch: number;

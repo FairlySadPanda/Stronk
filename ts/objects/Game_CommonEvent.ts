@@ -1,11 +1,11 @@
-import Game_Interpreter, { Game_Interpreter_OnLoad } from "./Game_Interpreter";
+import { Game_Interpreter, Game_Interpreter_OnLoad } from "./Game_Interpreter";
 
 export interface Game_CommonEvent_OnLoad {
     _commonEventId: number;
     _interpreter: Game_Interpreter_OnLoad;
 }
 
-export default class Game_CommonEvent {
+export class Game_CommonEvent {
     private _commonEventId: number;
     private _interpreter: Game_Interpreter;
 

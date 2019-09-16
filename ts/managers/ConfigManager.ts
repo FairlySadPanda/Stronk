@@ -1,7 +1,7 @@
-import Utils from "../core/Utils";
-import AudioManager from "./AudioManager";
-import StorageManager from "./StorageManager";
-import Graphics from "../core/Graphics";
+import { Utils } from "../core/Utils";
+import { AudioManager } from "./AudioManager";
+import { StorageManager } from "./StorageManager";
+import { Graphics } from "../core/Graphics";
 
 declare const nw: any;
 
@@ -85,7 +85,7 @@ interface OtherOptions {
     commandRemember: ToggleOption;
 }
 
-export default abstract class ConfigManager {
+export abstract class ConfigManager {
     public static alwaysDash = false;
     public static commandRemember = false;
     private static _isFullScreen = false;
@@ -213,25 +213,29 @@ export default abstract class ConfigManager {
 
     public static get currentResolution(): Resolution {
         return {
-            widthPx: this.graphicsOptions.screenResolution.list[
-                this._screenResolution
-            ][0],
-            heightPx: this.graphicsOptions.screenResolution.list[
-                this._screenResolution
-            ][1]
+            widthPx:
+                ConfigManager.graphicsOptions.screenResolution.list[
+                    ConfigManager._screenResolution
+                ][0],
+            heightPx:
+                ConfigManager.graphicsOptions.screenResolution.list[
+                    ConfigManager._screenResolution
+                ][1]
         };
     }
 
     public static get internaResolution(): Resolution {
-        return this.graphicsOptions.screenResolution.internalRenderResolution;
+        return ConfigManager.graphicsOptions.screenResolution
+            .internalRenderResolution;
     }
 
     public static get fieldResolution(): Resolution {
-        return this.graphicsOptions.screenResolution.internalFieldResolution;
+        return ConfigManager.graphicsOptions.screenResolution
+            .internalFieldResolution;
     }
 
     public static get isFullScreen(): boolean {
-        return this._isFullScreen;
+        return ConfigManager._isFullScreen;
     }
 
     public static set isFullScreen(value: boolean) {
@@ -243,7 +247,7 @@ export default abstract class ConfigManager {
         try {
             const config = StorageManager.load(-1);
             if (config) {
-                this.applyData(JSON.parse(config));
+                ConfigManager.applyData(JSON.parse(config));
             }
         } catch (e) {
             console.error(e);
@@ -251,52 +255,84 @@ export default abstract class ConfigManager {
     }
 
     public static save() {
-        StorageManager.save(-1, JSON.stringify(this.makeData()));
+        StorageManager.save(-1, JSON.stringify(ConfigManager.makeData()));
     }
 
     public static makeData() {
         return {
-            alwaysDash: this.alwaysDash,
-            commandRemember: this.commandRemember,
-            isFullScreen: this.isFullScreen,
-            bgmVolume: this.bgmVolume,
-            bgsVolume: this.bgsVolume,
-            meVolume: this.meVolume,
-            seVolume: this.seVolume,
-            _windowRed: this._windowRed,
-            _windowGreen: this._windowGreen,
-            _windowBlue: this._windowBlue,
-            _windowOpacity: this._windowOpacity,
-            _menuBack: this._menuBack,
-            _screenResolution: this._screenResolution,
-            _vSync: this.vSync,
-            graphicsOptions: this.graphicsOptions,
-            audioOptions: this.AudioSoundOptions,
-            otherOptions: this.OtherOptions,
-            cosmeticOptions: this.cosmeticsOptions
+            alwaysDash: ConfigManager.alwaysDash,
+            commandRemember: ConfigManager.commandRemember,
+            isFullScreen: ConfigManager.isFullScreen,
+            bgmVolume: ConfigManager.bgmVolume,
+            bgsVolume: ConfigManager.bgsVolume,
+            meVolume: ConfigManager.meVolume,
+            seVolume: ConfigManager.seVolume,
+            _windowRed: ConfigManager._windowRed,
+            _windowGreen: ConfigManager._windowGreen,
+            _windowBlue: ConfigManager._windowBlue,
+            _windowOpacity: ConfigManager._windowOpacity,
+            _menuBack: ConfigManager._menuBack,
+            _screenResolution: ConfigManager._screenResolution,
+            _vSync: ConfigManager.vSync,
+            graphicsOptions: ConfigManager.graphicsOptions,
+            audioOptions: ConfigManager.AudioSoundOptions,
+            otherOptions: ConfigManager.OtherOptions,
+            cosmeticOptions: ConfigManager.cosmeticsOptions
         };
     }
 
     public static applyData(config: {}) {
-        this.alwaysDash = this.readFlag(config, "alwaysDash");
-        this.commandRemember = this.readFlag(config, "commandRemember");
-        this.isFullScreen = this.readFlag(config, "isFullScreen");
-        this.bgmVolume = this.readVolume(config, "bgmVolume");
-        this.bgsVolume = this.readVolume(config, "bgsVolume");
-        this.meVolume = this.readVolume(config, "meVolume");
-        this.seVolume = this.readVolume(config, "seVolume");
-        this._windowRed = this.readFlagWindow(config, "_windowRed");
-        this._windowGreen = this.readFlagWindow(config, "_windowGreen");
-        this._windowBlue = this.readFlagWindow(config, "_windowBlue");
-        this._windowOpacity = this.readFlagWindow(config, "_windowOpacity");
-        this._windowSkin = this.readFlagWindowSkin(config);
-        this._menuBack = this.readFlagMenuBackground(config);
-        this._screenResolution = this.readFlagScreenResolution(config);
-        this.vSync = this.readFlagVSync(config);
-        this.cosmeticsOptions = this.readObject(config, "cosmeticOptions");
-        this.AudioSoundOptions = this.readObject(config, "audioOptions");
-        this.OtherOptions = this.readObject(config, "otherOptions");
-        this.graphicsOptions = this.readObject(config, "graphicsOptions");
+        ConfigManager.alwaysDash = ConfigManager.readFlag(config, "alwaysDash");
+        ConfigManager.commandRemember = ConfigManager.readFlag(
+            config,
+            "commandRemember"
+        );
+        ConfigManager.isFullScreen = ConfigManager.readFlag(
+            config,
+            "isFullScreen"
+        );
+        ConfigManager.bgmVolume = ConfigManager.readVolume(config, "bgmVolume");
+        ConfigManager.bgsVolume = ConfigManager.readVolume(config, "bgsVolume");
+        ConfigManager.meVolume = ConfigManager.readVolume(config, "meVolume");
+        ConfigManager.seVolume = ConfigManager.readVolume(config, "seVolume");
+        ConfigManager._windowRed = ConfigManager.readFlagWindow(
+            config,
+            "_windowRed"
+        );
+        ConfigManager._windowGreen = ConfigManager.readFlagWindow(
+            config,
+            "_windowGreen"
+        );
+        ConfigManager._windowBlue = ConfigManager.readFlagWindow(
+            config,
+            "_windowBlue"
+        );
+        ConfigManager._windowOpacity = ConfigManager.readFlagWindow(
+            config,
+            "_windowOpacity"
+        );
+        ConfigManager._windowSkin = ConfigManager.readFlagWindowSkin(config);
+        ConfigManager._menuBack = ConfigManager.readFlagMenuBackground(config);
+        ConfigManager._screenResolution = ConfigManager.readFlagScreenResolution(
+            config
+        );
+        ConfigManager.vSync = ConfigManager.readFlagVSync(config);
+        ConfigManager.cosmeticsOptions = ConfigManager.readObject(
+            config,
+            "cosmeticOptions"
+        );
+        ConfigManager.AudioSoundOptions = ConfigManager.readObject(
+            config,
+            "audioOptions"
+        );
+        ConfigManager.OtherOptions = ConfigManager.readObject(
+            config,
+            "otherOptions"
+        );
+        ConfigManager.graphicsOptions = ConfigManager.readObject(
+            config,
+            "graphicsOptions"
+        );
     }
 
     public static readFlag(config: {}, name: string) {

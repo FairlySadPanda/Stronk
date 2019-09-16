@@ -1,17 +1,17 @@
-import Graphics from "../core/Graphics";
-import ConfigManager from "../managers/ConfigManager";
+import { Graphics } from "../core/Graphics";
+import { ConfigManager } from "../managers/ConfigManager";
 
-import TextManager from "../managers/TextManager";
-import Game_Actor from "../objects/Game_Actor";
-import Window_Command from "./Window_Command";
-import Skill from "../interfaces/Skill";
+import { TextManager } from "../managers/TextManager";
+import { Game_Actor } from "../objects/Game_Actor";
+import { Window_Command } from "./Window_Command";
+import { Skill } from "../interfaces/Skill";
 
 // -----------------------------------------------------------------------------
 // Window_ActorCommand
 //
 // The window for selecting an actor's action on the battle screen.
 
-export default class Window_ActorCommand extends Window_Command {
+export class Window_ActorCommand extends Window_Command {
     public openness: number;
     private _actor: Game_Actor;
 

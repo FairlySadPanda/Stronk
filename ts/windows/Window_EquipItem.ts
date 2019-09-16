@@ -1,14 +1,14 @@
-import JsonEx from "../core/JsonEx";
-import Game_Actor, { Game_Actor_OnLoad } from "../objects/Game_Actor";
-import Window_EquipStatus from "./Window_EquipStatus";
-import Window_ItemList from "./Window_ItemList";
+import { JsonEx } from "../core/JsonEx";
+import { Game_Actor, Game_Actor_OnLoad } from "../objects/Game_Actor";
+import { Window_EquipStatus } from "./Window_EquipStatus";
+import { Window_ItemList } from "./Window_ItemList";
 
 // -----------------------------------------------------------------------------
 // Window_EquipItem
 //
 // The window for selecting an equipment item on the equipment screen.
 
-export default class Window_EquipItem extends Window_ItemList {
+export class Window_EquipItem extends Window_ItemList {
     private _actor: Game_Actor;
     private _slotId: number;
     private _statusWindow: Window_EquipStatus;

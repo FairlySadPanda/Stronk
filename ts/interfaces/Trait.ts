@@ -1,4 +1,4 @@
-export default interface Trait {
+export interface Trait {
     code: number;
     dataId: number;
     value: number;

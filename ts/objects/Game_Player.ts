@@ -1,12 +1,11 @@
-import Graphics from "../core/Graphics";
-import Input from "../core/Input";
-import TouchInput from "../core/TouchInput";
-import Utils from "../core/Utils";
-import BattleManager from "../managers/BattleManager";
-import ConfigManager from "../managers/ConfigManager";
-
-import Game_Character, { Game_Character_OnLoad } from "./Game_Character";
-import Game_Followers, { Game_Followers_OnLoad } from "./Game_Followers";
+import { Graphics } from "../core/Graphics";
+import { Input } from "../core/Input";
+import { TouchInput } from "../core/TouchInput";
+import { Utils } from "../core/Utils";
+import { BattleManager } from "../managers/BattleManager";
+import { ConfigManager } from "../managers/ConfigManager";
+import { Game_Character, Game_Character_OnLoad } from "./Game_Character";
+import { Game_Followers, Game_Followers_OnLoad } from "./Game_Followers";
 
 export interface Game_Player_OnLoad extends Game_Character_OnLoad {
     _followers: Game_Followers_OnLoad;
@@ -24,7 +23,7 @@ export interface Game_Player_OnLoad extends Game_Character_OnLoad {
     _encounterCount: number;
 }
 
-export default class Game_Player extends Game_Character {
+export class Game_Player extends Game_Character {
     private _followers: Game_Followers;
     private _vehicleType: string;
     private _vehicleGettingOn: boolean;

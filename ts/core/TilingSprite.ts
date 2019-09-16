@@ -1,12 +1,12 @@
 import * as PIXI from "pixi.js";
-import Graphics from "./Graphics";
-import Point from "./Point";
-import Rectangle from "./Rectangle";
-import Sprite from "./Sprite";
-import Utils from "./Utils";
-import Bitmap from "./Bitmap";
+import { Graphics } from "./Graphics";
+import { Point } from "./Point";
+import { Rectangle } from "./Rectangle";
+import { Sprite } from "./Sprite";
+import { Utils } from "./Utils";
+import { Bitmap } from "./Bitmap";
 
-export default class TilingSprite extends PIXI.extras.TilingSprite {
+export class TilingSprite extends PIXI.extras.TilingSprite {
     /**
      * The image for the tiling sprite.
      *

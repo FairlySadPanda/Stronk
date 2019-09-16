@@ -1,6 +1,6 @@
-import Utils from "../core/Utils";
+import { Utils } from "../core/Utils";
 
-export default class Game_Temp {
+export class Game_Temp {
     private _isPlaytest: boolean;
     private _commonEventId: number;
     private _destinationX: number;

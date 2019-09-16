@@ -1,6 +1,6 @@
-import Trait from "./Trait";
+import { Trait } from "./Trait";
 
-export default interface Enemy {
+export interface Enemy {
     id: number;
     actions: EnemyAction[];
     battlerHue: number;

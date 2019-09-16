@@ -1,14 +1,14 @@
-import Sprite from "../core/Sprite";
-import BattleManager from "../managers/BattleManager";
-import ImageManager from "../managers/ImageManager";
-import Sprite_Base from "./Sprite_Base";
-import Sprite_Battler from "./Sprite_Battler";
-import Sprite_StateOverlay from "./Sprite_StateOverlay";
-import Sprite_Weapon from "./Sprite_Weapon";
-import ConfigManager from "../managers/ConfigManager";
-import Graphics from "../core/Graphics";
-import Game_Enemy from "../objects/Game_Enemy";
-import Game_Actor from "../objects/Game_Actor";
+import { Sprite } from "../core/Sprite";
+import { BattleManager } from "../managers/BattleManager";
+import { ImageManager } from "../managers/ImageManager";
+import { Sprite_Base } from "./Sprite_Base";
+import { Sprite_Battler } from "./Sprite_Battler";
+import { Sprite_StateOverlay } from "./Sprite_StateOverlay";
+import { Sprite_Weapon } from "./Sprite_Weapon";
+import { ConfigManager } from "../managers/ConfigManager";
+import { Graphics } from "../core/Graphics";
+import { Game_Enemy } from "../objects/Game_Enemy";
+import { Game_Actor } from "../objects/Game_Actor";
 
 interface Motion {
     index: number;
@@ -41,7 +41,7 @@ interface Motions {
 //
 // The sprite for displaying an actor.
 
-export default class Sprite_Actor extends Sprite_Battler {
+export class Sprite_Actor extends Sprite_Battler {
     public static MOTIONS: Motions = {
         walk: { index: 0, loop: true },
         wait: { index: 1, loop: true },

@@ -1,10 +1,10 @@
-import Window_Selectable from "./Window_Selectable";
-import ConfigManager from "../managers/ConfigManager";
-import Graphics from "../core/Graphics";
-import SoundManager from "../managers/SoundManager";
-import Utils from "../core/Utils";
+import { Window_Selectable } from "./Window_Selectable";
+import { ConfigManager } from "../managers/ConfigManager";
+import { Graphics } from "../core/Graphics";
+import { SoundManager } from "../managers/SoundManager";
+import { Utils } from "../core/Utils";
 
-export default class Window_MushOptionsMainCommand extends Window_Selectable {
+export class Window_MushOptionsMainCommand extends Window_Selectable {
     _section: any;
     _sectionMaxItems: number[];
     _backSpace: number;

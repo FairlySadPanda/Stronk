@@ -1,16 +1,16 @@
-import Graphics from "../core/Graphics";
-import Utils from "../core/Utils";
-import ConfigManager from "../managers/ConfigManager";
-import SoundManager from "../managers/SoundManager";
-import TextManager from "../managers/TextManager";
-import Window_Command from "./Window_Command";
+import { Graphics } from "../core/Graphics";
+import { Utils } from "../core/Utils";
+import { ConfigManager } from "../managers/ConfigManager";
+import { SoundManager } from "../managers/SoundManager";
+import { TextManager } from "../managers/TextManager";
+import { Window_Command } from "./Window_Command";
 
 // -----------------------------------------------------------------------------
 // Window_Options
 //
 // The window for changing various settings on the options screen.
 
-export default class Window_Options extends Window_Command {
+export class Window_Options extends Window_Command {
     public constructor() {
         super(0, 0);
         this.updatePlacement();

@@ -1,16 +1,16 @@
-import Sprite from "../core/Sprite";
-import ImageManager from "../managers/ImageManager";
-import Sprite_Balloon from "./Sprite_Balloon";
-import Sprite_Base from "./Sprite_Base";
-import Game_Character from "../objects/Game_Character";
-import TilingSprite from "../core/TilingSprite";
+import { Sprite } from "../core/Sprite";
+import { ImageManager } from "../managers/ImageManager";
+import { Sprite_Balloon } from "./Sprite_Balloon";
+import { Sprite_Base } from "./Sprite_Base";
+import { Game_Character } from "../objects/Game_Character";
+import { TilingSprite } from "../core/TilingSprite";
 
 // -----------------------------------------------------------------------------
 // Sprite_Character
 //
 // The sprite for displaying a character.
 
-export default class Sprite_Character extends Sprite_Base {
+export class Sprite_Character extends Sprite_Base {
     private _character: Game_Character;
     private _balloonDuration: number;
     private _tilesetId: number;

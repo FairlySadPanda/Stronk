@@ -1,13 +1,13 @@
-import Sprite from "../core/Sprite";
-import SceneManager from "../managers/SceneManager";
-import Game_Actor from "../objects/Game_Actor";
-import Window_Help from "../windows/Window_Help";
-import Scene_Base from "./Scene_Base";
-import ConfigManager from "../managers/ConfigManager";
-import ImageManager from "../managers/ImageManager";
-import Graphics from "../core/Graphics";
+import { Sprite } from "../core/Sprite";
+import { SceneManager } from "../managers/SceneManager";
+import { Game_Actor } from "../objects/Game_Actor";
+import { Window_Help } from "../windows/Window_Help";
+import { Scene_Base } from "./Scene_Base";
+import { ConfigManager } from "../managers/ConfigManager";
+import { ImageManager } from "../managers/ImageManager";
+import { Graphics } from "../core/Graphics";
 
-export default abstract class Scene_MenuBase extends Scene_Base {
+export abstract class Scene_MenuBase extends Scene_Base {
     protected _helpWindow: Window_Help;
     protected _actor: Game_Actor;
     protected _backgroundSprite: Sprite;

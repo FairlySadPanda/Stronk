@@ -1,14 +1,14 @@
-import Graphics from "../core/Graphics";
-import DataManager from "../managers/DataManager";
-import TextManager from "../managers/TextManager";
-import Window_Command from "./Window_Command";
+import { Graphics } from "../core/Graphics";
+import { DataManager } from "../managers/DataManager";
+import { TextManager } from "../managers/TextManager";
+import { Window_Command } from "./Window_Command";
 
 // -----------------------------------------------------------------------------
 // Window_TitleCommand
 //
 // The window for selecting New Game/Continue on the title screen.
 
-export default class Window_TitleCommand extends Window_Command {
+export class Window_TitleCommand extends Window_Command {
     public static initCommandPosition() {
         Window_TitleCommand._lastCommandSymbol = null;
     }

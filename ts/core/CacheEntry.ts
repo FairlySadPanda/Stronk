@@ -1,6 +1,6 @@
-import CacheMap from "./CacheMap";
+import { CacheMap } from "./CacheMap";
 
-export default class CacheEntry {
+export class CacheEntry {
     private cache: CacheMap;
     private key: string;
     private item: string;

@@ -1,8 +1,8 @@
-import Decrypter from "./Decrypter";
-import ResourceHandler from "./ResourceHandler";
-import Utils from "./Utils";
+import { Decrypter } from "./Decrypter";
+import { ResourceHandler } from "./ResourceHandler";
+import { Utils } from "./Utils";
 
-export default class WebAudio {
+export class WebAudio {
     public reservedSeName: string;
     private static _standAlone: any;
     private _url: string;

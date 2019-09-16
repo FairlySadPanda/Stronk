@@ -1,14 +1,14 @@
-import Graphics from "../core/Graphics";
-import SceneManager from "../managers/SceneManager";
-import SoundManager from "../managers/SoundManager";
-import Game_Action from "../objects/Game_Action";
-import Window_ItemList from "../windows/Window_ItemList";
-import Window_MenuActor from "../windows/Window_MenuActor";
-import Window_SkillList from "../windows/Window_SkillList";
-import Scene_Map from "./Scene_Map";
-import Scene_MenuBase from "./Scene_MenuBase";
+import { Graphics } from "../core/Graphics";
+import { SceneManager } from "../managers/SceneManager";
+import { SoundManager } from "../managers/SoundManager";
+import { Game_Action } from "../objects/Game_Action";
+import { Window_ItemList } from "../windows/Window_ItemList";
+import { Window_MenuActor } from "../windows/Window_MenuActor";
+import { Window_SkillList } from "../windows/Window_SkillList";
+import { Scene_Map } from "./Scene_Map";
+import { Scene_MenuBase } from "./Scene_MenuBase";
 
-export default abstract class Scene_ItemBase extends Scene_MenuBase {
+export abstract class Scene_ItemBase extends Scene_MenuBase {
     protected _actorWindow: Window_MenuActor;
     protected _itemWindow: Window_ItemList | Window_SkillList;
 

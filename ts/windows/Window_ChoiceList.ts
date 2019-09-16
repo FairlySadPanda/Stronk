@@ -1,13 +1,13 @@
-import Graphics from "../core/Graphics";
-import Input from "../core/Input";
-import Window_Command from "./Window_Command";
+import { Graphics } from "../core/Graphics";
+import { Input } from "../core/Input";
+import { Window_Command } from "./Window_Command";
 
 // -----------------------------------------------------------------------------
 // Window_ChoiceList
 //
 // The window used for the event command [Show Choices].
 
-export default class Window_ChoiceList extends Window_Command {
+export class Window_ChoiceList extends Window_Command {
     public openness: number;
     private _background: number;
     public constructor(messageWindow) {

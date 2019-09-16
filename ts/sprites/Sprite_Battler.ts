@@ -1,14 +1,14 @@
-import Sprite_Base from "./Sprite_Base";
-import Sprite_Damage from "./Sprite_Damage";
-import Game_Battler from "../objects/Game_Battler";
-import ConfigManager from "../managers/ConfigManager";
+import { Sprite_Base } from "./Sprite_Base";
+import { Sprite_Damage } from "./Sprite_Damage";
+import { Game_Battler } from "../objects/Game_Battler";
+import { ConfigManager } from "../managers/ConfigManager";
 
 // -----------------------------------------------------------------------------
 // Sprite_Battler
 //
 // The superclass of Sprite_Actor and Sprite_Enemy.
 
-export default class Sprite_Battler extends Sprite_Base {
+export class Sprite_Battler extends Sprite_Base {
     private _battler: Game_Battler;
     private _damages: Sprite_Damage[];
     protected _homeX: number;

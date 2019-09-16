@@ -1,21 +1,22 @@
-import Bitmap from "../core/Bitmap";
-import Graphics from "../core/Graphics";
-import Input from "../core/Input";
-import TouchInput from "../core/TouchInput";
-import Utils from "../core/Utils";
-import WebAudio from "../core/WebAudio";
-import AudioManager from "./AudioManager";
-import ImageManager from "./ImageManager";
-import PluginManager from "./PluginManager";
-import Scene_Base from "../scenes/Scene_Base";
-import ConfigManager from "./ConfigManager";
+import { Bitmap } from "../core/Bitmap";
+import { Graphics } from "../core/Graphics";
+import { Input } from "../core/Input";
+import { TouchInput } from "../core/TouchInput";
+import { Utils } from "../core/Utils";
+import { WebAudio } from "../core/WebAudio";
+import { AudioManager } from "./AudioManager";
+import { ImageManager } from "./ImageManager";
+import { PluginManager } from "./PluginManager";
+import { Scene_Base } from "../scenes/Scene_Base";
+import { ConfigManager } from "./ConfigManager";
 
 declare const nw: any;
 
-export default abstract class SceneManager {
+export abstract class SceneManager {
     private static _scene: Scene_Base = null;
     private static _nextScene: Scene_Base = null;
     private static _stack = [];
+
     private static _stopped = false;
     private static _sceneStarted = false;
     private static _exiting = false;
@@ -32,6 +33,20 @@ export default abstract class SceneManager {
     private static _deltaTime = 1.0 / 60.0;
     private static _accumulator = 0.0;
     private static _currentTime = performance.now();
+
+    public static get scene(): Scene_Base {
+        return SceneManager._scene;
+    }
+    public static set scene(value: Scene_Base) {
+        SceneManager._scene = value;
+    }
+
+    public static get stack() {
+        return SceneManager._stack;
+    }
+    public static set stack(value) {
+        SceneManager._stack = value;
+    }
 
     public static run(sceneClass: any) {
         try {

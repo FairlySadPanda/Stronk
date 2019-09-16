@@ -1,6 +1,6 @@
-import Graphics from "../core/Graphics";
-import ImageManager from "../managers/ImageManager";
-import ConfigManager from "../managers/ConfigManager";
+import { Graphics } from "../core/Graphics";
+import { ImageManager } from "../managers/ImageManager";
+import { ConfigManager } from "../managers/ConfigManager";
 
 export interface Game_CharacterBase_OnLoad {
     _x: number;
@@ -35,7 +35,7 @@ export interface Game_CharacterBase_OnLoad {
     _movementSuccess: boolean;
 }
 
-export default class Game_CharacterBase {
+export class Game_CharacterBase {
     protected _x: number;
     protected _y: number;
     private _realX: number;

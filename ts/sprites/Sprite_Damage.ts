@@ -1,12 +1,12 @@
-import Sprite from "../core/Sprite";
-import ImageManager from "../managers/ImageManager";
+import { Sprite } from "../core/Sprite";
+import { ImageManager } from "../managers/ImageManager";
 
 // -----------------------------------------------------------------------------
 // Sprite_Damage
 //
 // The sprite for displaying a popup damage.
 
-export default class Sprite_Damage extends Sprite {
+export class Sprite_Damage extends Sprite {
     private _duration: number;
     private _flashColor: number[];
     private _flashDuration: number;

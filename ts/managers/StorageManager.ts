@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as LZString from "lz-string";
 import * as path from "path";
-import Utils from "../core/Utils";
+import { Utils } from "../core/Utils";
 
-export default abstract class StorageManager {
+export abstract class StorageManager {
     public static save(savefileId, json) {
         if (this.isLocalMode()) {
             this.saveToLocalFile(savefileId, json);

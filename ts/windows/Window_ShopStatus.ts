@@ -1,9 +1,9 @@
-import Input from "../core/Input";
-import TouchInput from "../core/TouchInput";
-import DataManager from "../managers/DataManager";
-import SoundManager from "../managers/SoundManager";
-import TextManager from "../managers/TextManager";
-import Window_Base from "./Window_Base";
+import { Input } from "../core/Input";
+import { TouchInput } from "../core/TouchInput";
+import { DataManager } from "../managers/DataManager";
+import { SoundManager } from "../managers/SoundManager";
+import { TextManager } from "../managers/TextManager";
+import { Window_Base } from "./Window_Base";
 
 // -----------------------------------------------------------------------------
 // Window_ShopStatus
@@ -11,7 +11,7 @@ import Window_Base from "./Window_Base";
 // The window for displaying number of items in possession and the actor's
 // equipment on the shop screen.
 
-export default class Window_ShopStatus extends Window_Base {
+export class Window_ShopStatus extends Window_Base {
     private _item: any;
     private _pageIndex: number;
 

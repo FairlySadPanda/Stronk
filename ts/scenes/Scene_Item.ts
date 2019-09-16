@@ -1,9 +1,9 @@
-import Graphics from "../core/Graphics";
-import Window_ItemCategory from "../windows/Window_ItemCategory";
-import Window_ItemList from "../windows/Window_ItemList";
-import Scene_ItemBase from "./Scene_ItemBase";
+import { Graphics } from "../core/Graphics";
+import { Window_ItemCategory } from "../windows/Window_ItemCategory";
+import { Window_ItemList } from "../windows/Window_ItemList";
+import { Scene_ItemBase } from "./Scene_ItemBase";
 
-export default class Scene_Item extends Scene_ItemBase {
+export class Scene_Item extends Scene_ItemBase {
     private _categoryWindow: Window_ItemCategory;
 
     public create() {

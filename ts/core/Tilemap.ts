@@ -1,16 +1,16 @@
 import * as PIXI from "pixi.js";
-import PluginManager from "../managers/PluginManager";
-import Bitmap from "./Bitmap";
-import Graphics from "./Graphics";
-import Point from "./Point";
-import ConfigManager from "../managers/ConfigManager";
+import { PluginManager } from "../managers/PluginManager";
+import { Bitmap } from "./Bitmap";
+import { Graphics } from "./Graphics";
+import { Point } from "./Point";
+import { ConfigManager } from "../managers/ConfigManager";
 
 PIXI.glCore.VertexArrayObject.FORCE_NATIVE = true;
 PIXI.settings.GC_MODE = PIXI.GC_MODES.AUTO;
 PIXI.tilemap.TileRenderer.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 PIXI.tilemap.TileRenderer.DO_CLEAR = true;
 
-export default class Tilemap extends PIXI.Container {
+export class Tilemap extends PIXI.Container {
     /**
      * The width of the screen in pixels.
      *
@@ -525,7 +525,7 @@ export default class Tilemap extends PIXI.Container {
      * @return {Boolean}
      * @private
      */
-    private _isHigherTile(tileId: string | number) {
+    protected _isHigherTile(tileId: string | number) {
         return this.flags[tileId] & 0x10;
     }
 
@@ -535,7 +535,7 @@ export default class Tilemap extends PIXI.Container {
      * @return {Boolean}
      * @private
      */
-    private _isTableTile(tileId: string | number): boolean {
+    protected _isTableTile(tileId: string | number): boolean {
         return Tilemap.isTileA2(tileId) && Boolean(this.flags[tileId] & 0x80);
     }
 
@@ -546,7 +546,7 @@ export default class Tilemap extends PIXI.Container {
      * @return {Boolean}
      * @private
      */
-    private _isOverpassPosition(mx: any, my: any) {
+    protected _isOverpassPosition(mx: any, my: any) {
         return false;
     }
 
@@ -554,7 +554,7 @@ export default class Tilemap extends PIXI.Container {
      * @method _sortChildren
      * @private
      */
-    private _sortChildren() {
+    protected _sortChildren() {
         this.children.sort(this._compareChildOrder.bind(this));
     }
 
@@ -583,9 +583,9 @@ export default class Tilemap extends PIXI.Container {
      * @method _hackRenderer
      * @private
      */
-    private _hackRenderer(renderer: {
-        plugins: { tilemap: { tileAnim: number[] } };
-    }) {
+    protected _hackRenderer(
+        renderer: PIXI.CanvasRenderer | PIXI.WebGLRenderer
+    ) {
         let af = this.animationFrame % 4;
         if (af === 3) {
             af = 1;
@@ -600,7 +600,7 @@ export default class Tilemap extends PIXI.Container {
      * @method _createLayers
      * @private
      */
-    private _createLayers() {
+    protected _createLayers() {
         this._needsRepaint = true;
 
         if (!this.lowerZLayer) {
@@ -647,7 +647,7 @@ export default class Tilemap extends PIXI.Container {
      * @param {Number} startY
      * @private
      */
-    private _updateLayerPositions(startX: number, startY: number) {
+    protected _updateLayerPositions(startX: number, startY: number) {
         let ox = 0;
         let oy = 0;
         if (this.roundPixels) {
@@ -669,7 +669,7 @@ export default class Tilemap extends PIXI.Container {
      * @param {Number} startY
      * @private
      */
-    private _paintAllTiles(startX: number, startY: number) {
+    protected _paintAllTiles(startX: number, startY: number) {
         this.lowerZLayer.clear();
         this.upperZLayer.clear();
         const tileCols = Math.ceil(this._width / this._tileWidth) + 1;
@@ -1051,7 +1051,7 @@ export default class Tilemap extends PIXI.Container {
      * @return {Number}
      * @private
      */
-    private _readMapData(x: number, y: number, z: number) {
+    protected _readMapData(x: number, y: number, z: number) {
         if (this._mapData) {
             const width = this._mapWidth;
             const height = this._mapHeight;

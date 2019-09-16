@@ -1,12 +1,12 @@
-import Sprite from "../core/Sprite";
-import ImageManager from "../managers/ImageManager";
+import { Sprite } from "../core/Sprite";
+import { ImageManager } from "../managers/ImageManager";
 
 // -----------------------------------------------------------------------------
 // Sprite_Picture
 //
 // The sprite for displaying a picture.
 
-export default class Sprite_Picture extends Sprite {
+export class Sprite_Picture extends Sprite {
     private _pictureName: string;
     private _pictureId: any;
     public constructor(pictureId) {

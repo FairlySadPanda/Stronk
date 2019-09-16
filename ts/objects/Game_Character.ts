@@ -1,6 +1,7 @@
-import Utils from "../core/Utils";
-import AudioManager from "../managers/AudioManager";
-import Game_CharacterBase, {
+import { Utils } from "../core/Utils";
+import { AudioManager } from "../managers/AudioManager";
+import {
+    Game_CharacterBase,
     Game_CharacterBase_OnLoad
 } from "./Game_CharacterBase";
 
@@ -13,7 +14,7 @@ export interface Game_Character_OnLoad extends Game_CharacterBase_OnLoad {
     _waitCount: number;
 }
 
-export default class Game_Character extends Game_CharacterBase {
+export class Game_Character extends Game_CharacterBase {
     public static ROUTE_END = 0;
     public static ROUTE_MOVE_DOWN = 1;
     public static ROUTE_MOVE_LEFT = 2;

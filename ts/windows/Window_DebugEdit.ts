@@ -1,14 +1,14 @@
-import Input from "../core/Input";
-import Utils from "../core/Utils";
-import SoundManager from "../managers/SoundManager";
-import Window_Selectable from "./Window_Selectable";
+import { Input } from "../core/Input";
+import { Utils } from "../core/Utils";
+import { SoundManager } from "../managers/SoundManager";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_DebugEdit
 //
 // The window for displaying switches and variables on the debug screen.
 
-export default class Window_DebugEdit extends Window_Selectable {
+export class Window_DebugEdit extends Window_Selectable {
     private _mode: string;
     private _topId: number;
 

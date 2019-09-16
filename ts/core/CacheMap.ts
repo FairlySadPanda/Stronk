@@ -1,6 +1,6 @@
-import CacheEntry from "./CacheEntry";
+import { CacheEntry } from "./CacheEntry";
 
-export default class CacheMap {
+export class CacheMap {
     private manager: any;
     private _inner: CacheEntry[];
     private lastRemovedEntries: CacheEntry[];

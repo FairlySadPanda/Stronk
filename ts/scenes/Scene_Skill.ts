@@ -1,11 +1,11 @@
-import Graphics from "../core/Graphics";
-import SoundManager from "../managers/SoundManager";
-import Window_SkillList from "../windows/Window_SkillList";
-import Window_SkillStatus from "../windows/Window_SkillStatus";
-import Window_SkillType from "../windows/Window_SkillType";
-import Scene_ItemBase from "./Scene_ItemBase";
+import { Graphics } from "../core/Graphics";
+import { SoundManager } from "../managers/SoundManager";
+import { Window_SkillList } from "../windows/Window_SkillList";
+import { Window_SkillStatus } from "../windows/Window_SkillStatus";
+import { Window_SkillType } from "../windows/Window_SkillType";
+import { Scene_ItemBase } from "./Scene_ItemBase";
 
-export default class Scene_Skill extends Scene_ItemBase {
+export class Scene_Skill extends Scene_ItemBase {
     private _skillTypeWindow: Window_SkillType;
     private _statusWindow: Window_SkillStatus;
     protected _itemWindow: Window_SkillList;

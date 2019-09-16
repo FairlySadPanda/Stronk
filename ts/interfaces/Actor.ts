@@ -1,6 +1,6 @@
-import Trait from "./Trait";
+import { Trait } from "./Trait";
 
-export default interface Actor {
+export interface Actor {
     id: number;
     battlerName: string;
     characterIndex: 0;

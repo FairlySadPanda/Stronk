@@ -1,9 +1,9 @@
-import BattleManager from "../managers/BattleManager";
-import Game_Enemy from "./Game_Enemy";
-import Game_Interpreter from "./Game_Interpreter";
-import Game_Unit from "./Game_Unit";
+import { BattleManager } from "../managers/BattleManager";
+import { Game_Enemy } from "./Game_Enemy";
+import { Game_Interpreter } from "./Game_Interpreter";
+import { Game_Unit } from "./Game_Unit";
 
-export default class Game_Troop extends Game_Unit {
+export class Game_Troop extends Game_Unit {
     public static LETTER_TABLE_HALF: string[] = [
         " A",
         " B",

@@ -1,10 +1,10 @@
-import Bitmap from "../core/Bitmap";
-import CacheMap from "../core/CacheMap";
-import ImageCache from "../core/ImageCache";
-import RequestQueue from "../core/RequestQueue";
-import Utils from "../core/Utils";
+import { Bitmap } from "../core/Bitmap";
+import { CacheMap } from "../core/CacheMap";
+import { ImageCache } from "../core/ImageCache";
+import { RequestQueue } from "../core/RequestQueue";
+import { Utils } from "../core/Utils";
 
-export default abstract class ImageManager {
+export abstract class ImageManager {
     public static cache = new CacheMap(ImageManager);
 
     public static loadAnimation(filename, hue?): Bitmap {

@@ -1,4 +1,4 @@
-export default interface Skill {
+export interface Skill {
     id: number;
     animationId: number;
     damage: Damage;

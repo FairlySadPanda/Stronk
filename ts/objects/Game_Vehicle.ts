@@ -1,5 +1,5 @@
-import AudioManager from "../managers/AudioManager";
-import Game_Character, { Game_Character_OnLoad } from "./Game_Character";
+import { AudioManager } from "../managers/AudioManager";
+import { Game_Character, Game_Character_OnLoad } from "./Game_Character";
 
 export interface Game_Vehicle_OnLoad extends Game_Character_OnLoad {
     _type: string;
@@ -9,7 +9,7 @@ export interface Game_Vehicle_OnLoad extends Game_Character_OnLoad {
     _bgm: any;
 }
 
-export default class Game_Vehicle extends Game_Character {
+export class Game_Vehicle extends Game_Character {
     private _type: string;
     private _mapId: number;
     private _altitude: number;

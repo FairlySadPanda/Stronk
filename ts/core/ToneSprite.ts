@@ -1,8 +1,8 @@
 import * as PIXI from "pixi.js";
-import Graphics from "./Graphics";
-import Utils from "./Utils";
+import { Graphics } from "./Graphics";
+import { Utils } from "./Utils";
 
-export default class ToneSprite extends PIXI.Container {
+export class ToneSprite extends PIXI.Container {
     private _red: number;
     private _green: number;
     private _blue: number;

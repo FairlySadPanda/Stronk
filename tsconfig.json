@@ -2,12 +2,13 @@
     "compilerOptions": {
         "experimentalDecorators": true,
         "module": "commonjs",
-        "target": "es2018",
+        "target": "es2019",
         "noImplicitAny": false,
         "strictNullChecks": false,
         "moduleResolution": "node",
         "sourceMap": true,
-        "outDir": "js"
+        "outDir": "js",
+        "allowJs": false
     },
     "include": ["./**/*"],
     "exclude": ["./ts/plugins.ts"],

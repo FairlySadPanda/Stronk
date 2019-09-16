@@ -1,12 +1,12 @@
 import * as PIXI from "pixi.js";
-import Decrypter from "./Decrypter";
-import Graphics from "./Graphics";
-import Rectangle from "./Rectangle";
-import ResourceHandler from "./ResourceHandler";
-import Stage from "./Stage";
-import Utils from "./Utils";
+import { Decrypter } from "./Decrypter";
+import { Graphics } from "./Graphics";
+import { Rectangle } from "./Rectangle";
+import { ResourceHandler } from "./ResourceHandler";
+import { Stage } from "./Stage";
+import { Utils } from "./Utils";
 
-export default class Bitmap {
+export class Bitmap {
     private get _canvas() {
         if (!this.__canvas) {
             this._createCanvas();
@@ -1042,7 +1042,7 @@ export default class Bitmap {
      * @method _makeFontNameText
      * @private
      */
-    private _makeFontNameText() {
+    protected _makeFontNameText() {
         return (
             (this.fontItalic ? "Italic " : "") +
             this.fontSize +

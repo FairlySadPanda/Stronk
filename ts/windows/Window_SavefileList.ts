@@ -1,13 +1,13 @@
-import DataManager from "../managers/DataManager";
-import TextManager from "../managers/TextManager";
-import Window_Selectable from "./Window_Selectable";
+import { DataManager } from "../managers/DataManager";
+import { TextManager } from "../managers/TextManager";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_SavefileList
 //
 // The window for selecting a save file on the save and load screens.
 
-export default class Window_SavefileList extends Window_Selectable {
+export class Window_SavefileList extends Window_Selectable {
     private _mode: any;
 
     public constructor(x, y, width, height) {

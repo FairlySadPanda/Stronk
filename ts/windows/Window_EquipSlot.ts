@@ -1,11 +1,11 @@
-import Window_Selectable from "./Window_Selectable";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_EquipSlot
 //
 // The window for selecting an equipment slot on the equipment screen.
 
-export default class Window_EquipSlot extends Window_Selectable {
+export class Window_EquipSlot extends Window_Selectable {
     public _actor: any;
     private _itemWindow: any;
     private _statusWindow: any;

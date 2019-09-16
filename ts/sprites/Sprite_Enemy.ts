@@ -1,18 +1,18 @@
-import Graphics from "../core/Graphics";
-import ImageManager from "../managers/ImageManager";
-import SoundManager from "../managers/SoundManager";
-import Sprite_Battler from "./Sprite_Battler";
-import Sprite_StateIcon from "./Sprite_StateIcon";
-import ConfigManager from "../managers/ConfigManager";
-import Game_Enemy from "../objects/Game_Enemy";
-import Game_Battler from "../objects/Game_Battler";
+import { Graphics } from "../core/Graphics";
+import { ImageManager } from "../managers/ImageManager";
+import { SoundManager } from "../managers/SoundManager";
+import { Sprite_Battler } from "./Sprite_Battler";
+import { Sprite_StateIcon } from "./Sprite_StateIcon";
+import { ConfigManager } from "../managers/ConfigManager";
+import { Game_Enemy } from "../objects/Game_Enemy";
+import { Game_Battler } from "../objects/Game_Battler";
 
 // -----------------------------------------------------------------------------
 // Sprite_Enemy
 //
 // The sprite for displaying an enemy.
 
-export default class Sprite_Enemy extends Sprite_Battler {
+export class Sprite_Enemy extends Sprite_Battler {
     private _enemy: Game_Enemy;
     private _appeared: boolean;
     private _battlerName: string;

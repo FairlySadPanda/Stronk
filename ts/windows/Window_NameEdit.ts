@@ -1,13 +1,13 @@
-import Graphics from "../core/Graphics";
-import ImageManager from "../managers/ImageManager";
-import Window_Base from "./Window_Base";
+import { Graphics } from "../core/Graphics";
+import { ImageManager } from "../managers/ImageManager";
+import { Window_Base } from "./Window_Base";
 
 // -----------------------------------------------------------------------------
 // Window_NameEdit
 //
 // The window for editing an actor's name on the name input screen.
 
-export default class Window_NameEdit extends Window_Base {
+export class Window_NameEdit extends Window_Base {
     private _actor: any;
     private _name: string;
     private _index: any;

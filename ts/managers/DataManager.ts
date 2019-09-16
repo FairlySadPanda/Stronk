@@ -1,26 +1,26 @@
-import Decrypter from "../core/Decrypter";
-import JsonEx from "../core/JsonEx";
-import ResourceHandler from "../core/ResourceHandler";
-import Utils from "../core/Utils";
-import Game_Actors from "../objects/Game_Actors";
-import Game_Map from "../objects/Game_Map";
-import Game_Message from "../objects/Game_Message";
-import Game_Party from "../objects/Game_Party";
-import Game_Player from "../objects/Game_Player";
-import Game_Screen from "../objects/Game_Screen";
-import Game_SelfSwitches from "../objects/Game_SelfSwitches";
-import Game_Switches from "../objects/Game_Switches";
-import Game_System from "../objects/Game_System";
-import Game_Temp from "../objects/Game_Temp";
-import Game_Timer from "../objects/Game_Timer";
-import Game_Troop from "../objects/Game_Troop";
-import Game_Variables from "../objects/Game_Variables";
-import Scene_Boot from "../scenes/Scene_Boot";
-import BattleManager from "./BattleManager";
-import ImageManager from "./ImageManager";
-import StorageManager from "./StorageManager";
+import { Decrypter } from "../core/Decrypter";
+import { JsonEx } from "../core/JsonEx";
+import { ResourceHandler } from "../core/ResourceHandler";
+import { Utils } from "../core/Utils";
+import { Game_Actors } from "../objects/Game_Actors";
+import { Game_Map } from "../objects/Game_Map";
+import { Game_Message } from "../objects/Game_Message";
+import { Game_Party } from "../objects/Game_Party";
+import { Game_Player } from "../objects/Game_Player";
+import { Game_Screen } from "../objects/Game_Screen";
+import { Game_SelfSwitches } from "../objects/Game_SelfSwitches";
+import { Game_Switches } from "../objects/Game_Switches";
+import { Game_System } from "../objects/Game_System";
+import { Game_Temp } from "../objects/Game_Temp";
+import { Game_Timer } from "../objects/Game_Timer";
+import { Game_Troop } from "../objects/Game_Troop";
+import { Game_Variables } from "../objects/Game_Variables";
+import { Scene_Boot } from "../scenes/Scene_Boot";
+import { BattleManager } from "./BattleManager";
+import { ImageManager } from "./ImageManager";
+import { StorageManager } from "./StorageManager";
 
-export default abstract class DataManager {
+export abstract class DataManager {
     private static _windowId = "RPGMV";
     private static _lastAccessedId = 1;
     private static _errorUrl = null;

@@ -1,13 +1,13 @@
-import DataManager from "../managers/DataManager";
-import Game_Action from "../objects/Game_Action";
-import Window_MenuStatus from "./Window_MenuStatus";
+import { DataManager } from "../managers/DataManager";
+import { Game_Action } from "../objects/Game_Action";
+import { Window_MenuStatus } from "./Window_MenuStatus";
 
 // -----------------------------------------------------------------------------
 // Window_MenuActor
 //
 // The window for selecting a target actor on the item and skill screens.
 
-export default class Window_MenuActor extends Window_MenuStatus {
+export class Window_MenuActor extends Window_MenuStatus {
     public constructor() {
         super(0, 0);
         this.hide();

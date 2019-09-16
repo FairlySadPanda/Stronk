@@ -1,13 +1,13 @@
-import Rectangle from "../core/Rectangle";
-import Sprite from "../core/Sprite";
-import TouchInput from "../core/TouchInput";
+import { Rectangle } from "../core/Rectangle";
+import { Sprite } from "../core/Sprite";
+import { TouchInput } from "../core/TouchInput";
 
 // -----------------------------------------------------------------------------
 // Sprite_Button
 //
 // The sprite for displaying a button.
 
-export default class Sprite_Button extends Sprite {
+export class Sprite_Button extends Sprite {
     private _touching: boolean;
     private _coldFrame: any;
     private _hotFrame: any;

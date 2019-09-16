@@ -1,19 +1,19 @@
-import Graphics from "../core/Graphics";
-import SceneManager from "../managers/SceneManager";
-import Window_Gold from "../windows/Window_Gold";
-import Window_MenuCommand from "../windows/Window_MenuCommand";
-import Window_MenuStatus from "../windows/Window_MenuStatus";
-import Scene_Equip from "./Scene_Equip";
-import Scene_GameEnd from "./Scene_GameEnd";
-import Scene_Item from "./Scene_Item";
-import Scene_MenuBase from "./Scene_MenuBase";
-import Scene_Save from "./Scene_Save";
-import Scene_Skill from "./Scene_Skill";
-import Scene_Status from "./Scene_Status";
-import Scene_MushOptions from "./Scene_MushOptions";
-import ConfigManager from "../managers/ConfigManager";
+import { Graphics } from "../core/Graphics";
+import { SceneManager } from "../managers/SceneManager";
+import { Window_Gold } from "../windows/Window_Gold";
+import { Window_MenuCommand } from "../windows/Window_MenuCommand";
+import { Window_MenuStatus } from "../windows/Window_MenuStatus";
+import { Scene_Equip } from "./Scene_Equip";
+import { Scene_GameEnd } from "./Scene_GameEnd";
+import { Scene_Item } from "./Scene_Item";
+import { Scene_MenuBase } from "./Scene_MenuBase";
+import { Scene_Save } from "./Scene_Save";
+import { Scene_Skill } from "./Scene_Skill";
+import { Scene_Status } from "./Scene_Status";
+import { Scene_MushOptions } from "./Scene_MushOptions";
+import { ConfigManager } from "../managers/ConfigManager";
 
-export default class Scene_Menu extends Scene_MenuBase {
+export class Scene_Menu extends Scene_MenuBase {
     private _statusWindow: any;
     private _commandWindow: Window_MenuCommand;
     private _goldWindow: Window_Gold;

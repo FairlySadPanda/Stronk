@@ -1,8 +1,8 @@
 import * as gui from "nw";
-import ResourceHandler from "./ResourceHandler";
-import Utils from "./Utils";
+import { ResourceHandler } from "./ResourceHandler";
+import { Utils } from "./Utils";
 
-export default class Input {
+export class Input {
     public static get dir4(): number {
         return Input._dir4;
     }

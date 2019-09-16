@@ -1,14 +1,14 @@
-import Bitmap from "../core/Bitmap";
-import Graphics from "../core/Graphics";
-import Sprite from "../core/Sprite";
-import Utils from "../core/Utils";
+import { Bitmap } from "../core/Bitmap";
+import { Graphics } from "../core/Graphics";
+import { Sprite } from "../core/Sprite";
+import { Utils } from "../core/Utils";
 
 // -----------------------------------------------------------------------------
 // Sprite_Timer
 //
 // The sprite for displaying the timer.
 
-export default class Sprite_Timer extends Sprite {
+export class Sprite_Timer extends Sprite {
     private _seconds: number;
 
     public constructor() {

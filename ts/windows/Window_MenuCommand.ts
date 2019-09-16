@@ -1,13 +1,13 @@
-import DataManager from "../managers/DataManager";
-import TextManager from "../managers/TextManager";
-import Window_Command from "./Window_Command";
+import { DataManager } from "../managers/DataManager";
+import { TextManager } from "../managers/TextManager";
+import { Window_Command } from "./Window_Command";
 
 // -----------------------------------------------------------------------------
 // Window_MenuCommand
 //
 // The window for selecting a command on the menu screen.
 
-export default class Window_MenuCommand extends Window_Command {
+export class Window_MenuCommand extends Window_Command {
     private static _lastCommandSymbol = null;
 
     public static initCommandPosition() {
@@ -79,7 +79,6 @@ export default class Window_MenuCommand extends Window_Command {
         const enabled = this.isGameEndEnabled();
         this.addCommand(TextManager.gameEnd, "gameEnd", enabled);
     }
-
 
     public needsCommand(name: string): boolean {
         const flags = $dataSystem.menuCommands;

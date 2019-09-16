@@ -1,10 +1,10 @@
-import Game_Actor, { Game_Actor_OnLoad } from "./Game_Actor";
+import { Game_Actor, Game_Actor_OnLoad } from "./Game_Actor";
 
 export interface Game_Actors_OnLoad {
     _data: Game_Actor_OnLoad[];
 }
 
-export default class Game_Actors {
+export class Game_Actors {
     private _data: Game_Actor[];
     public constructor(gameLoadInput?: Game_Actors_OnLoad) {
         this._data = [];

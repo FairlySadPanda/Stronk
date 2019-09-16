@@ -1,13 +1,13 @@
-import Graphics from "../core/Graphics";
-import Game_Enemy from "../objects/Game_Enemy";
-import Window_Selectable from "./Window_Selectable";
+import { Graphics } from "../core/Graphics";
+import { Game_Enemy } from "../objects/Game_Enemy";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_BattleEnemy
 //
 // The window for selecting a target enemy on the battle screen.
 
-export default class Window_BattleEnemy extends Window_Selectable {
+export class Window_BattleEnemy extends Window_Selectable {
     private get _enemies(): Game_Enemy[] {
         if (!this.__enemies) {
             this.__enemies = $gameTroop.aliveMembers();

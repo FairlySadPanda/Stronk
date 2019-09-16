@@ -2,7 +2,7 @@ export interface Game_Unit_OnLoad {
     _inBattle: boolean;
 }
 
-export default class Game_Unit {
+export class Game_Unit {
     private _inBattle: boolean;
 
     public constructor(gameLoadInput?: Game_Unit_OnLoad) {

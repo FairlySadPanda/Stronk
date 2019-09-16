@@ -1,12 +1,12 @@
-import Graphics from "../core/Graphics";
-import Utils from "../core/Utils";
-import AudioManager from "../managers/AudioManager";
-import ImageManager from "../managers/ImageManager";
-import Game_CommonEvent, { Game_CommonEvent_OnLoad } from "./Game_CommonEvent";
-import Game_Event, { Game_Event_OnLoad } from "./Game_Event";
-import Game_Interpreter, { Game_Interpreter_OnLoad } from "./Game_Interpreter";
-import Game_Vehicle, { Game_Vehicle_OnLoad } from "./Game_Vehicle";
-import ConfigManager from "../managers/ConfigManager";
+import { Graphics } from "../core/Graphics";
+import { Utils } from "../core/Utils";
+import { AudioManager } from "../managers/AudioManager";
+import { ImageManager } from "../managers/ImageManager";
+import { Game_CommonEvent, Game_CommonEvent_OnLoad } from "./Game_CommonEvent";
+import { Game_Event, Game_Event_OnLoad } from "./Game_Event";
+import { Game_Interpreter, Game_Interpreter_OnLoad } from "./Game_Interpreter";
+import { Game_Vehicle, Game_Vehicle_OnLoad } from "./Game_Vehicle";
+import { ConfigManager } from "../managers/ConfigManager";
 
 export interface Game_Map_OnLoad {
     tileEvents: any[];
@@ -35,7 +35,7 @@ export interface Game_Map_OnLoad {
     _battleback2Name: any;
 }
 
-export default class Game_Map {
+export class Game_Map {
     public tileEvents: any[];
     private _needsRefresh: boolean;
     private _interpreter: Game_Interpreter;

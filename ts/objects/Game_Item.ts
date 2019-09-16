@@ -1,15 +1,15 @@
-import DataManager from "../managers/DataManager";
-import Item from "../interfaces/Item";
-import Skill from "../interfaces/Skill";
-import Weapon from "../interfaces/Weapon";
-import Armor from "../interfaces/Armor";
+import { DataManager } from "../managers/DataManager";
+import { Item } from "../interfaces/Item";
+import { Skill } from "../interfaces/Skill";
+import { Weapon } from "../interfaces/Weapon";
+import { Armor } from "../interfaces/Armor";
 
 export interface Game_Item_OnLoad {
     _dataClass: string;
     _itemId: number;
 }
 
-export default class Game_Item {
+export class Game_Item {
     private _dataClass: string;
     private _itemId: number;
 

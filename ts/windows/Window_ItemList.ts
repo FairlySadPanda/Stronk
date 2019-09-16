@@ -1,13 +1,13 @@
-import Item from "../interfaces/Item";
-import DataManager from "../managers/DataManager";
-import Window_Selectable from "./Window_Selectable";
+import { Item } from "../interfaces/Item";
+import { DataManager } from "../managers/DataManager";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_ItemList
 //
 // The window for selecting an item on the item screen.
 
-export default class Window_ItemList extends Window_Selectable {
+export class Window_ItemList extends Window_Selectable {
     public _category: string;
     public _data: Item[];
 

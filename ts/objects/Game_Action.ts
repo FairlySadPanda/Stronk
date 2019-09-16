@@ -1,11 +1,11 @@
-import Utils from "../core/Utils";
-import Game_Item from "./Game_Item";
-import Weapon from "../interfaces/Weapon";
-import Skill from "../interfaces/Skill";
-import Item from "../interfaces/Item";
-import Armor from "../interfaces/Armor";
+import { Utils } from "../core/Utils";
+import { Game_Item } from "./Game_Item";
+import { Weapon } from "../interfaces/Weapon";
+import { Skill } from "../interfaces/Skill";
+import { Item } from "../interfaces/Item";
+import { Armor } from "../interfaces/Armor";
 
-export default class Game_Action {
+export class Game_Action {
     public static EFFECT_RECOVER_HP = 11;
     public static EFFECT_RECOVER_MP = 12;
     public static EFFECT_GAIN_TP = 13;

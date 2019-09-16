@@ -1,12 +1,12 @@
-import ImageManager from "../managers/ImageManager";
-import Sprite_Base from "./Sprite_Base";
+import { ImageManager } from "../managers/ImageManager";
+import { Sprite_Base } from "./Sprite_Base";
 
 // -----------------------------------------------------------------------------
 // Sprite_Weapon
 //
 // The sprite for displaying a weapon image for attacking.
 
-export default class Sprite_Weapon extends Sprite_Base {
+export class Sprite_Weapon extends Sprite_Base {
     private _weaponImageId: number;
     private _animationCount: number;
     private _pattern: number;

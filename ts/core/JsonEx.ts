@@ -1,4 +1,4 @@
-export default abstract class JsonEx {
+export abstract class JsonEx {
     /**
      * The maximum depth of objects.
      *

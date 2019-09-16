@@ -1,4 +1,4 @@
-import Utils from "../core/Utils";
+import { Utils } from "../core/Utils";
 
 export interface Game_Picture_OnLoad {
     _name: string;
@@ -22,7 +22,7 @@ export interface Game_Picture_OnLoad {
     _rotationSpeed: number;
 }
 
-export default class Game_Picture {
+export class Game_Picture {
     private _name: string;
     private _origin: number;
     private _x: number;

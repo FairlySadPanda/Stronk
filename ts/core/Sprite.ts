@@ -1,15 +1,15 @@
 import * as PIXI from "pixi.js";
-import Bitmap from "./Bitmap";
-import Graphics from "./Graphics";
-import Rectangle from "./Rectangle";
-import Utils from "./Utils";
+import { Bitmap } from "./Bitmap";
+import { Graphics } from "./Graphics";
+import { Rectangle } from "./Rectangle";
+import { Utils } from "./Utils";
 
 // -----------------------------------------------------------------------------
 /**
  * The basic object that is rendered to the game screen.
  *
  */
-export default class Sprite extends PIXI.Sprite {
+export class Sprite extends PIXI.Sprite {
     public get bitmap(): Bitmap {
         return this._bitmap;
     }

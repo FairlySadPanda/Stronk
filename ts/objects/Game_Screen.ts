@@ -1,6 +1,6 @@
-import Utils from "../core/Utils";
-import Game_Picture, { Game_Picture_OnLoad } from "./Game_Picture";
-import ConfigManager from "../managers/ConfigManager";
+import { Utils } from "../core/Utils";
+import { Game_Picture, Game_Picture_OnLoad } from "./Game_Picture";
+import { ConfigManager } from "../managers/ConfigManager";
 
 export interface Game_Screen_OnLoad {
     _brightness: number;
@@ -28,7 +28,7 @@ export interface Game_Screen_OnLoad {
     _weatherDuration: number;
 }
 
-export default class Game_Screen {
+export class Game_Screen {
     private _brightness: number;
     private _tone: number[];
     private _flashColor: number[];

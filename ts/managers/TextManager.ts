@@ -1,4 +1,4 @@
-export default abstract class TextManager {
+export abstract class TextManager {
     public static basic(basicId: number) {
         return $dataSystem.terms.basic[basicId] || "";
     }

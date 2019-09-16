@@ -1,11 +1,11 @@
-import Window_Selectable from "./Window_Selectable";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_ShopBuy
 //
 // The window for selecting an item to buy on the shop screen.
 
-export default class Window_ShopBuy extends Window_Selectable {
+export class Window_ShopBuy extends Window_Selectable {
     private _shopGoods: any;
     private _money: number;
     private _data: any;

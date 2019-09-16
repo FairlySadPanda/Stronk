@@ -1,9 +1,9 @@
-import SceneManager from "../managers/SceneManager";
-import Window_GameEnd from "../windows/Window_GameEnd";
-import Scene_MenuBase from "./Scene_MenuBase";
-import Scene_Title from "./Scene_Title";
+import { SceneManager } from "../managers/SceneManager";
+import { Window_GameEnd } from "../windows/Window_GameEnd";
+import { Scene_MenuBase } from "./Scene_MenuBase";
+import { Scene_Title } from "./Scene_Title";
 
-export default class Scene_GameEnd extends Scene_MenuBase {
+export class Scene_GameEnd extends Scene_MenuBase {
     private _commandWindow: Window_GameEnd;
 
     public create() {

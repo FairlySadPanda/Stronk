@@ -1,5 +1,5 @@
-import Graphics from "./Graphics";
-import Utils from "./Utils";
+import { Graphics } from "./Graphics";
+import { Utils } from "./Utils";
 
 interface TouchInputEvent {
     triggered: boolean;
@@ -12,7 +12,7 @@ interface TouchInputEvent {
 
 declare let window: any;
 
-export default class TouchInput {
+export class TouchInput {
     public static get wheelX(): number {
         return this._wheelX;
     }

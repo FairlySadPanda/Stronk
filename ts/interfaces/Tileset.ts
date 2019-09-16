@@ -1,4 +1,4 @@
-export default interface Tileset {
+export interface Tileset {
     id: number;
     flags: number[];
     mode: number;

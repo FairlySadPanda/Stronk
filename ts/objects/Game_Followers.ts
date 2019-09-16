@@ -1,4 +1,4 @@
-import Game_Follower from "./Game_Follower";
+import { Game_Follower } from "./Game_Follower";
 
 export interface Game_Followers_OnLoad {
     _visible: any;
@@ -11,7 +11,7 @@ export interface Game_Followers_OnLoad {
 //
 // The wrapper class for a follower array.
 
-export default class Game_Followers {
+export class Game_Followers {
     private _visible: any;
     private _gathering: boolean;
     private _data: any[];

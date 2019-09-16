@@ -1,12 +1,12 @@
-import ImageManager from "../managers/ImageManager";
-import Sprite_Base from "./Sprite_Base";
+import { ImageManager } from "../managers/ImageManager";
+import { Sprite_Base } from "./Sprite_Base";
 
 // -----------------------------------------------------------------------------
 // Sprite_StateOverlay
 //
 // The sprite for displaying an overlay image for a state.
 
-export default class Sprite_StateOverlay extends Sprite_Base {
+export class Sprite_StateOverlay extends Sprite_Base {
     private _battler: any;
     private _overlayIndex: number;
     private _animationCount: number;

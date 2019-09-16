@@ -1,11 +1,11 @@
-import Window_Selectable from "./Window_Selectable";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_SkillList
 //
 // The window for selecting a skill on the skill screen.
 
-export default class Window_SkillList extends Window_Selectable {
+export class Window_SkillList extends Window_Selectable {
     public _actor: any;
     public _stypeId: number;
     public _data: any[];

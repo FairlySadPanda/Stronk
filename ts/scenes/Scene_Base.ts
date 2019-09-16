@@ -1,14 +1,14 @@
-import Graphics from "../core/Graphics";
-import ScreenSprite from "../core/ScreenSprite";
-import Stage from "../core/Stage";
-import Utils from "../core/Utils";
-import WindowLayer from "../core/WindowLayer";
-import AudioManager from "../managers/AudioManager";
-import ImageManager from "../managers/ImageManager";
-import SceneManager from "../managers/SceneManager";
-import Scene_Gameover from "./Scene_Gameover";
+import { Graphics } from "../core/Graphics";
+import { ScreenSprite } from "../core/ScreenSprite";
+import { Stage } from "../core/Stage";
+import { Utils } from "../core/Utils";
+import { WindowLayer } from "../core/WindowLayer";
+import { AudioManager } from "../managers/AudioManager";
+import { ImageManager } from "../managers/ImageManager";
+import { SceneManager } from "../managers/SceneManager";
+import { Scene_Gameover } from "./Scene_Gameover";
 
-export default class Scene_Base extends Stage {
+export class Scene_Base extends Stage {
     protected _fadeSprite: any;
     protected _windowLayer: WindowLayer;
     protected _active: boolean;
@@ -319,4 +319,14 @@ export default class Scene_Base extends Stage {
     }
 
     public prepare(...args: any[]): void {}
+
+    /**
+     * Clear the children from a Scene for cleanup purposes
+     * @author Yanfly
+     */
+    public clearChildren() {
+        while (this.children.length > 0) {
+            this.removeChild(this.children[0]);
+        }
+    }
 }

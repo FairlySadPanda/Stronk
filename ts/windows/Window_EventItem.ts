@@ -1,13 +1,13 @@
-import Graphics from "../core/Graphics";
-import DataManager from "../managers/DataManager";
-import Window_ItemList from "./Window_ItemList";
+import { Graphics } from "../core/Graphics";
+import { DataManager } from "../managers/DataManager";
+import { Window_ItemList } from "./Window_ItemList";
 
 // -----------------------------------------------------------------------------
 // Window_EventItem
 //
 // The window used for the event command [Select Item].
 
-export default class Window_EventItem extends Window_ItemList {
+export class Window_EventItem extends Window_ItemList {
     public _messageWindow: any;
     public openness: number;
 

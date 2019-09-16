@@ -1,9 +1,17 @@
-import Bitmap from "./Bitmap";
-import ImageCacheEntry from "./ImageCacheEntry";
+import { Bitmap } from "./Bitmap";
+import { ImageCacheEntry } from "./ImageCacheEntry";
 
-export default class ImageCache {
-    private limit: number = 10000000; // 10 million
+export class ImageCache {
+    private static _limit: number = 10000000; // 10 million
+
     private items: ImageCacheEntry[] = [];
+
+    public static get limit(): number {
+        return ImageCache._limit;
+    }
+    public static set limit(value: number) {
+        ImageCache._limit = value;
+    }
 
     public add(key: string, value: Bitmap): void {
         this.items[key] = {
@@ -78,7 +86,7 @@ export default class ImageCache {
 
     // TODO: Refactor this function to make more sense
     private truncateCache(): void {
-        let sizeLeft = this.limit;
+        let sizeLeft = ImageCache.limit;
 
         const items = this.items;
 

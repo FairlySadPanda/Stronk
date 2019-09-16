@@ -1,14 +1,14 @@
-import Graphics from "../core/Graphics";
-import ImageManager from "../managers/ImageManager";
-import Window_Base from "./Window_Base";
-import Window_Selectable from "./Window_Selectable";
+import { Graphics } from "../core/Graphics";
+import { ImageManager } from "../managers/ImageManager";
+import { Window_Base } from "./Window_Base";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_MenuStatus
 //
 // The window for displaying party member status on the menu screen.
 
-export default class Window_MenuStatus extends Window_Selectable {
+export class Window_MenuStatus extends Window_Selectable {
     private _formationMode: boolean;
     private _pendingIndex: number;
 

@@ -1,14 +1,14 @@
-import Graphics from "../core/Graphics";
-import Input from "../core/Input";
-import Utils from "../core/Utils";
-import Window_Selectable from "./Window_Selectable";
+import { Graphics } from "../core/Graphics";
+import { Input } from "../core/Input";
+import { Utils } from "../core/Utils";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_DebugRange
 //
 // The window for selecting a block of switches/variables on the debug screen.
 
-export default class Window_DebugRange extends Window_Selectable {
+export class Window_DebugRange extends Window_Selectable {
     public static lastTopRow = 0;
     public static lastIndex = 0;
 

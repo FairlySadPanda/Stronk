@@ -1,16 +1,16 @@
-import Graphics from "../core/Graphics";
-import Utils from "../core/Utils";
-import TextManager from "../managers/TextManager";
-import Game_Actor from "../objects/Game_Actor";
-import Window_Selectable from "./Window_Selectable";
-import Item from "../interfaces/Item";
+import { Graphics } from "../core/Graphics";
+import { Utils } from "../core/Utils";
+import { TextManager } from "../managers/TextManager";
+import { Game_Actor } from "../objects/Game_Actor";
+import { Window_Selectable } from "./Window_Selectable";
+import { Item } from "../interfaces/Item";
 
 // -----------------------------------------------------------------------------
 // Window_Status
 //
 // The window for displaying full status on the status screen.
 
-export default class Window_Status extends Window_Selectable {
+export class Window_Status extends Window_Selectable {
     public _actor: Game_Actor;
     public setActor(actor) {
         if (this._actor !== actor) {

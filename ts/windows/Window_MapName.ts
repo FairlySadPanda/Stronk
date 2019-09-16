@@ -1,11 +1,11 @@
-import Window_Base from "./Window_Base";
+import { Window_Base } from "./Window_Base";
 
 // -----------------------------------------------------------------------------
 // Window_MapName
 //
 // The window for displaying the map name on the map screen.
 
-export default class Window_MapName extends Window_Base {
+export class Window_MapName extends Window_Base {
     public opacity: number;
     public contentsOpacity: number;
     private _showCount: number;

@@ -1,16 +1,16 @@
-import Graphics from "../core/Graphics";
-import ConfigManager from "../managers/ConfigManager";
-import DataManager from "../managers/DataManager";
-import ImageManager from "../managers/ImageManager";
-import SceneManager from "../managers/SceneManager";
-import SoundManager from "../managers/SoundManager";
-import Window_TitleCommand from "../windows/Window_TitleCommand";
-import Scene_Base from "./Scene_Base";
-import Scene_Battle from "./Scene_Battle";
-import Scene_Map from "./Scene_Map";
-import Scene_Title from "./Scene_Title";
+import { Graphics } from "../core/Graphics";
+import { ConfigManager } from "../managers/ConfigManager";
+import { DataManager } from "../managers/DataManager";
+import { ImageManager } from "../managers/ImageManager";
+import { SceneManager } from "../managers/SceneManager";
+import { SoundManager } from "../managers/SoundManager";
+import { Window_TitleCommand } from "../windows/Window_TitleCommand";
+import { Scene_Base } from "./Scene_Base";
+import { Scene_Battle } from "./Scene_Battle";
+import { Scene_Map } from "./Scene_Map";
+import { Scene_Title } from "./Scene_Title";
 
-export default class Scene_Boot extends Scene_Base {
+export class Scene_Boot extends Scene_Base {
     public static loadSystemImages() {
         ImageManager.reserveSystem("IconSet");
         ImageManager.reserveSystem("Balloon");

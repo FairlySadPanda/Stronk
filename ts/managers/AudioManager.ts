@@ -1,10 +1,10 @@
-import Decrypter from "../core/Decrypter";
-import Graphics from "../core/Graphics";
-import Html5Audio from "../core/Html5Audio";
-import Utils from "../core/Utils";
-import WebAudio from "../core/WebAudio";
+import { Decrypter } from "../core/Decrypter";
+import { Graphics } from "../core/Graphics";
+import { Html5Audio } from "../core/Html5Audio";
+import { Utils } from "../core/Utils";
+import { WebAudio } from "../core/WebAudio";
 
-export default abstract class AudioManager {
+export abstract class AudioManager {
     private static _masterVolume = 1; // (min: 0, max: 1)
     private static _bgmVolume = 100;
     private static _bgsVolume = 100;

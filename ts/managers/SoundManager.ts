@@ -1,6 +1,6 @@
-import AudioManager from "./AudioManager";
+import { AudioManager } from "./AudioManager";
 
-export default abstract class SoundManager {
+export abstract class SoundManager {
     public static preloadImportantSounds() {
         this.loadSystemSound(0);
         this.loadSystemSound(1);

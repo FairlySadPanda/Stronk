@@ -1,6 +1,6 @@
-import Trait from "./Trait";
+import { Trait } from "./Trait";
 
-export default interface Armor {
+export interface Armor {
     id: number;
     atypeId: number;
     description: string;

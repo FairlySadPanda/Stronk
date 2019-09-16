@@ -1,13 +1,13 @@
-import Bitmap from "../core/Bitmap";
-import Graphics from "../core/Graphics";
-import Sprite from "../core/Sprite";
+import { Bitmap } from "../core/Bitmap";
+import { Graphics } from "../core/Graphics";
+import { Sprite } from "../core/Sprite";
 
 // -----------------------------------------------------------------------------
 // Sprite_Destination
 //
 // The sprite for displaying the destination place of the touch input.
 
-export default class Sprite_Destination extends Sprite {
+export class Sprite_Destination extends Sprite {
     private _frameCount: number;
     public z: number;
 

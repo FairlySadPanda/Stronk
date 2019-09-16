@@ -2,7 +2,7 @@ export interface Game_Variables_OnLoad {
     _data: number | string[];
 }
 
-export default class Game_Variables {
+export class Game_Variables {
     public _data: number | string[];
 
     public constructor(gameLoadInput?: Game_Variables_OnLoad) {

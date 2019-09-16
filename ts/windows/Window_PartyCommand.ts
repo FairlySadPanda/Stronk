@@ -1,14 +1,14 @@
-import Graphics from "../core/Graphics";
-import BattleManager from "../managers/BattleManager";
-import TextManager from "../managers/TextManager";
-import Window_Command from "./Window_Command";
+import { Graphics } from "../core/Graphics";
+import { BattleManager } from "../managers/BattleManager";
+import { TextManager } from "../managers/TextManager";
+import { Window_Command } from "./Window_Command";
 
 // -----------------------------------------------------------------------------
 // Window_PartyCommand
 //
 // The window for selecting whether to fight or escape on the battle screen.
 
-export default class Window_PartyCommand extends Window_Command {
+export class Window_PartyCommand extends Window_Command {
     public openness: number;
 
     public constructor() {

@@ -1,8 +1,8 @@
-import Window_NameEdit from "../windows/Window_NameEdit";
-import Window_NameInput from "../windows/Window_NameInput";
-import Scene_MenuBase from "./Scene_MenuBase";
+import { Window_NameEdit } from "../windows/Window_NameEdit";
+import { Window_NameInput } from "../windows/Window_NameInput";
+import { Scene_MenuBase } from "./Scene_MenuBase";
 
-export default class Scene_Name extends Scene_MenuBase {
+export class Scene_Name extends Scene_MenuBase {
     private _actorId: number;
     private _maxLength: number;
     private _editWindow: Window_NameEdit;

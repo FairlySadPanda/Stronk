@@ -1,6 +1,6 @@
 declare const nw: any;
 
-export default abstract class Utils {
+export abstract class Utils {
     public static get RPGMAKER_NAME() {
         return "MV";
     }

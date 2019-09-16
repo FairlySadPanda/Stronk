@@ -1,9 +1,9 @@
-import Utils from "../core/Utils";
-import DataManager from "../managers/DataManager";
-import TextManager from "../managers/TextManager";
-import Game_Item, { Game_Item_OnLoad } from "./Game_Item";
-import Game_Unit, { Game_Unit_OnLoad } from "./Game_Unit";
-import Item from "../interfaces/Item";
+import { Utils } from "../core/Utils";
+import { DataManager } from "../managers/DataManager";
+import { TextManager } from "../managers/TextManager";
+import { Game_Item, Game_Item_OnLoad } from "./Game_Item";
+import { Game_Unit, Game_Unit_OnLoad } from "./Game_Unit";
+import { Item } from "../interfaces/Item";
 
 export interface Game_Party_Onload extends Game_Unit_OnLoad {
     _gold: number;
@@ -17,7 +17,7 @@ export interface Game_Party_Onload extends Game_Unit_OnLoad {
     _armors: number[];
 }
 
-export default class Game_Party extends Game_Unit {
+export class Game_Party extends Game_Unit {
     public static ABILITY_ENCOUNTER_HALF = 0;
     public static ABILITY_ENCOUNTER_NONE = 1;
     public static ABILITY_CANCEL_SURPRISE = 2;

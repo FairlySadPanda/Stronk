@@ -1,10 +1,10 @@
-import DataManager from "../managers/DataManager";
-import SoundManager from "../managers/SoundManager";
-import StorageManager from "../managers/StorageManager";
-import TextManager from "../managers/TextManager";
-import Scene_File from "./Scene_File";
+import { DataManager } from "../managers/DataManager";
+import { SoundManager } from "../managers/SoundManager";
+import { StorageManager } from "../managers/StorageManager";
+import { TextManager } from "../managers/TextManager";
+import { Scene_File } from "./Scene_File";
 
-export default class Scene_Save extends Scene_File {
+export class Scene_Save extends Scene_File {
     public mode() {
         return "save";
     }

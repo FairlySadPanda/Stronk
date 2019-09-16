@@ -1,7 +1,7 @@
-import Window_Base from "./Window_Base";
-import ConfigManager from "../managers/ConfigManager";
+import { Window_Base } from "./Window_Base";
+import { ConfigManager } from "../managers/ConfigManager";
 
-export default class Window_MushOptionsMainBack extends Window_Base {
+export class Window_MushOptionsMainBack extends Window_Base {
     _section: number;
     public constructor(x, y, width, height) {
         super(x, y, width, height);

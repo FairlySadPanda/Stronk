@@ -1,4 +1,4 @@
-export default interface Item {
+export interface Item {
     id: number;
     animationId: number;
     consumable: boolean;

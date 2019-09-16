@@ -1,6 +1,6 @@
-import Audio from "./Audio";
+import { Audio } from "./Audio";
 
-export default interface Animation {
+export interface Animation {
     id: number;
     animation1Hue: number;
     animation1Name: string;

@@ -1,14 +1,14 @@
-import Graphics from "../core/Graphics";
-import TextManager from "../managers/TextManager";
-import Window_HorzCommand from "./Window_HorzCommand";
-import Window_ItemList from "./Window_ItemList";
+import { Graphics } from "../core/Graphics";
+import { TextManager } from "../managers/TextManager";
+import { Window_HorzCommand } from "./Window_HorzCommand";
+import { Window_ItemList } from "./Window_ItemList";
 
 // -----------------------------------------------------------------------------
 // Window_ItemCategory
 //
 // The window for selecting a category of items on the item and shop screens.
 
-export default class Window_ItemCategory extends Window_HorzCommand {
+export class Window_ItemCategory extends Window_HorzCommand {
     private _itemWindow: Window_ItemList;
 
     public constructor() {

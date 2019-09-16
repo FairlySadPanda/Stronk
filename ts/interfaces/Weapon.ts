@@ -1,6 +1,6 @@
-import Trait from "./Trait";
+import { Trait } from "./Trait";
 
-export default interface Weapon {
+export interface Weapon {
     id: number;
     animationId: number;
     description: string;

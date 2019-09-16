@@ -1,13 +1,13 @@
-import Utils from "../core/Utils";
-import BattleManager from "../managers/BattleManager";
-import DataManager from "../managers/DataManager";
-import SoundManager from "../managers/SoundManager";
-import TextManager from "../managers/TextManager";
-import Game_Action from "./Game_Action";
-import Game_Battler, { Game_Battler_OnLoad } from "./Game_Battler";
-import Game_Item, { Game_Item_OnLoad } from "./Game_Item";
-import Weapon from "../interfaces/Weapon";
-import Armor from "../interfaces/Armor";
+import { Utils } from "../core/Utils";
+import { BattleManager } from "../managers/BattleManager";
+import { DataManager } from "../managers/DataManager";
+import { SoundManager } from "../managers/SoundManager";
+import { TextManager } from "../managers/TextManager";
+import { Game_Action } from "./Game_Action";
+import { Game_Battler, Game_Battler_OnLoad } from "./Game_Battler";
+import { Game_Item, Game_Item_OnLoad } from "./Game_Item";
+import { Weapon } from "../interfaces/Weapon";
+import { Armor } from "../interfaces/Armor";
 
 export interface Game_Actor_OnLoad extends Game_Battler_OnLoad {
     _actorId: number;
@@ -31,7 +31,7 @@ export interface Game_Actor_OnLoad extends Game_Battler_OnLoad {
     _stateSteps: {};
 }
 
-export default class Game_Actor extends Game_Battler {
+export class Game_Actor extends Game_Battler {
     private _actorId: number;
     private _name: string;
     private _nickname: string;

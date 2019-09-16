@@ -1,10 +1,10 @@
-import Utils from "../core/Utils";
-import BattleManager from "../managers/BattleManager";
-import DataManager from "../managers/DataManager";
-import SoundManager from "../managers/SoundManager";
-import Game_Action from "./Game_Action";
-import Game_ActionResult from "./Game_ActionResult";
-import Game_BattlerBase, { Game_BattlerBase_OnLoad } from "./Game_BattlerBase";
+import { Utils } from "../core/Utils";
+import { BattleManager } from "../managers/BattleManager";
+import { DataManager } from "../managers/DataManager";
+import { SoundManager } from "../managers/SoundManager";
+import { Game_Action } from "./Game_Action";
+import { Game_ActionResult } from "./Game_ActionResult";
+import { Game_BattlerBase, Game_BattlerBase_OnLoad } from "./Game_BattlerBase";
 
 export interface Game_Battler_OnLoad extends Game_BattlerBase_OnLoad {
     _actions: any[];
@@ -21,7 +21,7 @@ export interface Game_Battler_OnLoad extends Game_BattlerBase_OnLoad {
     _selected: boolean;
 }
 
-export default abstract class Game_Battler extends Game_BattlerBase {
+export abstract class Game_Battler extends Game_BattlerBase {
     private _actions: any[];
     private _speed: number;
     private _result: Game_ActionResult;

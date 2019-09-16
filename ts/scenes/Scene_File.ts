@@ -1,10 +1,10 @@
-import Graphics from "../core/Graphics";
-import DataManager from "../managers/DataManager";
-import Window_Help from "../windows/Window_Help";
-import Window_SavefileList from "../windows/Window_SavefileList";
-import Scene_MenuBase from "./Scene_MenuBase";
+import { Graphics } from "../core/Graphics";
+import { DataManager } from "../managers/DataManager";
+import { Window_Help } from "../windows/Window_Help";
+import { Window_SavefileList } from "../windows/Window_SavefileList";
+import { Scene_MenuBase } from "./Scene_MenuBase";
 
-export default class Scene_File extends Scene_MenuBase {
+export class Scene_File extends Scene_MenuBase {
     private _listWindow: Window_SavefileList;
 
     public create() {

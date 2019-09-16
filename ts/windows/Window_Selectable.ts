@@ -1,16 +1,16 @@
-import Input from "../core/Input";
-import Rectangle from "../core/Rectangle";
-import TouchInput from "../core/TouchInput";
-import Utils from "../core/Utils";
-import SoundManager from "../managers/SoundManager";
-import Window_Base from "./Window_Base";
+import { Input } from "../core/Input";
+import { Rectangle } from "../core/Rectangle";
+import { TouchInput } from "../core/TouchInput";
+import { Utils } from "../core/Utils";
+import { SoundManager } from "../managers/SoundManager";
+import { Window_Base } from "./Window_Base";
 
 // -----------------------------------------------------------------------------
 // Window_Selectable
 //
-// The window class with cursor movement and scroll export default functions.
+// The window class with cursor movement and scroll export functions.
 
-export default class Window_Selectable extends Window_Base {
+export class Window_Selectable extends Window_Base {
     protected _index: number;
     private _cursorFixed: boolean;
     private _cursorAll: boolean;

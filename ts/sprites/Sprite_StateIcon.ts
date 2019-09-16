@@ -1,12 +1,12 @@
-import Sprite from "../core/Sprite";
-import ImageManager from "../managers/ImageManager";
+import { Sprite } from "../core/Sprite";
+import { ImageManager } from "../managers/ImageManager";
 
 // -----------------------------------------------------------------------------
 // Sprite_StateIcon
 //
 // The sprite for displaying state icons.
 
-export default class Sprite_StateIcon extends Sprite {
+export class Sprite_StateIcon extends Sprite {
     private static _iconWidth = 32;
     private static _iconHeight = 32;
 

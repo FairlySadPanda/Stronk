@@ -1,12 +1,12 @@
-import TextManager from "../managers/TextManager";
-import Window_Base from "./Window_Base";
+import { TextManager } from "../managers/TextManager";
+import { Window_Base } from "./Window_Base";
 
 // -----------------------------------------------------------------------------
 // Window_EquipStatus
 //
 // The window for displaying parameter changes on the equipment screen.
 
-export default class Window_EquipStatus extends Window_Base {
+export class Window_EquipStatus extends Window_Base {
     private _actor: any;
     private _tempActor: any;
 

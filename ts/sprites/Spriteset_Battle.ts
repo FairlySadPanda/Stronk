@@ -1,21 +1,21 @@
-import Graphics from "../core/Graphics";
-import Sprite from "../core/Sprite";
-import TilingSprite from "../core/TilingSprite";
-import BattleManager from "../managers/BattleManager";
-import ImageManager from "../managers/ImageManager";
-import SceneManager from "../managers/SceneManager";
-import Spriteset_Base from "./Spriteset_Base";
-import Sprite_Actor from "./Sprite_Actor";
-import Sprite_Enemy from "./Sprite_Enemy";
-import Sprite_Battler from "./Sprite_Battler";
-import ConfigManager from "../managers/ConfigManager";
+import { Graphics } from "../core/Graphics";
+import { Sprite } from "../core/Sprite";
+import { TilingSprite } from "../core/TilingSprite";
+import { BattleManager } from "../managers/BattleManager";
+import { ImageManager } from "../managers/ImageManager";
+import { SceneManager } from "../managers/SceneManager";
+import { Spriteset_Base } from "./Spriteset_Base";
+import { Sprite_Actor } from "./Sprite_Actor";
+import { Sprite_Enemy } from "./Sprite_Enemy";
+import { Sprite_Battler } from "./Sprite_Battler";
+import { ConfigManager } from "../managers/ConfigManager";
 
 // -----------------------------------------------------------------------------
 // Spriteset_Battle
 //
 // The set of sprites on the battle screen.
 
-export default class Spriteset_Battle extends Spriteset_Base {
+export class Spriteset_Battle extends Spriteset_Base {
     private _battlebackLocated: boolean;
     private _backgroundSprite: Sprite;
     private _battleField: Sprite;

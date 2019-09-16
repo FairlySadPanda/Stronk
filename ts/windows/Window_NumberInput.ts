@@ -1,18 +1,18 @@
-import Graphics from "../core/Graphics";
-import Input from "../core/Input";
-import TouchInput from "../core/TouchInput";
-import Utils from "../core/Utils";
-import ImageManager from "../managers/ImageManager";
-import SoundManager from "../managers/SoundManager";
-import Sprite_Button from "../sprites/Sprite_Button";
-import Window_Selectable from "./Window_Selectable";
+import { Graphics } from "../core/Graphics";
+import { Input } from "../core/Input";
+import { TouchInput } from "../core/TouchInput";
+import { Utils } from "../core/Utils";
+import { ImageManager } from "../managers/ImageManager";
+import { SoundManager } from "../managers/SoundManager";
+import { Sprite_Button } from "../sprites/Sprite_Button";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_NumberInput
 //
 // The window used for the event command [Input Number].
 
-export default class Window_NumberInput extends Window_Selectable {
+export class Window_NumberInput extends Window_Selectable {
     private _messageWindow: any;
     private _number: number;
     private _maxDigits: number;

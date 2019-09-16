@@ -1,4 +1,4 @@
-import AudioManager from "../managers/AudioManager";
+import { AudioManager } from "../managers/AudioManager";
 
 interface Game_System_OnLoad {
     _saveEnabled: boolean;
@@ -21,7 +21,7 @@ interface Game_System_OnLoad {
     _walkingBgm: any;
 }
 
-export default class Game_System {
+export class Game_System {
     private _saveEnabled: boolean;
     private _menuEnabled: boolean;
     private _encounterEnabled: boolean;

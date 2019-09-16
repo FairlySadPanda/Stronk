@@ -1,7 +1,7 @@
-import AudioManager from "../managers/AudioManager";
-import Bitmap from "./Bitmap";
+import { AudioManager } from "../managers/AudioManager";
+import { Bitmap } from "./Bitmap";
 
-export default class Decrypter {
+export class Decrypter {
     private static _ignoreList: any = [];
     private static _headerlength: number;
     private static _encryptionKey: any;
@@ -12,6 +12,13 @@ export default class Decrypter {
     public static REMAIN: any;
     public static hasEncryptedImages: boolean;
     public static hasEncryptedAudio: boolean;
+
+    public static get ignoreList(): any {
+        return Decrypter._ignoreList;
+    }
+    public static set ignoreList(value: any) {
+        Decrypter._ignoreList = value;
+    }
 
     public static checkImgIgnore(url) {
         for (let cnt = 0; cnt < this._ignoreList.length; cnt++) {

@@ -1,18 +1,18 @@
-import Bitmap from "../core/Bitmap";
-import Graphics from "../core/Graphics";
-import Sprite from "../core/Sprite";
-import AudioManager from "../managers/AudioManager";
-import DataManager from "../managers/DataManager";
-import ImageManager from "../managers/ImageManager";
-import SceneManager from "../managers/SceneManager";
-import Window_TitleCommand from "../windows/Window_TitleCommand";
-import Scene_Base from "./Scene_Base";
-import Scene_Load from "./Scene_Load";
-import Scene_Map from "./Scene_Map";
-import Scene_MushOptions from "./Scene_MushOptions";
-import ConfigManager from "../managers/ConfigManager";
+import { Bitmap } from "../core/Bitmap";
+import { Graphics } from "../core/Graphics";
+import { Sprite } from "../core/Sprite";
+import { AudioManager } from "../managers/AudioManager";
+import { DataManager } from "../managers/DataManager";
+import { ImageManager } from "../managers/ImageManager";
+import { SceneManager } from "../managers/SceneManager";
+import { Window_TitleCommand } from "../windows/Window_TitleCommand";
+import { Scene_Base } from "./Scene_Base";
+import { Scene_Load } from "./Scene_Load";
+import { Scene_Map } from "./Scene_Map";
+import { Scene_MushOptions } from "./Scene_MushOptions";
+import { ConfigManager } from "../managers/ConfigManager";
 
-export default class Scene_Title extends Scene_Base {
+export class Scene_Title extends Scene_Base {
     private _commandWindow: any;
     private _gameTitleSprite: Sprite;
     private _backSprite1: Sprite;

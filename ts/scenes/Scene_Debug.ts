@@ -1,10 +1,10 @@
-import Graphics from "../core/Graphics";
-import Window_Base from "../windows/Window_Base";
-import Window_DebugEdit from "../windows/Window_DebugEdit";
-import Window_DebugRange from "../windows/Window_DebugRange";
-import Scene_MenuBase from "./Scene_MenuBase";
+import { Graphics } from "../core/Graphics";
+import { Window_Base } from "../windows/Window_Base";
+import { Window_DebugEdit } from "../windows/Window_DebugEdit";
+import { Window_DebugRange } from "../windows/Window_DebugRange";
+import { Scene_MenuBase } from "./Scene_MenuBase";
 
-export default class Scene_Debug extends Scene_MenuBase {
+export class Scene_Debug extends Scene_MenuBase {
     private _rangeWindow: Window_DebugRange;
     private _editWindow: Window_DebugEdit;
     private _debugHelpWindow: Window_Base;

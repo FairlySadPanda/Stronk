@@ -1,14 +1,16 @@
-export default class PluginManager {
-    private static _path = "js/plugins/";
+import { IPlugin } from "../IPlugin";
+
+export class PluginManager {
+    private static _path = "../plugins/";
     private static _scripts = [];
     private static _errorUrls = [];
     private static _parameters = {};
 
-    public static setup(plugins) {
+    public static setup(plugins: IPlugin[]) {
         plugins.forEach(function(plugin) {
             if (plugin.status && !(this._scripts.indexOf(plugin.name) > -1)) {
                 this.setParameters(plugin.name, plugin.parameters);
-                this.loadScript(plugin.name + ".js");
+                require(PluginManager._path + plugin.name);
                 this._scripts.push(plugin.name);
             }
         }, this);

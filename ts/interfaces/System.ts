@@ -1,6 +1,6 @@
-import Audio from "./Audio";
+import { Audio } from "./Audio";
 
-export default interface System {
+export interface System {
     airship: Airship;
     armorTypes: string[];
     attackMotions: AttackMotion[];

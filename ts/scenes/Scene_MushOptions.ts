@@ -1,14 +1,14 @@
-import Scene_MenuBase from "./Scene_MenuBase";
-import ConfigManager from "../managers/ConfigManager";
-import Graphics from "../core/Graphics";
-import Input from "../core/Input";
-import SoundManager from "../managers/SoundManager";
-import SceneManager from "../managers/SceneManager";
-import Window_MushOptionsSections from "../windows/Windows_MushOptionsSections";
-import Window_MushOptionsMainCommand from "../windows/Window_MushOptionsMainCommand";
-import Window_MushOptionsMainBack from "../windows/Window_MushOptionsMainBack";
+import { Scene_MenuBase } from "./Scene_MenuBase";
+import { ConfigManager } from "../managers/ConfigManager";
+import { Graphics } from "../core/Graphics";
+import { Input } from "../core/Input";
+import { SoundManager } from "../managers/SoundManager";
+import { SceneManager } from "../managers/SceneManager";
+import { Window_MushOptionsSections } from "../windows/Windows_MushOptionsSections";
+import { Window_MushOptionsMainCommand } from "../windows/Window_MushOptionsMainCommand";
+import { Window_MushOptionsMainBack } from "../windows/Window_MushOptionsMainBack";
 
-export default class Scene_MushOptions extends Scene_MenuBase {
+export class Scene_MushOptions extends Scene_MenuBase {
     private timer: number;
     private windowSections: Window_MushOptionsSections;
     private windowMainBack: Window_MushOptionsMainBack;

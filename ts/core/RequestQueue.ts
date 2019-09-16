@@ -1,6 +1,6 @@
-import Bitmap from "./Bitmap";
+import { Bitmap } from "./Bitmap";
 
-export default class RequestQueue {
+export class RequestQueue {
     private queue: any[] = [];
 
     public enqueue(key: string, value: Bitmap): void {

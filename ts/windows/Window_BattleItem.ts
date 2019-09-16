@@ -1,11 +1,11 @@
-import Window_ItemList from "./Window_ItemList";
+import { Window_ItemList } from "./Window_ItemList";
 
 // -----------------------------------------------------------------------------
 // Window_BattleItem
 //
 // The window for selecting an item to use on the battle screen.
 
-export default class Window_BattleItem extends Window_ItemList {
+export class Window_BattleItem extends Window_ItemList {
     public constructor(x, y, width, height) {
         super(x, y, width, height);
         this.hide();

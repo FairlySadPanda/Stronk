@@ -1,19 +1,19 @@
-import Graphics from "../core/Graphics";
-import Input from "../core/Input";
-import Utils from "../core/Utils";
-import AudioManager from "../managers/AudioManager";
-import BattleManager from "../managers/BattleManager";
-import ImageManager from "../managers/ImageManager";
-import SceneManager from "../managers/SceneManager";
-import Scene_Battle from "../scenes/Scene_Battle";
-import Scene_Gameover from "../scenes/Scene_Gameover";
-import Scene_Menu from "../scenes/Scene_Menu";
-import Scene_Name from "../scenes/Scene_Name";
-import Scene_Save from "../scenes/Scene_Save";
-import Scene_Shop from "../scenes/Scene_Shop";
-import Scene_Title from "../scenes/Scene_Title";
-import Window_MenuCommand from "../windows/Window_MenuCommand";
-import Game_Character from "./Game_Character";
+import { Graphics } from "../core/Graphics";
+import { Input } from "../core/Input";
+import { Utils } from "../core/Utils";
+import { AudioManager } from "../managers/AudioManager";
+import { BattleManager } from "../managers/BattleManager";
+import { ImageManager } from "../managers/ImageManager";
+import { SceneManager } from "../managers/SceneManager";
+import { Scene_Battle } from "../scenes/Scene_Battle";
+import { Scene_Gameover } from "../scenes/Scene_Gameover";
+import { Scene_Menu } from "../scenes/Scene_Menu";
+import { Scene_Name } from "../scenes/Scene_Name";
+import { Scene_Save } from "../scenes/Scene_Save";
+import { Scene_Shop } from "../scenes/Scene_Shop";
+import { Scene_Title } from "../scenes/Scene_Title";
+import { Window_MenuCommand } from "../windows/Window_MenuCommand";
+import { Game_Character } from "./Game_Character";
 
 export interface Game_Interpreter_OnLoad {
     _depth: any;
@@ -34,7 +34,8 @@ export interface Game_Interpreter_OnLoad {
     _imageReservationId: any;
 }
 
-export default class Game_Interpreter {
+export class Game_Interpreter {
+    isContinueMessageString: () => boolean;
     public static requestImages(list, commonList?) {
         if (!list) {
             return;

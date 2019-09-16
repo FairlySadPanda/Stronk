@@ -1,10 +1,10 @@
-import Game_Character, { Game_Character_OnLoad } from "./Game_Character";
+import { Game_Character, Game_Character_OnLoad } from "./Game_Character";
 
 interface Game_Follower_OnLoad extends Game_Character_OnLoad {
     _memberIndex: number;
 }
 
-export default class Game_Follower extends Game_Character {
+export class Game_Follower extends Game_Character {
     private _memberIndex: number;
 
     public constructor(

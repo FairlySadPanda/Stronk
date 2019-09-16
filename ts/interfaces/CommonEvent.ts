@@ -1,4 +1,4 @@
-export default interface CommonEvent {
+export interface CommonEvent {
     id: number;
     list: CommonEventList[];
     name: string;

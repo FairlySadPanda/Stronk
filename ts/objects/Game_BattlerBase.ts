@@ -1,5 +1,5 @@
-import Utils from "../core/Utils";
-import DataManager from "../managers/DataManager";
+import { Utils } from "../core/Utils";
+import { DataManager } from "../managers/DataManager";
 
 export interface Game_BattlerBase_OnLoad {
     _hp: any;
@@ -13,7 +13,7 @@ export interface Game_BattlerBase_OnLoad {
     _buffTurns: number[];
 }
 
-export default class Game_BattlerBase {
+export class Game_BattlerBase {
     public static TRAIT_ELEMENT_RATE = 11;
     public static TRAIT_DEBUFF_RATE = 12;
     public static TRAIT_STATE_RATE = 13;

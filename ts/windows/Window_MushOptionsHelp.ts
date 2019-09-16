@@ -1,7 +1,7 @@
-import Window_Base from "./Window_Base";
-import ConfigManager from "../managers/ConfigManager";
+import { Window_Base } from "./Window_Base";
+import { ConfigManager } from "../managers/ConfigManager";
 
-export default class Window_MushOptionsHelp extends Window_Base {
+export class Window_MushOptionsHelp extends Window_Base {
     _action: number;
     _index: number;
     _section: any;

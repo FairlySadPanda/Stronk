@@ -1,30 +1,31 @@
-import Input from "../core/Input";
-import TouchInput from "../core/TouchInput";
-import AudioManager from "../managers/AudioManager";
-import BattleManager from "../managers/BattleManager";
-import DataManager from "../managers/DataManager";
-import ImageManager from "../managers/ImageManager";
-import SceneManager from "../managers/SceneManager";
-import SoundManager from "../managers/SoundManager";
-import Spriteset_Map from "../sprites/Spriteset_Map";
-import Window_MapName from "../windows/Window_MapName";
-import Window_MenuCommand from "../windows/Window_MenuCommand";
-import Window_Message from "../windows/Window_Message";
-import Window_ScrollText from "../windows/Window_ScrollText";
-import Scene_Base from "./Scene_Base";
-import Scene_Battle from "./Scene_Battle";
-import Scene_Debug from "./Scene_Debug";
-import Scene_Gameover from "./Scene_Gameover";
-import Scene_Load from "./Scene_Load";
-import Scene_Menu from "./Scene_Menu";
-import Scene_Title from "./Scene_Title";
+import { Input } from "../core/Input";
+import { TouchInput } from "../core/TouchInput";
+import { AudioManager } from "../managers/AudioManager";
+import { BattleManager } from "../managers/BattleManager";
+import { DataManager } from "../managers/DataManager";
+import { ImageManager } from "../managers/ImageManager";
+import { SceneManager } from "../managers/SceneManager";
+import { SoundManager } from "../managers/SoundManager";
+import { Spriteset_Map } from "../sprites/Spriteset_Map";
+import { Window_MapName } from "../windows/Window_MapName";
+import { Window_MenuCommand } from "../windows/Window_MenuCommand";
+import { Window_Message } from "../windows/Window_Message";
+import { Window_ScrollText } from "../windows/Window_ScrollText";
+import { Scene_Base } from "./Scene_Base";
+import { Scene_Battle } from "./Scene_Battle";
+import { Scene_Debug } from "./Scene_Debug";
+import { Scene_Gameover } from "./Scene_Gameover";
+import { Scene_Load } from "./Scene_Load";
+import { Scene_Menu } from "./Scene_Menu";
+import { Scene_Title } from "./Scene_Title";
 
-export default class Scene_Map extends Scene_Base {
+export class Scene_Map extends Scene_Base {
     public menuCalling: boolean;
     private _transfer: boolean;
     private _mapNameWindow: Window_MapName;
     private _messageWindow: Window_Message;
     private _spriteset: Spriteset_Map;
+
     private _scrollTextWindow: Window_ScrollText;
     private _waitCount: number;
     private _encounterEffectDuration: number;
@@ -37,6 +38,13 @@ export default class Scene_Map extends Scene_Base {
         this._encounterEffectDuration = 0;
         this._mapLoaded = false;
         this._touchCount = 0;
+    }
+
+    public get spriteset(): Spriteset_Map {
+        return this._spriteset;
+    }
+    public set spriteset(value: Spriteset_Map) {
+        this._spriteset = value;
     }
 
     public create() {

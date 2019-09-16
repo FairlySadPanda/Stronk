@@ -1,14 +1,14 @@
-import Input from "../core/Input";
-import Rectangle from "../core/Rectangle";
-import SoundManager from "../managers/SoundManager";
-import Window_Selectable from "./Window_Selectable";
+import { Input } from "../core/Input";
+import { Rectangle } from "../core/Rectangle";
+import { SoundManager } from "../managers/SoundManager";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_NameInput
 //
 // The window for selecting text characters on the name input screen.
 
-export default class Window_NameInput extends Window_Selectable {
+export class Window_NameInput extends Window_Selectable {
     public static LATIN1: string[];
     public static LATIN2: string[];
     public static RUSSIA: string[];

@@ -1,12 +1,12 @@
-import Graphics from "../core/Graphics";
-import Window_Base from "./Window_Base";
+import { Graphics } from "../core/Graphics";
+import { Window_Base } from "./Window_Base";
 
 // -----------------------------------------------------------------------------
 // Window_Help
 //
 // The window for displaying the description of the selected item.
 
-export default class Window_Help extends Window_Base {
+export class Window_Help extends Window_Base {
     private _text: string;
 
     public constructor(numLines?: number) {

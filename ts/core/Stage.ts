@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 
-export default class Stage extends PIXI.Container {
+export class Stage extends PIXI.Container {
     public interactive: boolean;
 
     public constructor() {

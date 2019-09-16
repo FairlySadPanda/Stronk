@@ -1,11 +1,11 @@
-import Window_Command from "./Window_Command";
+import { Window_Command } from "./Window_Command";
 
 // -----------------------------------------------------------------------------
 // Window_SkillType
 //
 // The window for selecting a skill type on the skill screen.
 
-export default class Window_SkillType extends Window_Command {
+export class Window_SkillType extends Window_Command {
     private _actor: any;
     private _skillWindow: any;
 

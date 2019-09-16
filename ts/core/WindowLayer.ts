@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 
-export default class WindowLayer extends PIXI.Container {
+export class WindowLayer extends PIXI.Container {
     /**
      * The width of the window layer in pixels.
      *

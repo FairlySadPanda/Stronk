@@ -1,11 +1,11 @@
 import * as PIXI from "pixi.js";
-import Bitmap from "./Bitmap";
-import Point from "./Point";
-import Rectangle from "./Rectangle";
-import Sprite from "./Sprite";
-import Utils from "./Utils";
+import { Bitmap } from "./Bitmap";
+import { Point } from "./Point";
+import { Rectangle } from "./Rectangle";
+import { Sprite } from "./Sprite";
+import { Utils } from "./Utils";
 
-export default class Window extends PIXI.Container {
+export class Window extends PIXI.Container {
     public origin: Point;
     public active: boolean;
     public downArrowVisible: boolean;
@@ -16,7 +16,7 @@ export default class Window extends PIXI.Container {
     protected _width: number;
     protected _height: number;
     private _cursorRect: Rectangle;
-    private _openness: number;
+    protected _openness: number;
     private _animationCount: number;
     private _padding: number;
     private _margin: number;

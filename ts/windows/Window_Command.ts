@@ -1,12 +1,12 @@
-import Window_Message from "./Window_Message";
-import Window_Selectable from "./Window_Selectable";
+import { Window_Message } from "./Window_Message";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_Command
 //
 // The superclass of windows for selecting a command.
 
-export default class Window_Command extends Window_Selectable {
+export class Window_Command extends Window_Selectable {
     protected _messageWindow: Window_Message;
     public constructor(x: any, y: any, messageWindow?: Window_Message) {
         super(0, 0, 0, 0);

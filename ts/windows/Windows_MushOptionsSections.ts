@@ -1,7 +1,7 @@
-import Window_Selectable from "./Window_Selectable";
-import ConfigManager from "../managers/ConfigManager";
+import { Window_Selectable } from "./Window_Selectable";
+import { ConfigManager } from "../managers/ConfigManager";
 
-export default class Window_MushOptionsSections extends Window_Selectable {
+export class Window_MushOptionsSections extends Window_Selectable {
     public sections: string[];
 
     public constructor(x, y, width, height) {

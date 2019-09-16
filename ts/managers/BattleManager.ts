@@ -1,11 +1,11 @@
-import Utils from "../core/Utils";
-import Game_Action from "../objects/Game_Action";
-import Game_Battler from "../objects/Game_Battler";
-import Scene_Gameover from "../scenes/Scene_Gameover";
-import AudioManager from "./AudioManager";
-import SceneManager from "./SceneManager";
-import SoundManager from "./SoundManager";
-import TextManager from "./TextManager";
+import { Utils } from "../core/Utils";
+import { Game_Action } from "../objects/Game_Action";
+import { Game_Battler } from "../objects/Game_Battler";
+import { Scene_Gameover } from "../scenes/Scene_Gameover";
+import { AudioManager } from "./AudioManager";
+import { SceneManager } from "./SceneManager";
+import { SoundManager } from "./SoundManager";
+import { TextManager } from "./TextManager";
 
 interface Rewards {
     gold: number;
@@ -13,7 +13,7 @@ interface Rewards {
     items: any;
 }
 
-export default abstract class BattleManager {
+export abstract class BattleManager {
     public static _canEscape: any;
     public static _canLose: any;
     public static _phase: string;
@@ -660,7 +660,11 @@ export default abstract class BattleManager {
     public static displayExp() {
         const exp = this._rewards.exp;
         if (exp > 0) {
-            const text = TextManager.obtainExp.format(exp, TextManager.exp);
+            const text = Utils.format(
+                TextManager.obtainExp,
+                exp,
+                TextManager.exp
+            );
             $gameMessage.add("\\." + text);
         }
     }

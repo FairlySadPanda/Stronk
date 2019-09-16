@@ -1,21 +1,21 @@
-import Graphics from "../core/Graphics";
-import Input from "../core/Input";
-import TouchInput from "../core/TouchInput";
-import Utils from "../core/Utils";
+import { Graphics } from "../core/Graphics";
+import { Input } from "../core/Input";
+import { TouchInput } from "../core/TouchInput";
+import { Utils } from "../core/Utils";
 
-import ImageManager from "../managers/ImageManager";
-import Window_Base from "./Window_Base";
-import Window_ChoiceList from "./Window_ChoiceList";
-import Window_EventItem from "./Window_EventItem";
-import Window_Gold from "./Window_Gold";
-import Window_NumberInput from "./Window_NumberInput";
+import { ImageManager } from "../managers/ImageManager";
+import { Window_Base } from "./Window_Base";
+import { Window_ChoiceList } from "./Window_ChoiceList";
+import { Window_EventItem } from "./Window_EventItem";
+import { Window_Gold } from "./Window_Gold";
+import { Window_NumberInput } from "./Window_NumberInput";
 
 // -----------------------------------------------------------------------------
 // Window_Message
 //
 // The window for displaying text messages.
 
-export default class Window_Message extends Window_Base {
+export class Window_Message extends Window_Base {
     public openness: number;
     private _imageReservationId: number;
     private _background: number;
@@ -32,6 +32,13 @@ export default class Window_Message extends Window_Base {
     private _pauseSkip: boolean;
     private _textSpeed: number;
     private _textSpeedCount: number;
+    wordwrapWidth: () => any;
+    adjustWindowSettings: () => void;
+    isFastForward: () => boolean;
+    convertNameBox: (text: any) => any;
+    convertMessageCharacters: (text: any) => any;
+    convertActorFace: (actor: any) => string;
+    hasDifferentNameBoxText: () => boolean;
 
     public constructor() {
         const width = Window_Message.prototype.windowWidth();

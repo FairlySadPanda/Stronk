@@ -1,6 +1,6 @@
-import Decrypter from "./Decrypter";
+import { Decrypter } from "./Decrypter";
 
-export default abstract class Html5Audio {
+export abstract class Html5Audio {
     private static _initialized = false;
     private static _unlocked = false;
     private static _audioElement: HTMLAudioElement = null;

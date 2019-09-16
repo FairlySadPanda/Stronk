@@ -1,11 +1,11 @@
-import Input from "../core/Input";
-import TouchInput from "../core/TouchInput";
-import Utils from "../core/Utils";
-import ImageManager from "../managers/ImageManager";
-import SoundManager from "../managers/SoundManager";
-import TextManager from "../managers/TextManager";
-import Sprite_Button from "../sprites/Sprite_Button";
-import Window_Selectable from "./Window_Selectable";
+import { Input } from "../core/Input";
+import { TouchInput } from "../core/TouchInput";
+import { Utils } from "../core/Utils";
+import { ImageManager } from "../managers/ImageManager";
+import { SoundManager } from "../managers/SoundManager";
+import { TextManager } from "../managers/TextManager";
+import { Sprite_Button } from "../sprites/Sprite_Button";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_ShopNumber
@@ -13,7 +13,7 @@ import Window_Selectable from "./Window_Selectable";
 // The window for inputting quantity of items to buy or sell on the shop
 // screen.
 
-export default class Window_ShopNumber extends Window_Selectable {
+export class Window_ShopNumber extends Window_Selectable {
     private _item: any;
     private _max: number;
     private _price: number;

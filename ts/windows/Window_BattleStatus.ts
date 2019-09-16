@@ -1,12 +1,12 @@
-import Graphics from "../core/Graphics";
-import Window_Selectable from "./Window_Selectable";
+import { Graphics } from "../core/Graphics";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_BattleStatus
 //
 // The window for displaying the status of party members on the battle screen.
 
-export default class Window_BattleStatus extends Window_Selectable {
+export class Window_BattleStatus extends Window_Selectable {
     public openness: number;
 
     public constructor() {

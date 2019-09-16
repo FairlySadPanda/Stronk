@@ -1,11 +1,11 @@
-import Window_BattleStatus from "./Window_BattleStatus";
+import { Window_BattleStatus } from "./Window_BattleStatus";
 
 // -----------------------------------------------------------------------------
 // Window_BattleActor
 //
 // The window for selecting a target actor on the battle screen.
 
-export default class Window_BattleActor extends Window_BattleStatus {
+export class Window_BattleActor extends Window_BattleStatus {
     public x: any;
     public y: any;
     public openness: number;

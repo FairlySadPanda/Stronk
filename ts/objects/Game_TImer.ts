@@ -1,11 +1,11 @@
-import BattleManager from "../managers/BattleManager";
+import { BattleManager } from "../managers/BattleManager";
 
 export interface Game_Timer_OnLoad {
     _frames: number;
     _working: boolean;
 }
 
-export default class Game_Timer {
+export class Game_Timer {
     private _frames: number;
     private _working: boolean;
 

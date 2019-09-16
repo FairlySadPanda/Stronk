@@ -1,9 +1,9 @@
 import * as enableInlineVideo from "iphone-inline-video";
 import * as PIXI from "pixi.js";
-import SceneManager from "../managers/SceneManager";
-import ResourceHandler from "./ResourceHandler";
-import Stage from "./Stage";
-import Utils from "./Utils";
+import { SceneManager } from "../managers/SceneManager";
+import { ResourceHandler } from "./ResourceHandler";
+import { Stage } from "./Stage";
+import { Utils } from "./Utils";
 
 /**
  * The Graphics master class for CoreEngine.
@@ -11,7 +11,7 @@ import Utils from "./Utils";
  * This does not change the functionality of the class, but is indicative of the laziness
  * of the programmer who ported all the functions into the class definition. - HD, Aug 2019
  */
-export default abstract class Graphics {
+export abstract class Graphics {
     public static get width(): number {
         return Graphics._width;
     }
@@ -678,7 +678,7 @@ export default abstract class Graphics {
      * @method _updateRealScale
      * @private
      */
-    private static _updateRealScale = function() {
+    public static _updateRealScale = function() {
         if (Graphics._stretchEnabled) {
             let h = window.innerWidth / Graphics.width;
             let v = window.innerHeight / Graphics.height;

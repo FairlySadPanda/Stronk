@@ -1,15 +1,15 @@
-import ScreenSprite from "../core/ScreenSprite";
-import Sprite from "../core/Sprite";
-import Utils from "../core/Utils";
-import AudioManager from "../managers/AudioManager";
-import ImageManager from "../managers/ImageManager";
+import { ScreenSprite } from "../core/ScreenSprite";
+import { Sprite } from "../core/Sprite";
+import { Utils } from "../core/Utils";
+import { AudioManager } from "../managers/AudioManager";
+import { ImageManager } from "../managers/ImageManager";
 
 // -----------------------------------------------------------------------------
 // Sprite_Animation
 //
 // The sprite for displaying an animation.
 
-export default class Sprite_Animation extends Sprite {
+export class Sprite_Animation extends Sprite {
     private static _checker1 = {};
     private static _checker2 = {};
 

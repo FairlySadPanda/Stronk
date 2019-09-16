@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
-import Utils from "./Utils";
+import { Utils } from "./Utils";
 
-export default class ToneFilter extends PIXI.filters.ColorMatrixFilter {
+export class ToneFilter extends PIXI.filters.ColorMatrixFilter {
     /**
      * Changes the hue.
      *

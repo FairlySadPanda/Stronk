@@ -1,12 +1,12 @@
-import TextManager from "../managers/TextManager";
-import Window_HorzCommand from "./Window_HorzCommand";
+import { TextManager } from "../managers/TextManager";
+import { Window_HorzCommand } from "./Window_HorzCommand";
 
 // -----------------------------------------------------------------------------
 // Window_ShopCommand
 //
 // The window for selecting buy/sell on the shop screen.
 
-export default class Window_ShopCommand extends Window_HorzCommand {
+export class Window_ShopCommand extends Window_HorzCommand {
     private _windowWidth: number;
     private _purchaseOnly: boolean;
 

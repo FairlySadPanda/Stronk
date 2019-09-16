@@ -1,9 +1,16 @@
-import SceneManager from "../managers/SceneManager";
-import Graphics from "./Graphics";
+import { SceneManager } from "../managers/SceneManager";
+import { Graphics } from "./Graphics";
 
-export default abstract class ResourceHandler {
+export abstract class ResourceHandler {
     private static _reloaders = [];
     private static _defaultRetryInterval = [500, 1000, 3000];
+
+    public static get defaultRetryInterval() {
+        return ResourceHandler._defaultRetryInterval;
+    }
+    public static set defaultRetryInterval(value) {
+        ResourceHandler._defaultRetryInterval = value;
+    }
 
     public static createLoader(
         url: string,

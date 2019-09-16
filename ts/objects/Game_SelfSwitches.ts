@@ -2,7 +2,7 @@ export interface Game_SelfSwitches_OnLoad {
     _data: boolean[];
 }
 
-export default class Game_SelfSwitches {
+export class Game_SelfSwitches {
     private _data: {};
 
     public constructor(gameLoadInput?: Game_SelfSwitches_OnLoad) {
