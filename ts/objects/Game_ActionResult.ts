@@ -35,7 +35,7 @@ export class Game_ActionResult {
     public addedDebuffs: any[];
     public removedBuffs: any[];
 
-    public constructor(gameLoadInput?: Game_ActionResult) {
+    public constructor(gameLoadInput?: Game_ActionResult_OnLoad) {
         this.clear();
 
         if (gameLoadInput) {
