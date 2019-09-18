@@ -352,11 +352,12 @@ export class Game_Screen {
     }
 
     public updatePictures() {
-        this._pictures.forEach(function(picture) {
-            if (picture) {
-                picture.update();
-            }
-        });
+        const group = this._pictures;
+        const length = group.length;
+        for (let i = 0; i < length; ++i) {
+            const picture = group[i];
+            if (picture) picture.update();
+        }
     }
 
     public startFlashForDamage() {

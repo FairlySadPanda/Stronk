@@ -313,6 +313,15 @@ export class Bitmap {
         dw?: number,
         dh?: number
     ) {
+        sx = Math.floor(sx);
+        sy = Math.floor(sy);
+        sw = Math.floor(sw);
+        sh = Math.floor(sh);
+        dx = Math.floor(dx);
+        dy = Math.floor(dy);
+        dw = Math.floor(dw);
+        dh = Math.floor(dh);
+
         dw = dw || sw;
         dh = dh || sh;
         if (
@@ -464,6 +473,11 @@ export class Bitmap {
         height: number,
         color: string
     ) {
+        x = Math.floor(x);
+        y = Math.floor(y);
+        width = Math.floor(width);
+        height = Math.floor(height);
+
         const context = this._context;
         context.save();
         context.fillStyle = color;
@@ -529,6 +543,8 @@ export class Bitmap {
      * @param {String} color The color of the circle in CSS format
      */
     public drawCircle(x: number, y: number, radius: number, color: string) {
+        x = Math.floor(x);
+        y = Math.floor(y);
         const context = this._context;
         context.save();
         context.fillStyle = color;
@@ -558,6 +574,12 @@ export class Bitmap {
         lineHeight: number,
         align?: CanvasTextAlign
     ) {
+        x = Math.floor(x);
+        y = Math.floor(y);
+        if (maxWidth < 0) maxWidth = 0;
+        maxWidth = Math.floor(maxWidth);
+        lineHeight = Math.floor(lineHeight);
+
         // Note: Firefox has a bug with textBaseline: Bug 737852
         //       So we use 'alphabetic' here.
         if (text !== undefined) {

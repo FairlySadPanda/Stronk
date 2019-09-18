@@ -21,6 +21,7 @@ export abstract class AudioManager {
     private static _path = "audio/";
     private static _blobUrl = null;
     private static _currentMe: number;
+    private static _frameSe: any;
 
     public static playBgm(bgm, pos?) {
         if (AudioManager.isCurrentBgm(bgm)) {
@@ -248,17 +249,30 @@ export abstract class AudioManager {
     }
 
     public static playSe(se) {
-        if (se.name) {
-            AudioManager._seBuffers = AudioManager._seBuffers.filter(function(
-                audio
-            ) {
-                return audio.isPlaying();
-            });
-            const buffer = AudioManager.createBuffer("se", se.name);
-            AudioManager.updateSeParameters(buffer, se);
-            buffer.play(false, 0);
-            AudioManager._seBuffers.push(buffer);
+        this._frameSe = this._frameSe || [];
+        if (this.uniqueCheckSe(se)) {
+            if (se.name) {
+                AudioManager._seBuffers = AudioManager._seBuffers.filter(
+                    function(audio) {
+                        return audio.isPlaying();
+                    }
+                );
+                const buffer = AudioManager.createBuffer("se", se.name);
+                AudioManager.updateSeParameters(buffer, se);
+                buffer.play(false, 0);
+                AudioManager._seBuffers.push(buffer);
+            }
+            this._frameSe.push(se);
         }
+    }
+
+    public static uniqueCheckSe(se1) {
+        if (this._frameSe.includes(se1)) return false;
+        return true;
+    }
+
+    public static clearUniqueCheckSe() {
+        this._frameSe = [];
     }
 
     public static updateSeParameters(buffer, se) {

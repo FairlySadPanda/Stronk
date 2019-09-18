@@ -256,7 +256,8 @@ export class Game_Party extends Game_Unit {
     }
 
     public maxItems(item) {
-        return 99;
+        if (!item) return 1;
+        return item.maxItem;
     }
 
     public hasMaxItems(item) {
@@ -339,9 +340,12 @@ export class Game_Party extends Game_Unit {
     }
 
     public onPlayerWalk() {
-        this.members().forEach(function(actor) {
-            return actor.onPlayerWalk();
-        });
+        const group = this.members();
+        const length = group.length;
+        for (let i = 0; i < length; ++i) {
+            const actor = group[i];
+            if (actor) actor.onPlayerWalk();
+        }
     }
 
     public menuActor() {

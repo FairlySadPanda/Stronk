@@ -35,7 +35,6 @@ export interface Game_Interpreter_OnLoad {
 }
 
 export class Game_Interpreter {
-    isContinueMessageString: () => boolean;
     public static requestImages(list, commonList?) {
         if (!list) {
             return;
@@ -2165,6 +2164,11 @@ export class Game_Interpreter {
     }
 
     public pluginCommand(command, args) {
-        // to be overridden by plugins
+        if (command === "GainGold") {
+            $gameParty.gainGold(parseInt(args[0]));
+        }
+        if (command === "LoseGold") {
+            $gameParty.loseGold(parseInt(args[0]));
+        }
     }
 }

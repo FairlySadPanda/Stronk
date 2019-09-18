@@ -448,4 +448,10 @@ export class Sprite extends PIXI.Sprite {
             }
         }
     }
+
+    public updateTransform() {
+        super.updateTransform();
+        this.worldTransform.tx = Math.floor(this.worldTransform.tx);
+        this.worldTransform.ty = Math.floor(this.worldTransform.ty);
+    }
 }

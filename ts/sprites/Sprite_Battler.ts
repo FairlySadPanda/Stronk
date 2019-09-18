@@ -9,7 +9,7 @@ import { ConfigManager } from "../managers/ConfigManager";
 // The superclass of Sprite_Actor and Sprite_Enemy.
 
 export class Sprite_Battler extends Sprite_Base {
-    private _battler: Game_Battler;
+    protected _battler: Game_Battler;
     private _damages: Sprite_Damage[];
     protected _homeX: number;
     protected _homeY: number;

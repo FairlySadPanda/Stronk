@@ -67,6 +67,7 @@ export class Game_Character extends Game_CharacterBase {
     private _originalMoveRoute: any;
     private _originalMoveRouteIndex: number;
     private _waitCount: number;
+
     public constructor(gameLoadInput?: Game_Character_OnLoad) {
         super(gameLoadInput);
 
@@ -91,6 +92,11 @@ export class Game_Character extends Game_CharacterBase {
         this._waitCount = 0;
     }
 
+    public queueMoveRoute(moveRoute) {
+        this._originalMoveRoute = moveRoute;
+        this._originalMoveRouteIndex = 0;
+    }
+
     public memorizeMoveRoute() {
         this._originalMoveRoute = this._moveRoute;
         this._originalMoveRouteIndex = this._moveRouteIndex;
@@ -107,9 +113,13 @@ export class Game_Character extends Game_CharacterBase {
     }
 
     public setMoveRoute(moveRoute) {
-        this._moveRoute = moveRoute;
-        this._moveRouteIndex = 0;
-        this._moveRouteForcing = false;
+        if (this._moveRouteForcing) {
+            this._moveRoute = moveRoute;
+            this._moveRouteIndex = 0;
+            this._moveRouteForcing = false;
+        } else {
+            this.queueMoveRoute(moveRoute);
+        }
     }
 
     public forceMoveRoute(moveRoute) {

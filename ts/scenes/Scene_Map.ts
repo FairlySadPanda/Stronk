@@ -148,6 +148,7 @@ export class Scene_Map extends Scene_Base {
     }
 
     public terminate() {
+        this._bypassFirstClear = true;
         super.terminate();
         if (!SceneManager.isNextScene(Scene_Battle)) {
             this._spriteset.update();
@@ -167,6 +168,7 @@ export class Scene_Map extends Scene_Base {
         this.removeChild(this._mapNameWindow);
         this.removeChild(this._windowLayer);
         this.removeChild(this._spriteset);
+        this.clearChildren();
     }
 
     public needsFadeIn() {

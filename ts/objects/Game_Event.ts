@@ -96,8 +96,11 @@ export class Game_Event extends Game_Character {
     }
 
     public isCollidedWithEvents(x, y) {
-        const events = $gameMap.eventsXyNt(x, y);
-        return events.length > 0;
+        const events = $gameMap.eventsXyNt(x, y).filter(function(ev) {
+            return ev.isNormalPriority();
+        });
+        if (events.length <= 0) return false;
+        return this.isNormalPriority();
     }
 
     public isCollidedWithPlayerCharacters(x, y) {

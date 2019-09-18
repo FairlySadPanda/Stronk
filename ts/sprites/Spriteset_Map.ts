@@ -59,6 +59,12 @@ export class Spriteset_Map extends Spriteset_Base {
         }
     }
 
+    public showCharacters() {
+        for (const sprite of this._characterSprites) {
+            if (!sprite.isTile()) sprite.show();
+        }
+    }
+
     public createParallax() {
         this._parallax = new TilingSprite();
         // this._parallax.move(0, 0, Graphics.width, Graphics.height);

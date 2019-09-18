@@ -273,4 +273,14 @@ export class Sprite_Enemy extends Sprite_Battler {
     public damageOffsetY() {
         return -8;
     }
+
+    public updateSelectionEffect() {
+        if (this._battler.isActor()) {
+            super.updateSelectionEffect();
+        } else {
+            if (this._battler.isSelected()) {
+                this.startEffect("whiten");
+            }
+        }
+    }
 }

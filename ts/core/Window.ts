@@ -257,12 +257,18 @@ export class Window extends PIXI.Container {
      * @private
      */
     private _refreshAllParts() {
+        this._roundWhUp();
         this._refreshBack();
         this._refreshFrame();
         this._refreshCursor();
         this._refreshContents();
         this._refreshArrows();
         this._refreshPauseSign();
+    }
+
+    private _roundWhUp() {
+        this._width = Math.ceil(this._width);
+        this._height = Math.ceil(this._height);
     }
 
     /**

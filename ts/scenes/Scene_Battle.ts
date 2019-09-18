@@ -106,12 +106,14 @@ export class Scene_Battle extends Scene_Base {
     }
 
     public terminate() {
+        this._bypassFirstClear = true;
         super.terminate();
         $gameParty.onBattleEnd();
         $gameTroop.onBattleEnd();
         AudioManager.stopMe();
 
         ImageManager.clearRequest();
+        this.clearChildren();
     }
 
     public needsSlowFadeOut() {

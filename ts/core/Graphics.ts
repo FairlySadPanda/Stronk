@@ -678,21 +678,65 @@ export abstract class Graphics {
      * @method _updateRealScale
      * @private
      */
-    public static _updateRealScale = function() {
-        if (Graphics._stretchEnabled) {
-            let h = window.innerWidth / Graphics.width;
-            let v = window.innerHeight / Graphics.height;
-            if (h >= 1 && h - 0.01 <= 1) {
-                h = 1;
-            }
-            if (v >= 1 && v - 0.01 <= 1) {
-                v = 1;
-            }
-            Graphics._realScale = Math.min(h, v);
+    public static _updateRealScale() {
+        if (this._stretchEnabled) {
+            const h = window.innerWidth / this._width;
+            const v = window.innerHeight / this._height;
+            this._realScale = Math.min(h, v);
+            if (this._realScale >= 3) this._realScale = 3;
+            else if (this._realScale >= 2) this._realScale = 2;
+            else if (this._realScale >= 1.5) this._realScale = 1.5;
+            else if (this._realScale >= 1) this._realScale = 1;
+            else this._realScale = 0.5;
         } else {
-            Graphics._realScale = Graphics._scale;
+            this._realScale = this._scale;
         }
-    };
+    }
+
+    public static printFullError(name: string, message: string, stack: string) {
+        if (Graphics._errorPrinter) {
+            Graphics._errorPrinter.innerHTML = Graphics._makeFullErrorHtml(
+                name,
+                message,
+                Graphics.processErrorStackMessage(stack)
+            );
+        }
+        Graphics._applyCanvasFilter();
+        Graphics._clearUpperCanvas();
+    }
+
+    private static _makeFullErrorHtml(
+        name: string,
+        message: string,
+        stack: string[]
+    ) {
+        let text = "";
+        for (var i = 2; i < stack.length; ++i) {
+            text += "<font color=white>" + stack[i] + "</font><br>";
+        }
+        return (
+            '<font color="yellow"><b>' +
+            stack[0] +
+            "</b></font><br>" +
+            '<font color="yellow"><b>' +
+            stack[1] +
+            "</b></font><br>" +
+            text
+        );
+    }
+
+    private static processErrorStackMessage(stack: string) {
+        const data = stack.split(/(?:\r\n|\r|\n)/);
+        data.unshift("Game has encountered a bug. Please report it.<br>");
+        for (let i = 1; i < data.length; ++i) {
+            data[i] = data[i].replace(/[\(](.*[\/])/, "(");
+        }
+        data.push(
+            '<br><font color="yellow"><b>Press F5 to restart the game.' +
+                "</b></font><br>"
+        );
+        return data;
+    }
 
     /**
      * @static
@@ -790,12 +834,12 @@ export abstract class Graphics {
      */
     private static _updateErrorPrinter = function() {
         Graphics._errorPrinter.width = Graphics.width * 0.9;
-        Graphics._errorPrinter.height = 40;
-        Graphics._errorPrinter.style.textAlign = "center";
         Graphics._errorPrinter.style.textShadow = "1px 1px 3px #000";
         Graphics._errorPrinter.style.fontSize = "20px";
         Graphics._errorPrinter.style.zIndex = 99;
-        Graphics._centerElement(Graphics._errorPrinter);
+        Graphics._errorPrinter.height = this._height * 0.5;
+        Graphics._errorPrinter.style.textAlign = "left";
+        this._centerElement(this._errorPrinter);
     };
 
     /**

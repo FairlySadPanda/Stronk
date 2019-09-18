@@ -236,18 +236,19 @@ export abstract class SceneManager {
 
     public static catchException(e: Error) {
         if (e instanceof Error) {
-            Graphics.printError(e.name, e.message);
+            Graphics.printFullError(e.name, e.message, e.stack);
             console.error(e.stack);
         } else {
             Graphics.printError("UnknownError", e);
         }
         AudioManager.stopAll();
-        SceneManager.stop();
+        this.stop();
     }
 
     public static updateInputData() {
         Input.update();
         TouchInput.update();
+        AudioManager.clearUniqueCheckSe();
     }
 
     public static updateMain() {

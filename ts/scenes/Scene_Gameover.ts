@@ -34,8 +34,10 @@ export class Scene_Gameover extends Scene_Base {
     }
 
     public terminate() {
+        this._bypassFirstClear = true;
         super.terminate();
         AudioManager.stopAll();
+        this.clearChildren();
     }
 
     public playGameoverMusic() {

@@ -39,8 +39,10 @@ export class Scene_MushOptions extends Scene_MenuBase {
     }
 
     public terminate() {
+        this._bypassFirstClear = true;
         super.terminate();
         ConfigManager.save();
+        this.clearChildren();
     }
 
     public createOptionsWindow() {

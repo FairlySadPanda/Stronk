@@ -14,10 +14,12 @@ export class Scene_Load extends Scene_File {
     }
 
     public terminate() {
+        this._bypassFirstClear = true;
         super.terminate();
         if (this._loadSuccess) {
             $gameSystem.onAfterLoad();
         }
+        this.clearChildren();
     }
 
     public mode() {

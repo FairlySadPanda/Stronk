@@ -32,6 +32,14 @@ export class ScreenSprite extends PIXI.Container {
         this._blue = -1;
         this._colorText = "";
         this.setBlack();
+
+        if (Utils.RPGMAKER_VERSION && Utils.RPGMAKER_VERSION >= "1.3.0") return;
+        this.scale.x = Graphics.boxWidth * 10;
+        this.scale.y = Graphics.boxHeight * 10;
+        this.anchor.x = 0.5;
+        this.anchor.y = 0.5;
+        this.x = 0;
+        this.y = 0;
     }
 
     /**

@@ -87,8 +87,10 @@ export class Sprite_Button extends Sprite {
     }
 
     public isButtonTouched() {
-        const x = this.canvasToLocalX(TouchInput.x);
-        const y = this.canvasToLocalY(TouchInput.y);
+        const x =
+            this.canvasToLocalX(TouchInput.x) + this.anchor.x * this.width;
+        const y =
+            this.canvasToLocalY(TouchInput.y) + this.anchor.y * this.height;
         return x >= 0 && y >= 0 && x < this.width && y < this.height;
     }
 

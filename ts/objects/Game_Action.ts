@@ -450,7 +450,7 @@ export class Game_Action {
                 return target.isDebuffAffected(effect.dataId);
             case Game_Action.EFFECT_LEARN_SKILL:
                 return (
-                    target.isActor() && !target.isLearnedSkill(effect.dataId)
+                    target.isActor() && !target._skills.includes(effect.dataId)
                 );
             default:
                 return true;

@@ -47,8 +47,10 @@ export class Scene_Title extends Scene_Base {
     }
 
     public terminate() {
+        this._bypassFirstClear = true;
         super.terminate();
         SceneManager.snapForBackground();
+        this.clearChildren();
     }
 
     public createBackground() {
@@ -146,5 +148,18 @@ export class Scene_Title extends Scene_Base {
         AudioManager.playBgm($dataSystem.titleBgm);
         AudioManager.stopBgs();
         AudioManager.stopMe();
+    }
+
+    public rescaleTitleSprite(sprite) {
+        if (sprite.bitmap.width <= 0 || sprite.bitmap <= 0) {
+            return setTimeout(this.rescaleTitleSprite.bind(this, sprite), 5);
+        }
+        const width = Graphics.boxWidth;
+        const height = Graphics.boxHeight;
+        const ratioX = width / sprite.bitmap.width;
+        const ratioY = height / sprite.bitmap.height;
+        if (ratioX > 1.0) sprite.scale.x = ratioX;
+        if (ratioY > 1.0) sprite.scale.y = ratioY;
+        this.centerSprite(sprite);
     }
 }

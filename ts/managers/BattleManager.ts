@@ -279,6 +279,9 @@ export abstract class BattleManager {
                 Utils.format(TextManager.surprise, $gameParty.name())
             );
         }
+        $gameTroop.members().forEach(function(enemy) {
+            enemy.recoverAll();
+        });
     }
 
     public static startInput() {
@@ -564,6 +567,7 @@ export abstract class BattleManager {
             ? true
             : Math.random() < this._escapeRatio;
         if (success) {
+            $gameParty.removeBattleStates();
             this.displayEscapeSuccessMessage();
             this._escaped = true;
             this.processAbort();

@@ -315,8 +315,9 @@ export class Window_Base extends Window {
         return this.contents.measureTextWidth(text);
     }
 
-    public drawTextEx(text, x, y) {
+    public drawTextEx(text: string, x: number, y: number) {
         if (text) {
+            this.resetFontSettings();
             const textState = {
                 index: 0,
                 x: x,
@@ -335,6 +336,14 @@ export class Window_Base extends Window {
         } else {
             return 0;
         }
+    }
+
+    public textWidthEx(text: string) {
+        return this.drawTextEx(
+            text,
+            0,
+            this.contents.height + this.lineHeight()
+        );
     }
 
     public convertEscapeCharacters(text) {

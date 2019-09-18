@@ -16,6 +16,7 @@ export class Scene_Base extends Stage {
     protected _fadeDuration: number;
     protected _imageReservationId: number;
     protected importantBitmapsAreLoaded: boolean;
+    protected _bypassFirstClear: boolean;
 
     public constructor() {
         super();
@@ -135,7 +136,10 @@ export class Scene_Base extends Stage {
      * @instance
      * @memberof Scene_Base
      */
-    public terminate() {}
+    public terminate() {
+        if (this._bypassFirstClear) return;
+        this.clearChildren();
+    }
 
     /**
      * Create the layer for the windows children

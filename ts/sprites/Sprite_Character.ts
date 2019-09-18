@@ -194,6 +194,8 @@ export class Sprite_Character extends Sprite_Base {
             this._lowerBody.setBlendColor(this.getBlendColor());
             this._upperBody.setColorTone(this.getColorTone());
             this._lowerBody.setColorTone(this.getColorTone());
+            this._upperBody.blendMode = this.blendMode;
+            this._lowerBody.blendMode = this.blendMode;
         } else if (this._upperBody) {
             this._upperBody.visible = false;
             this._lowerBody.visible = false;

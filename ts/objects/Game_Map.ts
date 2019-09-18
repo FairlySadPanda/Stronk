@@ -426,22 +426,22 @@ export class Game_Map {
     public adjustX(x: number) {
         if (
             this.isLoopHorizontal() &&
-            x < this._displayX - (this.width() - this.screenTileX()) / 2
+            x < this.displayX() - (this.width() - this.screenTileX()) / 2
         ) {
-            return x - this._displayX + $dataMap.width;
+            return x - this.displayX() + $dataMap.width;
         } else {
-            return x - this._displayX;
+            return x - this.displayX();
         }
     }
 
     public adjustY(y: number) {
         if (
             this.isLoopVertical() &&
-            y < this._displayY - (this.height() - this.screenTileY()) / 2
+            y < this.displayY() - (this.height() - this.screenTileY()) / 2
         ) {
-            return y - this._displayY + $dataMap.height;
+            return y - this.displayY() + $dataMap.height;
         } else {
-            return y - this._displayY;
+            return y - this.displayY();
         }
     }
 
@@ -796,18 +796,27 @@ export class Game_Map {
     }
 
     public updateEvents() {
-        this.events().forEach(function(event) {
-            event.update();
-        });
-        this._commonEvents.forEach(function(event) {
-            event.update();
-        });
+        let group: any = this.events();
+        let length = group.length;
+        for (let i = 0; i < length; ++i) {
+            let ev = group[i];
+            if (ev) ev.update();
+        }
+        group = this._commonEvents;
+        length = group.length;
+        for (let i = 0; i < length; ++i) {
+            let ev = group[i];
+            if (ev) ev.update();
+        }
     }
 
     public updateVehicles() {
-        this._vehicles.forEach(function(vehicle) {
-            vehicle.update();
-        });
+        const group = this._vehicles;
+        const length = group.length;
+        for (let i = 0; i < length; ++i) {
+            const vehicle = group[i];
+            if (vehicle) vehicle.update();
+        }
     }
 
     public updateParallax() {
