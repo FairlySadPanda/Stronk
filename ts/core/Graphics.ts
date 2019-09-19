@@ -679,17 +679,18 @@ export abstract class Graphics {
      * @private
      */
     public static _updateRealScale() {
-        if (this._stretchEnabled) {
-            const h = window.innerWidth / this._width;
-            const v = window.innerHeight / this._height;
-            this._realScale = Math.min(h, v);
-            if (this._realScale >= 3) this._realScale = 3;
-            else if (this._realScale >= 2) this._realScale = 2;
-            else if (this._realScale >= 1.5) this._realScale = 1.5;
-            else if (this._realScale >= 1) this._realScale = 1;
-            else this._realScale = 0.5;
+        if (Graphics._stretchEnabled) {
+            let h = window.innerWidth / Graphics.width;
+            let v = window.innerHeight / Graphics.height;
+            if (h >= 1 && h - 0.01 <= 1) {
+                h = 1;
+            }
+            if (v >= 1 && v - 0.01 <= 1) {
+                v = 1;
+            }
+            Graphics._realScale = Math.min(h, v);
         } else {
-            this._realScale = this._scale;
+            Graphics._realScale = Graphics._scale;
         }
     }
 

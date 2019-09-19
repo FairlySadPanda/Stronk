@@ -28,6 +28,7 @@ export class Scene_Menu extends Scene_MenuBase {
     public start() {
         super.start();
         this._statusWindow.refresh();
+        this.refreshMenuBackground();
     }
 
     public createCommandWindow() {
