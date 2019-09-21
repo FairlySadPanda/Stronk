@@ -52,7 +52,6 @@ interface GraphicsOptions {
         list: any[];
         scale: boolean;
         reposition: boolean;
-        internalRenderResolution: Resolution;
         internalFieldResolution: Resolution;
     };
     vSync: {
@@ -168,10 +167,6 @@ export abstract class ConfigManager {
                 [1600, 1200],
                 [1920, 1080]
             ],
-            internalRenderResolution: {
-                widthPx: 1920,
-                heightPx: 1080
-            },
             internalFieldResolution: {
                 widthPx: 960,
                 heightPx: 540
@@ -230,11 +225,6 @@ export abstract class ConfigManager {
                     ConfigManager._screenResolution
                 ][1]
         };
-    }
-
-    public static get internaResolution(): Resolution {
-        return ConfigManager.graphicsOptions.screenResolution
-            .internalRenderResolution;
     }
 
     public static get fieldResolution(): Resolution {

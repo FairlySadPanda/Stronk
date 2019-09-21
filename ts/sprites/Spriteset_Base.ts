@@ -38,8 +38,8 @@ export abstract class Spriteset_Base extends Sprite {
         this.setFrame(
             0,
             0,
-            ConfigManager.internaResolution.widthPx,
-            ConfigManager.internaResolution.heightPx
+            ConfigManager.currentResolution.widthPx,
+            ConfigManager.currentResolution.heightPx
         );
         this._tone = [0, 0, 0, 0];
         this.opaque = true;
