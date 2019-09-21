@@ -319,8 +319,6 @@ export class Tilemap extends PIXI.Container {
     public constructor() {
         super();
         this._margin = 20;
-        // this._width = Graphics.width + this._margin * 2;
-        // this._height = Graphics.height + this._margin * 2;
         this._width = ConfigManager.fieldResolution.widthPx + this._margin * 2;
         this._height =
             ConfigManager.fieldResolution.heightPx + this._margin * 2;
