@@ -159,7 +159,15 @@ export abstract class ConfigManager {
             name: "Resolution",
             reposition: true,
             scale: false,
-            list: [[800, 600], [1024, 768], [1280, 720], [1920, 1080]],
+            list: [
+                [800, 600],
+                [1024, 768],
+                [1280, 720],
+                [1280, 1024],
+                [1400, 900],
+                [1600, 1200],
+                [1920, 1080]
+            ],
             internalRenderResolution: {
                 widthPx: 1920,
                 heightPx: 1080
