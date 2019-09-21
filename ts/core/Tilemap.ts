@@ -5,11 +5,6 @@ import { Graphics } from "./Graphics";
 import { Point } from "./Point";
 import { ConfigManager } from "../managers/ConfigManager";
 
-PIXI.glCore.VertexArrayObject.FORCE_NATIVE = true;
-PIXI.settings.GC_MODE = PIXI.GC_MODES.AUTO;
-PIXI.tilemap.TileRenderer.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-PIXI.tilemap.TileRenderer.DO_CLEAR = true;
-
 export class Tilemap extends PIXI.Container {
     /**
      * The width of the screen in pixels.

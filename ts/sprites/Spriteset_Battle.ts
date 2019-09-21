@@ -93,14 +93,8 @@ export class Spriteset_Battle extends Spriteset_Base {
             const margin = 32;
             const x = -this._battleField.x - margin;
             const y = -this._battleField.y - margin;
-            const width =
-                ConfigManager.graphicsOptions.screenResolution
-                    .internalFieldResolution.widthPx +
-                margin * 2;
-            const height =
-                ConfigManager.graphicsOptions.screenResolution
-                    .internalFieldResolution.heightPx +
-                margin * 2;
+            const width = ConfigManager.fieldResolution.widthPx + margin * 2;
+            const height = ConfigManager.fieldResolution.heightPx + margin * 2;
             this._back1TilingSprite = new TilingSprite(
                 this.battleback1Bitmap()
             );
@@ -133,11 +127,9 @@ export class Spriteset_Battle extends Spriteset_Base {
                 // const xCorrection1 = Graphics.width / sprite1.width;
                 // const yCorrection1 = Graphics.height / sprite1.height;
                 const xCorrection1 =
-                    ConfigManager.graphicsOptions.screenResolution
-                        .internalFieldResolution.widthPx / sprite1.width;
+                    ConfigManager.fieldResolution.widthPx / sprite1.width;
                 const yCorrection1 =
-                    ConfigManager.graphicsOptions.screenResolution
-                        .internalFieldResolution.heightPx / sprite1.height;
+                    ConfigManager.fieldResolution.heightPx / sprite1.height;
                 sprite1.scale.x = xCorrection1;
                 sprite1.scale.y = yCorrection1;
             });
@@ -145,11 +137,9 @@ export class Spriteset_Battle extends Spriteset_Base {
                 // const xCorrection2 = Graphics.width / sprite2.width;
                 // const yCorrection2 = Graphics.height / sprite2.height;
                 const xCorrection2 =
-                    ConfigManager.graphicsOptions.screenResolution
-                        .internalFieldResolution.widthPx / sprite2.width;
+                    ConfigManager.fieldResolution.widthPx / sprite2.width;
                 const yCorrection2 =
-                    ConfigManager.graphicsOptions.screenResolution
-                        .internalFieldResolution.heightPx / sprite2.height;
+                    ConfigManager.fieldResolution.heightPx / sprite2.height;
                 sprite2.scale.x = xCorrection2;
                 sprite2.scale.y = yCorrection2;
             });

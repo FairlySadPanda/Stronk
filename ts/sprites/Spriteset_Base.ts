@@ -35,7 +35,6 @@ export abstract class Spriteset_Base extends Sprite {
 
     public constructor() {
         super();
-        // this.setFrame(0, 0, Graphics.width, Graphics.height);
         this.setFrame(
             0,
             0,

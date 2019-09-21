@@ -67,7 +67,6 @@ export class Spriteset_Map extends Spriteset_Base {
 
     public createParallax() {
         this._parallax = new TilingSprite();
-        // this._parallax.move(0, 0, Graphics.width, Graphics.height);
         this._parallax.move(
             0,
             0,
@@ -165,14 +164,11 @@ export class Spriteset_Map extends Spriteset_Base {
         const index = this._baseSprite.children.indexOf(this._parallax);
         this._baseSprite.removeChild(this._parallax);
         this._parallax = new TilingSprite();
-        // this._parallax.move(0, 0, Graphics.width, Graphics.height);
         this._parallax.move(
             0,
             0,
-            ConfigManager.graphicsOptions.screenResolution
-                .internalFieldResolution.widthPx,
-            ConfigManager.graphicsOptions.screenResolution
-                .internalFieldResolution.heightPx
+            ConfigManager.fieldResolution.widthPx,
+            ConfigManager.fieldResolution.heightPx
         );
         this._parallax.bitmap = ImageManager.loadParallax(this._parallaxName);
         this._baseSprite.addChildAt(this._parallax, index);

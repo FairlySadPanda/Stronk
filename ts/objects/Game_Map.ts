@@ -414,12 +414,10 @@ export class Game_Map {
     }
 
     public screenTileX() {
-        // return Graphics.width / this.tileWidth();
         return ConfigManager.fieldResolution.widthPx / this.tileWidth();
     }
 
     public screenTileY() {
-        // return Graphics.height / this.tileHeight();
         return ConfigManager.fieldResolution.heightPx / this.tileHeight();
     }
 
