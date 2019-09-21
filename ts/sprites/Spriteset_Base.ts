@@ -104,8 +104,6 @@ export abstract class Spriteset_Base extends Sprite {
     public createPictures() {
         const width = Graphics.boxWidth;
         const height = Graphics.boxHeight;
-        // const x = (Graphics.width - width) / 2;
-        // const y = (Graphics.height - height) / 2;
         const x = (ConfigManager.fieldResolution.widthPx - width) / 2;
         const y = (ConfigManager.fieldResolution.heightPx - height) / 2;
         this._pictureContainer = new Sprite();
