@@ -124,8 +124,6 @@ export class Spriteset_Battle extends Spriteset_Base {
             const sprite1 = this._back1Sprite;
             const sprite2 = this._back2Sprite;
             sprite1.bitmap.imagePromise.then(() => {
-                // const xCorrection1 = Graphics.width / sprite1.width;
-                // const yCorrection1 = Graphics.height / sprite1.height;
                 const xCorrection1 =
                     ConfigManager.fieldResolution.widthPx / sprite1.width;
                 const yCorrection1 =
@@ -134,8 +132,6 @@ export class Spriteset_Battle extends Spriteset_Base {
                 sprite1.scale.y = yCorrection1;
             });
             sprite2.bitmap.imagePromise.then(() => {
-                // const xCorrection2 = Graphics.width / sprite2.width;
-                // const yCorrection2 = Graphics.height / sprite2.height;
                 const xCorrection2 =
                     ConfigManager.fieldResolution.widthPx / sprite2.width;
                 const yCorrection2 =
