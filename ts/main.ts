@@ -17,7 +17,6 @@ declare const $plugins;
 
 PIXI.glCore.VertexArrayObject.FORCE_NATIVE = true;
 PIXI.settings.GC_MODE = PIXI.GC_MODES.AUTO;
-PIXI.tilemap.TileRenderer.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 PIXI.tilemap.TileRenderer.DO_CLEAR = true;
 
 window.$dataActors = null;

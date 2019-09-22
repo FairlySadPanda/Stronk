@@ -85,6 +85,14 @@ export class Game_CharacterBase {
         return this._y;
     }
 
+    public get realX(): number {
+        return this._realX;
+    }
+
+    public get realY(): number {
+        return this._realY;
+    }
+
     public initMembers() {
         this._x = 0;
         this._y = 0;

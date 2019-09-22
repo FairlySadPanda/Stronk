@@ -18,6 +18,7 @@ import { Scene_Gameover } from "./Scene_Gameover";
 import { Scene_Load } from "./Scene_Load";
 import { Scene_Menu } from "./Scene_Menu";
 import { Scene_Title } from "./Scene_Title";
+import { ConfigManager } from "../managers/ConfigManager";
 
 export class Scene_Map extends Scene_Base {
     public menuCalling: boolean;
@@ -211,7 +212,8 @@ export class Scene_Map extends Scene_Base {
             if (TouchInput.isPressed()) {
                 if (this._touchCount === 0 || this._touchCount >= 15) {
                     const x = $gameMap.canvasToMapX(
-                        TouchInput.x / $gameScreen.zoomScale()
+                        TouchInput.x / $gameScreen.zoomScale() +
+                            ConfigManager.xOffset
                     );
                     const y = $gameMap.canvasToMapY(
                         TouchInput.y / $gameScreen.zoomScale()
