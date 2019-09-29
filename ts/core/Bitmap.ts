@@ -240,6 +240,8 @@ export class Bitmap {
          * @type Number
          */
         this.outlineWidth = 4;
+
+        this._imagePromise = Promise.resolve();
     }
 
     /**

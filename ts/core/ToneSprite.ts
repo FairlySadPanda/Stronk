@@ -1,6 +1,7 @@
 import * as PIXI from "pixi.js";
 import { Graphics } from "./Graphics";
 import { Utils } from "./Utils";
+import { ConfigManager } from "../managers/ConfigManager";
 
 export class ToneSprite extends PIXI.Container {
     private _red: number;
@@ -13,13 +14,13 @@ export class ToneSprite extends PIXI.Container {
         this.clear();
     }
 
-    protected _renderCanvas(renderer) {
+    protected _renderCanvas(renderer: PIXI.CanvasRenderer) {
         if (this.visible) {
             const context = renderer.context;
             const t = this.worldTransform;
             const r = renderer.resolution;
-            const width = Graphics.width;
-            const height = Graphics.height;
+            const width = ConfigManager.currentResolution.widthPx;
+            const height = ConfigManager.currentResolution.heightPx;
             context.save();
             context.setTransform(t.a, t.b, t.c, t.d, t.tx * r, t.ty * r);
             if (Graphics.canUseSaturationBlend && this._gray > 0) {
@@ -89,7 +90,7 @@ export class ToneSprite extends PIXI.Container {
      * @param {Object} renderSession
      * @private
      */
-    public _renderWebGL(renderer) {
+    public _renderWebGL(renderer: PIXI.WebGLRenderer) {
         // Not supported
     }
 }

@@ -133,7 +133,16 @@ export class Game_Picture {
         this._rotationSpeed = 0;
     }
 
-    public show(name, origin, x, y, scaleX, scaleY, opacity, blendMode) {
+    public show(
+        name: string,
+        origin: number,
+        x: number,
+        y: number,
+        scaleX: number,
+        scaleY: number,
+        opacity: number,
+        blendMode: number
+    ) {
         this._name = name;
         this._origin = origin;
         this._x = x;
@@ -147,7 +156,16 @@ export class Game_Picture {
         this.initRotation();
     }
 
-    public move(origin, x, y, scaleX, scaleY, opacity, blendMode, duration) {
+    public move(
+        origin: number,
+        x: number,
+        y: number,
+        scaleX: number,
+        scaleY: number,
+        opacity: number,
+        blendMode: number,
+        duration: number
+    ) {
         this._origin = origin;
         this._targetX = x;
         this._targetY = y;
@@ -158,11 +176,11 @@ export class Game_Picture {
         this._duration = duration;
     }
 
-    public rotate(speed) {
+    public rotate(speed: number) {
         this._rotationSpeed = speed;
     }
 
-    public tint(tone, duration) {
+    public tint(tone: number[], duration: number) {
         if (!this._tone) {
             this._tone = [0, 0, 0, 0];
         }

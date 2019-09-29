@@ -60,7 +60,7 @@ export abstract class ImageManager {
 
     public static loadBitmap(
         folder: string,
-        filename: string,
+        filename?: string,
         hue?: number,
         smooth?: boolean
     ): Bitmap {

@@ -86,10 +86,8 @@ export abstract class Spriteset_Base extends Sprite {
 
     public createWebGLToneChanger() {
         const margin = 48;
-        // const width = Graphics.width + margin * 2;
-        // const height = Graphics.height + margin * 2;
-        const width = ConfigManager.fieldResolution.widthPx + margin * 2;
-        const height = ConfigManager.fieldResolution.heightPx + margin * 2;
+        const width = ConfigManager.currentResolution.widthPx + margin * 2;
+        const height = ConfigManager.currentResolution.heightPx + margin * 2;
         this._toneFilter = new ToneFilter();
         this._toneFilter.enabled = false;
         this._baseSprite.filters = [this._toneFilter];
