@@ -1,6 +1,7 @@
 import { Graphics } from "../core/Graphics";
 import { Game_Enemy } from "../objects/Game_Enemy";
 import { Window_Selectable } from "./Window_Selectable";
+import { ConfigManager } from "../managers/ConfigManager";
 
 // -----------------------------------------------------------------------------
 // Window_BattleEnemy
@@ -17,7 +18,7 @@ export class Window_BattleEnemy extends Window_Selectable {
 
     private __enemies: Game_Enemy[];
 
-    public constructor(x, y) {
+    public constructor(x: number, y: number) {
         super(
             x,
             y,
@@ -29,7 +30,7 @@ export class Window_BattleEnemy extends Window_Selectable {
     }
 
     public windowWidth() {
-        return Graphics.boxWidth - 192;
+        return ConfigManager.currentResolution.widthPx - 192;
     }
 
     public windowHeight() {

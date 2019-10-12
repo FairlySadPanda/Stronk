@@ -1,5 +1,6 @@
 import { Graphics } from "../core/Graphics";
 import { Window_Selectable } from "./Window_Selectable";
+import { ConfigManager } from "../managers/ConfigManager";
 
 // -----------------------------------------------------------------------------
 // Window_BattleStatus
@@ -11,8 +12,10 @@ export class Window_BattleStatus extends Window_Selectable {
 
     public constructor() {
         super(
-            Graphics.boxWidth - Window_BattleStatus.prototype.windowWidth(),
-            Graphics.boxHeight - Window_BattleStatus.prototype.windowHeight(),
+            ConfigManager.currentResolution.widthPx -
+                Window_BattleStatus.prototype.windowWidth(),
+            ConfigManager.currentResolution.heightPx -
+                Window_BattleStatus.prototype.windowHeight(),
             Window_BattleStatus.prototype.windowWidth(),
             Window_BattleStatus.prototype.windowHeight()
         );
@@ -21,7 +24,7 @@ export class Window_BattleStatus extends Window_Selectable {
     }
 
     public windowWidth() {
-        return Graphics.boxWidth - 192;
+        return ConfigManager.currentResolution.widthPx - 192;
     }
 
     public windowHeight() {

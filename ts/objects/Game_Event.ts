@@ -60,7 +60,7 @@ export class Game_Event extends Game_Character {
     }
 
     public initMembers() {
-        super.initMembers.call(this);
+        super.initMembers();
         this._moveType = 0;
         this._trigger = 0;
         this._starting = false;
@@ -90,7 +90,7 @@ export class Game_Event extends Game_Character {
 
     public isCollidedWithCharacters(x, y) {
         return (
-            super.isCollidedWithCharacters.call(this, x, y) ||
+            super.isCollidedWithCharacters(x, y) ||
             this.isCollidedWithPlayerCharacters(x, y)
         );
     }
@@ -126,7 +126,7 @@ export class Game_Event extends Game_Character {
         if (this._locked) {
             this.resetStopCount();
         }
-        super.updateStop.call(this);
+        super.updateStop();
         if (!this.isMoveRouteForcing()) {
             this.updateSelfMovement();
         }
@@ -387,7 +387,7 @@ export class Game_Event extends Game_Character {
     }
 
     public forceMoveRoute(moveRoute) {
-        super.forceMoveRoute.call(this, moveRoute);
+        super.forceMoveRoute(moveRoute);
         this._prelockDirection = 0;
     }
 }

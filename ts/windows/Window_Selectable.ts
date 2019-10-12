@@ -21,7 +21,7 @@ export class Window_Selectable extends Window_Base {
     private _scrollX: number;
     private _scrollY: number;
 
-    public constructor(x, y, width, height) {
+    public constructor(x: number, y: number, width: number, height: number) {
         super(x, y, width, height);
         this._index = -1;
         this._cursorFixed = false;
@@ -43,7 +43,7 @@ export class Window_Selectable extends Window_Base {
         return this._cursorFixed;
     }
 
-    public setCursorFixed(cursorFixed) {
+    public setCursorFixed(cursorFixed: boolean) {
         this._cursorFixed = cursorFixed;
     }
 
@@ -51,7 +51,7 @@ export class Window_Selectable extends Window_Base {
         return this._cursorAll;
     }
 
-    public setCursorAll(cursorAll) {
+    public setCursorAll(cursorAll: boolean) {
         this._cursorAll = cursorAll;
     }
 
@@ -92,7 +92,7 @@ export class Window_Selectable extends Window_Base {
         this.reselect();
     }
 
-    public select(index) {
+    public select(index: number) {
         this._index = index;
         this._stayCount = 0;
         this.ensureCursorVisible();
@@ -120,7 +120,7 @@ export class Window_Selectable extends Window_Base {
         return Math.max(0, this.maxRows() - this.maxPageRows());
     }
 
-    public setTopRow(row) {
+    public setTopRow(row: number) {
         const scrollY =
             Utils.clamp(row, 0, this.maxTopRow()) * this.itemHeight();
         if (this._scrollY !== scrollY) {
@@ -151,7 +151,7 @@ export class Window_Selectable extends Window_Base {
         return Math.max(0, this.topRow() + this.maxPageRows() - 1);
     }
 
-    public setBottomRow(row) {
+    public setBottomRow(row: number) {
         this.setTopRow(row - (this.maxPageRows() - 1));
     }
 
@@ -159,7 +159,7 @@ export class Window_Selectable extends Window_Base {
         return this.topRow() * this.maxCols();
     }
 
-    public itemRect(index) {
+    public itemRect(index: number) {
         const rect = new Rectangle();
         const maxCols = this.maxCols();
         rect.width = this.itemWidth();
@@ -170,14 +170,16 @@ export class Window_Selectable extends Window_Base {
         return rect;
     }
 
-    public itemRectForText(index) {
+    public itemRectForText(index: number) {
         const rect = this.itemRect(index);
         rect.x += this.textPadding();
         rect.width -= this.textPadding() * 2;
         return rect;
     }
 
-    public setHelpWindow(helpWindow) {
+    public setHelpWindow(
+        helpWindow: import("../../../../Projects/Dragon Slayers/ts/windows/Window_Help").Window_Help
+    ) {
         this._helpWindow = helpWindow;
         this.callUpdateHelp();
     }
@@ -194,15 +196,15 @@ export class Window_Selectable extends Window_Base {
         }
     }
 
-    public setHandler(symbol, method) {
+    public setHandler(symbol: string, method: any) {
         this._handlers[symbol] = method;
     }
 
-    public isHandled(symbol) {
+    public isHandled(symbol: string) {
         return !!this._handlers[symbol];
     }
 
-    public callHandler(symbol) {
+    public callHandler(symbol: string) {
         if (this.isHandled(symbol)) {
             this._handlers[symbol]();
         }
@@ -221,7 +223,7 @@ export class Window_Selectable extends Window_Base {
         );
     }
 
-    public cursorDown(wrap?) {
+    public cursorDown(wrap?: boolean) {
         const index = this.index();
         const maxItems = this.maxItems();
         const maxCols = this.maxCols();
@@ -230,7 +232,7 @@ export class Window_Selectable extends Window_Base {
         }
     }
 
-    public cursorUp(wrap?) {
+    public cursorUp(wrap?: boolean) {
         const index = this.index();
         const maxItems = this.maxItems();
         const maxCols = this.maxCols();
@@ -239,7 +241,7 @@ export class Window_Selectable extends Window_Base {
         }
     }
 
-    public cursorRight(wrap) {
+    public cursorRight(wrap: boolean) {
         const index = this.index();
         const maxItems = this.maxItems();
         const maxCols = this.maxCols();
@@ -251,7 +253,7 @@ export class Window_Selectable extends Window_Base {
         }
     }
 
-    public cursorLeft(wrap) {
+    public cursorLeft(wrap: boolean) {
         const index = this.index();
         const maxItems = this.maxItems();
         const maxCols = this.maxCols();
@@ -393,7 +395,7 @@ export class Window_Selectable extends Window_Base {
         return x >= 0 && y >= 0 && x < this.width && y < this.height;
     }
 
-    public onTouch(triggered) {
+    public onTouch(triggered: boolean) {
         const lastIndex = this.index();
         const x = this.canvasToLocalX(TouchInput.x);
         const y = this.canvasToLocalY(TouchInput.y);
@@ -418,7 +420,7 @@ export class Window_Selectable extends Window_Base {
         }
     }
 
-    public hitTest(x, y) {
+    public hitTest(x: number, y: number) {
         if (this.isContentsArea(x, y)) {
             const cx = x - this.padding;
             const cy = y - this.padding;
@@ -443,7 +445,7 @@ export class Window_Selectable extends Window_Base {
         return -1;
     }
 
-    public isContentsArea(x, y) {
+    public isContentsArea(x: number, y: number) {
         const left = this.padding;
         const top = this.padding;
         const right = this.width - this.padding;
@@ -561,7 +563,9 @@ export class Window_Selectable extends Window_Base {
         this._helpWindow.clear();
     }
 
-    public setHelpWindowItem(item) {
+    public setHelpWindowItem(
+        item: import("../../../../Projects/Dragon Slayers/ts/interfaces/Item").Item
+    ) {
         if (this._helpWindow) {
             this._helpWindow.setItem(item);
         }
@@ -583,14 +587,14 @@ export class Window_Selectable extends Window_Base {
         await Promise.all(promises);
     }
 
-    public async drawItem(index) {}
+    public async drawItem(index: number) {}
 
-    public clearItem(index) {
+    public clearItem(index: any) {
         const rect = this.itemRect(index);
         this.contents.clearRect(rect.x, rect.y, rect.width, rect.height);
     }
 
-    public redrawItem(index) {
+    public redrawItem(index: number) {
         if (index >= 0) {
             this.clearItem(index);
             this.drawItem(index);

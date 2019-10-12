@@ -20,6 +20,7 @@ import { Scene_Gameover } from "./Scene_Gameover";
 import { Scene_Title } from "./Scene_Title";
 import { Window_ItemList } from "../windows/Window_ItemList";
 import { Window_SkillList } from "../windows/Window_SkillList";
+import { ConfigManager } from "../managers/ConfigManager";
 
 export class Scene_Battle extends Scene_Base {
     private _partyCommandWindow: Window_PartyCommand;
@@ -281,8 +282,12 @@ export class Scene_Battle extends Scene_Base {
     }
 
     public createEnemyWindow() {
-        this._enemyWindow = new Window_BattleEnemy(0, this._statusWindow.y);
+        this._enemyWindow = new Window_BattleEnemy(0, 0);
         this._enemyWindow.x = Graphics.boxWidth - this._enemyWindow.width;
+        this._enemyWindow.y =
+            ConfigManager.currentResolution.heightPx -
+            this._statusWindow.height -
+            this._enemyWindow.height;
         this._enemyWindow.setHandler("ok", this.onEnemyOk.bind(this));
         this._enemyWindow.setHandler("cancel", this.onEnemyCancel.bind(this));
         this.addWindow(this._enemyWindow);

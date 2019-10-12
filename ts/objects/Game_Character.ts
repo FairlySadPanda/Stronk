@@ -61,12 +61,14 @@ export class Game_Character extends Game_CharacterBase {
     public static ROUTE_CHANGE_BLEND_MODE = 43;
     public static ROUTE_PLAY_SE = 44;
     public static ROUTE_SCRIPT = 45;
+
     private _moveRouteForcing: boolean;
     private _moveRoute: any;
     private _moveRouteIndex: number;
     private _originalMoveRoute: any;
     private _originalMoveRouteIndex: number;
     private _waitCount: number;
+    private _callerEventInfo: any;
 
     public constructor(gameLoadInput?: Game_Character_OnLoad) {
         super(gameLoadInput);
@@ -90,11 +92,7 @@ export class Game_Character extends Game_CharacterBase {
         this._originalMoveRoute = null;
         this._originalMoveRouteIndex = 0;
         this._waitCount = 0;
-    }
-
-    public queueMoveRoute(moveRoute) {
-        this._originalMoveRoute = moveRoute;
-        this._originalMoveRouteIndex = 0;
+        this._callerEventInfo = null;
     }
 
     public memorizeMoveRoute() {
@@ -106,6 +104,7 @@ export class Game_Character extends Game_CharacterBase {
         this._moveRoute = this._originalMoveRoute;
         this._moveRouteIndex = this._originalMoveRouteIndex;
         this._originalMoveRoute = null;
+        this._callerEventInfo = null;
     }
 
     public isMoveRouteForcing() {
@@ -113,13 +112,9 @@ export class Game_Character extends Game_CharacterBase {
     }
 
     public setMoveRoute(moveRoute) {
-        if (this._moveRouteForcing) {
-            this._moveRoute = moveRoute;
-            this._moveRouteIndex = 0;
-            this._moveRouteForcing = false;
-        } else {
-            this.queueMoveRoute(moveRoute);
-        }
+        this._moveRoute = moveRoute;
+        this._moveRouteIndex = 0;
+        this._moveRouteForcing = false;
     }
 
     public forceMoveRoute(moveRoute) {
@@ -130,6 +125,10 @@ export class Game_Character extends Game_CharacterBase {
         this._moveRouteIndex = 0;
         this._moveRouteForcing = true;
         this._waitCount = 0;
+    }
+
+    public setCallerEventInfo(callerEventInfo) {
+        this._callerEventInfo = callerEventInfo;
     }
 
     public updateStop() {
@@ -292,7 +291,27 @@ export class Game_Character extends Game_CharacterBase {
                 AudioManager.playSe(params[0]);
                 break;
             case gc.ROUTE_SCRIPT:
-                eval(params[0]);
+                try {
+                    eval(params[0]);
+                } catch (error) {
+                    if (this._callerEventInfo) {
+                        for (var key in this._callerEventInfo) {
+                            error[key] = this._callerEventInfo[key];
+                        }
+                        error.line += this._moveRouteIndex + 1;
+                        error.eventCommand = "set_route_script";
+                        error.content = command.parameters[0];
+                    } else {
+                        error.eventType = "map_event";
+                        // error.mapId = this._mapId;
+                        // error.mapEventId = this._eventId;
+                        // error.page = this._pageIndex + 1;
+                        error.line = this._moveRouteIndex + 1;
+                        error.eventCommand = "auto_route_script";
+                        error.content = command.parameters[0];
+                    }
+                    throw error;
+                }
                 break;
         }
     }

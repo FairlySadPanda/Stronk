@@ -134,7 +134,7 @@ export abstract class ConfigManager {
         wOpacity: {
             name: "Alpha",
             description: "ALPHA!",
-            defaultValue: 255,
+            defaultValue: 0,
             barColor1: "silver",
             barColor2: "gray"
         },
