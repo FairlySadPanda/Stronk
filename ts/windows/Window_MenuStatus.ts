@@ -2,6 +2,7 @@ import { Graphics } from "../core/Graphics";
 import { ImageManager } from "../managers/ImageManager";
 import { Window_Base } from "./Window_Base";
 import { Window_Selectable } from "./Window_Selectable";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 // -----------------------------------------------------------------------------
 // Window_MenuStatus
@@ -77,12 +78,13 @@ export class Window_MenuStatus extends Window_Selectable {
         const actor = $gameParty.members()[index];
         const rect = this.itemRect(index);
         this.changePaintOpacity(actor.isBattleMember());
+        const fw = Window_Base._faceWidth;
         await this.drawActorFace(
             actor,
             rect.x + 1,
             rect.y + 1,
-            Window_Base._faceWidth,
-            Window_Base._faceHeight
+            fw,
+            rect.height - 2
         );
         this.changePaintOpacity(true);
     }
@@ -90,8 +92,14 @@ export class Window_MenuStatus extends Window_Selectable {
     public async drawItemStatus(index) {
         const actor = $gameParty.members()[index];
         const rect = this.itemRect(index);
-        const x = rect.x + 162;
-        const y = rect.y + rect.height / 2 - this.lineHeight() * 1.5;
+        const xpad = Yanfly.Param.WindowPadding + Window_Base._faceWidth;
+        const x = rect.x + xpad;
+        let y = 0;
+        if (!Yanfly.Param.MenuTpGauge) {
+            y = Math.floor(rect.y + rect.height / 2 - this.lineHeight() * 1.5);
+        } else {
+            y = Math.floor(rect.y);
+        }
         const width = rect.width - x - this.textPadding();
         await this.drawActorSimpleStatus(actor, x, y, width);
     }

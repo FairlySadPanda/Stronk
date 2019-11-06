@@ -1,4 +1,4 @@
-export interface Skill {
+export interface Skill extends YanflyBaseParams {
     id: number;
     animationId: number;
     damage: Damage;
@@ -21,6 +21,7 @@ export interface Skill {
     successRate: number;
     tpCost: number;
     tpGain: number;
+    params: any[];
 }
 
 interface Effect {

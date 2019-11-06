@@ -146,4 +146,52 @@ export class Game_Unit {
             }
         }
     }
+
+    public createActions() {
+        let max = this.members().length;
+        for (let i = 0; i < max; ++i) {
+            let member = this.members()[i];
+            if (member) member.createActions();
+        }
+    }
+
+    public requestMotionRefresh() {
+        let max = this.members().length;
+        for (let i = 0; i < max; ++i) {
+            let member = this.members()[i];
+            if (member) member.requestMotionRefresh();
+        }
+    }
+
+    public onTurnStart() {
+        let max = this.members().length;
+        for (let i = 0; i < max; ++i) {
+            let member = this.members()[i];
+            if (member) {
+                member.onTurnStart();
+                member.refresh();
+            }
+        }
+    }
+
+    public updateTick() {
+        let max = this.members().length;
+        for (let i = 0; i < max; ++i) {
+            let member = this.members()[i];
+            if (member) member.updateTick();
+        }
+    }
+
+    public refreshMembers() {
+        const group = this.allMembers();
+        const length = group.length;
+        for (let i = 0; i < length; ++i) {
+            const member = group[i];
+            if (member) member.refresh();
+        }
+    }
+
+    public allMembers() {
+        return this.members();
+    }
 }

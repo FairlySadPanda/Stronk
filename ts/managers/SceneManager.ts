@@ -223,6 +223,10 @@ export abstract class SceneManager {
                 case 116: // F5
                     if (Utils.isNwjs()) {
                         location.reload();
+                        if (Utils.isOptionValid("test")) {
+                            const win = nw.Window.get();
+                            win.closeDevTools();
+                        }
                     }
                     break;
                 case 119: // F8

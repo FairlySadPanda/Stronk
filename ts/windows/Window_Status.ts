@@ -4,6 +4,7 @@ import { TextManager } from "../managers/TextManager";
 import { Game_Actor } from "../objects/Game_Actor";
 import { Window_Selectable } from "./Window_Selectable";
 import { Item } from "../interfaces/Item";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 // -----------------------------------------------------------------------------
 // Window_Status
@@ -99,15 +100,12 @@ export class Window_Status extends Window_Selectable {
                 this.drawText(TextManager.param(paramId), x, y2, 160)
             );
             this.resetTextColor();
+            const actorParam = Yanfly.Util.toGroup(this._actor.param(paramId));
+            const dw = this.textWidth(
+                Yanfly.Util.toGroup(this._actor.paramMax(i + 2))
+            );
             promises.push(
-                this.drawText(
-                    this._actor.param(paramId).toString(),
-                    x + 160,
-                    y2,
-                    60,
-                    undefined,
-                    "right"
-                )
+                this.drawText(actorParam, x + 160, y2, dw, undefined, "right")
             );
         }
         await Promise.all(promises);
@@ -117,14 +115,21 @@ export class Window_Status extends Window_Selectable {
         const lineHeight = this.lineHeight();
         const expTotal = Utils.format(TextManager.expTotal, TextManager.exp);
         const expNext = Utils.format(TextManager.expNext, TextManager.level);
-        let value1 = this._actor.currentExp();
-        let value2 = this._actor.nextRequiredExp();
+        let value1: string = this._actor.currentExp().toString();
+        let value2: string = this._actor.nextRequiredExp().toString();
         this.changeTextColor(this.systemColor());
+        if (this._actor.isMaxLevel()) {
+            value1 = "-------";
+            value2 = "-------";
+        } else {
+            value1 = Yanfly.Util.toGroup(value1);
+            value2 = Yanfly.Util.toGroup(value2);
+        }
         await this.drawText(expTotal, x, y + lineHeight * 0, 270);
         await this.drawText(expNext, x, y + lineHeight * 2, 270);
         this.resetTextColor();
         await this.drawText(
-            this._actor.isMaxLevel() ? "-------" : value1.toString(),
+            value1,
             x,
             y + lineHeight * 1,
             270,
@@ -132,7 +137,7 @@ export class Window_Status extends Window_Selectable {
             "right"
         );
         await this.drawText(
-            this._actor.isMaxLevel() ? "-------" : value2.toString(),
+            value2,
             x,
             y + lineHeight * 3,
             270,

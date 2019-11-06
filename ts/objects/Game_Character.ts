@@ -4,6 +4,7 @@ import {
     Game_CharacterBase,
     Game_CharacterBase_OnLoad
 } from "./Game_CharacterBase";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 export interface Game_Character_OnLoad extends Game_CharacterBase_OnLoad {
     _moveRouteForcing: boolean;
@@ -112,9 +113,13 @@ export class Game_Character extends Game_CharacterBase {
     }
 
     public setMoveRoute(moveRoute) {
-        this._moveRoute = moveRoute;
-        this._moveRouteIndex = 0;
-        this._moveRouteForcing = false;
+        if (!this.isMoveRouteForcing()) {
+            this._moveRoute = moveRoute;
+            this._moveRouteIndex = 0;
+            this._moveRouteForcing = false;
+        } else {
+            this.queueMoveRoute(moveRoute);
+        }
     }
 
     public forceMoveRoute(moveRoute) {
@@ -293,26 +298,14 @@ export class Game_Character extends Game_CharacterBase {
             case gc.ROUTE_SCRIPT:
                 try {
                     eval(params[0]);
-                } catch (error) {
-                    if (this._callerEventInfo) {
-                        for (var key in this._callerEventInfo) {
-                            error[key] = this._callerEventInfo[key];
-                        }
-                        error.line += this._moveRouteIndex + 1;
-                        error.eventCommand = "set_route_script";
-                        error.content = command.parameters[0];
-                    } else {
-                        error.eventType = "map_event";
-                        // error.mapId = this._mapId;
-                        // error.mapEventId = this._eventId;
-                        // error.page = this._pageIndex + 1;
-                        error.line = this._moveRouteIndex + 1;
-                        error.eventCommand = "auto_route_script";
-                        error.content = command.parameters[0];
-                    }
-                    throw error;
+                } catch (e) {
+                    Yanfly.Util.displayError(
+                        e,
+                        params[0],
+                        "MOVE ROUTE SCRIPT ERROR"
+                    );
                 }
-                break;
+                return;
         }
     }
 
@@ -606,5 +599,10 @@ export class Game_Character extends Game_CharacterBase {
 
     public searchLimit() {
         return 12;
+    }
+
+    public queueMoveRoute(moveRoute) {
+        this._originalMoveRoute = moveRoute;
+        this._originalMoveRouteIndex = 0;
     }
 }

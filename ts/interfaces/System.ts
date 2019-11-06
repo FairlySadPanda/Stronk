@@ -1,6 +1,9 @@
 import { Audio } from "./Audio";
 
 export interface System {
+    titleBgm(titleBgm: any);
+    battleBgm: any;
+    encryptionKey: any;
     airship: Airship;
     armorTypes: string[];
     attackMotions: AttackMotion[];
@@ -122,6 +125,7 @@ interface AttackMotion {
 }
 
 interface Airship {
+    bgm: any;
     Audio: Audio;
     characterIndex: number;
     characterName: string;

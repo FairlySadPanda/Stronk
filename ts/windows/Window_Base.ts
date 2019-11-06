@@ -6,6 +6,8 @@ import { ImageManager } from "../managers/ImageManager";
 import { TextManager } from "../managers/TextManager";
 import { Game_Actor } from "../objects/Game_Actor";
 import { ConfigManager } from "../managers/ConfigManager";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { Utils } from "../core/Utils";
 
 interface ListItem {
     name: string;
@@ -15,10 +17,10 @@ interface ListItem {
 }
 
 export class Window_Base extends Window {
-    public static _iconWidth: number = 32;
-    public static _iconHeight: number = 32;
-    public static _faceWidth: number = 144;
-    public static _faceHeight: number = 144;
+    public static _iconWidth: number = Yanfly.Param.IconWidth;
+    public static _iconHeight: number = Yanfly.Param.IconHeight;
+    public static _faceWidth: number = Yanfly.Param.FaceWidth;
+    public static _faceHeight: number = Yanfly.Param.FaceHeight;
     public windowskin: Bitmap;
     public padding: number;
     public backOpacity: number;
@@ -55,33 +57,33 @@ export class Window_Base extends Window {
     }
 
     public lineHeight() {
-        return 36;
+        return Yanfly.Param.LineHeight;
     }
 
     public standardFontFace() {
         if ($gameSystem.isChinese()) {
-            return "SimHei, Heiti TC, sans-serif";
+            return Yanfly.Param.ChineseFont;
         } else if ($gameSystem.isKorean()) {
-            return "Dotum, AppleGothic, sans-serif";
+            return Yanfly.Param.KoreanFont;
         } else {
-            return "GameFont";
+            return Yanfly.Param.DefaultFont;
         }
     }
 
     public standardFontSize() {
-        return 28;
+        return Yanfly.Param.FontSize;
     }
 
     public standardPadding() {
-        return 18;
+        return Yanfly.Param.WindowPadding;
     }
 
     public textPadding() {
-        return 6;
+        return Yanfly.Param.TextPadding;
     }
 
     public standardBackOpacity() {
-        return 192;
+        return Yanfly.Param.WindowOpacity;
     }
 
     public loadWindowskin() {
@@ -218,63 +220,63 @@ export class Window_Base extends Window {
     }
 
     public normalColor() {
-        return this.textColor(0);
+        return this.textColor(Yanfly.Param.ColorNormal);
     }
 
     public systemColor() {
-        return this.textColor(16);
+        return this.textColor(Yanfly.Param.ColorSystem);
     }
 
     public crisisColor() {
-        return this.textColor(17);
+        return this.textColor(Yanfly.Param.ColorCrisis);
     }
 
     public deathColor() {
-        return this.textColor(18);
+        return this.textColor(Yanfly.Param.ColorDeath);
     }
 
     public gaugeBackColor() {
-        return this.textColor(19);
+        return this.textColor(Yanfly.Param.ColorGaugeBack);
     }
 
     public hpGaugeColor1() {
-        return this.textColor(20);
+        return this.textColor(Yanfly.Param.ColorHpGauge1);
     }
 
     public hpGaugeColor2() {
-        return this.textColor(21);
+        return this.textColor(Yanfly.Param.ColorHpGauge2);
     }
 
     public mpGaugeColor1() {
-        return this.textColor(22);
+        return this.textColor(Yanfly.Param.ColorMpGauge1);
     }
 
     public mpGaugeColor2() {
-        return this.textColor(23);
+        return this.textColor(Yanfly.Param.ColorMpGauge2);
     }
 
     public mpCostColor() {
-        return this.textColor(23);
+        return this.textColor(Yanfly.Param.ColorMpCost);
     }
 
     public powerUpColor() {
-        return this.textColor(24);
+        return this.textColor(Yanfly.Param.ColorPowerUp);
     }
 
     public powerDownColor() {
-        return this.textColor(25);
+        return this.textColor(Yanfly.Param.ColorPowerDown);
     }
 
     public tpGaugeColor1() {
-        return this.textColor(28);
+        return this.textColor(Yanfly.Param.ColorTpGauge1);
     }
 
     public tpGaugeColor2() {
-        return this.textColor(29);
+        return this.textColor(Yanfly.Param.ColorTpGauge1);
     }
 
     public tpCostColor() {
-        return this.textColor(29);
+        return this.textColor(Yanfly.Param.ColorTpCost);
     }
 
     public pendingColor() {
@@ -323,10 +325,9 @@ export class Window_Base extends Window {
                 x: x,
                 y: y,
                 left: x,
-                text: null,
+                text: this.convertEscapeCharacters(text),
                 height: null
             };
-            textState.text = this.convertEscapeCharacters(text);
             textState.height = this.calcTextHeight(textState, false);
             this.resetFontSettings();
             while (textState.index < textState.text.length) {
@@ -568,11 +569,34 @@ export class Window_Base extends Window {
         this.contents.blt(bitmap, sx, sy, pw, ph, x - pw / 2, y - ph);
     }
 
-    public drawGauge(x, y, width, rate, color1, color2) {
-        const fillW = Math.floor(width * rate);
-        const gaugeY = y + this.lineHeight() - 8;
-        this.contents.fillRect(x, gaugeY, width, 6, this.gaugeBackColor());
-        this.contents.gradientFillRect(x, gaugeY, fillW, 6, color1, color2);
+    public drawGauge(dx, dy, dw, rate, color1, color2) {
+        const color3 = this.gaugeBackColor();
+        let fillW = Utils.clamp(Math.floor(dw * rate), 0, dw);
+        let gaugeH = this.gaugeHeight();
+        let gaugeY = dy + this.lineHeight() - gaugeH - 2;
+        if (Yanfly.Param.GaugeOutline) {
+            this.contents.paintOpacity = this.translucentOpacity();
+            this.contents.fillRect(dx, gaugeY - 1, dw, gaugeH, color3);
+            fillW = Math.max(fillW - 2, 0);
+            gaugeH -= 2;
+            dx += 1;
+        } else {
+            fillW = Math.floor(dw * rate);
+            gaugeY = dy + this.lineHeight() - gaugeH - 2;
+            this.contents.fillRect(dx, gaugeY, dw, gaugeH, color3);
+        }
+        this.contents.gradientFillRect(
+            dx,
+            gaugeY,
+            fillW,
+            gaugeH,
+            color1,
+            color2
+        );
+    }
+
+    public gaugeHeight() {
+        return Yanfly.Param.GaugeHeight;
     }
 
     public hpColor(actor) {
@@ -638,16 +662,12 @@ export class Window_Base extends Window {
 
     public drawActorLevel(actor: Game_Actor, x, y) {
         this.changeTextColor(this.systemColor());
-        this.drawText(TextManager.levelA, x, y, 48);
+        const dw1 = this.textWidth(TextManager.levelA);
+        this.drawText(TextManager.levelA, x, y, dw1);
         this.resetTextColor();
-        this.drawText(
-            actor.level.toString(),
-            x + 84,
-            y,
-            36,
-            undefined,
-            "right"
-        );
+        const level = Yanfly.Util.toGroup(actor.level);
+        const dw2 = this.textWidth(Yanfly.Util.toGroup(actor.maxLevel()));
+        this.drawText(level, x + dw1, y, dw2, undefined, "right");
     }
 
     public async drawActorIcons(
@@ -671,20 +691,41 @@ export class Window_Base extends Window {
 
     public drawCurrentAndMax(current, max, x, y, width, color1, color2) {
         const labelWidth = this.textWidth("HP");
-        const valueWidth = this.textWidth("0000");
+        const valueWidth = this.textWidth(Yanfly.Util.toGroup(max));
         const slashWidth = this.textWidth("/");
         const x1 = x + width - valueWidth;
         const x2 = x1 - slashWidth;
         const x3 = x2 - valueWidth;
         if (x3 >= x + labelWidth) {
             this.changeTextColor(color1);
-            this.drawText(current, x3, y, valueWidth, undefined, "right");
+            this.drawText(
+                Yanfly.Util.toGroup(current),
+                x3,
+                y,
+                valueWidth,
+                undefined,
+                "right"
+            );
             this.changeTextColor(color2);
             this.drawText("/", x2, y, slashWidth, undefined, "right");
-            this.drawText(max, x1, y, valueWidth, undefined, "right");
+            this.drawText(
+                Yanfly.Util.toGroup(max),
+                x1,
+                y,
+                valueWidth,
+                undefined,
+                "right"
+            );
         } else {
             this.changeTextColor(color1);
-            this.drawText(current, x1, y, valueWidth, undefined, "right");
+            this.drawText(
+                Yanfly.Util.toGroup(current),
+                x1,
+                y,
+                valueWidth,
+                undefined,
+                "right"
+            );
         }
     }
 
@@ -747,14 +788,18 @@ export class Window_Base extends Window {
 
     public async drawActorSimpleStatus(actor, x, y, width) {
         const lineHeight = this.lineHeight();
+        const xpad = Window_Base._faceWidth + 2 * Yanfly.Param.TextPadding;
         const x2 = x + 180;
-        const width2 = Math.min(200, width - 180 - this.textPadding());
+        const width2 = Math.max(180, width - xpad - this.textPadding());
         this.drawActorName(actor, x, y);
         this.drawActorLevel(actor, x, y + lineHeight * 1);
         await this.drawActorIcons(actor, x, y + lineHeight * 2);
         this.drawActorClass(actor, x2, y);
         this.drawActorHp(actor, x2, y + lineHeight * 1, width2);
         this.drawActorMp(actor, x2, y + lineHeight * 2, width2);
+        if (Yanfly.Param.MenuTpGauge) {
+            this.drawActorTp(actor, x2, y + lineHeight * 3, width2);
+        }
     }
 
     public drawItemName(item: Item, x: number, y: number, width?: number) {
@@ -767,19 +812,35 @@ export class Window_Base extends Window {
         }
     }
 
-    public drawCurrencyValue(value, unit, x, y, width) {
-        const unitWidth = Math.min(80, this.textWidth(unit));
+    public drawCurrencyValue(value, unit, wx, wy, ww) {
         this.resetTextColor();
-        this.drawText(value, x, y, width - unitWidth - 6, undefined, "right");
-        this.changeTextColor(this.systemColor());
-        this.drawText(
-            unit,
-            x + width - unitWidth,
-            y,
-            unitWidth,
-            undefined,
-            "right"
-        );
+        this.contents.fontSize = Yanfly.Param.GoldFontSize;
+        if (this.usingGoldIcon(unit)) {
+            var cx = Window_Base._iconWidth;
+        } else {
+            var cx = this.textWidth(unit);
+        }
+        var text = Yanfly.Util.toGroup(value);
+        if (this.textWidth(text) > ww - cx) {
+            text = Yanfly.Param.GoldOverlap;
+        }
+        this.drawText(text, wx, wy, ww - cx - 4, undefined, "right");
+        if (this.usingGoldIcon(unit)) {
+            this.drawIcon(
+                Yanfly.Icon.Gold,
+                wx + ww - Window_Base._iconWidth,
+                wy + 2
+            );
+        } else {
+            this.changeTextColor(this.systemColor());
+            this.drawText(unit, wx, wy, ww, undefined, "right");
+        }
+        this.resetFontSettings();
+    }
+
+    public usingGoldIcon(unit) {
+        if (unit !== TextManager.currencyUnit) return false;
+        return Yanfly.Icon.Gold > 0;
     }
 
     public paramchangeTextColor(change) {

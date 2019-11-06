@@ -1,6 +1,15 @@
 import { Trait } from "./Trait";
 
-export interface Actor {
+export interface Actor extends YanflyBaseParams {
+    reflectAnimationId: number;
+    spriteCannotMove: any;
+    anchorX: any;
+    anchorY: any;
+    plusParams: any;
+    rateParams: any;
+    flatParams: any;
+    maxParams: any;
+    minParams: any;
     id: number;
     battlerName: string;
     characterIndex: 0;

@@ -181,11 +181,13 @@ export class Game_Map {
     }
 
     public displayX() {
-        return this._displayX;
+        return Math.floor(this._displayX * this.tileWidth()) / this.tileWidth();
     }
 
     public displayY() {
-        return this._displayY;
+        return (
+            Math.floor(this._displayY * this.tileHeight()) / this.tileHeight()
+        );
     }
 
     public parallaxName() {
@@ -200,7 +202,7 @@ export class Game_Map {
         return this._battleback2Name;
     }
 
-    public requestRefresh(mapId?: undefined) {
+    public requestRefresh(mapId?: number) {
         this._needsRefresh = true;
     }
 

@@ -21,6 +21,9 @@ import { Scene_Title } from "./Scene_Title";
 import { Window_ItemList } from "../windows/Window_ItemList";
 import { Window_SkillList } from "../windows/Window_SkillList";
 import { ConfigManager } from "../managers/ConfigManager";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { Game_CommonEvent } from "../objects/Game_CommonEvent";
+import { CommonEvent } from "../interfaces/CommonEvent";
 
 export class Scene_Battle extends Scene_Base {
     private _partyCommandWindow: Window_PartyCommand;
@@ -34,11 +37,15 @@ export class Scene_Battle extends Scene_Base {
     private _helpWindow: Window_Help;
     private _scrollTextWindow: Window_ScrollText;
     private _spriteset: Spriteset_Battle;
-    private _logWindow: Window_BattleLog;
+    public _logWindow: Window_BattleLog;
+    _isStartActorCommand: any;
+
+    private commonEvents: Game_CommonEvent[];
 
     public create() {
         super.create();
         this.createDisplayObjects();
+        this.commonEvents = [];
     }
 
     public start() {
@@ -46,6 +53,11 @@ export class Scene_Battle extends Scene_Base {
         this.startFadeIn(this.fadeSpeed(), false);
         BattleManager.playBattleBgm();
         BattleManager.startBattle();
+        for (const event of $dataCommonEvents) {
+            if (event) {
+                this.commonEvents.push(new Game_CommonEvent(event.id));
+            }
+        }
     }
 
     public update() {
@@ -58,6 +70,18 @@ export class Scene_Battle extends Scene_Base {
             this.updateBattleProcess();
         }
         super.update();
+        if (!Yanfly._openedConsole) Yanfly.openConsole();
+        this.updateStatusWindowRequests();
+        for (const event of this.commonEvents) {
+            event.refresh();
+            event.update();
+        }
+    }
+
+    public updateStatusWindowRequests() {
+        if (!this._statusWindow) return;
+        if (this._statusWindow.isClosed()) return;
+        this._statusWindow.updateStatusRequests();
     }
 
     public updateBattleProcess() {
@@ -262,6 +286,9 @@ export class Scene_Battle extends Scene_Base {
         this._skillWindow.setHandler("ok", this.onSkillOk.bind(this));
         this._skillWindow.setHandler("cancel", this.onSkillCancel.bind(this));
         this.addWindow(this._skillWindow);
+        if (Yanfly.Param.BECLowerWindows) {
+            this.adjustLowerWindow(this._skillWindow);
+        }
     }
 
     public createItemWindow() {
@@ -272,6 +299,9 @@ export class Scene_Battle extends Scene_Base {
         this._itemWindow.setHandler("ok", this.onItemOk.bind(this));
         this._itemWindow.setHandler("cancel", this.onItemCancel.bind(this));
         this.addWindow(this._itemWindow);
+        if (Yanfly.Param.BECLowerWindows) {
+            this.adjustLowerWindow(this._itemWindow);
+        }
     }
 
     public createActorWindow() {
@@ -279,6 +309,11 @@ export class Scene_Battle extends Scene_Base {
         this._actorWindow.setHandler("ok", this.onActorOk.bind(this));
         this._actorWindow.setHandler("cancel", this.onActorCancel.bind(this));
         this.addWindow(this._actorWindow);
+        this._actorWindow.x =
+            ConfigManager.currentResolution.widthPx - this._actorWindow.width;
+        if (Yanfly.Param.BECSelectHelp) {
+            this._actorWindow.setHelpWindow(this._helpWindow);
+        }
     }
 
     public createEnemyWindow() {
@@ -291,6 +326,14 @@ export class Scene_Battle extends Scene_Base {
         this._enemyWindow.setHandler("ok", this.onEnemyOk.bind(this));
         this._enemyWindow.setHandler("cancel", this.onEnemyCancel.bind(this));
         this.addWindow(this._enemyWindow);
+        if (Yanfly.Param.BECSelectHelp) {
+            this._enemyWindow.setHelpWindow(this._helpWindow);
+        }
+    }
+
+    public adjustLowerWindow(win) {
+        win.height = win.fittingHeight(Yanfly.Param.BECWindowRows);
+        win.y = Graphics.boxHeight - win.height;
     }
 
     public createMessageWindow() {
@@ -311,11 +354,22 @@ export class Scene_Battle extends Scene_Base {
     }
 
     public startPartyCommandSelection() {
-        this.refreshStatus();
-        this._statusWindow.deselect();
-        this._statusWindow.open();
-        this._actorCommandWindow.close();
-        this._partyCommandWindow.setup();
+        if (this.isStartActorCommand()) {
+            this.selectNextCommand();
+        } else {
+            this.refreshStatus();
+            this._statusWindow.deselect();
+            this._statusWindow.open();
+            this._actorCommandWindow.close();
+            this._partyCommandWindow.setup();
+        }
+    }
+
+    public isStartActorCommand() {
+        if (this._isStartActorCommand === undefined) {
+            this._isStartActorCommand = Yanfly.Param.BECStartActCmd;
+        }
+        return this._isStartActorCommand;
     }
 
     public commandFight() {
@@ -328,9 +382,11 @@ export class Scene_Battle extends Scene_Base {
     }
 
     public startActorCommandSelection() {
+        BattleManager.createActions();
         this._statusWindow.select(BattleManager.actor().index());
         this._partyCommandWindow.close();
         this._actorCommandWindow.setup(BattleManager.actor());
+        this._statusWindow.refresh();
     }
 
     public commandAttack() {
@@ -339,6 +395,7 @@ export class Scene_Battle extends Scene_Base {
     }
 
     public commandSkill() {
+        this._helpWindow.clear();
         this._skillWindow.setActor(BattleManager.actor());
         this._skillWindow.setStypeId(this._actorCommandWindow.currentExt());
         this._skillWindow.refresh();
@@ -352,6 +409,7 @@ export class Scene_Battle extends Scene_Base {
     }
 
     public commandItem() {
+        this._helpWindow.clear();
         this._itemWindow.refresh();
         this._itemWindow.show();
         this._itemWindow.activate();
@@ -360,17 +418,32 @@ export class Scene_Battle extends Scene_Base {
     public selectNextCommand() {
         BattleManager.selectNextCommand();
         this.changeInputWindow();
+        this._helpWindow.clear();
+        BattleManager.stopAllSelection();
     }
 
     public selectPreviousCommand() {
-        BattleManager.selectPreviousCommand();
-        this.changeInputWindow();
+        if (this.isStartActorCommand()) {
+            BattleManager.selectPreviousCommand();
+            if (BattleManager.isInputting() && BattleManager.actor()) {
+                this.startActorCommandSelection();
+            } else {
+                BattleManager.selectPreviousCommand();
+                this.changeInputWindow();
+            }
+        } else {
+            BattleManager.selectPreviousCommand();
+            this.changeInputWindow();
+        }
     }
 
     public selectActorSelection() {
+        if (Yanfly.Param.BECSelectHelp) this._helpWindow.show();
+        this._helpWindow.clear();
         this._actorWindow.refresh();
         this._actorWindow.show();
         this._actorWindow.activate();
+        this._actorWindow.autoSelect();
     }
 
     public onActorOk() {
@@ -383,6 +456,8 @@ export class Scene_Battle extends Scene_Base {
     }
 
     public onActorCancel() {
+        if (Yanfly.Param.BECSelectHelp) this._helpWindow.hide();
+        this._helpWindow.clear();
         this._actorWindow.hide();
         switch (this._actorCommandWindow.currentSymbol()) {
             case "skill":
@@ -394,13 +469,18 @@ export class Scene_Battle extends Scene_Base {
                 this._itemWindow.activate();
                 break;
         }
+        BattleManager.stopAllSelection();
+        BattleManager.clearInputtingAction();
     }
 
     public selectEnemySelection() {
+        if (Yanfly.Param.BECSelectHelp) this._helpWindow.show();
+        this._helpWindow.clear();
         this._enemyWindow.refresh();
         this._enemyWindow.show();
         this._enemyWindow.select(0);
         this._enemyWindow.activate();
+        this._enemyWindow.autoSelect();
     }
 
     public onEnemyOk() {
@@ -413,6 +493,8 @@ export class Scene_Battle extends Scene_Base {
     }
 
     public onEnemyCancel() {
+        if (Yanfly.Param.BECSelectHelp) this._helpWindow.hide();
+        this._helpWindow.clear();
         this._enemyWindow.hide();
         switch (this._actorCommandWindow.currentSymbol()) {
             case "attack":
@@ -427,9 +509,12 @@ export class Scene_Battle extends Scene_Base {
                 this._itemWindow.activate();
                 break;
         }
+        BattleManager.stopAllSelection();
+        BattleManager.clearInputtingAction();
     }
 
     public onSkillOk() {
+        this._helpWindow.clear();
         const skill = this._skillWindow.item();
         const action = BattleManager.inputtingAction();
         action.setSkill(skill.id);
@@ -438,11 +523,13 @@ export class Scene_Battle extends Scene_Base {
     }
 
     public onSkillCancel() {
+        this._helpWindow.clear();
         this._skillWindow.hide();
         this._actorCommandWindow.activate();
     }
 
     public onItemOk() {
+        this._helpWindow.clear();
         const item = this._itemWindow.item();
         const action = BattleManager.inputtingAction();
         action.setItem(item.id);
@@ -451,11 +538,14 @@ export class Scene_Battle extends Scene_Base {
     }
 
     public onItemCancel() {
+        this._helpWindow.clear();
         this._itemWindow.hide();
         this._actorCommandWindow.activate();
     }
 
     public onSelectAction() {
+        if (Yanfly.Param.BECSelectHelp) BattleManager.forceSelection();
+        this._helpWindow.clear();
         const action = BattleManager.inputtingAction();
         this._skillWindow.hide();
         this._itemWindow.hide();
@@ -466,11 +556,24 @@ export class Scene_Battle extends Scene_Base {
         } else {
             this.selectActorSelection();
         }
+        if (Yanfly.Param.BECSelectHelp) BattleManager.resetSelection();
     }
 
     public endCommandSelection() {
         this._partyCommandWindow.close();
         this._actorCommandWindow.close();
         this._statusWindow.deselect();
+    }
+
+    public get statusWindow() {
+        return this._statusWindow;
+    }
+
+    public get enemyWindow() {
+        return this._enemyWindow;
+    }
+
+    public getParallelCommonEvents(): CommonEvent[] {
+        return $dataCommonEvents.filter(event => event.trigger === 2);
     }
 }

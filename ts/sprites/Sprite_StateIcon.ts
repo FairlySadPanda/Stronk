@@ -5,7 +5,6 @@ import { ImageManager } from "../managers/ImageManager";
 // Sprite_StateIcon
 //
 // The sprite for displaying state icons.
-
 export class Sprite_StateIcon extends Sprite {
     private static _iconWidth = 32;
     private static _iconHeight = 32;
@@ -47,6 +46,12 @@ export class Sprite_StateIcon extends Sprite {
             this.updateFrame();
             this._animationCount = 0;
         }
+        this.updateMirror();
+    }
+
+    public updateMirror() {
+        if (this.parent.scale.x < 0) this.scale.x = -1 * Math.abs(this.scale.x);
+        if (this.parent.scale.x > 0) this.scale.x = Math.abs(this.scale.x);
     }
 
     public animationWait() {

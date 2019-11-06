@@ -1,6 +1,6 @@
 import { Trait } from "./Trait";
 
-export interface Armor {
+export interface Armor extends YanflyBaseParams {
     id: number;
     atypeId: number;
     description: string;

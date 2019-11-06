@@ -3,6 +3,7 @@ import { Sprite } from "../core/Sprite";
 import { Utils } from "../core/Utils";
 import { AudioManager } from "../managers/AudioManager";
 import { ImageManager } from "../managers/ImageManager";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 // -----------------------------------------------------------------------------
 // Sprite_Animation
@@ -77,7 +78,7 @@ export class Sprite_Animation extends Sprite {
     }
 
     public setupRate() {
-        this._rate = 4;
+        this._rate = Yanfly.Param.AnimationRate;
     }
 
     public setupDuration() {

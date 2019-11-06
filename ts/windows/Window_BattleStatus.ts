@@ -1,6 +1,9 @@
 import { Graphics } from "../core/Graphics";
 import { Window_Selectable } from "./Window_Selectable";
 import { ConfigManager } from "../managers/ConfigManager";
+import { Window_Base } from "./Window_Base";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { BattleManager } from "../managers/BattleManager";
 
 // -----------------------------------------------------------------------------
 // Window_BattleStatus
@@ -32,7 +35,7 @@ export class Window_BattleStatus extends Window_Selectable {
     }
 
     public numVisibleRows() {
-        return 4;
+        return Yanfly.Param.BECCommandRows;
     }
 
     public maxItems() {
@@ -64,12 +67,16 @@ export class Window_BattleStatus extends Window_Selectable {
     }
 
     public gaugeAreaWidth() {
-        return 330;
+        return this.width / 2 + this.standardPadding();
     }
 
     public drawBasicArea(rect, actor) {
-        this.drawActorName(actor, rect.x + 0, rect.y, 150);
-        this.drawActorIcons(actor, rect.x + 156, rect.y, rect.width - 156);
+        const minIconArea = Window_Base._iconWidth * 2;
+        const nameLength = this.textWidth("0") * 16 + 6;
+        const iconWidth = Math.max(rect.width - nameLength, minIconArea);
+        const nameWidth = rect.width - iconWidth;
+        this.drawActorName(actor, rect.x + 0, rect.y, nameWidth);
+        this.drawActorIcons(actor, rect.x + nameWidth, rect.y, iconWidth);
     }
 
     public drawGaugeArea(rect, actor) {
@@ -81,13 +88,57 @@ export class Window_BattleStatus extends Window_Selectable {
     }
 
     public drawGaugeAreaWithTp(rect, actor) {
-        this.drawActorHp(actor, rect.x + 0, rect.y, 108);
-        this.drawActorMp(actor, rect.x + 123, rect.y, 96);
-        this.drawActorTp(actor, rect.x + 234, rect.y, 96);
+        const totalArea = this.gaugeAreaWidth() - 30;
+        const hpW = Math.floor((totalArea * 108) / 300);
+        const otW = Math.floor((totalArea * 96) / 300);
+        this.drawActorHp(actor, rect.x + 0, rect.y, hpW);
+        this.drawActorMp(actor, rect.x + hpW + 15, rect.y, otW);
+        this.drawActorTp(actor, rect.x + hpW + otW + 30, rect.y, otW);
     }
 
     public drawGaugeAreaWithoutTp(rect, actor) {
-        this.drawActorHp(actor, rect.x + 0, rect.y, 201);
-        this.drawActorMp(actor, rect.x + 216, rect.y, 114);
+        let totalArea = this.gaugeAreaWidth() - 15;
+        let hpW = Math.floor((totalArea * 201) / 315);
+        let otW = Math.floor((totalArea * 114) / 315);
+        this.drawActorHp(actor, rect.x + 0, rect.y, hpW);
+        this.drawActorMp(actor, rect.x + hpW + 15, rect.y, otW);
+    }
+
+    public updateStatusRequests() {
+        if (BattleManager._victoryPhase) return;
+        for (let i = 0; i < $gameParty.battleMembers().length; ++i) {
+            let actor = $gameParty.battleMembers()[i];
+            if (!actor) continue;
+            if (actor.isStatusRefreshRequested()) this.processStatusRefresh(i);
+        }
+    }
+
+    public processStatusRefresh(index) {
+        let actor = $gameParty.battleMembers()[index];
+        if (!actor) return;
+        let rect = this.itemRect(index);
+        this.contents.clearRect(rect.x, rect.y, rect.width, rect.height);
+        this.drawItem(index);
+        actor.completetStatusRefreshRequest();
+    }
+
+    public drawCurrentAndMax(current, max, x, y, width, color1, color2) {
+        if (!Yanfly.Param.BECCurMax) {
+            const labelWidth = this.textWidth("HP");
+            const valueWidth = this.textWidth(Yanfly.Util.toGroup(max));
+            const slashWidth = this.textWidth("/");
+            const x1 = x + width - valueWidth;
+            this.changeTextColor(color1);
+            this.drawText(
+                Yanfly.Util.toGroup(current),
+                x1,
+                y,
+                valueWidth,
+                undefined,
+                "right"
+            );
+        } else {
+            super.drawCurrentAndMax(current, max, x, y, width, color1, color2);
+        }
     }
 }

@@ -8,6 +8,8 @@ import { Game_Battler, Game_Battler_OnLoad } from "./Game_Battler";
 import { Game_Item, Game_Item_OnLoad } from "./Game_Item";
 import { Weapon } from "../interfaces/Weapon";
 import { Armor } from "../interfaces/Armor";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { Item } from "../interfaces/Item";
 
 export interface Game_Actor_OnLoad extends Game_Battler_OnLoad {
     _actorId: number;
@@ -32,6 +34,8 @@ export interface Game_Actor_OnLoad extends Game_Battler_OnLoad {
 }
 
 export class Game_Actor extends Game_Battler {
+    private _anchorX: any;
+    private _anchorY: any;
     private _actorId: number;
     private _name: string;
     private _nickname: string;
@@ -127,6 +131,8 @@ export class Game_Actor extends Game_Battler {
         this.initEquips(actor.equips);
         this.clearParamPlus();
         this.recoverAll();
+        this.clearCustomParamLimits();
+        this.clearXParamPlus();
     }
 
     public actorId() {
@@ -246,6 +252,7 @@ export class Game_Actor extends Game_Battler {
     }
 
     public isMaxLevel() {
+        if (this.maxLevel() === 0) return false;
         return this._level >= this.maxLevel();
     }
 
@@ -285,7 +292,7 @@ export class Game_Actor extends Game_Battler {
         return slots;
     }
 
-    public equips() {
+    public equips(): any[] {
         return this._equips.map(function(item) {
             return item.object();
         });
@@ -452,8 +459,11 @@ export class Game_Actor extends Game_Battler {
     }
 
     public refresh() {
+        this._anchorX = undefined;
+        this._anchorY = undefined;
         this.releaseUnequippableItems(false);
         super.refresh();
+        if ($gameParty.inBattle()) this.requestStatusRefresh();
     }
 
     public isActor() {
@@ -505,7 +515,7 @@ export class Game_Actor extends Game_Battler {
     }
 
     public traitObjects() {
-        let objects = super.traitObjects();
+        let objects = super.traitObjects() as any[];
         objects = objects.concat([this.actor(), this.currentClass()]);
         const equips = this.equips();
         for (let i = 0; i < equips.length; i++) {
@@ -538,22 +548,35 @@ export class Game_Actor extends Game_Battler {
 
     public paramMax(paramId) {
         if (paramId === 0) {
-            return 9999; // MHP
+            return Yanfly.Param.ActorMaxHp;
+        } else if (paramId === 1) {
+            return Yanfly.Param.ActorMaxMp;
+        } else {
+            return Yanfly.Param.ActorParam;
         }
-        return super.paramMax(paramId);
     }
 
     public paramBase(paramId) {
+        if (this.level > 99) {
+            let i = this.currentClass().params[paramId][99];
+            const j = this.currentClass().params[paramId][98];
+            i += (i - j) * (this.level - 99);
+            return i;
+        }
         return this.currentClass().params[paramId][this._level];
     }
 
-    public paramPlus(paramId) {
+    public paramPlus(paramId: number) {
         let value = super.paramPlus(paramId);
-        const equips = this.equips();
-        for (let i = 0; i < equips.length; i++) {
-            const item = equips[i];
-            if (item) {
-                value += (item as Weapon | Armor).params[paramId];
+        value += this.actor().plusParams[paramId];
+        value += this.currentClass().plusParams[paramId];
+        const length = this.equips().length;
+        for (let i = 0; i < length; ++i) {
+            const obj = this.equips()[i];
+            if (!obj) continue;
+            value += obj.params[paramId];
+            if (obj.plusParams) {
+                value += obj.plusParams[paramId];
             }
         }
         return value;
@@ -657,7 +680,7 @@ export class Game_Actor extends Game_Battler {
     }
 
     public learnSkill(skillId) {
-        if (!this.isLearnedSkill(skillId)) {
+        if (!this._skills.includes(skillId)) {
             this._skills.push(skillId);
             this._skills.sort(function(a, b) {
                 return a - b;
@@ -682,7 +705,7 @@ export class Game_Actor extends Game_Battler {
 
     public changeClass(classId, keepExp) {
         if (keepExp) {
-            this._exp[classId] = this.currentExp();
+            this._exp[classId] = this._exp[this._classId];
         }
         this._classId = classId;
         this.changeExp(this._exp[this._classId] || 0, false);
@@ -704,7 +727,8 @@ export class Game_Actor extends Game_Battler {
     }
 
     public isSpriteVisible() {
-        return $gameSystem.isSideView();
+        if ($gameSystem.isSideView()) return true;
+        return Yanfly.Param.BECFrontSprite;
     }
 
     public startAnimation(animationId, mirror, delay) {
@@ -733,22 +757,6 @@ export class Game_Actor extends Game_Battler {
 
     public performActionEnd() {
         super.performActionEnd();
-    }
-
-    public performAttack() {
-        const weapons = this.weapons();
-        const wtypeId = weapons[0] ? (weapons[0] as Weapon).wtypeId : 0;
-        const attackMotion = $dataSystem.attackMotions[wtypeId];
-        if (attackMotion) {
-            if (attackMotion.type === 0) {
-                this.requestMotion("thrust");
-            } else if (attackMotion.type === 1) {
-                this.requestMotion("swing");
-            } else if (attackMotion.type === 2) {
-                this.requestMotion("missile");
-            }
-            this.startWeaponAnimation(attackMotion.weaponImageId);
-        }
     }
 
     public performDamage() {
@@ -868,23 +876,19 @@ export class Game_Actor extends Game_Battler {
     }
 
     public showAddedStates() {
-        this.result()
-            .addedStateObjects()
-            .forEach(function(state) {
-                if (state.message1) {
-                    $gameMessage.add(this._name + state.message1);
-                }
-            }, this);
+        this.result.addedStateObjects().forEach(function(state) {
+            if (state.message1) {
+                $gameMessage.add(this._name + state.message1);
+            }
+        }, this);
     }
 
     public showRemovedStates() {
-        this.result()
-            .removedStateObjects()
-            .forEach(function(state) {
-                if (state.message4) {
-                    $gameMessage.add(this._name + state.message4);
-                }
-            }, this);
+        this.result.removedStateObjects().forEach(function(state) {
+            if (state.message4) {
+                $gameMessage.add(this._name + state.message4);
+            }
+        }, this);
     }
 
     public stepsForTurn() {
@@ -894,7 +898,7 @@ export class Game_Actor extends Game_Battler {
     public turnEndOnMap() {
         if ($gameParty.steps() % this.stepsForTurn() === 0) {
             this.onTurnEnd();
-            if (this.result().hpDamage > 0) {
+            if (this.result.hpDamage > 0) {
                 this.performMapDamage();
             }
         }
@@ -995,5 +999,218 @@ export class Game_Actor extends Game_Battler {
             return false;
         }
         return super.meetsUsableItemConditions(item);
+    }
+
+    public paramRate(paramId: number) {
+        let rate = super.paramRate(paramId);
+        rate *= this.actor().rateParams[paramId];
+        rate *= this.currentClass().rateParams[paramId];
+        const length = this.equips().length;
+        for (let i = 0; i < length; ++i) {
+            const obj = this.equips()[i];
+            if (obj && obj.rateParams) {
+                rate *= obj.rateParams[paramId];
+            }
+        }
+        return rate;
+    }
+
+    public paramFlat(paramId: number) {
+        let value = Game_Battler.prototype.paramFlat.call(this, paramId);
+        value += this.actor().flatParams[paramId];
+        value += this.currentClass().flatParams[paramId];
+        const length = this.equips().length;
+        for (let i = 0; i < length; ++i) {
+            const obj = this.equips()[i];
+            if (obj && obj.flatParams) {
+                value += obj.flatParams[paramId];
+            }
+        }
+        return value;
+    }
+
+    public customParamMax(paramId: number) {
+        let value = super.customParamMax(paramId);
+        if (this.actor().maxParams[paramId]) {
+            value = Math.max(value, this.actor().maxParams[paramId]);
+        }
+        if (this.currentClass().maxParams[paramId]) {
+            value = Math.max(value, this.currentClass().maxParams[paramId]);
+        }
+        const length = this.equips().length;
+        for (let i = 0; i < length; ++i) {
+            const obj = this.equips()[i];
+            if (obj && obj.maxParams && obj.maxParams[paramId]) {
+                value = Math.max(value, obj.maxParams[paramId]);
+            }
+        }
+        return value;
+    }
+
+    public customParamMin(paramId: number) {
+        let value = super.customParamMin(paramId);
+        if (this.actor().minParams[paramId]) {
+            value = Math.max(value, this.actor().minParams[paramId]);
+        }
+        if (this.currentClass().minParams[paramId]) {
+            value = Math.max(value, this.currentClass().minParams[paramId]);
+        }
+        const length = this.equips().length;
+        for (let i = 0; i < length; ++i) {
+            const obj = this.equips()[i];
+            if (obj && obj.minParams && obj.minParams[paramId]) {
+                value = Math.max(value, obj.minParams[paramId]);
+            }
+        }
+        return value;
+    }
+
+    public reflectAnimationId() {
+        if (this.actor().reflectAnimationId > 0) {
+            return this.actor().reflectAnimationId;
+        }
+        if (this.currentClass().reflectAnimationId > 0) {
+            return this.currentClass().reflectAnimationId;
+        }
+        for (let i = 0; i < this.equips().length; ++i) {
+            let equip = this.equips()[i];
+            if (equip && equip.reflectAnimationId > 0) {
+                return equip.reflectAnimationId;
+            }
+        }
+        return super.reflectAnimationId();
+    }
+
+    public spriteCanMove() {
+        if (this.actor().spriteCannotMove) return false;
+        if (this.currentClass().spriteCannotMove) return false;
+        for (let i = 0; i < this.equips().length; ++i) {
+            let equip = this.equips()[i];
+            if (equip && equip.spriteCannotMove) return false;
+        }
+        return super.spriteCanMove();
+    }
+
+    public spriteWidth() {
+        if ($gameSystem.isSideView() && this.battler()) {
+            return this.battler()._mainSprite.width;
+        } else {
+            return 1;
+        }
+    }
+
+    public spriteHeight() {
+        if ($gameSystem.isSideView() && this.battler()) {
+            return this.battler()._mainSprite.height;
+        } else {
+            return 1;
+        }
+    }
+
+    public anchorX() {
+        if (this._anchorX !== undefined) return this._anchorX;
+        let length = this.states().length;
+        for (let i = 0; i < length; ++i) {
+            let obj = this.states()[i];
+            if (obj && obj.anchorX !== undefined) {
+                this._anchorX = obj.anchorX;
+                return this._anchorX;
+            }
+        }
+        length = this.equips().length;
+        for (let i = 0; i < length; ++i) {
+            let obj = this.equips()[i];
+            if (obj && obj.anchorX !== undefined) {
+                this._anchorX = obj.anchorX;
+                return this._anchorX;
+            }
+        }
+        if (this.currentClass().anchorX !== undefined) {
+            this._anchorX = this.currentClass().anchorX;
+            return this._anchorX;
+        }
+        this._anchorX = this.actor().anchorX;
+        return this._anchorX;
+    }
+
+    public anchorY() {
+        if (this._anchorY !== undefined) return this._anchorY;
+        let length = this.states().length;
+        for (let i = 0; i < length; ++i) {
+            let obj = this.states()[i];
+            if (obj && obj.anchorY !== undefined) {
+                this._anchorY = obj.anchorY;
+                return this._anchorY;
+            }
+        }
+        length = this.equips().length;
+        for (let i = 0; i < length; ++i) {
+            let obj = this.equips()[i];
+            if (obj && obj.anchorY !== undefined) {
+                this._anchorY = obj.anchorY;
+                return this._anchorY;
+            }
+        }
+        if (this.currentClass().anchorY !== undefined) {
+            this._anchorY = this.currentClass().anchorY;
+            return this._anchorY;
+        }
+        this._anchorY = this.actor().anchorY;
+        return this._anchorY;
+    }
+
+    public spriteFacePoint(pointX, pointY) {
+        if (this.spritePosX() > pointX) {
+            this.spriteFaceForward();
+        } else {
+            this.spriteFaceBackward();
+        }
+    }
+
+    public spriteFaceAwayPoint(pointX, pointY) {
+        if (this.spritePosX() > pointX) {
+            this.spriteFaceBackward();
+        } else {
+            this.spriteFaceForward();
+        }
+    }
+
+    public performAttack() {
+        let weapons = this.weapons();
+        let wtypeId = weapons[0] ? weapons[0].wtypeId : 0;
+        let attackMotion = $dataSystem.attackMotions[wtypeId];
+        if (attackMotion) {
+            if (attackMotion.type === 0) {
+                this.forceMotion("thrust");
+            } else if (attackMotion.type === 1) {
+                this.forceMotion("swing");
+            } else if (attackMotion.type === 2) {
+                this.forceMotion("missile");
+            }
+            this.startWeaponAnimation(attackMotion.weaponImageId);
+        }
+    }
+
+    public attackMotion() {
+        let weapons = this.weapons();
+        let wtypeId = weapons[0] ? weapons[0].wtypeId : 0;
+        let attackMotion = $dataSystem.attackMotions[wtypeId];
+        if (attackMotion) {
+            if (attackMotion.type === 0) {
+                return "thrust";
+            } else if (attackMotion.type === 1) {
+                return "swing";
+            } else if (attackMotion.type === 2) {
+                return "missile";
+            }
+        }
+        return "thrust";
+    }
+
+    public performEscapeSuccess() {
+        if (this.battler()) {
+            this.performEscape();
+            this.battler().startMove(300, 0, 60);
+        }
     }
 }

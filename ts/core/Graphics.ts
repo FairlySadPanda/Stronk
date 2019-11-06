@@ -695,22 +695,23 @@ export abstract class Graphics {
     }
 
     public static printFullError(name: string, message: string, stack: string) {
-        if (Graphics._errorPrinter) {
-            Graphics._errorPrinter.innerHTML = Graphics._makeFullErrorHtml(
+        const stackArray = this.processErrorStackMessage(stack);
+        if (this._errorPrinter) {
+            this._errorPrinter.innerHTML = this._makeFullErrorHtml(
                 name,
                 message,
-                Graphics.processErrorStackMessage(stack)
+                stackArray
             );
         }
-        Graphics._applyCanvasFilter();
-        Graphics._clearUpperCanvas();
+        this._applyCanvasFilter();
+        this._clearUpperCanvas();
     }
 
     private static _makeFullErrorHtml(
         name: string,
         message: string,
         stack: string[]
-    ) {
+    ): string {
         let text = "";
         for (var i = 2; i < stack.length; ++i) {
             text += "<font color=white>" + stack[i] + "</font><br>";

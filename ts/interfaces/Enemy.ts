@@ -1,6 +1,9 @@
 import { Trait } from "./Trait";
 
-export interface Enemy {
+export interface Enemy extends YanflyBaseParams {
+    attackAnimationId: any;
+    reflectAnimationId: number;
+    spriteCannotMove: any;
     id: number;
     actions: EnemyAction[];
     battlerHue: number;

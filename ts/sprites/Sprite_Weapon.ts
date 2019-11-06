@@ -31,6 +31,7 @@ export class Sprite_Weapon extends Sprite_Base {
         this._pattern = 0;
         this.loadBitmap();
         this.updateFrame();
+        this._animationCount -= 1; // Synch with sprite
     }
 
     public update() {

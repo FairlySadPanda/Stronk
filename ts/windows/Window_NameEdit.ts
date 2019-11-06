@@ -75,7 +75,7 @@ export class Window_NameEdit extends Window_Base {
     }
 
     public faceWidth() {
-        return 144;
+        return Window_Base._faceWidth;
     }
 
     public charWidth() {

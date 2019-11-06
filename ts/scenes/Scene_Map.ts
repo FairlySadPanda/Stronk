@@ -19,6 +19,7 @@ import { Scene_Load } from "./Scene_Load";
 import { Scene_Menu } from "./Scene_Menu";
 import { Scene_Title } from "./Scene_Title";
 import { ConfigManager } from "../managers/ConfigManager";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 export class Scene_Map extends Scene_Base {
     public menuCalling: boolean;
@@ -98,6 +99,7 @@ export class Scene_Map extends Scene_Base {
         }
         this.updateWaitCount();
         super.update();
+        if (!Yanfly._openedConsole) Yanfly.openConsole();
     }
 
     public updateMainMultiply() {
@@ -399,9 +401,13 @@ export class Scene_Map extends Scene_Base {
     }
 
     public snapForBattleBackground() {
-        this._windowLayer.visible = false;
-        SceneManager.snapForBackground();
-        this._windowLayer.visible = true;
+        if (!Yanfly.Param.ShowEvSnap) {
+            this._spriteset.hideCharacters();
+            this._windowLayer.visible = false;
+            SceneManager.snapForBackground();
+            this._windowLayer.visible = true;
+        }
+        if (Yanfly.Param.ShowEvTrans) this._spriteset.showCharacters();
     }
 
     public startFlashForEncounter(duration) {

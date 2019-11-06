@@ -62,10 +62,7 @@ export class Window_EquipItem extends Window_ItemList {
     public updateHelp() {
         super.updateHelp();
         if (this._actor && this._statusWindow) {
-            const actor = new Game_Actor(
-                this._actor.actorId(),
-                JsonEx.makeDeepCopy(this._actor) as Game_Actor_OnLoad
-            );
+            const actor = JsonEx.makeDeepCopy(this._actor);
             actor.forceChangeEquip(this._slotId, this.item());
             this._statusWindow.setTempActor(actor);
         }

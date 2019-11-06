@@ -1,3 +1,4 @@
+import "./plugins.js";
 import "source-map-support/register";
 
 import "pixi.js";
@@ -6,6 +7,9 @@ import "pixi-picture";
 import "pixi-tilemap";
 
 import { PluginManager } from "./managers/PluginManager";
+
+PluginManager.setup($plugins);
+
 import { SceneManager } from "./managers/SceneManager";
 import { Scene_Boot } from "./scenes/Scene_Boot";
 
@@ -48,8 +52,6 @@ window.$gameTroop = null;
 window.$gameMap = null;
 window.$gamePlayer = null;
 window.$testEvent = null;
-
-PluginManager.setup($plugins);
 
 window.onload = function() {
     SceneManager.run(Scene_Boot);

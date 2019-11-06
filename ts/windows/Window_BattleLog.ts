@@ -8,6 +8,8 @@ import { DataManager } from "../managers/DataManager";
 import { SoundManager } from "../managers/SoundManager";
 import { TextManager } from "../managers/TextManager";
 import { Window_Selectable } from "./Window_Selectable";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { BattleManager } from "../managers/BattleManager";
 
 // -----------------------------------------------------------------------------
 // Window_BattleLog
@@ -25,6 +27,7 @@ export class Window_BattleLog extends Window_Selectable {
     private _spriteset: any;
     private _backBitmap: Bitmap;
     private _backSprite: Sprite;
+    _actionIcon: any;
 
     public constructor() {
         super(
@@ -96,33 +99,6 @@ export class Window_BattleLog extends Window_Selectable {
         return this.updateWaitCount() || this.updateWaitMode();
     }
 
-    public updateWaitCount() {
-        if (this._waitCount > 0) {
-            this._waitCount -= this.isFastForward() ? 3 : 1;
-            if (this._waitCount < 0) {
-                this._waitCount = 0;
-            }
-            return true;
-        }
-        return false;
-    }
-
-    public updateWaitMode() {
-        let waiting = false;
-        switch (this._waitMode) {
-            case "effect":
-                waiting = this._spriteset.isEffecting();
-                break;
-            case "movement":
-                waiting = this._spriteset.isAnyoneMoving();
-                break;
-        }
-        if (!waiting) {
-            this._waitMode = "";
-        }
-        return waiting;
-    }
-
     public setWaitMode(waitMode) {
         this._waitMode = waitMode;
     }
@@ -139,6 +115,7 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public isFastForward() {
+        if (Yanfly.Param.BECOptSpeed) return true;
         return (
             Input.isLongPressed("ok") ||
             Input.isPressed("shift") ||
@@ -159,10 +136,6 @@ export class Window_BattleLog extends Window_Selectable {
 
     public wait() {
         this._waitCount = this.messageSpeed();
-    }
-
-    public waitForEffect() {
-        this.setWaitMode("effect");
     }
 
     public waitForMovement() {
@@ -194,10 +167,6 @@ export class Window_BattleLog extends Window_Selectable {
         if (this._lines.length > baseLine) {
             this.wait();
         }
-    }
-
-    public popupDamage(target) {
-        target.startDamagePopup();
     }
 
     public performActionStart(subject, action) {
@@ -270,27 +239,59 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public showEnemyAttackAnimation(subject, targets) {
-        SoundManager.playEnemyAttack();
+        if ($gameSystem.isSideView()) {
+            this.showNormalAnimation(
+                targets,
+                subject.attackAnimationId(),
+                false
+            );
+        } else {
+            this.showNormalAnimation(
+                targets,
+                subject.attackAnimationId(),
+                false
+            );
+            SoundManager.playEnemyAttack();
+        }
+    }
+
+    public showActorAtkAniMirror(subject, targets) {
+        if (subject.isActor()) {
+            this.showNormalAnimation(
+                targets,
+                subject.attackAnimationId1(),
+                true
+            );
+            this.showNormalAnimation(
+                targets,
+                subject.attackAnimationId2(),
+                false
+            );
+        } else {
+            this.showNormalAnimation(
+                targets,
+                subject.attackAnimationId1(),
+                true
+            );
+        }
     }
 
     public showNormalAnimation(targets, animationId, mirror?) {
         const animation = $dataAnimations[animationId];
         if (animation) {
-            let delay = this.animationBaseDelay();
-            const nextDelay = this.animationNextDelay();
-            targets.forEach(function(target) {
-                target.startAnimation(animationId, mirror, delay);
-                delay += nextDelay;
-            });
+            if (animation.position === 3) {
+                targets.forEach(function(target) {
+                    target.startAnimation(animationId, mirror, 0);
+                });
+            } else {
+                let delay = this.animationBaseDelay();
+                const nextDelay = this.animationNextDelay();
+                targets.forEach(function(target) {
+                    target.startAnimation(animationId, mirror, delay);
+                    delay += nextDelay;
+                });
+            }
         }
-    }
-
-    public animationBaseDelay() {
-        return 8;
-    }
-
-    public animationNextDelay() {
-        return 12;
     }
 
     public async refresh() {
@@ -336,36 +337,23 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public drawLineText(index) {
-        const rect = this.itemRectForText(index);
-        this.contents.clearRect(rect.x, rect.y, rect.width, rect.height);
-        this.drawTextEx(this._lines[index], rect.x, rect.y);
+        if (this._lines[index].match("<CENTER>")) {
+            this.drawCenterLine(index);
+        } else if (this._lines[index].match("<SIMPLE>")) {
+            this.drawSimpleActionLine(index);
+        } else {
+            const rect = this.itemRectForText(index);
+            this.contents.clearRect(rect.x, rect.y, rect.width, rect.height);
+            this.drawTextEx(this._lines[index], rect.x, rect.y);
+        }
     }
 
     public startTurn() {
         this.push("wait");
     }
 
-    public startAction(subject, action, targets) {
-        const item = action.item();
-        this.push("performActionStart", subject, action);
-        this.push("waitForMovement");
-        this.push("performAction", subject, action);
-        this.push(
-            "showAnimation",
-            subject,
-            Utils.arrayClone(targets),
-            item.animationId
-        );
-        this.displayAction(subject, item);
-    }
-
-    public endAction(subject) {
-        this.push("waitForNewLine");
-        this.push("clear");
-        this.push("performActionEnd", subject);
-    }
-
     public displayCurrentState(subject) {
+        if (!Yanfly.Param.BECShowStateText) return;
         const stateText = subject.mostImportantStateText();
         if (stateText) {
             this.push("addText", subject.name() + stateText);
@@ -379,69 +367,78 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public displayAction(subject, item) {
-        const numMethods = this._methods.length;
-        if (DataManager.isSkill(item)) {
-            if (item.message1) {
+        if (Yanfly.Param.BECFullActText) {
+            const numMethods = this._methods.length;
+            if (DataManager.isSkill(item)) {
+                if (item.message1) {
+                    this.push(
+                        "addText",
+                        subject.name() + Utils.format(item.message1, item.name)
+                    );
+                }
+                if (item.message2) {
+                    this.push(
+                        "addText",
+                        Utils.format(item.message2, item.name)
+                    );
+                }
+            } else {
                 this.push(
                     "addText",
-                    subject.name() + Utils.format(item.message1, item.name)
+                    Utils.format(TextManager.useItem, subject.name(), item.name)
                 );
             }
-            if (item.message2) {
-                this.push("addText", Utils.format(item.message2, item.name));
+            if (this._methods.length === numMethods) {
+                this.push("wait");
             }
         } else {
-            this.push(
-                "addText",
-                Utils.format(TextManager.useItem, subject.name(), item.name)
-            );
+            this._actionIcon = this.displayIcon(item);
+            var text = this.displayText(item);
+            this.push("addText", "<SIMPLE>" + text);
+            if (item.message2) {
+                this.push("addText", "<CENTER>" + item.message2.format(text));
+            }
         }
-        if (this._methods.length === numMethods) {
-            this.push("wait");
-        }
     }
 
-    public displayCounter(target) {
-        this.push("performCounter", target);
-        this.push(
-            "addText",
-            Utils.format(TextManager.counterAttack, target.name())
-        );
+    public displayIcon(item) {
+        if (!item) return 0;
+        return item.battleDisplayIcon;
     }
 
-    public displayReflection(target) {
-        this.push("performReflection", target);
-        this.push(
-            "addText",
-            Utils.format(TextManager.magicReflection, target.name())
-        );
-    }
-
-    public displaySubstitute(substitute, target) {
-        const substName = substitute.name();
-        this.push("performSubstitute", substitute, target);
-        this.push(
-            "addText",
-            Utils.format(TextManager.substitute, substName, target.name())
-        );
+    public displayText(item) {
+        if (!item) return "";
+        return item.battleDisplayText;
     }
 
     public displayActionResults(subject, target) {
-        if (target.result().used) {
-            this.push("pushBaseLine");
-            this.displayCritical(target);
-            this.push("popupDamage", target);
-            this.push("popupDamage", subject);
-            this.displayDamage(target);
-            this.displayAffectedStatus(target);
-            this.displayFailure(target);
-            this.push("waitForNewLine");
-            this.push("popBaseLine");
+        if (Yanfly.Param.BECOptSpeed) {
+            if (target.result.used) {
+                this.displayCritical(target);
+                this.displayDamage(target);
+                this.displayAffectedStatus(target);
+                this.displayFailure(target);
+            }
+        } else {
+            if (target.result.used) {
+                this.push("pushBaseLine");
+                this.displayCritical(target);
+                this.push("popupDamage", target);
+                this.push("popupDamage", subject);
+                this.displayDamage(target);
+                this.displayAffectedStatus(target);
+                this.displayFailure(target);
+                this.push("waitForNewLine");
+                this.push("popBaseLine");
+            }
         }
+
+        if (target.isDead()) target.performCollapse();
     }
 
     public displayFailure(target) {
-        if (target.result().isHit() && !target.result().success) {
+        if (!Yanfly.Param.BECShowFailText) return;
+        if (target.result.isHit() && !target.result.success) {
             this.push(
                 "addText",
                 Utils.format(TextManager.actionFailure, target.name())
@@ -450,7 +447,8 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public displayCritical(target) {
-        if (target.result().critical) {
+        if (!Yanfly.Param.BECShowCritText) return;
+        if (target.result.critical) {
             if (target.isActor()) {
                 this.push("addText", TextManager.criticalToActor);
             } else {
@@ -460,9 +458,9 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public displayDamage(target) {
-        if (target.result().missed) {
+        if (target.result.missed) {
             this.displayMiss(target);
-        } else if (target.result().evaded) {
+        } else if (target.result.evaded) {
             this.displayEvasion(target);
         } else {
             this.displayHpDamage(target);
@@ -472,8 +470,9 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public displayMiss(target) {
+        if (!Yanfly.Param.BECShowMissText) return;
         let fmt;
-        if (target.result().physical) {
+        if (target.result.physical) {
             fmt = target.isActor()
                 ? TextManager.actorNoHit
                 : TextManager.enemyNoHit;
@@ -485,8 +484,9 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public displayEvasion(target) {
+        if (!Yanfly.Param.BECShowEvaText) return;
         let fmt;
-        if (target.result().physical) {
+        if (target.result.physical) {
             fmt = TextManager.evasion;
             this.push("performEvasion", target);
         } else {
@@ -497,11 +497,12 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public displayHpDamage(target) {
-        if (target.result().hpAffected) {
-            if (target.result().hpDamage > 0 && !target.result().drain) {
+        if (!Yanfly.Param.BECShowHpText) return;
+        if (target.result.hpAffected) {
+            if (target.result.hpDamage > 0 && !target.result.drain) {
                 this.push("performDamage", target);
             }
-            if (target.result().hpDamage < 0) {
+            if (target.result.hpDamage < 0) {
                 this.push("performRecovery", target);
             }
             this.push("addText", this.makeHpDamageText(target));
@@ -509,8 +510,9 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public displayMpDamage(target) {
-        if (target.isAlive() && target.result().mpDamage !== 0) {
-            if (target.result().mpDamage < 0) {
+        if (!Yanfly.Param.BECShowMpText) return;
+        if (target.isAlive() && target.result.mpDamage !== 0) {
+            if (target.result.mpDamage < 0) {
                 this.push("performRecovery", target);
             }
             this.push("addText", this.makeMpDamageText(target));
@@ -518,8 +520,9 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public displayTpDamage(target) {
-        if (target.isAlive() && target.result().tpDamage !== 0) {
-            if (target.result().tpDamage < 0) {
+        if (!Yanfly.Param.BECShowTpText) return;
+        if (target.isAlive() && target.result.tpDamage !== 0) {
+            if (target.result.tpDamage < 0) {
                 this.push("performRecovery", target);
             }
             this.push("addText", this.makeTpDamageText(target));
@@ -527,7 +530,7 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public displayAffectedStatus(target) {
-        if (target.result().isStatusAffected()) {
+        if (target.result.isStatusAffected()) {
             this.push("pushBaseLine");
             this.displayChangedStates(target);
             this.displayChangedBuffs(target);
@@ -537,7 +540,7 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public displayAutoAffectedStatus(target) {
-        if (target.result().isStatusAffected()) {
+        if (target.result.isStatusAffected()) {
             this.displayAffectedStatus(target);
             this.push("clear");
         }
@@ -549,40 +552,35 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public displayAddedStates(target) {
-        target
-            .result()
-            .addedStateObjects()
-            .forEach(function(state) {
-                const stateMsg = target.isActor()
-                    ? state.message1
-                    : state.message2;
-                if (state.id === target.deathStateId()) {
-                    this.push("performCollapse", target);
-                }
-                if (stateMsg) {
-                    this.push("popBaseLine");
-                    this.push("pushBaseLine");
-                    this.push("addText", target.name() + stateMsg);
-                    this.push("waitForEffect");
-                }
-            }, this);
+        if (!Yanfly.Param.BECShowStateText) return;
+        target.result.addedStateObjects().forEach(function(state) {
+            const stateMsg = target.isActor() ? state.message1 : state.message2;
+            if (state.id === target.deathStateId()) {
+                this.push("performCollapse", target);
+            }
+            if (stateMsg) {
+                this.push("popBaseLine");
+                this.push("pushBaseLine");
+                this.push("addText", target.name() + stateMsg);
+                this.push("waitForEffect");
+            }
+        }, this);
     }
 
     public displayRemovedStates(target) {
-        target
-            .result()
-            .removedStateObjects()
-            .forEach(function(state) {
-                if (state.message4) {
-                    this.push("popBaseLine");
-                    this.push("pushBaseLine");
-                    this.push("addText", target.name() + state.message4);
-                }
-            }, this);
+        if (!Yanfly.Param.BECShowStateText) return;
+        target.result.removedStateObjects().forEach(function(state) {
+            if (state.message4) {
+                this.push("popBaseLine");
+                this.push("pushBaseLine");
+                this.push("addText", target.name() + state.message4);
+            }
+        }, this);
     }
 
     public displayChangedBuffs(target) {
-        const result = target.result();
+        if (!Yanfly.Param.BECShowBuffText) return;
+        const result = target.result;
         this.displayBuffs(target, result.addedBuffs, TextManager.buffAdd);
         this.displayBuffs(target, result.addedDebuffs, TextManager.debuffAdd);
         this.displayBuffs(target, result.removedBuffs, TextManager.buffRemove);
@@ -600,7 +598,7 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public makeHpDamageText(target) {
-        const result = target.result();
+        const result = target.result;
         const damage = result.hpDamage;
         const isActor = target.isActor();
         let fmt;
@@ -624,7 +622,7 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public makeMpDamageText(target) {
-        const result = target.result();
+        const result = target.result;
         const damage = result.mpDamage;
         const isActor = target.isActor();
         let fmt;
@@ -645,7 +643,7 @@ export class Window_BattleLog extends Window_Selectable {
     }
 
     public makeTpDamageText(target) {
-        const result = target.result();
+        const result = target.result;
         const damage = result.tpDamage;
         const isActor = target.isActor();
         let fmt;
@@ -659,4 +657,129 @@ export class Window_BattleLog extends Window_Selectable {
             return "";
         }
     }
+
+    public updateWaitCount() {
+        if (this._waitCount > 0) {
+            this._waitCount -= 1;
+            if (this._waitCount < 0) {
+                this._waitCount = 0;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public animationBaseDelay() {
+        return Yanfly.Param.BECAniBaseDel;
+    }
+
+    public animationNextDelay() {
+        return Yanfly.Param.BECAniNextDel;
+    }
+
+    public updateWaitMode() {
+        var waiting = false;
+        switch (this._waitMode) {
+            case "effect":
+                waiting = this._spriteset.isEffecting();
+                break;
+            case "movement":
+                waiting = this._spriteset.isAnyoneMoving();
+                break;
+            case "animation":
+                waiting = this._spriteset.isAnimationPlaying();
+                break;
+            case "popups":
+                waiting = this._spriteset.isPopupPlaying();
+                break;
+        }
+        if (!waiting) {
+            this._waitMode = "";
+        }
+        return waiting;
+    }
+
+    public startAction(subject, action, targets) {}
+
+    public endAction(subject) {}
+
+    public waitForAnimation() {
+        this.setWaitMode("animation");
+    }
+
+    public waitForEffect() {
+        this.setWaitMode("effect");
+    }
+
+    public waitForPopups() {
+        this.setWaitMode("popups");
+    }
+
+    public textWidthEx(text) {
+        return this.drawTextEx(
+            text,
+            0,
+            this.contents.height + this.lineHeight()
+        );
+    }
+
+    public drawCenterLine(index) {
+        let text = this._lines[index].replace("<CENTER>", "");
+        let rect = this.itemRectForText(index);
+        this.contents.clearRect(rect.x, rect.y, rect.width, rect.height);
+        let tw = this.textWidthEx(text);
+        let wx = rect.x + (rect.width - tw) / 2;
+        this.resetFontSettings();
+        this.drawTextEx(text, wx, rect.y);
+    }
+
+    public drawSimpleActionLine(index) {
+        let text = this._lines[index].replace("<SIMPLE>", "");
+        let rect = this.itemRectForText(index);
+        this.contents.clearRect(rect.x, rect.y, rect.width, rect.height);
+        if (this._actionIcon) {
+            let tw = this.textWidth(text);
+            let ix = (rect.width - tw) / 2 - 4;
+            this.drawIcon(this._actionIcon, ix, rect.y + 2);
+        }
+        this.drawText(
+            text,
+            rect.x,
+            rect.y,
+            Graphics.boxWidth,
+            undefined,
+            "center"
+        );
+    }
+
+    public displayCounter(target) {
+        if (Yanfly.Param.BECShowCntText) {
+            this.addText(TextManager.counterAttack.format(target.name()));
+        }
+        target.performCounter();
+        this.showAttackAnimation(target, [BattleManager._subject]);
+        this.waitForAnimation();
+    }
+
+    public displayReflection(target) {
+        if (Yanfly.Param.BECShowRflText) {
+            this.addText(TextManager.magicReflection.format(target.name()));
+        }
+        target.performReflection();
+        let animationId = BattleManager._action.item().animationId;
+        this.showNormalAnimation([BattleManager._subject], animationId);
+        this.waitForAnimation();
+    }
+
+    public displaySubstitute(substitute, target) {
+        if (Yanfly.Param.BECShowSubText) {
+            let substName = substitute.name();
+            this.addText(
+                TextManager.substitute.format(substName, target.name())
+            );
+        }
+        substitute.performSubstitute(target);
+    }
+
+    public popupDamage(target) {}
 }

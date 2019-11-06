@@ -1,4 +1,5 @@
 import { Window_Selectable } from "./Window_Selectable";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 // -----------------------------------------------------------------------------
 // Window_ShopBuy
@@ -89,8 +90,10 @@ export class Window_ShopBuy extends Window_Selectable {
         rect.width -= this.textPadding();
         this.changePaintOpacity(this.isEnabled(item));
         await this.drawItemName(item, rect.x, rect.y, rect.width - priceWidth);
+        this.contents.fontSize = Yanfly.Param.GoldFontSize;
+        const itemPrice = Yanfly.Util.toGroup(this.price(item));
         await this.drawText(
-            this.price(item),
+            itemPrice,
             rect.x + rect.width - priceWidth,
             rect.y,
             priceWidth,
@@ -98,6 +101,7 @@ export class Window_ShopBuy extends Window_Selectable {
             "right"
         );
         this.changePaintOpacity(true);
+        this.resetFontSettings();
     }
 
     public setStatusWindow(statusWindow) {

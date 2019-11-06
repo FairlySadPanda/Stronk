@@ -10,13 +10,15 @@ import { Scene_Gameover } from "./Scene_Gameover";
 
 export class Scene_Base extends Stage {
     protected _fadeSprite: any;
-    protected _windowLayer: WindowLayer;
+    public _windowLayer: WindowLayer;
     protected _active: boolean;
     protected _fadeSign: number;
     protected _fadeDuration: number;
     protected _imageReservationId: number;
     protected importantBitmapsAreLoaded: boolean;
     protected _bypassFirstClear: boolean;
+    protected _debugActive: boolean;
+    public _logWindow: any;
 
     public constructor() {
         super();
@@ -26,6 +28,15 @@ export class Scene_Base extends Stage {
         this._fadeSprite = null;
         this._imageReservationId = Utils.generateRuntimeId();
         this.importantBitmapsAreLoaded = false;
+        this._debugActive = false;
+    }
+
+    public get debugActive(): boolean {
+        return this._debugActive;
+    }
+
+    public set debugActive(value: boolean) {
+        this._debugActive = value;
     }
 
     /**

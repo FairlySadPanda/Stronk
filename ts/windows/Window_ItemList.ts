@@ -1,6 +1,7 @@
 import { Item } from "../interfaces/Item";
 import { DataManager } from "../managers/DataManager";
 import { Window_Selectable } from "./Window_Selectable";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 // -----------------------------------------------------------------------------
 // Window_ItemList
@@ -97,28 +98,15 @@ export class Window_ItemList extends Window_Selectable {
     }
 
     public numberWidth() {
-        return this.textWidth("000");
+        return this.textWidth("\u00d70,000");
     }
 
     public drawItemNumber(item, x, y, width) {
-        if (this.needsNumber()) {
-            this.drawText(
-                ":",
-                x,
-                y,
-                width - this.textWidth("00"),
-                undefined,
-                "right"
-            );
-            this.drawText(
-                $gameParty.numItems(item).toString(),
-                x,
-                y,
-                width,
-                undefined,
-                "right"
-            );
-        }
+        if (!this.needsNumber()) return;
+        let numItems = Yanfly.Util.toGroup($gameParty.numItems(item));
+        this.contents.fontSize = Yanfly.Param.ItemQuantitySize;
+        this.drawText("\u00d7" + numItems, x, y, width, undefined, "right");
+        this.resetFontSettings();
     }
 
     public updateHelp() {

@@ -9,6 +9,7 @@ import { Scene_Base } from "./Scene_Base";
 import { Scene_Battle } from "./Scene_Battle";
 import { Scene_Map } from "./Scene_Map";
 import { Scene_Title } from "./Scene_Title";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 export class Scene_Boot extends Scene_Base {
     public static loadSystemImages() {
@@ -53,10 +54,14 @@ export class Scene_Boot extends Scene_Base {
     public isGameFontLoaded() {
         if (Graphics.isFontLoaded("GameFont")) {
             return true;
-        } else if (!Graphics.canUseCssFontLoading()) {
+        } else if (Yanfly.Param.GameFontTimer <= 0) {
+            return false;
+        } else {
             const elapsed = Date.now() - this._startDate;
-            if (elapsed >= 60000) {
+            if (elapsed >= Yanfly.Param.GameFontTimer) {
                 throw new Error("Failed to load GameFont");
+            } else {
+                return false;
             }
         }
     }

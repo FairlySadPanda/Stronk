@@ -12,14 +12,15 @@ import { Window_Base } from "./Window_Base";
 
 export class Window_Selectable extends Window_Base {
     protected _index: number;
-    private _cursorFixed: boolean;
-    private _cursorAll: boolean;
-    private _stayCount: number;
-    private _helpWindow: any;
-    private _handlers: {};
-    private _touching: boolean;
-    private _scrollX: number;
-    private _scrollY: number;
+    protected _cursorFixed: boolean;
+    protected _cursorAll: boolean;
+    protected _stayCount: number;
+    protected _helpWindow: any;
+    protected _handlers: {};
+    protected _touching: boolean;
+    protected _scrollX: number;
+    protected _scrollY: number;
+    protected _inputLock: any;
 
     public constructor(x: number, y: number, width: number, height: number) {
         super(x, y, width, height);
@@ -215,6 +216,7 @@ export class Window_Selectable extends Window_Base {
     }
 
     public isCursorMovable() {
+        if (this._inputLock) return false;
         return (
             this.isOpenAndActive() &&
             !this._cursorFixed &&

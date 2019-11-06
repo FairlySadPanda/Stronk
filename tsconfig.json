@@ -8,9 +8,10 @@
         "moduleResolution": "node",
         "sourceMap": true,
         "outDir": "js",
-        "allowJs": false
+        "allowJs": false,
+        "removeComments": false
     },
     "include": ["./**/*"],
-    "exclude": ["./ts/plugins.ts"],
+    "exclude": [],
     "files": ["./ts/globals.d.ts"]
 }

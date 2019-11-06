@@ -1,4 +1,5 @@
 import { Window_Selectable } from "./Window_Selectable";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 // -----------------------------------------------------------------------------
 // Window_SkillList
@@ -91,13 +92,8 @@ export class Window_SkillList extends Window_Selectable {
             const rect = this.itemRect(index);
             rect.width -= this.textPadding();
             this.changePaintOpacity(this.isEnabled(skill));
-            await this.drawItemName(
-                skill,
-                rect.x,
-                rect.y,
-                rect.width - costWidth
-            );
-            await this.drawSkillCost(skill, rect.x, rect.y, rect.width);
+            this.drawItemName(skill, rect.x, rect.y, rect.width - costWidth);
+            this.drawSkillCost(skill, rect.x, rect.y, rect.width);
             this.changePaintOpacity(1);
         }
     }
@@ -109,24 +105,16 @@ export class Window_SkillList extends Window_Selectable {
     public drawSkillCost(skill, x, y, width) {
         if (this._actor.skillTpCost(skill) > 0) {
             this.changeTextColor(this.tpCostColor());
-            this.drawText(
-                this._actor.skillTpCost(skill),
-                x,
-                y,
-                width,
-                undefined,
-                "right"
+            const skillcost = Yanfly.Util.toGroup(
+                this._actor.skillTpCost(skill)
             );
+            this.drawText(skillcost, x, y, width, undefined, "right");
         } else if (this._actor.skillMpCost(skill) > 0) {
             this.changeTextColor(this.mpCostColor());
-            this.drawText(
-                this._actor.skillMpCost(skill),
-                x,
-                y,
-                width,
-                undefined,
-                "right"
+            const skillcost = Yanfly.Util.toGroup(
+                this._actor.skillMpCost(skill)
             );
+            this.drawText(skillcost, x, y, width, undefined, "right");
         }
     }
 

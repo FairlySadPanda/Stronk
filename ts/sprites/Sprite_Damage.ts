@@ -1,5 +1,6 @@
 import { Sprite } from "../core/Sprite";
 import { ImageManager } from "../managers/ImageManager";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 // -----------------------------------------------------------------------------
 // Sprite_Damage
@@ -11,6 +12,7 @@ export class Sprite_Damage extends Sprite {
     private _flashColor: number[];
     private _flashDuration: number;
     private _damageBitmap: any;
+    private _result: any;
 
     public constructor() {
         super();
@@ -18,10 +20,12 @@ export class Sprite_Damage extends Sprite {
         this._flashColor = [0, 0, 0, 0];
         this._flashDuration = 0;
         this._damageBitmap = ImageManager.loadSystem("Damage");
+        this._duration = Yanfly.Param.BECPopupDur;
     }
 
     public setup(target) {
-        const result = target.result();
+        this._result = target.shiftDamagePopup();
+        const result = this._result;
         if (result.missed || result.evaded) {
             this.createMiss();
         } else if (result.hpAffected) {
@@ -35,8 +39,8 @@ export class Sprite_Damage extends Sprite {
     }
 
     public setupCriticalEffect() {
-        this._flashColor = [255, 0, 0, 160];
-        this._flashDuration = 60;
+        this._flashColor = eval("[" + Yanfly.Param.BECCritPopup + "]");
+        this._flashDuration = Yanfly.Param.BECCritDur;
     }
 
     public digitWidth() {
@@ -90,6 +94,9 @@ export class Sprite_Damage extends Sprite {
         }
         this.updateFlash();
         this.updateOpacity();
+        if (this._duration <= 0 && this.parent) {
+            this.parent.removeChild(this);
+        }
     }
 
     public updateChild(sprite) {

@@ -53,6 +53,47 @@ export class Spriteset_Battle extends Spriteset_Base {
         super.update();
         this._loadingDone ? this.updateActors() : null;
         this.updateBattleback();
+        this.updateZCoordinates();
+    }
+
+    public updateZCoordinates() {
+        // if (Imported.YEP_ImprovedBattlebacks) {
+        //     this.updateBattlebackGroupRemove();
+        // } else {
+        this._battleField.removeChild(this._back1Sprite);
+        this._battleField.removeChild(this._back2Sprite);
+        // }
+        this._battleField.children.sort(this.battleFieldDepthCompare);
+        // if (Imported.YEP_ImprovedBattlebacks) {
+        //     this.updateBattlebackGroupAdd();
+        // } else {
+        this._battleField.addChildAt(this._back2Sprite, 0);
+        this._battleField.addChildAt(this._back1Sprite, 0);
+        // }
+    }
+
+    public battleFieldDepthCompare(a, b) {
+        let priority = BattleManager.getSpritePriority();
+        if (a._battler && b._battler && priority !== 0) {
+            if (priority === 1) {
+                if (a._battler.isActor() && b._battler.isEnemy()) return 1;
+                if (a._battler.isEnemy() && b._battler.isActor()) return -1;
+            } else if (priority === 2) {
+                if (a._battler.isActor() && b._battler.isEnemy()) return -1;
+                if (a._battler.isEnemy() && b._battler.isActor()) return 1;
+            }
+        }
+        if (a.z < b.z) return -1;
+        if (a.z > b.z) return 1;
+        if (a.y < b.y) return -1;
+        if (a.y > b.y) return 1;
+        return 0;
+    }
+
+    public isPopupPlaying() {
+        return this.battlerSprites().some(function(sprite) {
+            return sprite.isPopupPlaying();
+        });
     }
 
     public createBattleField() {
@@ -350,7 +391,16 @@ export class Spriteset_Battle extends Spriteset_Base {
     }
 
     public battlerSprites(): Sprite_Battler[] {
-        return [...this._enemySprites, ...this._actorSprites];
+        const sprites = [...this._enemySprites, ...this._actorSprites];
+        const length = sprites.length;
+        const result: Sprite_Battler[] = [];
+        for (let i = 0; i < length; ++i) {
+            const sprite = sprites[i];
+            if (!sprite) continue;
+            if (!sprite.battler) continue;
+            result.push(sprite);
+        }
+        return result;
     }
 
     public isAnimationPlaying() {
@@ -372,6 +422,6 @@ export class Spriteset_Battle extends Spriteset_Base {
     }
 
     public isBusy() {
-        return this.isAnimationPlaying() || this.isAnyoneMoving();
+        return false;
     }
 }

@@ -1,5 +1,6 @@
 import { Window_Message } from "./Window_Message";
 import { Window_Selectable } from "./Window_Selectable";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 // -----------------------------------------------------------------------------
 // Window_Command
@@ -143,7 +144,7 @@ export class Window_Command extends Window_Selectable {
     }
 
     public itemTextAlign(): CanvasTextAlign {
-        return "left";
+        return Yanfly.Param.TextAlign;
     }
 
     public isOkEnabled() {
