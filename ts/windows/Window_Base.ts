@@ -32,7 +32,7 @@ export class Window_Base extends Window {
     private _closing: boolean;
     private _dimmerSprite: Sprite;
 
-    public constructor(x, y, width, height) {
+    public constructor(x: number, y: number, width: number, height: number) {
         super();
         this._list = [];
         this.loadWindowskin();
@@ -125,7 +125,7 @@ export class Window_Base extends Window {
         return this._height - this.standardPadding() * 2;
     }
 
-    public fittingHeight(numLines) {
+    public fittingHeight(numLines: number) {
         return numLines * this.lineHeight() + this.standardPadding() * 2;
     }
 
@@ -213,7 +213,7 @@ export class Window_Base extends Window {
         this.active = false;
     }
 
-    public textColor(n) {
+    public textColor(n: number) {
         const px = 96 + (n % 8) * 12 + 6;
         const py = 144 + Math.floor(n / 8) * 12 + 6;
         return this.windowskin.getPixel(px, py);
@@ -287,11 +287,11 @@ export class Window_Base extends Window {
         return 160;
     }
 
-    public changeTextColor(color) {
+    public changeTextColor(color: string) {
         this.contents.textColor = color;
     }
 
-    public changePaintOpacity(enabled) {
+    public changePaintOpacity(enabled: number | boolean) {
         this.contents.paintOpacity = enabled ? 255 : this.translucentOpacity();
     }
 
@@ -313,7 +313,7 @@ export class Window_Base extends Window {
         );
     }
 
-    public textWidth(text) {
+    public textWidth(text: string) {
         return this.contents.measureTextWidth(text);
     }
 
@@ -347,7 +347,7 @@ export class Window_Base extends Window {
         );
     }
 
-    public convertEscapeCharacters(text) {
+    public convertEscapeCharacters(text: string) {
         text = text.replace(/\\/g, "\x1b");
         text = text.replace(/\x1b\x1b/g, "\\");
         text = text.replace(/\x1bV\[(\d+)\]/gi, function() {
@@ -372,17 +372,17 @@ export class Window_Base extends Window {
         return text;
     }
 
-    public actorName(n) {
+    public actorName(n: number) {
         const actor = n >= 1 ? $gameActors.actor(n) : null;
         return actor ? actor.name() : "";
     }
 
-    public partyMemberName(n) {
+    public partyMemberName(n: number) {
         const actor = n >= 1 ? $gameParty.members()[n - 1] : null;
         return actor ? actor.name() : "";
     }
 
-    public processCharacter(textState) {
+    public processCharacter(textState: any) {
         switch (textState.text[textState.index]) {
             case "\n":
                 this.processNewLine(textState);
@@ -402,7 +402,13 @@ export class Window_Base extends Window {
         }
     }
 
-    public processNormalCharacter(textState) {
+    public processNormalCharacter(textState: {
+        text: any[];
+        index: number;
+        x: number;
+        y: number;
+        height: number;
+    }) {
         const c = textState.text[textState.index++];
         const w = this.textWidth(c);
         this.contents.drawText(
@@ -415,18 +421,21 @@ export class Window_Base extends Window {
         textState.x += w;
     }
 
-    public processNewLine(textState) {
+    public processNewLine(textState: any) {
         textState.x = textState.left;
         textState.y += textState.height;
         textState.height = this.calcTextHeight(textState, false);
         textState.index++;
     }
 
-    public processNewPage(textState) {
+    public processNewPage(textState: { index: number }) {
         textState.index++;
     }
 
-    public obtainEscapeCode(textState) {
+    public obtainEscapeCode(textState: {
+        index: number;
+        text: { slice: (arg0: any) => string };
+    }) {
         textState.index++;
         const regExp = /^[.|^!><{}\\]|^[A-Z]+/i;
         const arr = regExp.exec(textState.text.slice(textState.index));
@@ -438,7 +447,10 @@ export class Window_Base extends Window {
         }
     }
 
-    public obtainEscapeParam(textState) {
+    public obtainEscapeParam(textState: {
+        text: { slice: (arg0: any) => string };
+        index: number;
+    }) {
         const arr = /^\[\d+\]/.exec(textState.text.slice(textState.index));
         if (arr) {
             textState.index += arr[0].length;
@@ -448,7 +460,7 @@ export class Window_Base extends Window {
         }
     }
 
-    public processEscapeCharacter(code, textState) {
+    public processEscapeCharacter(code: string, textState: any) {
         switch (code) {
             case "C":
                 this.changeTextColor(
@@ -470,7 +482,10 @@ export class Window_Base extends Window {
         }
     }
 
-    public processDrawIcon(iconIndex, textState) {
+    public processDrawIcon(
+        iconIndex: number,
+        textState: { x: number; y: number }
+    ) {
         this.drawIcon(iconIndex, textState.x + 2, textState.y + 2);
         textState.x += Window_Base._iconWidth + 4;
     }
@@ -487,7 +502,17 @@ export class Window_Base extends Window {
         }
     }
 
-    public calcTextHeight(textState, all) {
+    public calcTextHeight(
+        textState: {
+            index: any;
+            x?: number;
+            y?: number;
+            left?: number;
+            text: any;
+            height?: any;
+        },
+        all: boolean
+    ) {
         const lastFontSize = this.contents.fontSize;
         let textHeight = 0;
         const lines = textState.text.slice(textState.index).split("\n");
@@ -519,7 +544,7 @@ export class Window_Base extends Window {
         return textHeight;
     }
 
-    public async drawIcon(iconIndex, x, y) {
+    public async drawIcon(iconIndex: number, x: number, y: number) {
         const bitmap = ImageManager.loadSystem("IconSet");
         await bitmap.imagePromise;
         const pw = Window_Base._iconWidth;
@@ -569,7 +594,14 @@ export class Window_Base extends Window {
         this.contents.blt(bitmap, sx, sy, pw, ph, x - pw / 2, y - ph);
     }
 
-    public drawGauge(dx, dy, dw, rate, color1, color2) {
+    public drawGauge(
+        dx: number,
+        dy: number,
+        dw: number,
+        rate: number,
+        color1: string,
+        color2: string
+    ) {
         const color3 = this.gaugeBackColor();
         let fillW = Utils.clamp(Math.floor(dw * rate), 0, dw);
         let gaugeH = this.gaugeHeight();
@@ -599,7 +631,7 @@ export class Window_Base extends Window {
         return Yanfly.Param.GaugeHeight;
     }
 
-    public hpColor(actor) {
+    public hpColor(actor: Game_Actor) {
         if (actor.isDead()) {
             return this.deathColor();
         } else if (actor.isDying()) {
@@ -609,19 +641,29 @@ export class Window_Base extends Window {
         }
     }
 
-    public mpColor(actor) {
+    public mpColor(actor: Game_Actor) {
         return this.normalColor();
     }
 
-    public tpColor(actor) {
+    public tpColor(actor: any) {
         return this.normalColor();
     }
 
-    public drawActorCharacter(actor, x, y) {
+    public drawActorCharacter(
+        actor: { characterName: () => string; characterIndex: () => number },
+        x: number,
+        y: number
+    ) {
         this.drawCharacter(actor.characterName(), actor.characterIndex(), x, y);
     }
 
-    public async drawActorFace(actor, x, y, width?, height?) {
+    public async drawActorFace(
+        actor: Game_Actor,
+        x: number,
+        y: number,
+        width?: number,
+        height?: number
+    ) {
         await this.drawFace(
             actor.faceName(),
             actor.faceIndex(),
@@ -654,13 +696,18 @@ export class Window_Base extends Window {
         this.drawText(actor.currentClass().name, x, y, width);
     }
 
-    public drawActorNickname(actor, x, y, width?) {
+    public drawActorNickname(
+        actor: Game_Actor,
+        x: number,
+        y: number,
+        width?: number
+    ) {
         width = width || 270;
         this.resetTextColor();
         this.drawText(actor.nickname(), x, y, width);
     }
 
-    public drawActorLevel(actor: Game_Actor, x, y) {
+    public drawActorLevel(actor: Game_Actor, x: number, y: number) {
         this.changeTextColor(this.systemColor());
         const dw1 = this.textWidth(TextManager.levelA);
         this.drawText(TextManager.levelA, x, y, dw1);
@@ -689,7 +736,15 @@ export class Window_Base extends Window {
         await Promise.all(promises);
     }
 
-    public drawCurrentAndMax(current, max, x, y, width, color1, color2) {
+    public drawCurrentAndMax(
+        current: any,
+        max: any,
+        x: number,
+        y: number,
+        width: number,
+        color1: string,
+        color2: string
+    ) {
         const labelWidth = this.textWidth("HP");
         const valueWidth = this.textWidth(Yanfly.Util.toGroup(max));
         const slashWidth = this.textWidth("/");
@@ -775,7 +830,7 @@ export class Window_Base extends Window {
         );
     }
 
-    public drawActorTp(actor, x, y, width) {
+    public drawActorTp(actor: Game_Actor, x: number, y: number, width: number) {
         width = width || 96;
         const color1 = this.tpGaugeColor1();
         const color2 = this.tpGaugeColor2();
@@ -786,7 +841,12 @@ export class Window_Base extends Window {
         this.drawText(actor.tp, x + width - 64, y, 64, undefined, "right");
     }
 
-    public async drawActorSimpleStatus(actor, x, y, width) {
+    public async drawActorSimpleStatus(
+        actor: Game_Actor,
+        x: number,
+        y: number,
+        width: number
+    ) {
         const lineHeight = this.lineHeight();
         const xpad = Window_Base._faceWidth + 2 * Yanfly.Param.TextPadding;
         const x2 = x + 180;
@@ -812,7 +872,13 @@ export class Window_Base extends Window {
         }
     }
 
-    public drawCurrencyValue(value, unit, wx, wy, ww) {
+    public drawCurrencyValue(
+        value: number,
+        unit: string,
+        wx: number,
+        wy: number,
+        ww: number
+    ) {
         this.resetTextColor();
         this.contents.fontSize = Yanfly.Param.GoldFontSize;
         if (this.usingGoldIcon(unit)) {
@@ -838,12 +904,12 @@ export class Window_Base extends Window {
         this.resetFontSettings();
     }
 
-    public usingGoldIcon(unit) {
+    public usingGoldIcon(unit: string) {
         if (unit !== TextManager.currencyUnit) return false;
         return Yanfly.Icon.Gold > 0;
     }
 
-    public paramchangeTextColor(change) {
+    public paramchangeTextColor(change: number) {
         if (change > 0) {
             return this.powerUpColor();
         } else if (change < 0) {
@@ -853,7 +919,7 @@ export class Window_Base extends Window {
         }
     }
 
-    public setBackgroundType(type) {
+    public setBackgroundType(type: number) {
         if (type === 0) {
             this.opacity = 255;
         } else {
@@ -916,7 +982,7 @@ export class Window_Base extends Window {
         return "rgba(0, 0, 0, 0)";
     }
 
-    public canvasToLocalX(x) {
+    public canvasToLocalX(x: number) {
         let node = this;
         while (node) {
             x -= node.x;
@@ -926,7 +992,7 @@ export class Window_Base extends Window {
         return x;
     }
 
-    public canvasToLocalY(y) {
+    public canvasToLocalY(y: number) {
         let node = this;
         while (node) {
             y -= node.y;
