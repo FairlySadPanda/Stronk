@@ -7,6 +7,7 @@ import { Game_ActionResult } from "./Game_ActionResult";
 import { Game_BattlerBase, Game_BattlerBase_OnLoad } from "./Game_BattlerBase";
 import { JsonEx } from "../core/JsonEx";
 import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { Sprite_Battler } from "../sprites/Sprite_Battler";
 
 export interface Game_Battler_OnLoad extends Game_BattlerBase_OnLoad {
     _actions: any[];
@@ -671,7 +672,7 @@ export abstract class Game_Battler extends Game_BattlerBase {
         }
     }
 
-    public setBattler(sprite) {
+    public setBattler(sprite: Sprite_Battler) {
         BattleManager.registerSprite(this, sprite);
     }
 

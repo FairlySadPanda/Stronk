@@ -1,7 +1,6 @@
 import { Sprite_Base } from "./Sprite_Base";
 import { Sprite_Damage } from "./Sprite_Damage";
 import { Game_Battler } from "../objects/Game_Battler";
-import { ConfigManager } from "../managers/ConfigManager";
 import { BattleManager } from "../managers/BattleManager";
 import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 import { ScreenSprite } from "../core/ScreenSprite";
@@ -34,7 +33,7 @@ export class Sprite_Battler extends Sprite_Base {
     private _postSpriteInitialized: boolean;
     protected _mainSprite: Sprite_Base;
 
-    public constructor(battler?) {
+    public constructor(battler?: Game_Battler) {
         super();
         this.preSpriteInitialize(battler);
         this.initMembers();
@@ -64,7 +63,7 @@ export class Sprite_Battler extends Sprite_Base {
         this.setZ();
     }
 
-    public setBattler(battler) {
+    public setBattler(battler: Game_Battler) {
         this._battler = battler;
         if (battler) battler.setBattler(this);
     }

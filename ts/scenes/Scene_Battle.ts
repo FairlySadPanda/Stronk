@@ -19,17 +19,17 @@ import { Scene_Base } from "./Scene_Base";
 import { Scene_Gameover } from "./Scene_Gameover";
 import { Scene_Title } from "./Scene_Title";
 import { Window_ItemList } from "../windows/Window_ItemList";
-import { Window_SkillList } from "../windows/Window_SkillList";
 import { ConfigManager } from "../managers/ConfigManager";
 import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 import { Game_CommonEvent } from "../objects/Game_CommonEvent";
 import { CommonEvent } from "../interfaces/CommonEvent";
+import { Window_Base } from "../windows/Window_Base";
 
 export class Scene_Battle extends Scene_Base {
     private _partyCommandWindow: Window_PartyCommand;
     private _actorCommandWindow: Window_ActorCommand;
-    private _skillWindow: Window_SkillList;
-    private _itemWindow: Window_ItemList;
+    private _skillWindow: Window_BattleSkill;
+    private _itemWindow: Window_BattleItem;
     private _actorWindow: Window_BattleActor;
     private _enemyWindow: Window_BattleEnemy;
     private _statusWindow: Window_BattleStatus;
@@ -287,7 +287,7 @@ export class Scene_Battle extends Scene_Base {
         this._skillWindow.setHandler("cancel", this.onSkillCancel.bind(this));
         this.addWindow(this._skillWindow);
         if (Yanfly.Param.BECLowerWindows) {
-            this.adjustLowerWindow(this._skillWindow);
+            this.adjustWindow(this._skillWindow);
         }
     }
 
@@ -300,7 +300,7 @@ export class Scene_Battle extends Scene_Base {
         this._itemWindow.setHandler("cancel", this.onItemCancel.bind(this));
         this.addWindow(this._itemWindow);
         if (Yanfly.Param.BECLowerWindows) {
-            this.adjustLowerWindow(this._itemWindow);
+            this.adjustWindow(this._itemWindow);
         }
     }
 
@@ -331,7 +331,7 @@ export class Scene_Battle extends Scene_Base {
         }
     }
 
-    public adjustLowerWindow(win) {
+    private adjustWindow(win: Window_Base) {
         win.height = win.fittingHeight(Yanfly.Param.BECWindowRows);
         win.y = Graphics.boxHeight - win.height;
     }
@@ -411,6 +411,7 @@ export class Scene_Battle extends Scene_Base {
     public commandItem() {
         this._helpWindow.clear();
         this._itemWindow.refresh();
+        this._itemWindow.actor = BattleManager.actor();
         this._itemWindow.show();
         this._itemWindow.activate();
     }
@@ -465,6 +466,7 @@ export class Scene_Battle extends Scene_Base {
                 this._skillWindow.activate();
                 break;
             case "item":
+                this._itemWindow.actor = BattleManager.actor();
                 this._itemWindow.show();
                 this._itemWindow.activate();
                 break;
@@ -505,6 +507,7 @@ export class Scene_Battle extends Scene_Base {
                 this._skillWindow.activate();
                 break;
             case "item":
+                this._itemWindow.actor = BattleManager.actor();
                 this._itemWindow.show();
                 this._itemWindow.activate();
                 break;

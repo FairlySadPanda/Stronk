@@ -310,17 +310,17 @@ export class Game_Party extends Game_Unit {
         });
     }
 
-    public loseItem(item, amount, includeEquip?) {
+    public loseItem(item: Item, amount: number, includeEquip?: boolean) {
         this.gainItem(item, -amount, includeEquip);
     }
 
-    public consumeItem(item) {
+    public consumeItem(item: Item) {
         if (DataManager.isItem(item) && item.consumable) {
             this.loseItem(item, 1);
         }
     }
 
-    public canUse(item) {
+    public canUse(item: Item) {
         return this.members().some(function(actor) {
             return actor.canUse(item);
         });
