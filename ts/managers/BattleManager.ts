@@ -31,7 +31,7 @@ export abstract class BattleManager {
     private static _mapBgm: any;
     private static _mapBgs: any;
     private static _actionBattlers: any[];
-    private static _subject: any;
+    private static _subject: Game_Battler;
     private static _action: any;
     private static _targets: any[];
     private static _logWindow: any;

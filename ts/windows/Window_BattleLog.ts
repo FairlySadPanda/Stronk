@@ -754,7 +754,9 @@ export class Window_BattleLog extends Window_Selectable {
 
     public displayCounter(target) {
         if (Yanfly.Param.BECShowCntText) {
-            this.addText(TextManager.counterAttack.format(target.name()));
+            this.addText(
+                Utils.format(TextManager.counterAttack, target.name())
+            );
         }
         target.performCounter();
         this.showAttackAnimation(target, [BattleManager._subject]);
@@ -763,7 +765,9 @@ export class Window_BattleLog extends Window_Selectable {
 
     public displayReflection(target) {
         if (Yanfly.Param.BECShowRflText) {
-            this.addText(TextManager.magicReflection.format(target.name()));
+            this.addText(
+                Utils.format(TextManager.magicReflection, target.name())
+            );
         }
         target.performReflection();
         let animationId = BattleManager._action.item().animationId;
@@ -775,7 +779,7 @@ export class Window_BattleLog extends Window_Selectable {
         if (Yanfly.Param.BECShowSubText) {
             let substName = substitute.name();
             this.addText(
-                TextManager.substitute.format(substName, target.name())
+                Utils.format(TextManager.substitute, substName, target.name())
             );
         }
         substitute.performSubstitute(target);
