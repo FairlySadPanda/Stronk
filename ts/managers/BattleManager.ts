@@ -8,6 +8,9 @@ import { SoundManager } from "./SoundManager";
 import { TextManager } from "./TextManager";
 import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 import { JsonEx } from "../core/JsonEx";
+import { Game_Actor } from "../objects/Game_Actor";
+import { Game_Enemy } from "../objects/Game_Enemy";
+import { Sprite_Battler } from "../sprites/Sprite_Battler";
 
 interface Rewards {
     gold: number;
@@ -16,53 +19,53 @@ interface Rewards {
 }
 
 export abstract class BattleManager {
-    public static _canEscape: any;
-    public static _canLose: any;
-    public static _phase: string;
-    public static _battleTest: boolean;
-    public static _eventCallback: any;
-    public static _preemptive: boolean;
-    public static _surprise: boolean;
-    public static _actorIndex: number;
-    public static _actionForcedBattler: any;
-    public static _mapBgm: any;
-    public static _mapBgs: any;
-    public static _actionBattlers: any[];
-    public static _subject: any;
-    public static _action: any;
-    public static _targets: any[];
-    public static _logWindow: any;
-    public static _statusWindow: any;
-    public static _spriteset: any;
-    public static _escapeRatio: number;
-    public static _escaped: boolean;
-    public static _rewards: Rewards;
-    public static _turnForced: boolean;
-    static _forceSelection: boolean;
-    static _allSelection: boolean;
-    static _victoryPhase: boolean;
-    static _forceActionQueue: any[];
-    static _escapeFailBoost: any;
-    static _timeBasedStates: any;
-    static _timeBasedBuffs: any;
-    static _registeredSprites: any;
-    static _spritePriority: any;
-    static _processTurn: boolean;
-    static _windowLayer: any;
-    static _enteredEndPhase: boolean;
-    static _performedBattlers: any;
-    static _processingForcedAction: any;
-    static _allTargets: any;
-    static _individualTargets: any;
-    static _phaseSteps: string[];
-    static _returnPhase: string;
-    static _actionList: any[];
-    static _preForcePhase: string;
-    static _target: any;
-    static _conditionFlags: any;
-    static _trueFlags: any;
-    static _actSeq: any;
-    static _bypassMoveToStartLocation: any;
+    private static _canEscape: any;
+    private static _canLose: any;
+    private static _phase: string;
+    private static _battleTest: boolean;
+    private static _eventCallback: any;
+    private static _preemptive: boolean;
+    private static _surprise: boolean;
+    private static _actorIndex: number;
+    private static _actionForcedBattler: any;
+    private static _mapBgm: any;
+    private static _mapBgs: any;
+    private static _actionBattlers: any[];
+    private static _subject: any;
+    private static _action: any;
+    private static _targets: any[];
+    private static _logWindow: any;
+    private static _statusWindow: any;
+    private static _spriteset: any;
+    private static _escapeRatio: number;
+    private static _escaped: boolean;
+    private static _rewards: Rewards;
+    private static _turnForced: boolean;
+    private static _forceSelection: boolean;
+    private static _allSelection: boolean;
+    private static _victoryPhase: boolean;
+    private static _forceActionQueue: any[];
+    private static _escapeFailBoost: any;
+    private static _timeBasedStates: any;
+    private static _timeBasedBuffs: any;
+    private static _registeredSprites: any;
+    private static _spritePriority: any;
+    private static _processTurn: boolean;
+    private static _windowLayer: any;
+    private static _enteredEndPhase: boolean;
+    private static _performedBattlers: any;
+    private static _processingForcedAction: any;
+    private static _allTargets: any;
+    private static _individualTargets: any;
+    private static _phaseSteps: string[];
+    private static _returnPhase: string;
+    private static _actionList: any[];
+    private static _preForcePhase: string;
+    private static _target: any;
+    private static _conditionFlags: any;
+    private static _trueFlags: any;
+    private static _actSeq: any;
+    private static _bypassMoveToStartLocation: any;
 
     public static setup(troopId, canEscape, canLose) {
         this.initMembers();
@@ -901,19 +904,22 @@ export abstract class BattleManager {
         }
     }
 
-    public static registerSprite(battler, sprite) {
+    public static registerSprite(
+        battler: Game_Battler,
+        sprite: Sprite_Battler
+    ) {
         let id = 0;
         if (!this._registeredSprites) this._registeredSprites = {};
-        if (battler.isActor()) id = 100000 + battler.actorId();
-        if (battler.isEnemy()) id = 200000 + battler.index();
+        if (battler.isActor()) id = 100000 + (battler as Game_Actor).actorId();
+        if (battler.isEnemy()) id = 200000 + (battler as Game_Enemy).index();
         this._registeredSprites[id] = sprite;
     }
 
-    public static getSprite(battler) {
+    public static getSprite(battler: Game_Battler): Sprite_Battler {
         let id = 0;
         if (!this._registeredSprites) this._registeredSprites = {};
-        if (battler.isActor()) id = 100000 + battler.actorId();
-        if (battler.isEnemy()) id = 200000 + battler.index();
+        if (battler.isActor()) id = 100000 + (battler as Game_Actor).actorId();
+        if (battler.isEnemy()) id = 200000 + (battler as Game_Enemy).index();
         return this._registeredSprites[id];
     }
 
