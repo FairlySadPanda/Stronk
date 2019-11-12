@@ -4,8 +4,19 @@ import { Point } from "./Point";
 import { Rectangle } from "./Rectangle";
 import { Sprite } from "./Sprite";
 import { Utils } from "./Utils";
+import { ConfigManager } from "../managers/ConfigManager";
 
 export class Window extends PIXI.Container {
+    /**
+     * The maximum width a window can be without having to handle widescreen formatting
+     */
+    public static get maxWidthOfWindow() {
+        return Math.min(
+            (ConfigManager.currentResolution.heightPx / 3) * 4,
+            ConfigManager.currentResolution.widthPx
+        );
+    }
+
     public origin: Point;
     public active: boolean;
     public downArrowVisible: boolean;
@@ -120,7 +131,7 @@ export class Window extends PIXI.Container {
      * @param {Number} width The width of the window
      * @param {Number} height The height of the window
      */
-    public move(x, y, width, height) {
+    public move(x: number, y: number, width: number, height: number) {
         this.x = x || 0;
         this.y = y || 0;
         if (this._width !== width || this._height !== height) {
@@ -157,7 +168,7 @@ export class Window extends PIXI.Container {
      * @param {Number} width The width of the cursor
      * @param {Number} height The height of the cursor
      */
-    public setCursorRect(x, y, width, height) {
+    public setCursorRect(x: number, y: number, width: number, height: number) {
         const cx = Math.floor(x || 0);
         const cy = Math.floor(y || 0);
         const cw = Math.floor(width || 0);
@@ -185,7 +196,7 @@ export class Window extends PIXI.Container {
      * @param {Number} g The green value in the range (-255, 255)
      * @param {Number} b The blue value in the range (-255, 255)
      */
-    public setTone(r, g, b) {
+    public setTone(r: number, g: number, b: number) {
         const tone = this._colorTone;
         if (r !== tone[0] || g !== tone[1] || b !== tone[2]) {
             this._colorTone = [r, g, b];
@@ -200,7 +211,7 @@ export class Window extends PIXI.Container {
      * @param {Object} child The child to add
      * @return {Object} The child that was added
      */
-    public addChildToBack(child) {
+    public addChildToBack(child: Sprite) {
         const containerIndex = this.children.indexOf(
             this._windowSpriteContainer
         );
