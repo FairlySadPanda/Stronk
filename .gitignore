@@ -10,5 +10,6 @@ movies
 save
 Game.rpgproject
 package-lock.json
-/ts/plugins
+*.js
+*.rar
 *.code-workspace
