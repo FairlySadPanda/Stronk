@@ -1,6 +1,7 @@
 import { Utils } from "../core/Utils";
 import { Game_Character, Game_Character_OnLoad } from "./Game_Character";
 import { Game_Interpreter, Game_Interpreter_OnLoad } from "./Game_Interpreter";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 export interface Game_Event_OnLoad extends Game_Character_OnLoad {
     _mapId: number;
@@ -104,6 +105,7 @@ export class Game_Event extends Game_Character {
     }
 
     public isCollidedWithPlayerCharacters(x, y) {
+        if ($gameTemp.moveAllowPlayerCollision) return false;
         return this.isNormalPriority() && $gamePlayer.isCollided(x, y);
     }
 
@@ -132,7 +134,16 @@ export class Game_Event extends Game_Character {
         }
     }
 
+    public checkUpdateSelfMove() {
+        var note = this.event().note;
+        this._isAlwaysUpdateMovement = !!note.match(
+            /<ALWAYS UPDATE MOVEMENT>/i
+        );
+    }
+
     public updateSelfMovement() {
+        if (this._isAlwaysUpdateMovement === undefined)
+            this.checkUpdateSelfMove();
         if (
             !this._locked &&
             this.isNearTheScreen() &&
@@ -389,5 +400,45 @@ export class Game_Event extends Game_Character {
     public forceMoveRoute(moveRoute) {
         super.forceMoveRoute(moveRoute);
         this._prelockDirection = 0;
+    }
+
+    public processMoveRouteSelfVariable(str, code) {
+        let keyName: string;
+        let value;
+        // if (!Imported.YEP_SelfSwVar) return;
+        if (str.match(/(\d+)/i)) {
+            keyName = "SELF VARIABLE " + parseInt(RegExp.$1);
+        } else {
+            keyName = str.toUpperCase();
+        }
+        const key = [$gameMap.mapId(), this.eventId(), keyName];
+        try {
+            value = eval(code);
+        } catch (e) {
+            value = 0;
+            Yanfly.Util.displayError(
+                e,
+                code,
+                "MOVE ROUTE SELF VARIABLE SCRIPT ERROR"
+            );
+        }
+        $gameSelfSwitches.setValue(key, value);
+    }
+
+    public processMoveRouteSelfSwitch(str, setting) {
+        let keyName: string;
+        if (str.match(/(\d+)/i)) {
+            keyName = "SELF SWITCH " + parseInt(RegExp.$1);
+        } else {
+            keyName = str.toUpperCase();
+        }
+        const key = [$gameMap.mapId(), this.eventId(), keyName];
+        if (setting.toUpperCase() === "ON") {
+            $gameSelfSwitches.setValue(key, true);
+        } else if (setting.toUpperCase() === "OFF") {
+            $gameSelfSwitches.setValue(key, false);
+        } else if (setting.toUpperCase() === "TOGGLE") {
+            $gameSelfSwitches.setValue(key, !$gameSelfSwitches.value(key));
+        }
     }
 }

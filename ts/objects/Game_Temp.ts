@@ -7,7 +7,24 @@ export class Game_Temp {
     private _destinationX: number;
     private _destinationY: number;
     private _forceActionQueue: any;
-    _disableMouseOverSelect: any;
+    private _disableMouseOverSelect: any;
+    private _moveCommand: any;
+
+    public get moveCommand(): any {
+        return this._moveCommand;
+    }
+    public set moveCommand(value: any) {
+        this._moveCommand = value;
+    }
+
+    private _moveAllowPlayerCollision: boolean;
+
+    public get moveAllowPlayerCollision(): boolean {
+        return this._moveAllowPlayerCollision;
+    }
+    public set moveAllowPlayerCollision(value: boolean) {
+        this._moveAllowPlayerCollision = value;
+    }
 
     public isPlaytest() {
         return this._isPlaytest;
