@@ -1,3 +1,4 @@
+import "pixi-tilemap";
 import * as PIXI from "pixi.js";
 import { ConfigManager } from "../managers/ConfigManager";
 import { PluginManager } from "../managers/PluginManager";

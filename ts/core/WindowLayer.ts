@@ -116,8 +116,7 @@ export class WindowLayer extends PIXI.Container {
             ((projectionMatrix.ty + 1) / 2) * projection.sourceFrame.height
         );
 
-        for (let i = 0; i < this.children.length; i++) {
-            const child = this.children[i] as Window;
+        for (const child of this.children as Window[]) {
             if (child._isWindow && child.visible && child.openness > 0) {
                 this._maskWindow(child, shift);
                 renderer.mask.push(child, new PIXI.MaskData(this._windowMask));
@@ -131,7 +130,7 @@ export class WindowLayer extends PIXI.Container {
 
         renderer.batch.flush();
         renderer.filter.pop();
-        renderer.scissor.pop();
+        renderer.mask.pop(this);
 
         for (let j = 0; j < this.children.length; j++) {
             const child = this.children[j] as Window;

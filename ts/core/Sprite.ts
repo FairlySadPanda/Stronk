@@ -382,36 +382,6 @@ export class Sprite extends PIXI.Sprite {
         context.drawImage(this._bitmap.canvas, x, y, w, h, 0, 0, w, h);
     }
 
-    // /**
-    //  * checks if we need to speed up custom blendmodes
-    //  * @param renderer
-    //  * @private
-    //  */
-    // public _speedUpCustomBlendModes(renderer: ) {
-    //     const picture = renderer.plugins.picture;
-    //     const blend = this.blendMode;
-    //     if (renderer.renderingToScreen && renderer._activeRenderTarget.root) {
-    //         if (picture.drawModes[blend]) {
-    //             const stage = renderer._lastObjectRendered;
-    //             const f = stage._filters;
-    //             if (!f || !f[0]) {
-    //                 setTimeout(function() {
-    //                     const f = stage._filters;
-    //                     if (!f || !f[0]) {
-    //                         stage.filters = [Sprite.voidFilter];
-    //                         stage.filterArea = new PIXI.Rectangle(
-    //                             0,
-    //                             0,
-    //                             Graphics.width,
-    //                             Graphics.height
-    //                         );
-    //                     }
-    //                 }, 0);
-    //             }
-    //         }
-    //     }
-    // }
-
     /**
      * @param {Object} renderer
      * @private
@@ -432,17 +402,6 @@ export class Sprite extends PIXI.Sprite {
 
             renderer.batch.setObjectRenderer(renderer.plugins[this.pluginName]);
             renderer.plugins[this.pluginName].render(this);
-
-            // if (this.pluginName === "sprite" && this._isPicture) {
-            //     // use heavy renderer, which reduces artifacts and applies corrent blendMode,
-            //     // but does not use multitexture optimization
-            //     // this._speedUpCustomBlendModes(renderer);
-            //     renderer.setObjectRenderer(renderer.plugins.picture);
-            //     renderer.plugins.picture.render(this);
-            // } else {
-            //     // use pixi super-speed renderer
-
-            // }
         }
     }
 
