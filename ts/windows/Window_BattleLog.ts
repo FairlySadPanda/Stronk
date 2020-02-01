@@ -4,12 +4,12 @@ import { Input } from "../core/Input";
 import { Sprite } from "../core/Sprite";
 import { TouchInput } from "../core/TouchInput";
 import { Utils } from "../core/Utils";
+import { BattleManager } from "../managers/BattleManager";
 import { DataManager } from "../managers/DataManager";
 import { SoundManager } from "../managers/SoundManager";
 import { TextManager } from "../managers/TextManager";
-import { Window_Selectable } from "./Window_Selectable";
 import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
-import { BattleManager } from "../managers/BattleManager";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_BattleLog
@@ -759,7 +759,7 @@ export class Window_BattleLog extends Window_Selectable {
             );
         }
         target.performCounter();
-        this.showAttackAnimation(target, [BattleManager._subject]);
+        this.showAttackAnimation(target, [BattleManager.subject]);
         this.waitForAnimation();
     }
 
@@ -770,8 +770,8 @@ export class Window_BattleLog extends Window_Selectable {
             );
         }
         target.performReflection();
-        let animationId = BattleManager._action.item().animationId;
-        this.showNormalAnimation([BattleManager._subject], animationId);
+        let animationId = BattleManager.action.item().animationId;
+        this.showNormalAnimation([BattleManager.subject], animationId);
         this.waitForAnimation();
     }
 

@@ -1,13 +1,13 @@
+import { JsonEx } from "../core/JsonEx";
 import { Utils } from "../core/Utils";
 import { BattleManager } from "../managers/BattleManager";
 import { DataManager } from "../managers/DataManager";
 import { SoundManager } from "../managers/SoundManager";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { Sprite_Battler } from "../sprites/Sprite_Battler";
 import { Game_Action } from "./Game_Action";
 import { Game_ActionResult } from "./Game_ActionResult";
 import { Game_BattlerBase, Game_BattlerBase_OnLoad } from "./Game_BattlerBase";
-import { JsonEx } from "../core/JsonEx";
-import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
-import { Sprite_Battler } from "../sprites/Sprite_Battler";
 
 export interface Game_Battler_OnLoad extends Game_BattlerBase_OnLoad {
     _actions: any[];
@@ -19,7 +19,6 @@ export interface Game_Battler_OnLoad extends Game_BattlerBase_OnLoad {
     _damagePopup: any[];
     _effectType: any;
     _motionType: any;
-    _weaponImageId: number;
     _motionRefresh: boolean;
     _selected: boolean;
 }
@@ -33,7 +32,7 @@ export abstract class Game_Battler extends Game_BattlerBase {
     private _damagePopup: any[];
     private _effectType: any;
     private _motionType: any;
-    private _weaponImageId: number;
+
     private _motionRefresh: boolean;
     private _selected: boolean;
     private _selfTurnCount: number;
@@ -59,7 +58,6 @@ export abstract class Game_Battler extends Game_BattlerBase {
             this._damagePopup = gameLoadInput._damagePopup;
             this._effectType = gameLoadInput._effectType;
             this._motionType = gameLoadInput._motionType;
-            this._weaponImageId = gameLoadInput._weaponImageId;
             this._motionRefresh = gameLoadInput._motionRefresh;
             this._selected = gameLoadInput._selected;
         }
@@ -76,7 +74,6 @@ export abstract class Game_Battler extends Game_BattlerBase {
         this._damagePopup = [];
         this._effectType = null;
         this._motionType = null;
-        this._weaponImageId = 0;
         this._motionRefresh = false;
         this._selected = false;
     }
@@ -87,10 +84,6 @@ export abstract class Game_Battler extends Game_BattlerBase {
 
     public clearDamagePopup() {
         this._damagePopup = [];
-    }
-
-    public clearWeaponAnimation() {
-        this._weaponImageId = 0;
     }
 
     public clearEffect() {
@@ -138,10 +131,6 @@ export abstract class Game_Battler extends Game_BattlerBase {
         return !!this._motionType;
     }
 
-    public isWeaponAnimationRequested() {
-        return this._weaponImageId > 0;
-    }
-
     public isMotionRefreshRequested() {
         return this._motionRefresh;
     }
@@ -167,10 +156,6 @@ export abstract class Game_Battler extends Game_BattlerBase {
 
     public motionType() {
         return this._motionType;
-    }
-
-    public weaponImageId() {
-        return this._weaponImageId;
     }
 
     public shiftAnimation() {
@@ -200,13 +185,6 @@ export abstract class Game_Battler extends Game_BattlerBase {
             let copyResult = JsonEx.makeDeepCopy(result);
             copyResult.hpAffected = false;
             this._damagePopup.push(copyResult);
-        }
-    }
-
-    public startWeaponAnimation(weaponImageId) {
-        this._weaponImageId = weaponImageId;
-        if (this.battler()) {
-            this.battler().setupWeaponAnimation();
         }
     }
 
@@ -545,7 +523,7 @@ export abstract class Game_Battler extends Game_BattlerBase {
         this.clearResult();
         this.removeStatesAuto(1);
         this.removeBuffsAuto();
-        if (!BattleManager._processTurn) this.updateStateActionEnd();
+        if (!BattleManager.processTurn) this.updateStateActionEnd();
     }
 
     public onBattleEnd() {
@@ -663,7 +641,7 @@ export abstract class Game_Battler extends Game_BattlerBase {
     public performSubstitute(target) {
         if (!$gameSystem.isSideView()) return;
         this._flinched = true;
-        if (BattleManager._action.isForAll()) {
+        if (BattleManager.action.isForAll()) {
             this.spriteStepForward();
             target.spriteStepSubBack();
         } else {
@@ -914,7 +892,7 @@ export abstract class Game_Battler extends Game_BattlerBase {
 
     public spriteHomeX() {
         if ($gameSystem.isSideView() && this.battler()) {
-            return this.battler()._homeX;
+            return this.battler().homeX;
         } else {
             return 0;
         }
@@ -922,7 +900,7 @@ export abstract class Game_Battler extends Game_BattlerBase {
 
     public spriteHomeY() {
         if ($gameSystem.isSideView() && this.battler()) {
-            return this.battler()._homeY;
+            return this.battler().homeY;
         } else {
             return 0;
         }
@@ -1055,7 +1033,7 @@ export abstract class Game_Battler extends Game_BattlerBase {
 
     public canAddStateFreeTurn(stateId) {
         if (!$gameParty.inBattle()) return false;
-        if (BattleManager._subject !== this) return false;
+        if (BattleManager.subject !== this) return false;
         if ($dataStates[stateId].autoRemovalTiming !== 1) return false;
         // if (Imported.YEP_BuffsStatesCore) {
         //     if ($dataStates[stateId].reapplyRules === 0) return false;

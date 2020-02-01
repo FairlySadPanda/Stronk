@@ -1,17 +1,16 @@
+import { Bitmap } from "../core/Bitmap";
 import { Sprite } from "../core/Sprite";
 import { BattleManager } from "../managers/BattleManager";
+import { ConfigManager } from "../managers/ConfigManager";
 import { ImageManager } from "../managers/ImageManager";
+import { Game_Actor } from "../objects/Game_Actor";
+import { Game_Enemy } from "../objects/Game_Enemy";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { Window_Base } from "../windows/Window_Base";
 import { Sprite_Base } from "./Sprite_Base";
 import { Sprite_Battler } from "./Sprite_Battler";
 import { Sprite_StateOverlay } from "./Sprite_StateOverlay";
 import { Sprite_Weapon } from "./Sprite_Weapon";
-import { Graphics } from "../core/Graphics";
-import { Game_Enemy } from "../objects/Game_Enemy";
-import { Game_Actor } from "../objects/Game_Actor";
-import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
-import { Window_Base } from "../windows/Window_Base";
-import { Bitmap } from "../core/Bitmap";
-import { ConfigManager } from "../managers/ConfigManager";
 
 interface Motion {
     index: number;
@@ -135,7 +134,7 @@ export class Sprite_Actor extends Sprite_Battler {
     }
 
     public moveToStartPosition() {
-        if (BattleManager._bypassMoveToStartLocation) return;
+        if (BattleManager.bypassMoveToStartLocation) return;
         if ($gameSystem.isSideView() && this._checkAliveStatus) {
             this.startMove(300, 0, 0);
         }

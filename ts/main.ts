@@ -1,27 +1,12 @@
-import "./plugins.js";
 import "source-map-support/register";
-
-import "pixi.js";
-
-import "pixi-picture";
-import "pixi-tilemap";
-
 import { PluginManager } from "./managers/PluginManager";
+import { SceneManager } from "./managers/SceneManager";
 
 PluginManager.setup($plugins);
-
-import { SceneManager } from "./managers/SceneManager";
-import { Scene_Boot } from "./scenes/Scene_Boot";
-
-declare const $plugins;
 
 // =============================================================================
 // main.js
 // =============================================================================
-
-PIXI.glCore.VertexArrayObject.FORCE_NATIVE = true;
-PIXI.settings.GC_MODE = PIXI.GC_MODES.AUTO;
-PIXI.tilemap.TileRenderer.DO_CLEAR = true;
 
 window.$dataActors = null;
 window.$dataClasses = null;
@@ -54,5 +39,5 @@ window.$gamePlayer = null;
 window.$testEvent = null;
 
 window.onload = function() {
-    SceneManager.run(Scene_Boot);
+    SceneManager.run(require("./scenes/Scene_Boot").Scene_Boot);
 };

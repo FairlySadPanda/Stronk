@@ -1,15 +1,14 @@
 import { Utils } from "../core/Utils";
+import { Weapon } from "../interfaces/Weapon";
 import { BattleManager } from "../managers/BattleManager";
 import { DataManager } from "../managers/DataManager";
 import { SoundManager } from "../managers/SoundManager";
 import { TextManager } from "../managers/TextManager";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { Sprite_Actor } from "../sprites/Sprite_Actor";
 import { Game_Action } from "./Game_Action";
 import { Game_Battler, Game_Battler_OnLoad } from "./Game_Battler";
 import { Game_Item, Game_Item_OnLoad } from "./Game_Item";
-import { Weapon } from "../interfaces/Weapon";
-import { Armor } from "../interfaces/Armor";
-import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
-import { Item } from "../interfaces/Item";
 
 export interface Game_Actor_OnLoad extends Game_Battler_OnLoad {
     _actorId: number;
@@ -31,6 +30,7 @@ export interface Game_Actor_OnLoad extends Game_Battler_OnLoad {
     _lastCommandSymbol: string;
     _profile: any;
     _stateSteps: {};
+    _weaponImageId: number;
 }
 
 export class Game_Actor extends Game_Battler {
@@ -55,10 +55,12 @@ export class Game_Actor extends Game_Battler {
     private _lastCommandSymbol: string;
     private _profile: any;
     private _stateSteps: {};
+    private _weaponImageId: number;
 
     public constructor(actorId: number, gameLoadInput?: Game_Actor_OnLoad) {
         super(gameLoadInput);
         if (gameLoadInput) {
+            this._weaponImageId = gameLoadInput._weaponImageId;
             this._actorId = gameLoadInput._actorId;
             this._name = gameLoadInput._name;
             this._nickname = gameLoadInput._nickname;
@@ -115,6 +117,7 @@ export class Game_Actor extends Game_Battler {
         this._lastMenuSkill = new Game_Item();
         this._lastBattleSkill = new Game_Item();
         this._lastCommandSymbol = "";
+        this._weaponImageId = 0;
     }
 
     public setup(actorId) {
@@ -133,6 +136,18 @@ export class Game_Actor extends Game_Battler {
         this.recoverAll();
         this.clearCustomParamLimits();
         this.clearXParamPlus();
+    }
+
+    public clearWeaponAnimation() {
+        this._weaponImageId = 0;
+    }
+
+    public isWeaponAnimationRequested() {
+        return this._weaponImageId > 0;
+    }
+
+    public weaponImageId() {
+        return this._weaponImageId;
     }
 
     public actorId() {
@@ -1093,7 +1108,7 @@ export class Game_Actor extends Game_Battler {
 
     public spriteWidth() {
         if ($gameSystem.isSideView() && this.battler()) {
-            return this.battler()._mainSprite.width;
+            return this.battler().mainSprite.width;
         } else {
             return 1;
         }
@@ -1101,7 +1116,7 @@ export class Game_Actor extends Game_Battler {
 
     public spriteHeight() {
         if ($gameSystem.isSideView() && this.battler()) {
-            return this.battler()._mainSprite.height;
+            return this.battler().mainSprite.height;
         } else {
             return 1;
         }
@@ -1188,6 +1203,16 @@ export class Game_Actor extends Game_Battler {
                 this.forceMotion("missile");
             }
             this.startWeaponAnimation(attackMotion.weaponImageId);
+        }
+    }
+
+    public startWeaponAnimation(weaponImageId) {
+        this._weaponImageId = weaponImageId;
+        const actor = this.battler() as Sprite_Actor;
+        if (actor.setupWeaponAnimation) {
+            actor.setupWeaponAnimation();
+        } else {
+            throw new Error("Sprite is not a Sprite_Actor");
         }
     }
 

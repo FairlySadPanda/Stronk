@@ -62,7 +62,6 @@ export class Sprite extends PIXI.Sprite {
     public ry: number;
     public dy: number;
 
-    public _renderWebGL_PIXI = PIXI.WebGLRenderer.prototype.render;
     protected _isPicture: boolean;
 
     private _bitmap: any;
@@ -252,13 +251,15 @@ export class Sprite extends PIXI.Sprite {
         } else if (this._bitmap) {
             this.texture.frame = Rectangle.emptyRectangle;
         } else {
-            this.texture.baseTexture.width = Math.max(
-                this.texture.baseTexture.width,
-                this._frame.x + this._frame.width
-            );
-            this.texture.baseTexture.height = Math.max(
-                this.texture.baseTexture.height,
-                this._frame.y + this._frame.height
+            this.texture.baseTexture.setSize(
+                Math.max(
+                    this.texture.baseTexture.width,
+                    this._frame.x + this._frame.width
+                ),
+                Math.max(
+                    this.texture.baseTexture.height,
+                    this._frame.y + this._frame.height
+                )
             );
             this.texture.frame = this._frame;
         }
@@ -381,46 +382,41 @@ export class Sprite extends PIXI.Sprite {
         context.drawImage(this._bitmap.canvas, x, y, w, h, 0, 0, w, h);
     }
 
+    // /**
+    //  * checks if we need to speed up custom blendmodes
+    //  * @param renderer
+    //  * @private
+    //  */
+    // public _speedUpCustomBlendModes(renderer: ) {
+    //     const picture = renderer.plugins.picture;
+    //     const blend = this.blendMode;
+    //     if (renderer.renderingToScreen && renderer._activeRenderTarget.root) {
+    //         if (picture.drawModes[blend]) {
+    //             const stage = renderer._lastObjectRendered;
+    //             const f = stage._filters;
+    //             if (!f || !f[0]) {
+    //                 setTimeout(function() {
+    //                     const f = stage._filters;
+    //                     if (!f || !f[0]) {
+    //                         stage.filters = [Sprite.voidFilter];
+    //                         stage.filterArea = new PIXI.Rectangle(
+    //                             0,
+    //                             0,
+    //                             Graphics.width,
+    //                             Graphics.height
+    //                         );
+    //                     }
+    //                 }, 0);
+    //             }
+    //         }
+    //     }
+    // }
+
     /**
-     * checks if we need to speed up custom blendmodes
-     * @param renderer
-     * @private
-     */
-    public _speedUpCustomBlendModes(renderer: {
-        plugins: { picture: any };
-        renderingToScreen: any;
-        _activeRenderTarget: { root: any };
-        _lastObjectRendered: any;
-    }) {
-        const picture = renderer.plugins.picture;
-        const blend = this.blendMode;
-        if (renderer.renderingToScreen && renderer._activeRenderTarget.root) {
-            if (picture.drawModes[blend]) {
-                const stage = renderer._lastObjectRendered;
-                const f = stage._filters;
-                if (!f || !f[0]) {
-                    setTimeout(function() {
-                        const f = stage._filters;
-                        if (!f || !f[0]) {
-                            stage.filters = [Sprite.voidFilter];
-                            stage.filterArea = new PIXI.Rectangle(
-                                0,
-                                0,
-                                Graphics.width,
-                                Graphics.height
-                            );
-                        }
-                    }, 0);
-                }
-            }
-        }
-    }
-    /**
-     * @method _renderWebGL
      * @param {Object} renderer
      * @private
      */
-    public _renderWebGL(renderer) {
+    public render(renderer: PIXI.Renderer) {
         if (this.bitmap) {
             this.bitmap.touch();
         }
@@ -432,20 +428,21 @@ export class Sprite extends PIXI.Sprite {
                 this._bitmap.checkDirty();
             }
 
-            // copy of pixi-v4 internal code
             this.calculateVertices();
 
-            if (this.pluginName === "sprite" && this._isPicture) {
-                // use heavy renderer, which reduces artifacts and applies corrent blendMode,
-                // but does not use multitexture optimization
-                this._speedUpCustomBlendModes(renderer);
-                renderer.setObjectRenderer(renderer.plugins.picture);
-                renderer.plugins.picture.render(this);
-            } else {
-                // use pixi super-speed renderer
-                renderer.setObjectRenderer(renderer.plugins[this.pluginName]);
-                renderer.plugins[this.pluginName].render(this);
-            }
+            renderer.batch.setObjectRenderer(renderer.plugins[this.pluginName]);
+            renderer.plugins[this.pluginName].render(this);
+
+            // if (this.pluginName === "sprite" && this._isPicture) {
+            //     // use heavy renderer, which reduces artifacts and applies corrent blendMode,
+            //     // but does not use multitexture optimization
+            //     // this._speedUpCustomBlendModes(renderer);
+            //     renderer.setObjectRenderer(renderer.plugins.picture);
+            //     renderer.plugins.picture.render(this);
+            // } else {
+            //     // use pixi super-speed renderer
+
+            // }
         }
     }
 

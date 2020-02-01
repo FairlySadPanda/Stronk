@@ -1,10 +1,9 @@
-import { Window_BattleStatus } from "./Window_BattleStatus";
-import { BattleManager } from "../managers/BattleManager";
-import { Window_Selectable } from "./Window_Selectable";
-import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
-import { TouchInput } from "../core/TouchInput";
-import { SoundManager } from "../managers/SoundManager";
 import { Rectangle } from "../core/Rectangle";
+import { TouchInput } from "../core/TouchInput";
+import { BattleManager } from "../managers/BattleManager";
+import { SoundManager } from "../managers/SoundManager";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { Window_BattleStatus } from "./Window_BattleStatus";
 
 // -----------------------------------------------------------------------------
 // Window_BattleActor
@@ -144,7 +143,7 @@ export class Window_BattleActor extends Window_BattleStatus {
         if (!actor) return false;
         if (!actor.isSpriteVisible()) return false;
         if (!actor.isAppeared()) return false;
-        if ($gameTemp._disableMouseOverSelect) return false;
+        if ($gameTemp.mouseOverSelectDisabled()) return false;
         let x = TouchInput.x;
         let y = TouchInput.y;
         let rect = new Rectangle();
@@ -177,7 +176,7 @@ export class Window_BattleActor extends Window_BattleStatus {
         if (!actor) return false;
         if (!actor.isSpriteVisible()) return false;
         if (!actor.isAppeared()) return false;
-        if ($gameTemp._disableMouseOverSelect) return false;
+        if ($gameTemp.mouseOverSelectDisabled()) return false;
         let x = TouchInput._mouseOverX;
         let y = TouchInput._mouseOverY;
         let rect = new Rectangle();

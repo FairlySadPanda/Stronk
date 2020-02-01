@@ -1,9 +1,8 @@
-import { Graphics } from "../core/Graphics";
-import { Window_Selectable } from "./Window_Selectable";
-import { ConfigManager } from "../managers/ConfigManager";
-import { Window_Base } from "./Window_Base";
-import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 import { BattleManager } from "../managers/BattleManager";
+import { ConfigManager } from "../managers/ConfigManager";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { Window_Base } from "./Window_Base";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_BattleStatus
@@ -105,7 +104,7 @@ export class Window_BattleStatus extends Window_Selectable {
     }
 
     public updateStatusRequests() {
-        if (BattleManager._victoryPhase) return;
+        if (BattleManager.isVictoryPhase()) return;
         for (let i = 0; i < $gameParty.battleMembers().length; ++i) {
             let actor = $gameParty.battleMembers()[i];
             if (!actor) continue;

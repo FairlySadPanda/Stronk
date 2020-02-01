@@ -1,14 +1,13 @@
-import { Graphics } from "../core/Graphics";
 import { Sprite } from "../core/Sprite";
 import { TilingSprite } from "../core/TilingSprite";
 import { BattleManager } from "../managers/BattleManager";
+import { ConfigManager } from "../managers/ConfigManager";
 import { ImageManager } from "../managers/ImageManager";
 import { SceneManager } from "../managers/SceneManager";
 import { Spriteset_Base } from "./Spriteset_Base";
 import { Sprite_Actor } from "./Sprite_Actor";
-import { Sprite_Enemy } from "./Sprite_Enemy";
 import { Sprite_Battler } from "./Sprite_Battler";
-import { ConfigManager } from "../managers/ConfigManager";
+import { Sprite_Enemy } from "./Sprite_Enemy";
 
 // -----------------------------------------------------------------------------
 // Spriteset_Battle
@@ -391,7 +390,10 @@ export class Spriteset_Battle extends Spriteset_Base {
     }
 
     public battlerSprites(): Sprite_Battler[] {
-        const sprites = [...this._enemySprites, ...this._actorSprites];
+        const sprites = [
+            ...this._enemySprites,
+            ...this._actorSprites
+        ] as Sprite_Battler[];
         const length = sprites.length;
         const result: Sprite_Battler[] = [];
         for (let i = 0; i < length; ++i) {

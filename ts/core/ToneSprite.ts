@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
+import { ConfigManager } from "../managers/ConfigManager";
 import { Graphics } from "./Graphics";
 import { Utils } from "./Utils";
-import { ConfigManager } from "../managers/ConfigManager";
 
 export class ToneSprite extends PIXI.Container {
     private _red: number;
@@ -83,14 +83,5 @@ export class ToneSprite extends PIXI.Container {
         this._green = Utils.clamp(Math.round(g || 0), -255, 255);
         this._blue = Utils.clamp(Math.round(b || 0), -255, 255);
         this._gray = Utils.clamp(Math.round(gray || 0), 0, 255);
-    }
-
-    /**
-     * @method _renderWebGL
-     * @param {Object} renderSession
-     * @private
-     */
-    public _renderWebGL(renderer: PIXI.WebGLRenderer) {
-        // Not supported
     }
 }

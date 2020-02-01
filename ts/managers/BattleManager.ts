@@ -1,16 +1,17 @@
+/* eslint-disable standard/computed-property-even-spacing */
+import { JsonEx } from "../core/JsonEx";
 import { Utils } from "../core/Utils";
 import { Game_Action } from "../objects/Game_Action";
+import { Game_Actor } from "../objects/Game_Actor";
 import { Game_Battler } from "../objects/Game_Battler";
+import { Game_Enemy } from "../objects/Game_Enemy";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 import { Scene_Gameover } from "../scenes/Scene_Gameover";
+import { Sprite_Battler } from "../sprites/Sprite_Battler";
 import { AudioManager } from "./AudioManager";
 import { SceneManager } from "./SceneManager";
 import { SoundManager } from "./SoundManager";
 import { TextManager } from "./TextManager";
-import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
-import { JsonEx } from "../core/JsonEx";
-import { Game_Actor } from "../objects/Game_Actor";
-import { Game_Enemy } from "../objects/Game_Enemy";
-import { Sprite_Battler } from "../sprites/Sprite_Battler";
 
 interface Rewards {
     gold: number;
@@ -65,7 +66,15 @@ export abstract class BattleManager {
     private static _conditionFlags: any;
     private static _trueFlags: any;
     private static _actSeq: any;
-    private static _bypassMoveToStartLocation: any;
+    private static _bypassMoveToStartLocation: boolean;
+
+    public static get bypassMoveToStartLocation(): boolean {
+        return BattleManager._bypassMoveToStartLocation;
+    }
+
+    public static get processingTurn(): boolean {
+        return BattleManager._processTurn;
+    }
 
     public static setup(troopId, canEscape, canLose) {
         this.initMembers();
@@ -127,6 +136,10 @@ export abstract class BattleManager {
 
     public static setStatusWindow(statusWindow) {
         this._statusWindow = statusWindow;
+    }
+
+    public static get spriteset(): any {
+        return BattleManager._spriteset;
     }
 
     public static setSpriteset(spriteset) {
@@ -444,7 +457,7 @@ export abstract class BattleManager {
     }
 
     public static getNextSubject() {
-        //if ($gameTroop.turnCount() <= 0) return;
+        // if ($gameTroop.turnCount() <= 0) return;
         this._performedBattlers = this._performedBattlers || [];
         this.makeActionOrders();
         for (;;) {
@@ -1532,7 +1545,7 @@ export abstract class BattleManager {
                 return [actor];
             }
         }
-        if ("FIRST" === string.toUpperCase()) {
+        if (string.toUpperCase() === "FIRST") {
             return [this._targets[0]];
         }
         return targets;
@@ -1796,5 +1809,17 @@ export abstract class BattleManager {
     public static actionWaitForPopups() {
         this._logWindow.waitForPopups();
         return false;
+    }
+
+    public static isVictoryPhase(): boolean {
+        return BattleManager._victoryPhase;
+    }
+
+    public static get subject(): Game_Battler {
+        return BattleManager._subject;
+    }
+
+    public static get action(): any {
+        return BattleManager._action;
     }
 }

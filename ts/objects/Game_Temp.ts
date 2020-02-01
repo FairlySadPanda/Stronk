@@ -1,5 +1,5 @@
-import { Utils } from "../core/Utils";
 import { JsonEx } from "../core/JsonEx";
+import { Utils } from "../core/Utils";
 
 export class Game_Temp {
     private _isPlaytest: boolean;
@@ -7,8 +7,12 @@ export class Game_Temp {
     private _destinationX: number;
     private _destinationY: number;
     private _forceActionQueue: any;
-    private _disableMouseOverSelect: any;
+    private _disableMouseOverSelect: boolean;
     private _moveCommand: any;
+
+    public mouseOverSelectDisabled(): boolean {
+        return this._disableMouseOverSelect;
+    }
 
     public get moveCommand(): any {
         return this._moveCommand;

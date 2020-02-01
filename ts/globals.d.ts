@@ -1,6 +1,8 @@
 /**
- * Global variable declaration and global type modifications
+ * Global variable declaration and global type modifications.
+ *
  * Typescript does not allow for d.ts files that merge types to use ES6 imports!
+ *
  * Instead, use import("") syntax for type imports.
  */
 

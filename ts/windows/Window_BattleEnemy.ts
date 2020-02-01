@@ -1,11 +1,10 @@
-import { Graphics } from "../core/Graphics";
-import { Game_Enemy } from "../objects/Game_Enemy";
-import { Window_Selectable } from "./Window_Selectable";
-import { ConfigManager } from "../managers/ConfigManager";
-import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
-import { TouchInput } from "../core/TouchInput";
-import { SoundManager } from "../managers/SoundManager";
 import { Rectangle } from "../core/Rectangle";
+import { TouchInput } from "../core/TouchInput";
+import { ConfigManager } from "../managers/ConfigManager";
+import { SoundManager } from "../managers/SoundManager";
+import { Game_Enemy } from "../objects/Game_Enemy";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { Window_Selectable } from "./Window_Selectable";
 
 // -----------------------------------------------------------------------------
 // Window_BattleEnemy
@@ -192,7 +191,7 @@ export class Window_BattleEnemy extends Window_Selectable {
     public isClickedEnemy(enemy) {
         if (!enemy) return false;
         if (!enemy.isSpriteVisible()) return false;
-        if ($gameTemp._disableMouseOverSelect) return false;
+        if ($gameTemp.mouseOverSelectDisabled()) return false;
         let x = TouchInput.x;
         let y = TouchInput.y;
         let rect = new Rectangle();
@@ -225,7 +224,7 @@ export class Window_BattleEnemy extends Window_Selectable {
     public isMouseOverEnemy(enemy) {
         if (!enemy) return false;
         if (!enemy.isSpriteVisible()) return false;
-        if ($gameTemp._disableMouseOverSelect) return false;
+        if ($gameTemp.mouseOverSelectDisabled()) return false;
         let x = TouchInput._mouseOverX;
         let y = TouchInput._mouseOverY;
         let rect = new Rectangle();

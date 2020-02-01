@@ -121,9 +121,11 @@ export class Bitmap {
         const height = Graphics.height;
         const bitmap = new Bitmap(width, height);
         const context = bitmap._context;
-        const renderTexture = PIXI.RenderTexture.create(width, height);
+        const renderTexture = PIXI.RenderTexture.create({
+            width: width,
+            height: height
+        });
         if (stage) {
-            // @ts-ignore
             Graphics.renderer.render(stage, renderTexture);
             stage.worldTransform.identity();
             context.drawImage(
@@ -286,8 +288,7 @@ export class Bitmap {
         height = Math.max(height || 0, 1);
         this._canvas.width = width;
         this._canvas.height = height;
-        this._baseTexture.width = width;
-        this._baseTexture.height = height;
+        this._baseTexture.setSize(width, height);
     }
 
     /**
@@ -1031,9 +1032,8 @@ export class Bitmap {
 
     private _createBaseTexture(source) {
         this.__baseTexture = new PIXI.BaseTexture(source);
-        this.__baseTexture.mipmap = false;
-        this.__baseTexture.width = source.width;
-        this.__baseTexture.height = source.height;
+        this.__baseTexture.mipmap = PIXI.MIPMAP_MODES.OFF;
+        this.__baseTexture.setSize(source.width, source.height);
 
         if (this._smooth) {
             this._baseTexture.scaleMode = PIXI.SCALE_MODES.LINEAR;

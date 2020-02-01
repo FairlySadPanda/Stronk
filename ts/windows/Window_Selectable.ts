@@ -2,8 +2,10 @@ import { Input } from "../core/Input";
 import { Rectangle } from "../core/Rectangle";
 import { TouchInput } from "../core/TouchInput";
 import { Utils } from "../core/Utils";
+import { Item } from "../interfaces/Item";
 import { SoundManager } from "../managers/SoundManager";
 import { Window_Base } from "./Window_Base";
+import { Window_Help } from "./Window_Help";
 
 // -----------------------------------------------------------------------------
 // Window_Selectable
@@ -178,9 +180,7 @@ export class Window_Selectable extends Window_Base {
         return rect;
     }
 
-    public setHelpWindow(
-        helpWindow: import("../../../../Projects/Dragon Slayers/ts/windows/Window_Help").Window_Help
-    ) {
+    public setHelpWindow(helpWindow: Window_Help) {
         this._helpWindow = helpWindow;
         this.callUpdateHelp();
     }
@@ -565,9 +565,7 @@ export class Window_Selectable extends Window_Base {
         this._helpWindow.clear();
     }
 
-    public setHelpWindowItem(
-        item: import("../../../../Projects/Dragon Slayers/ts/interfaces/Item").Item
-    ) {
+    public setHelpWindowItem(item: Item) {
         if (this._helpWindow) {
             this._helpWindow.setItem(item);
         }

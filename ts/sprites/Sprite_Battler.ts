@@ -1,9 +1,9 @@
+import { ScreenSprite } from "../core/ScreenSprite";
+import { BattleManager } from "../managers/BattleManager";
+import { Game_Battler } from "../objects/Game_Battler";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 import { Sprite_Base } from "./Sprite_Base";
 import { Sprite_Damage } from "./Sprite_Damage";
-import { Game_Battler } from "../objects/Game_Battler";
-import { BattleManager } from "../managers/BattleManager";
-import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
-import { ScreenSprite } from "../core/ScreenSprite";
 
 // -----------------------------------------------------------------------------
 // Sprite_Battler
@@ -38,6 +38,21 @@ export class Sprite_Battler extends Sprite_Base {
         this.preSpriteInitialize(battler);
         this.initMembers();
         this.setBattler(battler);
+    }
+
+    public get mainSprite(): Sprite_Base {
+        if (!this._mainSprite) {
+            throw new Error("This battler has no main sprite!");
+        }
+        return this.mainSprite;
+    }
+
+    public get homeX(): number {
+        return this._homeX;
+    }
+
+    public get homeY(): number {
+        return this._homeY;
     }
 
     public preSpriteInitialize(battler) {}
@@ -223,7 +238,7 @@ export class Sprite_Battler extends Sprite_Base {
                 sprite.y = this.y + this.damageOffsetY();
                 sprite.setup(this._battler);
                 this.pushDamageSprite(sprite);
-                BattleManager._spriteset.addChild(sprite);
+                BattleManager.spriteset.addChild(sprite);
                 this._battler.clearResult();
             }
         } else {

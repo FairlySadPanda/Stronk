@@ -114,7 +114,7 @@ export abstract class Graphics {
      */
     public static BLEND_SCREEN: number = 3;
 
-    public static renderer: PIXI.WebGLRenderer;
+    public static renderer: PIXI.Renderer;
 
     private static _rendererType: any;
     private static _boxWidth: number;
@@ -731,7 +731,7 @@ export abstract class Graphics {
         const data = stack.split(/(?:\r\n|\r|\n)/);
         data.unshift("Game has encountered a bug. Please report it.<br>");
         for (let i = 1; i < data.length; ++i) {
-            data[i] = data[i].replace(/[\(](.*[\/])/, "(");
+            data[i] = data[i].replace(/[(](.*[/])/, "(");
         }
         data.push(
             '<br><font color="yellow"><b>Press F5 to restart the game.' +
@@ -957,9 +957,13 @@ export abstract class Graphics {
     private static _createRenderer = function() {
         const width = Graphics.width;
         const height = Graphics.height;
-        const options = { view: Graphics._canvas };
+        const options = {
+            view: Graphics._canvas,
+            width: width,
+            height: height
+        };
         try {
-            Graphics.renderer = new PIXI.WebGLRenderer(width, height, options);
+            Graphics.renderer = new PIXI.Renderer(options);
             if (Graphics.renderer && Graphics.renderer.textureGC) {
                 Graphics.renderer.textureGC.maxIdle = 1;
             }

@@ -1,7 +1,7 @@
-//=============================================================================
+//= ============================================================================
 // Stronk! Modified: Yanfly Engine Plugins - Core Engine
 // YEP_CoreEngine.js
-//=============================================================================
+//= ============================================================================
 
 /*:
  * @plugindesc v1.31 Needed for the majority of Yanfly Engine Scripts. Also
@@ -814,9 +814,9 @@
  * - Finished plugin!
  */
 
-import { PluginManager } from "../managers/PluginManager";
-import { Utils } from "../core/Utils";
 import * as gui from "nw";
+import { Utils } from "../core/Utils";
+import { PluginManager } from "../managers/PluginManager";
 
 export interface YanflyCore {}
 
@@ -900,7 +900,7 @@ export interface YEP {
     focusWindow(win: any): void;
 }
 
-export const Yanfly: Partial<YEP> = {
+const Yanfly: Partial<YEP> = {
     _loaded_YEP_CoreEngine: false,
     _openedConsole: false,
     version: "Stronk.1",
@@ -945,9 +945,9 @@ export const Yanfly: Partial<YEP> = {
     }
 };
 
-//=============================================================================
+//= ======= =====================================================================
 // Parameter Variables
-//=============================================================================
+//= ======= =====================================================================
 
 Yanfly.Param.OpenConsole = String(Yanfly.Parameters["Open Console"]);
 Yanfly.Param.OpenConsole = eval(Yanfly.Param.OpenConsole);
@@ -1023,3 +1023,5 @@ Yanfly.Param.ColorPowerDown = Number(Yanfly.Parameters["Color: Power Down"]);
 Yanfly.Param.ColorTpGauge1 = Number(Yanfly.Parameters["Color: TP Gauge 1"]);
 Yanfly.Param.ColorTpGauge2 = Number(Yanfly.Parameters["Color: TP Gauge 2"]);
 Yanfly.Param.ColorTpCost = Number(Yanfly.Parameters["Color: TP Cost Color"]);
+
+export { Yanfly };
