@@ -120,7 +120,6 @@ export class WindowLayer extends PIXI.Container {
             if (child._isWindow && child.visible && child.openness > 0) {
                 this._maskWindow(child, shift);
                 renderer.mask.push(child, new PIXI.MaskData(this._windowMask));
-                renderer.clear();
                 renderer.mask.pop(child);
                 renderer.batch.currentRenderer.start();
                 child.render(renderer);
