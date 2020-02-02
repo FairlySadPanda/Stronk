@@ -1,3 +1,4 @@
+import * as PIXI from "pixi.js";
 import "source-map-support/register";
 import { PluginManager } from "./managers/PluginManager";
 import { SceneManager } from "./managers/SceneManager";
@@ -8,6 +9,7 @@ PluginManager.setup($plugins);
 // main.js
 // =============================================================================
 
+window.PIXI = PIXI;
 window.$dataActors = null;
 window.$dataClasses = null;
 window.$dataSkills = null;

@@ -2,7 +2,7 @@
     "name": "stronk-v1.1.0",
     "main": "index.html",
     "js-flags": "--expose-gc",
-    "chromium-args": "--mixed-context --remote-debugging-port=9223 --limit-fps=60 --disable-features=nw2",
+    "chromium-args": "--mixed-context --remote-debugging-port=9223 --limit-fps=60 --disable-features=nw2 --load-extension=chrome",
     "window": {
         "title": "STRONK! v.0.1.0",
         "toolbar": false,
