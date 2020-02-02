@@ -383,10 +383,11 @@ export class Sprite extends PIXI.Sprite {
     }
 
     /**
+     * @method _renderWebGL
      * @param {Object} renderer
      * @private
      */
-    public render(renderer: PIXI.Renderer) {
+    public _render(renderer: PIXI.Renderer) {
         if (this.bitmap) {
             this.bitmap.touch();
         }
@@ -400,8 +401,12 @@ export class Sprite extends PIXI.Sprite {
 
             this.calculateVertices();
 
-            renderer.batch.setObjectRenderer(renderer.plugins[this.pluginName]);
-            renderer.plugins[this.pluginName].render(this);
+            if (this.pluginName === "sprite" && this._isPicture) {
+                renderer.batch.setObjectRenderer(renderer.plugins.picture);
+                renderer.batch.renderer.render(this);
+            } else {
+                super._render(renderer);
+            }
         }
     }
 
