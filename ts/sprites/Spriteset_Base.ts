@@ -102,8 +102,9 @@ export abstract class Spriteset_Base extends Sprite {
     public createPictures() {
         const width = Graphics.boxWidth;
         const height = Graphics.boxHeight;
+        const offset = ConfigManager.xOffset;
         this._pictureContainer = new Sprite();
-        this._pictureContainer.setFrame(0, 0, width, height);
+        this._pictureContainer.setFrame(0 + offset, 0, width, height);
         for (let i = 1; i <= $gameScreen.maxPictures(); i++) {
             this._pictureContainer.addChild(new Sprite_Picture(i));
         }
