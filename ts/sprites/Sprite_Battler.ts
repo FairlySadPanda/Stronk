@@ -44,7 +44,7 @@ export class Sprite_Battler extends Sprite_Base {
         if (!this._mainSprite) {
             throw new Error("This battler has no main sprite!");
         }
-        return this.mainSprite;
+        return this._mainSprite;
     }
 
     public get homeX(): number {

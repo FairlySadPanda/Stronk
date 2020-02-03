@@ -101,10 +101,12 @@ export class Spriteset_Map extends Spriteset_Base {
                 this._tilemap.bitmaps.push(bitmap);
             }
             const newTilesetFlags = $gameMap.tilesetFlags();
-            this._tilemap.refreshTileset();
-            if (!Utils.arrayEquals(this._tilemap.flags, newTilesetFlags)) {
-                this._tilemap.refresh();
-            }
+            Promise.all(this.bitmapPromises).then(() => {
+                this._tilemap.refreshTileset();
+                if (!Utils.arrayEquals(this._tilemap.flags, newTilesetFlags)) {
+                    this._tilemap.refresh();
+                }
+            });
             this._tilemap.flags = newTilesetFlags;
         }
     }

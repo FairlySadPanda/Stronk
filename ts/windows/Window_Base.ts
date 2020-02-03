@@ -1,13 +1,13 @@
 import { Bitmap } from "../core/Bitmap";
 import { Sprite } from "../core/Sprite";
+import { Utils } from "../core/Utils";
 import { Window } from "../core/Window";
 import { Item } from "../interfaces/Item";
+import { ConfigManager } from "../managers/ConfigManager";
 import { ImageManager } from "../managers/ImageManager";
 import { TextManager } from "../managers/TextManager";
 import { Game_Actor } from "../objects/Game_Actor";
-import { ConfigManager } from "../managers/ConfigManager";
 import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
-import { Utils } from "../core/Utils";
 
 interface ListItem {
     name: string;
@@ -92,7 +92,7 @@ export class Window_Base extends Window {
             if (files.length > 0) {
                 const maxValue = files.length;
                 let value = this.getGameSettingsMoe("_windowskin");
-                if (Number.isInteger(value) == false) {
+                if (Number.isInteger(value) === false) {
                     value = 0;
                     ConfigManager["_windowskin"] = 0;
                 }
