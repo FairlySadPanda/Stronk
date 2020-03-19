@@ -5,12 +5,10 @@ data
 fonts
 icon
 img
-js
+js/*
 movies
 save
 Game.rpgproject
 package-lock.json
-*.js
 *.rar
-*.code-workspace
-!./js/plugins.js
+!js/plugins.js
