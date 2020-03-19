@@ -13,4 +13,4 @@ package-lock.json
 *.js
 *.rar
 *.code-workspace
-!/js/plugins.js
+!./js/plugins.js
