@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import { Window } from "./Window";
 
 export class WindowLayer extends PIXI.Container {
     /**
@@ -31,7 +32,6 @@ export class WindowLayer extends PIXI.Container {
 
     public static voidFilter = new PIXI.filters.AlphaFilter();
 
-    private _windowRect: any;
     private _width: number;
     private _height: number;
     private _windowMask: PIXI.Graphics;
@@ -45,8 +45,6 @@ export class WindowLayer extends PIXI.Container {
         this._windowMask.beginFill(0xffffff, 1);
         this._windowMask.drawRect(0, 0, 0, 0);
         this._windowMask.endFill();
-        // @ts-ignore
-        this._windowRect = this._windowMask.graphicsData[0].shape;
 
         this.filterArea = new PIXI.Rectangle();
         this.filters = [WindowLayer.voidFilter];
@@ -88,11 +86,11 @@ export class WindowLayer extends PIXI.Container {
     }
 
     /**
-     * @method _renderWebGL
+     * @method _render
      * @param {Object} renderSession
      * @private
      */
-    public renderWebGL(renderer: PIXI.WebGLRenderer) {
+    public render(renderer: PIXI.Renderer) {
         if (!this.visible || !this.renderable) {
             return;
         }
@@ -101,46 +99,42 @@ export class WindowLayer extends PIXI.Container {
             return;
         }
 
-        renderer.flush();
-        // @ts-ignore
-        this.filterArea.copy(this);
-        // @ts-ignore Bad PIXI typing
-        renderer.filterManager.pushFilter(this, this.filters);
-        renderer.currentRenderer.start();
+        renderer.batch.flush();
+        this.filterArea.copyFrom(
+            new PIXI.Rectangle(this.x, this.y, this.width, this.height)
+        );
+        renderer.filter.push(this, this.filters);
+        renderer.batch.currentRenderer.start();
 
         const shift = new PIXI.Point();
-        const rt = renderer._activeRenderTarget;
-        const projectionMatrix = rt.projectionMatrix;
+        const projection = renderer.projection;
+        const projectionMatrix = projection.projectionMatrix;
         shift.x = Math.round(
-            ((projectionMatrix.tx + 1) / 2) * rt.sourceFrame.width
+            ((projectionMatrix.tx + 1) / 2) * projection.sourceFrame.width
         );
         shift.y = Math.round(
-            ((projectionMatrix.ty + 1) / 2) * rt.sourceFrame.height
+            ((projectionMatrix.ty + 1) / 2) * projection.sourceFrame.height
         );
 
-        for (let i = 0; i < this.children.length; i++) {
-            const child = this.children[i];
-            // @ts-ignore
+        for (const child of this.children as Window[]) {
             if (child._isWindow && child.visible && child.openness > 0) {
                 this._maskWindow(child, shift);
-                // @ts-ignore Another bad typing
-                renderer.maskManager.pushScissorMask(this, this._windowMask);
-                renderer.clear();
-                renderer.maskManager.popScissorMask();
-                renderer.currentRenderer.start();
-                child.renderWebGL(renderer);
-                renderer.currentRenderer.flush();
+                renderer.mask.push(child, new PIXI.MaskData(this._windowMask));
+                renderer.mask.pop(child);
+                renderer.batch.currentRenderer.start();
+                child.render(renderer);
+                renderer.batch.currentRenderer.flush();
             }
         }
 
-        renderer.flush();
-        renderer.filterManager.popFilter();
-        renderer.maskManager.popScissorMask();
+        renderer.batch.flush();
+        renderer.filter.pop();
+        renderer.mask.pop(this);
 
         for (let j = 0; j < this.children.length; j++) {
-            // @ts-ignore
-            if (!this.children[j]._isWindow) {
-                this.children[j].renderWebGL(renderer);
+            const child = this.children[j] as Window;
+            if (!child._isWindow) {
+                this.children[j].render(renderer);
             }
         }
     }
@@ -151,17 +145,14 @@ export class WindowLayer extends PIXI.Container {
      * @private
      */
     private _maskWindow(window, shift) {
-        // @ts-ignore
-        this._windowMask._currentBounds = null;
-        this._windowMask.boundsDirty = Number(true);
-        const rect = this._windowRect;
-        rect.x = this.x + shift.x + window.x;
-        rect.y =
+        this._windowMask.clear();
+        this._windowMask.x = this.x + shift.x + window.x;
+        this._windowMask.y =
             this.x +
             shift.y +
             window.y +
             (window.height / 2) * (1 - window._openness / 255);
-        rect.width = window.width;
-        rect.height = (window.height * window._openness) / 255;
+        this._windowMask.width = window.width;
+        this._windowMask.height = (window.height * window._openness) / 255;
     }
 }

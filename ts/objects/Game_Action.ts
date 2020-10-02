@@ -1,9 +1,11 @@
 import { Utils } from "../core/Utils";
 import { Game_Item } from "./Game_Item";
-import { Weapon } from "../interfaces/Weapon";
 import { Skill } from "../interfaces/Skill";
 import { Item } from "../interfaces/Item";
-import { Armor } from "../interfaces/Armor";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { BattleManager } from "../managers/BattleManager";
+import { Game_ActionResult } from "./Game_ActionResult";
+import { Game_Battler } from "./Game_Battler";
 
 export class Game_Action {
     public static EFFECT_RECOVER_HP = 11;
@@ -31,7 +33,7 @@ export class Game_Action {
     private _targetIndex: number;
     private _reflectionTarget: any;
 
-    public constructor(subject?, forcing?) {
+    public constructor(subject?: Game_Battler, forcing?: boolean) {
         this._subjectActorId = 0;
         this._subjectEnemyIndex = -1;
         this._forcing = forcing || false;
@@ -155,6 +157,10 @@ export class Game_Action {
     }
 
     public needsSelection() {
+        if ($gameParty.inBattle() && (this.item() as Item).scope === 0)
+            return false;
+        if ($gameParty.inBattle() && BattleManager.isForceSelection())
+            return true;
         return this.checkItemScope([1, 7, 9]);
     }
 
@@ -268,14 +274,34 @@ export class Game_Action {
     }
 
     public speed() {
-        const agi = this.subject().agi;
-        let speed = agi + Utils.randomInt(Math.floor(5 + agi / 4));
-        if (this.item()) {
-            speed += (this.item() as Skill | Item).speed;
+        const user = this.subject();
+        const a = user;
+        const maxhp = user.mhp;
+        const mhp = user.mhp;
+        const hp = user.hp;
+        const maxmp = user.mmp;
+        const mmp = user.mmp;
+        const mp = user.mp;
+        const maxtp = user.maxTp();
+        const mtp = user.maxTp();
+        const tp = user.tp;
+        const atk = user.atk;
+        const def = user.def;
+        const mat = user.mat;
+        const int = user.mat;
+        const mdf = user.mdf;
+        //const res = user.res;
+        const agi = user.agi;
+        const luk = user.luk;
+        const code = Yanfly.Param.BECActionSpeed;
+        let speed = 0;
+        try {
+            speed = eval(code);
+        } catch (e) {
+            Yanfly.Util.displayError(e, code, "ACTION SPEED FORMULA ERROR");
         }
-        if (this.isAttack()) {
-            speed += this.subject().attackSpeed();
-        }
+        if (this.item()) speed += (this.item() as Item).speed;
+        if (this.isAttack()) speed += this.subject().attackSpeed();
         return speed;
     }
 
@@ -393,7 +419,7 @@ export class Game_Action {
         }
     }
 
-    public evaluateWithTarget(target) {
+    public evaluateWithTarget(target: Game_Battler) {
         if (this.isHpEffect()) {
             const value = this.makeDamageValue(target, false);
             if (this.isForOpponent()) {
@@ -405,7 +431,7 @@ export class Game_Action {
         }
     }
 
-    public testApply(target) {
+    public testApply(target: Game_Battler) {
         return (
             this.isForDeadFriend() === target.isDead() &&
             ($gameParty.inBattle() ||
@@ -416,7 +442,7 @@ export class Game_Action {
         );
     }
 
-    public hasItemAnyValidEffects(target) {
+    public hasItemAnyValidEffects(target: Game_Battler) {
         return (this.item() as Skill | Item).effects.some(function(effect) {
             return this.testItemEffect(target, effect);
         }, this);
@@ -457,7 +483,7 @@ export class Game_Action {
         }
     }
 
-    public itemCnt(target) {
+    public itemCnt(target: Game_Battler) {
         if (this.isPhysical() && target.canMove()) {
             return target.cnt;
         } else {
@@ -465,7 +491,7 @@ export class Game_Action {
         }
     }
 
-    public itemMrf(target) {
+    public itemMrf(target: Game_Battler) {
         if (this.isMagical()) {
             return target.mrf;
         } else {
@@ -473,7 +499,7 @@ export class Game_Action {
         }
     }
 
-    public itemHit(target) {
+    public itemHit(target: Game_Battler) {
         if (this.isPhysical()) {
             return (
                 (this.item() as Item).successRate * 0.01 * this.subject().hit
@@ -483,7 +509,7 @@ export class Game_Action {
         }
     }
 
-    public itemEva(target) {
+    public itemEva(target: Game_Battler) {
         if (this.isPhysical()) {
             return target.eva;
         } else if (this.isMagical()) {
@@ -493,15 +519,19 @@ export class Game_Action {
         }
     }
 
-    public itemCri(target) {
+    public itemCri(target: Game_Battler) {
         return (this.item() as Item).damage.critical
             ? this.subject().cri * (1 - target.cev)
             : 0;
     }
 
-    public apply(target) {
-        const result = target.result();
-        this.subject().clearResult();
+    public apply(target: Game_Battler) {
+        target.result = null;
+        target.result = new Game_ActionResult();
+        this.subject().result = null;
+        this.subject().result = new Game_ActionResult();
+        const result = target.result;
+        this.subject().clearResult;
         result.clear();
         result.used = this.testApply(target);
         result.missed = result.used && Math.random() >= this.itemHit(target);
@@ -518,6 +548,11 @@ export class Game_Action {
                 this.applyItemEffect(target, effect);
             }, this);
             this.applyItemUserEffect(target);
+        }
+        if ($gameParty.inBattle()) {
+            target.startDamagePopup();
+            target.performResultEffects();
+            if (target !== this.subject()) this.subject().startDamagePopup();
         }
     }
 
@@ -546,28 +581,30 @@ export class Game_Action {
         return value;
     }
 
-    public evalDamageFormula(target) {
+    public evalDamageFormula(target: Game_Battler) {
+        const item = this.item() as Skill | Item;
+        const a = this.subject();
+        const b = target;
+        const v = $gameVariables._data;
         try {
-            const item = this.item();
-            const a = this.subject();
-            const b = target;
-            const v = $gameVariables._data;
-            const sign =
-                [3, 4].indexOf((item as Skill | Item).damage.type) > -1
-                    ? -1
-                    : 1;
             let value =
-                Math.max(eval((item as Skill | Item).damage.formula), 0) * sign;
+                Math.max(eval(item.damage.formula), 0) *
+                ([3, 4].includes(item.damage.type) ? -1 : 1);
             if (isNaN(value)) {
                 value = 0;
             }
             return value;
         } catch (e) {
+            Yanfly.Util.displayError(
+                e,
+                item.damage.formula,
+                "DAMAGE FORMULA ERROR"
+            );
             return 0;
         }
     }
 
-    public calcElementRate(target) {
+    public calcElementRate(target: Game_Battler) {
         if ((this.item() as Skill | Item).damage.elementId < 0) {
             return this.elementsMaxRate(
                 target,
@@ -610,7 +647,7 @@ export class Game_Action {
     }
 
     public executeDamage(target, value) {
-        const result = target.result();
+        const result = target.result;
         if (value === 0) {
             result.critical = false;
         }
@@ -759,6 +796,9 @@ export class Game_Action {
                     chance *= this.subject().attackStatesRate(stateId);
                     chance *= this.lukEffectRate(target);
                     if (Math.random() < chance) {
+                        if (stateId === target.deathStateId()) {
+                            if (target.isImmortal()) target.removeImmortal();
+                        }
                         target.addState(stateId);
                         this.makeSuccess(target);
                     }
@@ -768,13 +808,17 @@ export class Game_Action {
     }
 
     public itemEffectAddNormalState(target, effect) {
+        let stateId = effect.dataId;
         let chance = effect.value1;
         if (!this.isCertainHit()) {
-            chance *= target.stateRate(effect.dataId);
+            chance *= target.stateRate(stateId);
             chance *= this.lukEffectRate(target);
         }
         if (Math.random() < chance) {
-            target.addState(effect.dataId);
+            if (stateId === target.deathStateId()) {
+                if (target.isImmortal()) target.removeImmortal();
+            }
+            target.addState(stateId);
             this.makeSuccess(target);
         }
     }
@@ -836,11 +880,11 @@ export class Game_Action {
 
     public itemEffectCommonEvent(target, effect) {}
 
-    public makeSuccess(target) {
-        target.result().success = true;
+    public makeSuccess(target: Game_Battler) {
+        target.result.success = true;
     }
 
-    public applyItemUserEffect(target) {
+    public applyItemUserEffect(target: Game_Battler) {
         const value = Math.floor(
             (this.item() as Skill | Item).tpGain * this.subject().tcr
         );
@@ -848,10 +892,19 @@ export class Game_Action {
     }
 
     public lukEffectRate(target) {
-        return Math.max(1.0 + (this.subject().luk - target.luk) * 0.001, 0.0);
+        const item = this.item();
+        const skill = this.item();
+        const a = this.subject();
+        const user = this.subject();
+        const subject = this.subject();
+        const b = target;
+        const s = $gameSwitches._data;
+        const v = $gameVariables._data;
+        return eval(Yanfly.Param.BPCLukEffectRate);
     }
 
     public applyGlobal() {
+        if ($gameParty.inBattle()) return;
         (this.item() as Skill | Item).effects.forEach(function(effect) {
             if (effect.code === Game_Action.EFFECT_COMMON_EVENT) {
                 $gameTemp.reserveCommonEvent(effect.dataId);

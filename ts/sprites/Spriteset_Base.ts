@@ -5,9 +5,9 @@ import { Sprite } from "../core/Sprite";
 import { ToneFilter } from "../core/ToneFilter";
 import { ToneSprite } from "../core/ToneSprite";
 import { Utils } from "../core/Utils";
+import { ConfigManager } from "../managers/ConfigManager";
 import { Sprite_Picture } from "./Sprite_Picture";
 import { Sprite_Timer } from "./Sprite_Timer";
-import { ConfigManager } from "../managers/ConfigManager";
 
 // -----------------------------------------------------------------------------
 // Spriteset_Base
@@ -102,10 +102,9 @@ export abstract class Spriteset_Base extends Sprite {
     public createPictures() {
         const width = Graphics.boxWidth;
         const height = Graphics.boxHeight;
-        const x = (ConfigManager.fieldResolution.widthPx - width) / 2;
-        const y = (ConfigManager.fieldResolution.heightPx - height) / 2;
+        const offset = ConfigManager.xOffset;
         this._pictureContainer = new Sprite();
-        this._pictureContainer.setFrame(x, y, width, height);
+        this._pictureContainer.setFrame(0 + offset, 0, width, height);
         for (let i = 1; i <= $gameScreen.maxPictures(); i++) {
             this._pictureContainer.addChild(new Sprite_Picture(i));
         }

@@ -114,7 +114,7 @@ export abstract class Graphics {
      */
     public static BLEND_SCREEN: number = 3;
 
-    public static renderer: PIXI.WebGLRenderer;
+    public static renderer: PIXI.Renderer;
 
     private static _rendererType: any;
     private static _boxWidth: number;
@@ -695,22 +695,23 @@ export abstract class Graphics {
     }
 
     public static printFullError(name: string, message: string, stack: string) {
-        if (Graphics._errorPrinter) {
-            Graphics._errorPrinter.innerHTML = Graphics._makeFullErrorHtml(
+        const stackArray = this.processErrorStackMessage(stack);
+        if (this._errorPrinter) {
+            this._errorPrinter.innerHTML = this._makeFullErrorHtml(
                 name,
                 message,
-                Graphics.processErrorStackMessage(stack)
+                stackArray
             );
         }
-        Graphics._applyCanvasFilter();
-        Graphics._clearUpperCanvas();
+        this._applyCanvasFilter();
+        this._clearUpperCanvas();
     }
 
     private static _makeFullErrorHtml(
         name: string,
         message: string,
         stack: string[]
-    ) {
+    ): string {
         let text = "";
         for (var i = 2; i < stack.length; ++i) {
             text += "<font color=white>" + stack[i] + "</font><br>";
@@ -730,7 +731,7 @@ export abstract class Graphics {
         const data = stack.split(/(?:\r\n|\r|\n)/);
         data.unshift("Game has encountered a bug. Please report it.<br>");
         for (let i = 1; i < data.length; ++i) {
-            data[i] = data[i].replace(/[\(](.*[\/])/, "(");
+            data[i] = data[i].replace(/[(](.*[/])/, "(");
         }
         data.push(
             '<br><font color="yellow"><b>Press F5 to restart the game.' +
@@ -956,9 +957,13 @@ export abstract class Graphics {
     private static _createRenderer = function() {
         const width = Graphics.width;
         const height = Graphics.height;
-        const options = { view: Graphics._canvas };
+        const options = {
+            view: Graphics._canvas,
+            width: width,
+            height: height
+        };
         try {
-            Graphics.renderer = new PIXI.WebGLRenderer(width, height, options);
+            Graphics.renderer = new PIXI.Renderer(options);
             if (Graphics.renderer && Graphics.renderer.textureGC) {
                 Graphics.renderer.textureGC.maxIdle = 1;
             }

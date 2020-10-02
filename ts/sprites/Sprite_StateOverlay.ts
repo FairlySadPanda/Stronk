@@ -44,6 +44,12 @@ export class Sprite_StateOverlay extends Sprite_Base {
             this.updateFrame();
             this._animationCount = 0;
         }
+        this.updateMirror();
+    }
+
+    public updateMirror() {
+        if (this.parent.scale.x < 0) this.scale.x = -1 * Math.abs(this.scale.x);
+        if (this.parent.scale.x > 0) this.scale.x = Math.abs(this.scale.x);
     }
 
     public animationWait() {

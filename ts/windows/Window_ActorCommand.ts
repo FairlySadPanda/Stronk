@@ -5,6 +5,7 @@ import { TextManager } from "../managers/TextManager";
 import { Game_Actor } from "../objects/Game_Actor";
 import { Window_Command } from "./Window_Command";
 import { Skill } from "../interfaces/Skill";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 // -----------------------------------------------------------------------------
 // Window_ActorCommand
@@ -30,7 +31,11 @@ export class Window_ActorCommand extends Window_Command {
     }
 
     public numVisibleRows() {
-        return 4;
+        return Yanfly.Param.BECCommandRows;
+    }
+
+    public itemTextAlign() {
+        return Yanfly.Param.BECCommandAlign;
     }
 
     public makeCommandList() {
@@ -48,10 +53,10 @@ export class Window_ActorCommand extends Window_Command {
 
     public addSkillCommands() {
         const skillTypes = this._actor.addedSkillTypes();
-        skillTypes.sort(function(a: number, b: number) {
+        skillTypes.sort(function(a, b) {
             return a - b;
         });
-        skillTypes.forEach(function(stypeId: string | number) {
+        skillTypes.forEach(function(stypeId) {
             const name = $dataSystem.skillTypes[stypeId];
             this.addCommand(name, "skill", true, stypeId);
         }, this);

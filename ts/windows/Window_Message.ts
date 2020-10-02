@@ -32,13 +32,6 @@ export class Window_Message extends Window_Base {
     private _pauseSkip: boolean;
     private _textSpeed: number;
     private _textSpeedCount: number;
-    wordwrapWidth: () => any;
-    adjustWindowSettings: () => void;
-    isFastForward: () => boolean;
-    convertNameBox: (text: any) => any;
-    convertMessageCharacters: (text: any) => any;
-    convertActorFace: (actor: any) => string;
-    hasDifferentNameBoxText: () => boolean;
 
     public constructor() {
         const width = Window_Message.prototype.windowWidth();
@@ -80,7 +73,7 @@ export class Window_Message extends Window_Base {
     }
 
     public windowWidth() {
-        return Graphics.boxWidth;
+        return Window_Message.maxWidthOfWindow;
     }
 
     public windowHeight() {

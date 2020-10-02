@@ -11,7 +11,7 @@ export abstract class TextManager {
         return $dataSystem.terms.commands[commandId] || "";
     }
 
-    public static message(messageId: string) {
+    public static message(messageId: string): string {
         return $dataSystem.terms.messages[messageId] || "";
     }
 

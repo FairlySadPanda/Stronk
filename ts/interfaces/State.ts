@@ -1,6 +1,11 @@
 import { Trait } from "./Trait";
 
-export interface State {
+export interface State extends YanflyBaseParams {
+    anchorX: any;
+    anchorY: any;
+    reflectAnimationId: number;
+    spriteCannotMove: any;
+    reapplyRules: number;
     id: number;
     autoRemovalTiming: number;
     chanceByDamage: number;

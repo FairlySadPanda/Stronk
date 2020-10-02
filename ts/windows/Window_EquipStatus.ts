@@ -1,5 +1,6 @@
 import { TextManager } from "../managers/TextManager";
 import { Window_Base } from "./Window_Base";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 // -----------------------------------------------------------------------------
 // Window_EquipStatus
@@ -76,7 +77,8 @@ export class Window_EquipStatus extends Window_Base {
 
     public drawCurrentParam(x, y, paramId) {
         this.resetTextColor();
-        this.drawText(this._actor.param(paramId), x, y, 48, undefined, "right");
+        const actorparam = Yanfly.Util.toGroup(this._actor.param(paramId));
+        this.drawText(actorparam, x, y, 48, undefined, "right");
     }
 
     public drawRightArrow(x, y) {
@@ -87,7 +89,8 @@ export class Window_EquipStatus extends Window_Base {
     public drawNewParam(x, y, paramId) {
         const newValue = this._tempActor.param(paramId);
         const diffvalue = newValue - this._actor.param(paramId);
+        const actorparam = Yanfly.Util.toGroup(newValue);
         this.changeTextColor(this.paramchangeTextColor(diffvalue));
-        this.drawText(newValue, x, y, 48, undefined, "right");
+        this.drawText(actorparam, x, y, 48, undefined, "right");
     }
 }

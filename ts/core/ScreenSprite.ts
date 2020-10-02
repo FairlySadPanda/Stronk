@@ -10,16 +10,6 @@ export class ScreenSprite extends PIXI.Container {
     public _blue: number;
     public _colorText: string;
 
-    public static YEPWarned = false;
-    public static warnYep() {
-        if (!ScreenSprite.YEPWarned) {
-            console.log(
-                "Deprecation warning. Please update YEP_CoreEngine. ScreenSprite is not a sprite, it has graphics inside."
-            );
-            ScreenSprite.YEPWarned = true;
-        }
-    }
-
     public constructor() {
         super();
 
@@ -32,14 +22,6 @@ export class ScreenSprite extends PIXI.Container {
         this._blue = -1;
         this._colorText = "";
         this.setBlack();
-
-        if (Utils.RPGMAKER_VERSION && Utils.RPGMAKER_VERSION >= "1.3.0") return;
-        this.scale.x = Graphics.boxWidth * 10;
-        this.scale.y = Graphics.boxHeight * 10;
-        this.anchor.x = 0.5;
-        this.anchor.y = 0.5;
-        this.x = 0;
-        this.y = 0;
     }
 
     /**
@@ -101,7 +83,6 @@ export class ScreenSprite extends PIXI.Container {
     }
 
     public get anchor(): Point {
-        ScreenSprite.warnYep();
         this.scale.x = 1;
         this.scale.y = 1;
         return new Point(0, 0);

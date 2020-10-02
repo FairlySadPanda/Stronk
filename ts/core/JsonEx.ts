@@ -1,3 +1,5 @@
+import * as _ from "lodash";
+
 export abstract class JsonEx {
     /**
      * The maximum depth of objects.
@@ -53,8 +55,8 @@ export abstract class JsonEx {
      * @param {Object} object The object to be copied
      * @return {Object} The copied object
      */
-    public static makeDeepCopy(object): object {
-        return this.parse(this.stringify(object));
+    public static makeDeepCopy<T>(object: T): T {
+        return _.cloneDeep(object);
     }
     private static _id: number = 1;
 

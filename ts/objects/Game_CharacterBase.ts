@@ -66,6 +66,8 @@ export class Game_CharacterBase {
     private _jumpCount: number;
     private _jumpPeak: number;
     private _movementSuccess: boolean;
+    protected _isAlwaysUpdateMovement: boolean;
+    protected _patternMoveRouteLocked: boolean;
 
     public constructor(gameLoadInput?: Game_CharacterBase_OnLoad) {
         this.initMembers();
@@ -353,6 +355,7 @@ export class Game_CharacterBase {
     }
 
     public isNearTheScreen() {
+        if (this._isAlwaysUpdateMovement) return true;
         const gw = ConfigManager.fieldResolution.widthPx;
         const gh = ConfigManager.fieldResolution.heightPx;
         const tw = $gameMap.tileWidth();
@@ -442,6 +445,7 @@ export class Game_CharacterBase {
     }
 
     public updatePattern() {
+        if (this._patternMoveRouteLocked) return;
         if (!this.hasStepAnime() && this._stopCount > 0) {
             this.resetPattern();
         } else {
@@ -656,6 +660,7 @@ export class Game_CharacterBase {
     }
 
     public requestAnimation(animationId) {
+        animationId = Math.round(animationId);
         this._animationId = animationId;
     }
 

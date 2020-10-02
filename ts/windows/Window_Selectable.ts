@@ -2,8 +2,10 @@ import { Input } from "../core/Input";
 import { Rectangle } from "../core/Rectangle";
 import { TouchInput } from "../core/TouchInput";
 import { Utils } from "../core/Utils";
+import { Item } from "../interfaces/Item";
 import { SoundManager } from "../managers/SoundManager";
 import { Window_Base } from "./Window_Base";
+import { Window_Help } from "./Window_Help";
 
 // -----------------------------------------------------------------------------
 // Window_Selectable
@@ -12,14 +14,15 @@ import { Window_Base } from "./Window_Base";
 
 export class Window_Selectable extends Window_Base {
     protected _index: number;
-    private _cursorFixed: boolean;
-    private _cursorAll: boolean;
-    private _stayCount: number;
-    private _helpWindow: any;
-    private _handlers: {};
-    private _touching: boolean;
-    private _scrollX: number;
-    private _scrollY: number;
+    protected _cursorFixed: boolean;
+    protected _cursorAll: boolean;
+    protected _stayCount: number;
+    protected _helpWindow: any;
+    protected _handlers: {};
+    protected _touching: boolean;
+    protected _scrollX: number;
+    protected _scrollY: number;
+    protected _inputLock: any;
 
     public constructor(x: number, y: number, width: number, height: number) {
         super(x, y, width, height);
@@ -177,9 +180,7 @@ export class Window_Selectable extends Window_Base {
         return rect;
     }
 
-    public setHelpWindow(
-        helpWindow: import("../../../../Projects/Dragon Slayers/ts/windows/Window_Help").Window_Help
-    ) {
+    public setHelpWindow(helpWindow: Window_Help) {
         this._helpWindow = helpWindow;
         this.callUpdateHelp();
     }
@@ -215,6 +216,7 @@ export class Window_Selectable extends Window_Base {
     }
 
     public isCursorMovable() {
+        if (this._inputLock) return false;
         return (
             this.isOpenAndActive() &&
             !this._cursorFixed &&
@@ -563,9 +565,7 @@ export class Window_Selectable extends Window_Base {
         this._helpWindow.clear();
     }
 
-    public setHelpWindowItem(
-        item: import("../../../../Projects/Dragon Slayers/ts/interfaces/Item").Item
-    ) {
+    public setHelpWindowItem(item: Item) {
         if (this._helpWindow) {
             this._helpWindow.setItem(item);
         }

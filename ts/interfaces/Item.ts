@@ -1,4 +1,4 @@
-export interface Item {
+export interface Item extends YanflyBaseParams {
     id: number;
     animationId: number;
     consumable: boolean;
@@ -17,6 +17,7 @@ export interface Item {
     speed: number;
     successRate: number;
     tpGain: number;
+    params: any[];
 }
 
 interface Damage {

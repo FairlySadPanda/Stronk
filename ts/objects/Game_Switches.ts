@@ -1,9 +1,13 @@
+import { SceneManager } from "../managers/SceneManager";
+import { Scene_Debug } from "../scenes/Scene_Debug";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+
 export interface Game_Switches_OnLoad {
     _data: boolean[];
 }
 
 export class Game_Switches {
-    private _data: boolean[];
+    public _data: boolean[];
 
     public constructor(gameLoadInput?: Game_Switches_OnLoad) {
         this.clear();
@@ -18,6 +22,10 @@ export class Game_Switches {
     }
 
     public value(switchId) {
+        if (this.isAdvancedSwitch(switchId)) {
+            return this.runAdvancedSwitchCode(switchId);
+        }
+
         return !!this._data[switchId];
     }
 
@@ -30,5 +38,36 @@ export class Game_Switches {
 
     public onChange() {
         $gameMap.requestRefresh();
+    }
+
+    private isAdvancedSwitch(switchId: number) {
+        if (
+            SceneManager.scene.debugActive ||
+            SceneManager.scene instanceof Scene_Debug
+        ) {
+            return false;
+        } else if ($dataSystem.switches[switchId].match(/EVAL:[ ](.*)/i))
+            return true;
+        return false;
+    }
+
+    private runAdvancedSwitchCode(switchId: number) {
+        const value = false;
+        let code = "";
+        if ($dataSystem.switches[switchId].match(/EVAL:[ ](.*)/i)) {
+            code = "value = " + String(RegExp.$1);
+        } else {
+            return false;
+        }
+        try {
+            eval(code);
+        } catch (e) {
+            Yanfly.Util.displayError(
+                e,
+                code,
+                "ADVANCED SWITCH " + switchId + " EVAL ERROR"
+            );
+        }
+        return value;
     }
 }

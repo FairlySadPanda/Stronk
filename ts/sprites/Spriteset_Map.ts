@@ -4,11 +4,11 @@ import { Tilemap } from "../core/Tilemap";
 import { TilingSprite } from "../core/TilingSprite";
 import { Utils } from "../core/Utils";
 import { Weather } from "../core/Weather";
+import { ConfigManager } from "../managers/ConfigManager";
 import { ImageManager } from "../managers/ImageManager";
 import { Spriteset_Base } from "./Spriteset_Base";
 import { Sprite_Character } from "./Sprite_Character";
 import { Sprite_Destination } from "./Sprite_Destination";
-import { ConfigManager } from "../managers/ConfigManager";
 
 // -----------------------------------------------------------------------------
 // Spriteset_Map
@@ -101,10 +101,12 @@ export class Spriteset_Map extends Spriteset_Base {
                 this._tilemap.bitmaps.push(bitmap);
             }
             const newTilesetFlags = $gameMap.tilesetFlags();
-            this._tilemap.refreshTileset();
-            if (!Utils.arrayEquals(this._tilemap.flags, newTilesetFlags)) {
-                this._tilemap.refresh();
-            }
+            Promise.all(this.bitmapPromises).then(() => {
+                this._tilemap.refreshTileset();
+                if (!Utils.arrayEquals(this._tilemap.flags, newTilesetFlags)) {
+                    this._tilemap.refresh();
+                }
+            });
             this._tilemap.flags = newTilesetFlags;
         }
     }

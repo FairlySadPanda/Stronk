@@ -1,3 +1,8 @@
+import { SceneManager } from "../managers/SceneManager";
+
+import { Scene_Debug } from "../scenes/Scene_Debug";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+
 export interface Game_Variables_OnLoad {
     _data: number | string[];
 }
@@ -18,6 +23,9 @@ export class Game_Variables {
     }
 
     public value(variableId) {
+        if (this.isAdvancedVariable(variableId)) {
+            return this.runAdvancedVariableCode(variableId);
+        }
         return this._data[variableId] || 0;
     }
 
@@ -33,5 +41,40 @@ export class Game_Variables {
 
     public onChange() {
         $gameMap.requestRefresh();
+    }
+
+    public isAdvancedVariable(variableId) {
+        if (
+            SceneManager.scene.debugActive ||
+            SceneManager.scene instanceof Scene_Debug
+        ) {
+            return false;
+        }
+        const name = $dataSystem.variables[variableId];
+        if (name.match(/EVAL:[ ](.*)/i)) {
+            return true;
+        }
+        return false;
+    }
+
+    public runAdvancedVariableCode(variableId) {
+        const value = 0;
+        const name = $dataSystem.variables[variableId];
+        let code = "";
+        if (name.match(/EVAL:[ ](.*)/i)) {
+            code = "value = " + String(RegExp.$1);
+        } else {
+            return false;
+        }
+        try {
+            eval(code);
+        } catch (e) {
+            Yanfly.Util.displayError(
+                e,
+                code,
+                "ADVANCED VARIABLE" + variableId + " EVAL ERROR"
+            );
+        }
+        return value;
     }
 }

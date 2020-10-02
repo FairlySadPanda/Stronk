@@ -1,11 +1,13 @@
 import { Bitmap } from "../core/Bitmap";
 import { Sprite } from "../core/Sprite";
+import { Utils } from "../core/Utils";
 import { Window } from "../core/Window";
 import { Item } from "../interfaces/Item";
+import { ConfigManager } from "../managers/ConfigManager";
 import { ImageManager } from "../managers/ImageManager";
 import { TextManager } from "../managers/TextManager";
 import { Game_Actor } from "../objects/Game_Actor";
-import { ConfigManager } from "../managers/ConfigManager";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 interface ListItem {
     name: string;
@@ -15,10 +17,10 @@ interface ListItem {
 }
 
 export class Window_Base extends Window {
-    public static _iconWidth: number = 32;
-    public static _iconHeight: number = 32;
-    public static _faceWidth: number = 144;
-    public static _faceHeight: number = 144;
+    public static _iconWidth: number = Yanfly.Param.IconWidth;
+    public static _iconHeight: number = Yanfly.Param.IconHeight;
+    public static _faceWidth: number = Yanfly.Param.FaceWidth;
+    public static _faceHeight: number = Yanfly.Param.FaceHeight;
     public windowskin: Bitmap;
     public padding: number;
     public backOpacity: number;
@@ -30,7 +32,7 @@ export class Window_Base extends Window {
     private _closing: boolean;
     private _dimmerSprite: Sprite;
 
-    public constructor(x, y, width, height) {
+    public constructor(x: number, y: number, width: number, height: number) {
         super();
         this._list = [];
         this.loadWindowskin();
@@ -55,33 +57,33 @@ export class Window_Base extends Window {
     }
 
     public lineHeight() {
-        return 36;
+        return Yanfly.Param.LineHeight;
     }
 
     public standardFontFace() {
         if ($gameSystem.isChinese()) {
-            return "SimHei, Heiti TC, sans-serif";
+            return Yanfly.Param.ChineseFont;
         } else if ($gameSystem.isKorean()) {
-            return "Dotum, AppleGothic, sans-serif";
+            return Yanfly.Param.KoreanFont;
         } else {
-            return "GameFont";
+            return Yanfly.Param.DefaultFont;
         }
     }
 
     public standardFontSize() {
-        return 28;
+        return Yanfly.Param.FontSize;
     }
 
     public standardPadding() {
-        return 18;
+        return Yanfly.Param.WindowPadding;
     }
 
     public textPadding() {
-        return 6;
+        return Yanfly.Param.TextPadding;
     }
 
     public standardBackOpacity() {
-        return 192;
+        return Yanfly.Param.WindowOpacity;
     }
 
     public loadWindowskin() {
@@ -90,7 +92,7 @@ export class Window_Base extends Window {
             if (files.length > 0) {
                 const maxValue = files.length;
                 let value = this.getGameSettingsMoe("_windowskin");
-                if (Number.isInteger(value) == false) {
+                if (Number.isInteger(value) === false) {
                     value = 0;
                     ConfigManager["_windowskin"] = 0;
                 }
@@ -123,7 +125,7 @@ export class Window_Base extends Window {
         return this._height - this.standardPadding() * 2;
     }
 
-    public fittingHeight(numLines) {
+    public fittingHeight(numLines: number) {
         return numLines * this.lineHeight() + this.standardPadding() * 2;
     }
 
@@ -211,70 +213,70 @@ export class Window_Base extends Window {
         this.active = false;
     }
 
-    public textColor(n) {
+    public textColor(n: number) {
         const px = 96 + (n % 8) * 12 + 6;
         const py = 144 + Math.floor(n / 8) * 12 + 6;
         return this.windowskin.getPixel(px, py);
     }
 
     public normalColor() {
-        return this.textColor(0);
+        return this.textColor(Yanfly.Param.ColorNormal);
     }
 
     public systemColor() {
-        return this.textColor(16);
+        return this.textColor(Yanfly.Param.ColorSystem);
     }
 
     public crisisColor() {
-        return this.textColor(17);
+        return this.textColor(Yanfly.Param.ColorCrisis);
     }
 
     public deathColor() {
-        return this.textColor(18);
+        return this.textColor(Yanfly.Param.ColorDeath);
     }
 
     public gaugeBackColor() {
-        return this.textColor(19);
+        return this.textColor(Yanfly.Param.ColorGaugeBack);
     }
 
     public hpGaugeColor1() {
-        return this.textColor(20);
+        return this.textColor(Yanfly.Param.ColorHpGauge1);
     }
 
     public hpGaugeColor2() {
-        return this.textColor(21);
+        return this.textColor(Yanfly.Param.ColorHpGauge2);
     }
 
     public mpGaugeColor1() {
-        return this.textColor(22);
+        return this.textColor(Yanfly.Param.ColorMpGauge1);
     }
 
     public mpGaugeColor2() {
-        return this.textColor(23);
+        return this.textColor(Yanfly.Param.ColorMpGauge2);
     }
 
     public mpCostColor() {
-        return this.textColor(23);
+        return this.textColor(Yanfly.Param.ColorMpCost);
     }
 
     public powerUpColor() {
-        return this.textColor(24);
+        return this.textColor(Yanfly.Param.ColorPowerUp);
     }
 
     public powerDownColor() {
-        return this.textColor(25);
+        return this.textColor(Yanfly.Param.ColorPowerDown);
     }
 
     public tpGaugeColor1() {
-        return this.textColor(28);
+        return this.textColor(Yanfly.Param.ColorTpGauge1);
     }
 
     public tpGaugeColor2() {
-        return this.textColor(29);
+        return this.textColor(Yanfly.Param.ColorTpGauge1);
     }
 
     public tpCostColor() {
-        return this.textColor(29);
+        return this.textColor(Yanfly.Param.ColorTpCost);
     }
 
     public pendingColor() {
@@ -285,11 +287,11 @@ export class Window_Base extends Window {
         return 160;
     }
 
-    public changeTextColor(color) {
+    public changeTextColor(color: string) {
         this.contents.textColor = color;
     }
 
-    public changePaintOpacity(enabled) {
+    public changePaintOpacity(enabled: number | boolean) {
         this.contents.paintOpacity = enabled ? 255 : this.translucentOpacity();
     }
 
@@ -311,7 +313,7 @@ export class Window_Base extends Window {
         );
     }
 
-    public textWidth(text) {
+    public textWidth(text: string) {
         return this.contents.measureTextWidth(text);
     }
 
@@ -323,10 +325,9 @@ export class Window_Base extends Window {
                 x: x,
                 y: y,
                 left: x,
-                text: null,
+                text: this.convertEscapeCharacters(text),
                 height: null
             };
-            textState.text = this.convertEscapeCharacters(text);
             textState.height = this.calcTextHeight(textState, false);
             this.resetFontSettings();
             while (textState.index < textState.text.length) {
@@ -346,7 +347,7 @@ export class Window_Base extends Window {
         );
     }
 
-    public convertEscapeCharacters(text) {
+    public convertEscapeCharacters(text: string) {
         text = text.replace(/\\/g, "\x1b");
         text = text.replace(/\x1b\x1b/g, "\\");
         text = text.replace(/\x1bV\[(\d+)\]/gi, function() {
@@ -371,17 +372,17 @@ export class Window_Base extends Window {
         return text;
     }
 
-    public actorName(n) {
+    public actorName(n: number) {
         const actor = n >= 1 ? $gameActors.actor(n) : null;
         return actor ? actor.name() : "";
     }
 
-    public partyMemberName(n) {
+    public partyMemberName(n: number) {
         const actor = n >= 1 ? $gameParty.members()[n - 1] : null;
         return actor ? actor.name() : "";
     }
 
-    public processCharacter(textState) {
+    public processCharacter(textState: any) {
         switch (textState.text[textState.index]) {
             case "\n":
                 this.processNewLine(textState);
@@ -401,7 +402,13 @@ export class Window_Base extends Window {
         }
     }
 
-    public processNormalCharacter(textState) {
+    public processNormalCharacter(textState: {
+        text: any[];
+        index: number;
+        x: number;
+        y: number;
+        height: number;
+    }) {
         const c = textState.text[textState.index++];
         const w = this.textWidth(c);
         this.contents.drawText(
@@ -414,18 +421,21 @@ export class Window_Base extends Window {
         textState.x += w;
     }
 
-    public processNewLine(textState) {
+    public processNewLine(textState: any) {
         textState.x = textState.left;
         textState.y += textState.height;
         textState.height = this.calcTextHeight(textState, false);
         textState.index++;
     }
 
-    public processNewPage(textState) {
+    public processNewPage(textState: { index: number }) {
         textState.index++;
     }
 
-    public obtainEscapeCode(textState) {
+    public obtainEscapeCode(textState: {
+        index: number;
+        text: { slice: (arg0: any) => string };
+    }) {
         textState.index++;
         const regExp = /^[.|^!><{}\\]|^[A-Z]+/i;
         const arr = regExp.exec(textState.text.slice(textState.index));
@@ -437,7 +447,10 @@ export class Window_Base extends Window {
         }
     }
 
-    public obtainEscapeParam(textState) {
+    public obtainEscapeParam(textState: {
+        text: { slice: (arg0: any) => string };
+        index: number;
+    }) {
         const arr = /^\[\d+\]/.exec(textState.text.slice(textState.index));
         if (arr) {
             textState.index += arr[0].length;
@@ -447,7 +460,7 @@ export class Window_Base extends Window {
         }
     }
 
-    public processEscapeCharacter(code, textState) {
+    public processEscapeCharacter(code: string, textState: any) {
         switch (code) {
             case "C":
                 this.changeTextColor(
@@ -469,7 +482,10 @@ export class Window_Base extends Window {
         }
     }
 
-    public processDrawIcon(iconIndex, textState) {
+    public processDrawIcon(
+        iconIndex: number,
+        textState: { x: number; y: number }
+    ) {
         this.drawIcon(iconIndex, textState.x + 2, textState.y + 2);
         textState.x += Window_Base._iconWidth + 4;
     }
@@ -486,7 +502,17 @@ export class Window_Base extends Window {
         }
     }
 
-    public calcTextHeight(textState, all) {
+    public calcTextHeight(
+        textState: {
+            index: any;
+            x?: number;
+            y?: number;
+            left?: number;
+            text: any;
+            height?: any;
+        },
+        all: boolean
+    ) {
         const lastFontSize = this.contents.fontSize;
         let textHeight = 0;
         const lines = textState.text.slice(textState.index).split("\n");
@@ -518,7 +544,7 @@ export class Window_Base extends Window {
         return textHeight;
     }
 
-    public async drawIcon(iconIndex, x, y) {
+    public async drawIcon(iconIndex: number, x: number, y: number) {
         const bitmap = ImageManager.loadSystem("IconSet");
         await bitmap.imagePromise;
         const pw = Window_Base._iconWidth;
@@ -568,14 +594,44 @@ export class Window_Base extends Window {
         this.contents.blt(bitmap, sx, sy, pw, ph, x - pw / 2, y - ph);
     }
 
-    public drawGauge(x, y, width, rate, color1, color2) {
-        const fillW = Math.floor(width * rate);
-        const gaugeY = y + this.lineHeight() - 8;
-        this.contents.fillRect(x, gaugeY, width, 6, this.gaugeBackColor());
-        this.contents.gradientFillRect(x, gaugeY, fillW, 6, color1, color2);
+    public drawGauge(
+        dx: number,
+        dy: number,
+        dw: number,
+        rate: number,
+        color1: string,
+        color2: string
+    ) {
+        const color3 = this.gaugeBackColor();
+        let fillW = Utils.clamp(Math.floor(dw * rate), 0, dw);
+        let gaugeH = this.gaugeHeight();
+        let gaugeY = dy + this.lineHeight() - gaugeH - 2;
+        if (Yanfly.Param.GaugeOutline) {
+            this.contents.paintOpacity = this.translucentOpacity();
+            this.contents.fillRect(dx, gaugeY - 1, dw, gaugeH, color3);
+            fillW = Math.max(fillW - 2, 0);
+            gaugeH -= 2;
+            dx += 1;
+        } else {
+            fillW = Math.floor(dw * rate);
+            gaugeY = dy + this.lineHeight() - gaugeH - 2;
+            this.contents.fillRect(dx, gaugeY, dw, gaugeH, color3);
+        }
+        this.contents.gradientFillRect(
+            dx,
+            gaugeY,
+            fillW,
+            gaugeH,
+            color1,
+            color2
+        );
     }
 
-    public hpColor(actor) {
+    public gaugeHeight() {
+        return Yanfly.Param.GaugeHeight;
+    }
+
+    public hpColor(actor: Game_Actor) {
         if (actor.isDead()) {
             return this.deathColor();
         } else if (actor.isDying()) {
@@ -585,19 +641,29 @@ export class Window_Base extends Window {
         }
     }
 
-    public mpColor(actor) {
+    public mpColor(actor: Game_Actor) {
         return this.normalColor();
     }
 
-    public tpColor(actor) {
+    public tpColor(actor: any) {
         return this.normalColor();
     }
 
-    public drawActorCharacter(actor, x, y) {
+    public drawActorCharacter(
+        actor: { characterName: () => string; characterIndex: () => number },
+        x: number,
+        y: number
+    ) {
         this.drawCharacter(actor.characterName(), actor.characterIndex(), x, y);
     }
 
-    public async drawActorFace(actor, x, y, width?, height?) {
+    public async drawActorFace(
+        actor: Game_Actor,
+        x: number,
+        y: number,
+        width?: number,
+        height?: number
+    ) {
         await this.drawFace(
             actor.faceName(),
             actor.faceIndex(),
@@ -630,24 +696,25 @@ export class Window_Base extends Window {
         this.drawText(actor.currentClass().name, x, y, width);
     }
 
-    public drawActorNickname(actor, x, y, width?) {
+    public drawActorNickname(
+        actor: Game_Actor,
+        x: number,
+        y: number,
+        width?: number
+    ) {
         width = width || 270;
         this.resetTextColor();
         this.drawText(actor.nickname(), x, y, width);
     }
 
-    public drawActorLevel(actor: Game_Actor, x, y) {
+    public drawActorLevel(actor: Game_Actor, x: number, y: number) {
         this.changeTextColor(this.systemColor());
-        this.drawText(TextManager.levelA, x, y, 48);
+        const dw1 = this.textWidth(TextManager.levelA);
+        this.drawText(TextManager.levelA, x, y, dw1);
         this.resetTextColor();
-        this.drawText(
-            actor.level.toString(),
-            x + 84,
-            y,
-            36,
-            undefined,
-            "right"
-        );
+        const level = Yanfly.Util.toGroup(actor.level);
+        const dw2 = this.textWidth(Yanfly.Util.toGroup(actor.maxLevel()));
+        this.drawText(level, x + dw1, y, dw2, undefined, "right");
     }
 
     public async drawActorIcons(
@@ -669,22 +736,51 @@ export class Window_Base extends Window {
         await Promise.all(promises);
     }
 
-    public drawCurrentAndMax(current, max, x, y, width, color1, color2) {
+    public drawCurrentAndMax(
+        current: any,
+        max: any,
+        x: number,
+        y: number,
+        width: number,
+        color1: string,
+        color2: string
+    ) {
         const labelWidth = this.textWidth("HP");
-        const valueWidth = this.textWidth("0000");
+        const valueWidth = this.textWidth(Yanfly.Util.toGroup(max));
         const slashWidth = this.textWidth("/");
         const x1 = x + width - valueWidth;
         const x2 = x1 - slashWidth;
         const x3 = x2 - valueWidth;
         if (x3 >= x + labelWidth) {
             this.changeTextColor(color1);
-            this.drawText(current, x3, y, valueWidth, undefined, "right");
+            this.drawText(
+                Yanfly.Util.toGroup(current),
+                x3,
+                y,
+                valueWidth,
+                undefined,
+                "right"
+            );
             this.changeTextColor(color2);
             this.drawText("/", x2, y, slashWidth, undefined, "right");
-            this.drawText(max, x1, y, valueWidth, undefined, "right");
+            this.drawText(
+                Yanfly.Util.toGroup(max),
+                x1,
+                y,
+                valueWidth,
+                undefined,
+                "right"
+            );
         } else {
             this.changeTextColor(color1);
-            this.drawText(current, x1, y, valueWidth, undefined, "right");
+            this.drawText(
+                Yanfly.Util.toGroup(current),
+                x1,
+                y,
+                valueWidth,
+                undefined,
+                "right"
+            );
         }
     }
 
@@ -734,7 +830,7 @@ export class Window_Base extends Window {
         );
     }
 
-    public drawActorTp(actor, x, y, width) {
+    public drawActorTp(actor: Game_Actor, x: number, y: number, width: number) {
         width = width || 96;
         const color1 = this.tpGaugeColor1();
         const color2 = this.tpGaugeColor2();
@@ -745,16 +841,25 @@ export class Window_Base extends Window {
         this.drawText(actor.tp, x + width - 64, y, 64, undefined, "right");
     }
 
-    public async drawActorSimpleStatus(actor, x, y, width) {
+    public async drawActorSimpleStatus(
+        actor: Game_Actor,
+        x: number,
+        y: number,
+        width: number
+    ) {
         const lineHeight = this.lineHeight();
+        const xpad = Window_Base._faceWidth + 2 * Yanfly.Param.TextPadding;
         const x2 = x + 180;
-        const width2 = Math.min(200, width - 180 - this.textPadding());
+        const width2 = Math.max(180, width - xpad - this.textPadding());
         this.drawActorName(actor, x, y);
         this.drawActorLevel(actor, x, y + lineHeight * 1);
         await this.drawActorIcons(actor, x, y + lineHeight * 2);
         this.drawActorClass(actor, x2, y);
         this.drawActorHp(actor, x2, y + lineHeight * 1, width2);
         this.drawActorMp(actor, x2, y + lineHeight * 2, width2);
+        if (Yanfly.Param.MenuTpGauge) {
+            this.drawActorTp(actor, x2, y + lineHeight * 3, width2);
+        }
     }
 
     public drawItemName(item: Item, x: number, y: number, width?: number) {
@@ -767,22 +872,44 @@ export class Window_Base extends Window {
         }
     }
 
-    public drawCurrencyValue(value, unit, x, y, width) {
-        const unitWidth = Math.min(80, this.textWidth(unit));
+    public drawCurrencyValue(
+        value: number,
+        unit: string,
+        wx: number,
+        wy: number,
+        ww: number
+    ) {
         this.resetTextColor();
-        this.drawText(value, x, y, width - unitWidth - 6, undefined, "right");
-        this.changeTextColor(this.systemColor());
-        this.drawText(
-            unit,
-            x + width - unitWidth,
-            y,
-            unitWidth,
-            undefined,
-            "right"
-        );
+        this.contents.fontSize = Yanfly.Param.GoldFontSize;
+        if (this.usingGoldIcon(unit)) {
+            var cx = Window_Base._iconWidth;
+        } else {
+            var cx = this.textWidth(unit);
+        }
+        var text = Yanfly.Util.toGroup(value);
+        if (this.textWidth(text) > ww - cx) {
+            text = Yanfly.Param.GoldOverlap;
+        }
+        this.drawText(text, wx, wy, ww - cx - 4, undefined, "right");
+        if (this.usingGoldIcon(unit)) {
+            this.drawIcon(
+                Yanfly.Icon.Gold,
+                wx + ww - Window_Base._iconWidth,
+                wy + 2
+            );
+        } else {
+            this.changeTextColor(this.systemColor());
+            this.drawText(unit, wx, wy, ww, undefined, "right");
+        }
+        this.resetFontSettings();
     }
 
-    public paramchangeTextColor(change) {
+    public usingGoldIcon(unit: string) {
+        if (unit !== TextManager.currencyUnit) return false;
+        return Yanfly.Icon.Gold > 0;
+    }
+
+    public paramchangeTextColor(change: number) {
         if (change > 0) {
             return this.powerUpColor();
         } else if (change < 0) {
@@ -792,7 +919,7 @@ export class Window_Base extends Window {
         }
     }
 
-    public setBackgroundType(type) {
+    public setBackgroundType(type: number) {
         if (type === 0) {
             this.opacity = 255;
         } else {
@@ -855,7 +982,7 @@ export class Window_Base extends Window {
         return "rgba(0, 0, 0, 0)";
     }
 
-    public canvasToLocalX(x) {
+    public canvasToLocalX(x: number) {
         let node = this;
         while (node) {
             x -= node.x;
@@ -865,7 +992,7 @@ export class Window_Base extends Window {
         return x;
     }
 
-    public canvasToLocalY(y) {
+    public canvasToLocalY(y: number) {
         let node = this;
         while (node) {
             y -= node.y;

@@ -185,7 +185,7 @@ export class Input {
     private static shouldPreventDefault(keycode: number): boolean {
         switch (keycode) {
             case 8: // backspace
-            case 9: // ???
+            case 9: // ??? (Blame Yanfly)
             case 33: // pageup
             case 34: // pagedown
             case 37: // left arrow

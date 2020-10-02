@@ -13,6 +13,8 @@ interface TouchInputEvent {
 declare let window: any;
 
 export class TouchInput {
+    static _mouseOverX: number;
+    static _mouseOverY: number;
     public static get wheelX(): number {
         return this._wheelX;
     }
@@ -186,6 +188,8 @@ export class TouchInput {
             const y = Graphics.pageToCanvasY(event.pageY);
             this.onMove(x, y);
         }
+        this._mouseOverX = Graphics.pageToCanvasX(event.pageX);
+        this._mouseOverY = Graphics.pageToCanvasY(event.pageY);
     }
 
     private static onMouseUp(event: MouseEvent) {

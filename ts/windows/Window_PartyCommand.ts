@@ -2,6 +2,7 @@ import { Graphics } from "../core/Graphics";
 import { BattleManager } from "../managers/BattleManager";
 import { TextManager } from "../managers/TextManager";
 import { Window_Command } from "./Window_Command";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 // -----------------------------------------------------------------------------
 // Window_PartyCommand
@@ -25,7 +26,11 @@ export class Window_PartyCommand extends Window_Command {
     }
 
     public numVisibleRows() {
-        return 4;
+        return Yanfly.Param.BECCommandRows;
+    }
+
+    public itemTextAlign() {
+        return Yanfly.Param.BECCommandAlign;
     }
 
     public makeCommandList() {

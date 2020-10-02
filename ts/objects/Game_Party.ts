@@ -4,6 +4,7 @@ import { TextManager } from "../managers/TextManager";
 import { Game_Item, Game_Item_OnLoad } from "./Game_Item";
 import { Game_Unit, Game_Unit_OnLoad } from "./Game_Unit";
 import { Item } from "../interfaces/Item";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 export interface Game_Party_Onload extends Game_Unit_OnLoad {
     _gold: number;
@@ -239,7 +240,7 @@ export class Game_Party extends Game_Unit {
     }
 
     public maxGold() {
-        return 99999999;
+        return eval(Yanfly.Param.MaxGold);
     }
 
     public steps() {
@@ -309,17 +310,17 @@ export class Game_Party extends Game_Unit {
         });
     }
 
-    public loseItem(item, amount, includeEquip?) {
+    public loseItem(item: Item, amount: number, includeEquip?: boolean) {
         this.gainItem(item, -amount, includeEquip);
     }
 
-    public consumeItem(item) {
+    public consumeItem(item: Item) {
         if (DataManager.isItem(item) && item.consumable) {
             this.loseItem(item, 1);
         }
     }
 
-    public canUse(item) {
+    public canUse(item: Item) {
         return this.members().some(function(actor) {
             return actor.canUse(item);
         });
@@ -487,5 +488,12 @@ export class Game_Party extends Game_Unit {
         this.members().forEach(function(actor) {
             actor.requestMotionRefresh();
         });
+    }
+
+    public performEscapeSuccess() {
+        for (let i = 0; i < this.members().length; ++i) {
+            let member = this.members()[i];
+            if (member) member.performEscapeSuccess();
+        }
     }
 }

@@ -6,6 +6,8 @@ import { Sprite_StateIcon } from "./Sprite_StateIcon";
 import { ConfigManager } from "../managers/ConfigManager";
 import { Game_Enemy } from "../objects/Game_Enemy";
 import { Game_Battler } from "../objects/Game_Battler";
+import { SceneManager } from "../managers/SceneManager";
+import { Window_EnemyVisualSelect } from "../windows/Window_EnemyVisualSelect";
 
 // -----------------------------------------------------------------------------
 // Sprite_Enemy
@@ -21,6 +23,9 @@ export class Sprite_Enemy extends Sprite_Battler {
     private _effectDuration: number;
     private _shake: number;
     private _stateIconSprite: Sprite_StateIcon;
+    _visualSelect: any;
+    _visualSelectWindow: any;
+    _addedVisualSelect: any;
 
     public initMembers() {
         super.initMembers();
@@ -32,6 +37,10 @@ export class Sprite_Enemy extends Sprite_Battler {
         this._effectDuration = 0;
         this._shake = 0;
         this.createStateIconSprite();
+    }
+
+    public preSpriteInitialize(battler: Game_Battler) {
+        if (this._visualSelect) this.createVisualSelectWindow();
     }
 
     public createStateIconSprite() {
@@ -54,6 +63,8 @@ export class Sprite_Enemy extends Sprite_Battler {
         );
 
         this._stateIconSprite.setup(battler);
+        if (this._visualSelectWindow)
+            this._visualSelectWindow.setBattler(battler);
     }
 
     public update() {
@@ -62,6 +73,8 @@ export class Sprite_Enemy extends Sprite_Battler {
             this.updateEffect();
             this.updateStateSprite();
         }
+        this.addVisualSelectWindow();
+        this.checkExistInSceneChildren();
     }
 
     public updateBitmap() {
@@ -275,12 +288,33 @@ export class Sprite_Enemy extends Sprite_Battler {
     }
 
     public updateSelectionEffect() {
-        if (this._battler.isActor()) {
-            super.updateSelectionEffect();
-        } else {
-            if (this._battler.isSelected()) {
-                this.startEffect("whiten");
-            }
+        if (this.battler.isSelected()) {
+            this.startEffect("whiten");
+        }
+    }
+
+    public addVisualSelectWindow() {
+        if (!this._visualSelect) return;
+        if (this._addedVisualSelect) return;
+        if (!SceneManager.scene) return;
+        let scene = SceneManager.scene;
+        if (!scene._windowLayer) return;
+        this._addedVisualSelect = true;
+        scene.addChild(this._visualSelectWindow);
+    }
+
+    public createVisualSelectWindow() {
+        this._visualSelectWindow = new Window_EnemyVisualSelect();
+    }
+
+    public checkExistInSceneChildren() {
+        if (!this._visualSelect) return;
+        if (!SceneManager.scene) return;
+        let scene = SceneManager.scene;
+        if (!scene._windowLayer) return;
+        if (!scene.children.includes(this._visualSelectWindow)) {
+            this._addedVisualSelect = true;
+            scene.addChild(this._visualSelectWindow);
         }
     }
 }

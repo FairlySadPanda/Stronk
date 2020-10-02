@@ -14,6 +14,7 @@ import { Scene_Shop } from "../scenes/Scene_Shop";
 import { Scene_Title } from "../scenes/Scene_Title";
 import { Window_MenuCommand } from "../windows/Window_MenuCommand";
 import { Game_Character } from "./Game_Character";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 export interface Game_Interpreter_OnLoad {
     _depth: any;
@@ -631,9 +632,13 @@ export class Game_Interpreter {
         let result = false;
         switch (this._params[0]) {
             case 0: // Switch
-                result =
-                    $gameSwitches.value(this._params[1]) ===
-                    (this._params[2] === 0);
+                if (this._params[2] === 0) {
+                    result = $gameSwitches.value(this._params[1]);
+                } else {
+                    result = !$gameSwitches.value(this._params[1]);
+                }
+                this._branch[this._indent] = result;
+                if (this._branch[this._indent] === false) this.skipBranch();
                 break;
             case 1: // Variable
                 const value1 = $gameVariables.value(this._params[1]);
@@ -667,10 +672,14 @@ export class Game_Interpreter {
             case 2: // Self Switch
                 if (this._eventId > 0) {
                     const key = [this._mapId, this._eventId, this._params[1]];
-                    result =
-                        $gameSelfSwitches.value(key) ===
-                        (this._params[2] === 0);
+                    if (this._params[2] === 0) {
+                        result = $gameSelfSwitches.value(key);
+                    } else {
+                        result = !$gameSelfSwitches.value(key);
+                    }
                 }
+                this._branch[this._indent] = result;
+                if (this._branch[this._indent] === false) this.skipBranch();
                 break;
             case 3: // Timer
                 if ($gameTimer.isWorking()) {
@@ -761,7 +770,19 @@ export class Game_Interpreter {
                 result = Input.isPressed(this._params[1]);
                 break;
             case 12: // Script
-                result = !!eval(this._params[1]);
+                const code = this._params[1];
+                try {
+                    result = !!eval(code);
+                } catch (e) {
+                    result = false;
+                    Yanfly.Util.displayError(
+                        e,
+                        code,
+                        "CONDITIONAL BRANCH SCRIPT ERROR"
+                    );
+                }
+                this._branch[this._indent] = result;
+                if (this._branch[this._indent] === false) this.skipBranch();
                 break;
             case 13: // Vehicle
                 result =
@@ -910,7 +931,20 @@ export class Game_Interpreter {
                 );
                 break;
             case 4: // Script
-                value = eval(this._params[4]);
+                value = 0;
+                var code = this._params[4];
+                try {
+                    value = eval(code);
+                } catch (e) {
+                    Yanfly.Util.displayError(
+                        e,
+                        code,
+                        "CONTROL VARIABLE SCRIPT ERROR"
+                    );
+                }
+                for (var i = this._params[0]; i <= this._params[1]; i++) {
+                    this.operateVariable(i, this._params[2], value);
+                }
                 break;
         }
         for (let i = this._params[0]; i <= this._params[1]; i++) {
@@ -2151,7 +2185,11 @@ export class Game_Interpreter {
             this._index++;
             script += this.currentCommand().parameters[0] + "\n";
         }
-        eval(script);
+        try {
+            eval(script);
+        } catch (e) {
+            Yanfly.Util.displayError(e, script, "SCRIPT CALL ERROR");
+        }
         return true;
     }
 
@@ -2170,5 +2208,22 @@ export class Game_Interpreter {
         if (command === "LoseGold") {
             $gameParty.loseGold(parseInt(args[0]));
         }
+        if (command === "RefreshMap") {
+            if (!$gameParty.inBattle()) {
+                $gameMap.requestRefresh($gameMap.mapId());
+            }
+        }
+        if (command === "RefreshTroop") {
+            if ($gameParty.inBattle()) {
+                $gameTroop.setupBattleEvent();
+            }
+        }
+        if (command === "setBattleSys" && !$gameParty.inBattle()) {
+            this.setBattleSystem(args[0]);
+        }
+    }
+
+    public setBattleSystem(value) {
+        $gameSystem.setBattleSystem(value);
     }
 }

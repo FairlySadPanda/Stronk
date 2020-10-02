@@ -1,4 +1,5 @@
 import { AudioManager } from "../managers/AudioManager";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 interface Game_System_OnLoad {
     _saveEnabled: boolean;
@@ -40,6 +41,7 @@ export class Game_System {
     private _defeatMe: any;
     private _savedBgm: any;
     private _walkingBgm: any;
+    _battleSystem: string;
 
     public constructor(gameLoadInput?: Game_System_OnLoad) {
         if (gameLoadInput) {
@@ -81,6 +83,20 @@ export class Game_System {
             this._savedBgm = null;
             this._walkingBgm = null;
         }
+        this.initBattleSystem();
+    }
+
+    public initBattleSystem() {
+        this._battleSystem = Yanfly.Param.BECSystem.toLowerCase();
+    }
+
+    public getBattleSystem() {
+        if (this._battleSystem === undefined) this.initBattleSystem();
+        return this._battleSystem;
+    }
+
+    public setBattleSystem(type) {
+        this._battleSystem = type.toLowerCase();
     }
 
     public isJapanese() {

@@ -1,4 +1,6 @@
 import { Window_Selectable } from "./Window_Selectable";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { Game_Actor } from "../objects/Game_Actor";
 
 // -----------------------------------------------------------------------------
 // Window_SkillList
@@ -6,18 +8,18 @@ import { Window_Selectable } from "./Window_Selectable";
 // The window for selecting a skill on the skill screen.
 
 export class Window_SkillList extends Window_Selectable {
-    public _actor: any;
+    public _actor: Game_Actor;
     public _stypeId: number;
     public _data: any[];
 
-    public constructor(x, y, width, height) {
+    public constructor(x: number, y: number, width: number, height: number) {
         super(x, y, width, height);
         this._actor = null;
         this._stypeId = 0;
         this._data = [];
     }
 
-    public setActor(actor) {
+    public setActor(actor: Game_Actor) {
         if (this._actor !== actor) {
             this._actor = actor;
             this.refresh();
@@ -25,7 +27,7 @@ export class Window_SkillList extends Window_Selectable {
         }
     }
 
-    public setStypeId(stypeId) {
+    public setStypeId(stypeId: number) {
         if (this._stypeId !== stypeId) {
             this._stypeId = stypeId;
             this.refresh();
@@ -34,7 +36,7 @@ export class Window_SkillList extends Window_Selectable {
     }
 
     public maxCols() {
-        return 2;
+        return 3;
     }
 
     public spacing() {
@@ -55,17 +57,17 @@ export class Window_SkillList extends Window_Selectable {
         return this.isEnabled(this._data[this.index()]);
     }
 
-    public includes(item) {
+    public includes(item: { stypeId: number }) {
         return item && item.stypeId === this._stypeId;
     }
 
-    public isEnabled(item) {
+    public isEnabled(item: any) {
         return this._actor && this._actor.canUse(item);
     }
 
     public makeItemList() {
         if (this._actor) {
-            this._data = this._actor.skills().filter(function(item) {
+            this._data = this._actor.skills().filter(function(item: any) {
                 return this.includes(item);
             }, this);
         } else {
@@ -74,7 +76,7 @@ export class Window_SkillList extends Window_Selectable {
     }
 
     public selectLast() {
-        let skill;
+        let skill: any;
         if ($gameParty.inBattle()) {
             skill = this._actor.lastBattleSkill();
         } else {
@@ -84,20 +86,15 @@ export class Window_SkillList extends Window_Selectable {
         this.select(index >= 0 ? index : 0);
     }
 
-    public async drawItem(index) {
+    public async drawItem(index: number) {
         const skill = this._data[index];
         if (skill) {
             const costWidth = this.costWidth();
             const rect = this.itemRect(index);
             rect.width -= this.textPadding();
             this.changePaintOpacity(this.isEnabled(skill));
-            await this.drawItemName(
-                skill,
-                rect.x,
-                rect.y,
-                rect.width - costWidth
-            );
-            await this.drawSkillCost(skill, rect.x, rect.y, rect.width);
+            this.drawItemName(skill, rect.x, rect.y, rect.width - costWidth);
+            this.drawSkillCost(skill, rect.x, rect.y, rect.width);
             this.changePaintOpacity(1);
         }
     }
@@ -106,27 +103,19 @@ export class Window_SkillList extends Window_Selectable {
         return this.textWidth("000");
     }
 
-    public drawSkillCost(skill, x, y, width) {
+    public drawSkillCost(skill: any, x: number, y: number, width: number) {
         if (this._actor.skillTpCost(skill) > 0) {
             this.changeTextColor(this.tpCostColor());
-            this.drawText(
-                this._actor.skillTpCost(skill),
-                x,
-                y,
-                width,
-                undefined,
-                "right"
+            const skillcost = Yanfly.Util.toGroup(
+                this._actor.skillTpCost(skill)
             );
+            this.drawText(skillcost, x, y, width, undefined, "right");
         } else if (this._actor.skillMpCost(skill) > 0) {
             this.changeTextColor(this.mpCostColor());
-            this.drawText(
-                this._actor.skillMpCost(skill),
-                x,
-                y,
-                width,
-                undefined,
-                "right"
+            const skillcost = Yanfly.Util.toGroup(
+                this._actor.skillMpCost(skill)
             );
+            this.drawText(skillcost, x, y, width, undefined, "right");
         }
     }
 

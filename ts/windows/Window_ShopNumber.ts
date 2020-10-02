@@ -6,6 +6,7 @@ import { SoundManager } from "../managers/SoundManager";
 import { TextManager } from "../managers/TextManager";
 import { Sprite_Button } from "../sprites/Sprite_Button";
 import { Window_Selectable } from "./Window_Selectable";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
 
 // -----------------------------------------------------------------------------
 // Window_ShopNumber
@@ -135,14 +136,8 @@ export class Window_ShopNumber extends Window_Selectable {
         const y = this.itemY();
         const width = this.cursorWidth() - this.textPadding();
         this.resetTextColor();
-        await this.drawText(
-            this._number.toString(),
-            x,
-            y,
-            width,
-            undefined,
-            "right"
-        );
+        const itemNumber = Yanfly.Util.toGroup(this._number);
+        await this.drawText(itemNumber, x, y, width, undefined, "right");
     }
 
     public async drawTotalPrice() {

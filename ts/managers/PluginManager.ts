@@ -24,11 +24,11 @@ export class PluginManager {
     }
 
     public static parameters(name) {
-        return this._parameters[name.toLowerCase()] || {};
+        return this._parameters[name] || {};
     }
 
     public static setParameters(name, parameters) {
-        this._parameters[name.toLowerCase()] = parameters;
+        this._parameters[name] = parameters;
     }
 
     public static loadScript(name) {

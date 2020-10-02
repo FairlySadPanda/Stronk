@@ -4,11 +4,11 @@ import { Input } from "../core/Input";
 import { TouchInput } from "../core/TouchInput";
 import { Utils } from "../core/Utils";
 import { WebAudio } from "../core/WebAudio";
+import { Scene_Base } from "../scenes/Scene_Base";
 import { AudioManager } from "./AudioManager";
+import { ConfigManager } from "./ConfigManager";
 import { ImageManager } from "./ImageManager";
 import { PluginManager } from "./PluginManager";
-import { Scene_Base } from "../scenes/Scene_Base";
-import { ConfigManager } from "./ConfigManager";
 
 declare const nw: any;
 
@@ -223,6 +223,10 @@ export abstract class SceneManager {
                 case 116: // F5
                     if (Utils.isNwjs()) {
                         location.reload();
+                        if (Utils.isOptionValid("test")) {
+                            const win = nw.Window.get();
+                            win.closeDevTools();
+                        }
                     }
                     break;
                 case 119: // F8

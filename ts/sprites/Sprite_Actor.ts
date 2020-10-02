@@ -1,14 +1,16 @@
+import { Bitmap } from "../core/Bitmap";
 import { Sprite } from "../core/Sprite";
 import { BattleManager } from "../managers/BattleManager";
+import { ConfigManager } from "../managers/ConfigManager";
 import { ImageManager } from "../managers/ImageManager";
+import { Game_Actor } from "../objects/Game_Actor";
+import { Game_Enemy } from "../objects/Game_Enemy";
+import { Yanfly } from "../plugins/Stronk_YEP_CoreEngine";
+import { Window_Base } from "../windows/Window_Base";
 import { Sprite_Base } from "./Sprite_Base";
 import { Sprite_Battler } from "./Sprite_Battler";
 import { Sprite_StateOverlay } from "./Sprite_StateOverlay";
 import { Sprite_Weapon } from "./Sprite_Weapon";
-import { ConfigManager } from "../managers/ConfigManager";
-import { Graphics } from "../core/Graphics";
-import { Game_Enemy } from "../objects/Game_Enemy";
-import { Game_Actor } from "../objects/Game_Actor";
 
 interface Motion {
     index: number;
@@ -67,11 +69,12 @@ export class Sprite_Actor extends Sprite_Battler {
     private _motion: any;
     private _motionCount: number;
     private _pattern: number;
-    private _mainSprite: Sprite_Base;
     private _shadowSprite: Sprite;
     private _weaponSprite: Sprite_Weapon;
     private _stateSprite: Sprite_StateOverlay;
     private _actor: any;
+    _checkAliveStatus: boolean;
+    _hideShadows: any;
 
     public constructor(battler?: undefined) {
         super(battler);
@@ -131,11 +134,75 @@ export class Sprite_Actor extends Sprite_Battler {
     }
 
     public moveToStartPosition() {
-        this.startMove(300, 0, 0);
+        if (BattleManager.bypassMoveToStartLocation) return;
+        if ($gameSystem.isSideView() && this._checkAliveStatus) {
+            this.startMove(300, 0, 0);
+        }
     }
 
     public setActorHome(index: number) {
-        this.setHome(800 + index * 32, 280 + index * 48);
+        const screenWidth = ConfigManager.fieldResolution.widthPx;
+        const screenHeight = ConfigManager.fieldResolution.heightPx;
+        const maxSize = $gameParty.maxBattleMembers();
+        const partySize = $gameParty.battleMembers().length;
+        let statusHeight = eval(Yanfly.Param.BECCommandRows);
+        statusHeight *= Window_Base.prototype.lineHeight.call(this);
+        statusHeight += Window_Base.prototype.standardPadding.call(this) * 2;
+        let homeX = 0;
+        let homeY = 0;
+        if ($gameSystem.isSideView()) {
+            let code = Yanfly.Param.BECHomePosX;
+            try {
+                homeX = eval(code);
+            } catch (e) {
+                Yanfly.Util.displayError(
+                    e,
+                    code,
+                    "SIDE VIEW HOME X FORMULA ERROR"
+                );
+            }
+            code = Yanfly.Param.BECHomePosY;
+            try {
+                homeY = eval(code);
+            } catch (e) {
+                homeY = 0;
+                Yanfly.Util.displayError(
+                    e,
+                    code,
+                    "SIDE VIEW HOME Y FORMULA ERROR"
+                );
+            }
+        } else {
+            let code = Yanfly.Param.BECFrontPosX;
+            try {
+                homeX = eval(code);
+            } catch (e) {
+                homeX = 0;
+                Yanfly.Util.displayError(
+                    e,
+                    code,
+                    "FRONT VIEW HOME X FORMULA ERROR"
+                );
+            }
+            code = Yanfly.Param.BECFrontPosY;
+            try {
+                homeY = eval(code);
+            } catch (e) {
+                homeY = 0;
+                Yanfly.Util.displayError(
+                    e,
+                    code,
+                    "FRONT VIEW HOME Y FORMULA ERROR"
+                );
+            }
+        }
+        this._checkAliveStatus = false;
+        if ($gameParty.battleMembers()[index]) {
+            var actor = $gameParty.battleMembers()[index];
+            if (actor.isAlive()) this._checkAliveStatus = true;
+        }
+        this.setHome(homeX, homeY);
+        this.moveToStartPosition();
     }
 
     public update() {
@@ -147,6 +214,12 @@ export class Sprite_Actor extends Sprite_Battler {
     }
 
     public updateShadow() {
+        if (this._hideShadows === undefined) {
+            this._hideShadows = Yanfly.Param.BECShowShadows;
+        }
+        if (!this._hideShadows) {
+            return (this._shadowSprite.visible = false);
+        }
         this._shadowSprite.visible = !!this._actor;
     }
 
@@ -157,12 +230,7 @@ export class Sprite_Actor extends Sprite_Battler {
         }
     }
 
-    public setupMotion() {
-        if (this._actor.isMotionRequested()) {
-            this.startMotion(this._actor.motionType());
-            this._actor.clearMotion();
-        }
-    }
+    public setupMotion() {}
 
     public setupWeaponAnimation() {
         if (this._actor.isWeaponAnimationRequested()) {
@@ -180,23 +248,16 @@ export class Sprite_Actor extends Sprite_Battler {
         }
     }
 
-    public updateTargetPosition() {
-        if (this._actor.isInputting() || this._actor.isActing()) {
-            this.stepForward();
-        } else if (this._actor.canMove() && BattleManager.isEscaped()) {
-            this.retreat();
-        } else if (!this.inHomePosition()) {
-            this.stepBack();
-        }
-    }
-
     public updateBitmap() {
+        let name = this._actor.battlerName();
+        let needUpdate = false;
+        if (this._battlerName !== name) needUpdate = true;
         super.updateBitmap();
-        const name = this._actor.battlerName();
         if (this._battlerName !== name) {
             this._battlerName = name;
             this._mainSprite.bitmap = ImageManager.loadSvActor(name);
         }
+        if (needUpdate) this.adjustAnchor();
     }
 
     public updateFrame() {
@@ -211,6 +272,14 @@ export class Sprite_Actor extends Sprite_Battler {
             const cy = motionIndex % 6;
             this._mainSprite.setFrame(cx * cw, cy * ch, cw, ch);
         }
+
+        if (!this._mainSprite) return;
+        if (!this._mainSprite.bitmap) return;
+        if (this._mainSprite.bitmap.width > 0 && !this.bitmap) {
+            var sw = this._mainSprite.bitmap.width / 9;
+            var sh = this._mainSprite.bitmap.height / 6;
+            this.bitmap = new Bitmap(sw, sh);
+        }
     }
 
     public updateMove() {
@@ -218,16 +287,6 @@ export class Sprite_Actor extends Sprite_Battler {
         if (!bitmap || bitmap.isReady()) {
             super.updateMove();
         }
-    }
-
-    public updateMotion() {
-        this.setupMotion();
-        this.setupWeaponAnimation();
-        if (this._actor.isMotionRefreshRequested()) {
-            this.refreshMotion();
-            this._actor.clearMotion();
-        }
-        this.updateMotionCount();
     }
 
     public updateMotionCount() {
@@ -249,31 +308,29 @@ export class Sprite_Actor extends Sprite_Battler {
 
     public refreshMotion() {
         const actor = this._actor;
+        if (!actor) return;
         const motionGuard = Sprite_Actor.MOTIONS["guard"];
-        if (actor) {
-            if (this._motion === motionGuard && !BattleManager.isInputting()) {
-                return;
-            }
-            const stateMotion = actor.stateMotionIndex();
-            if (actor.isInputting() || actor.isActing()) {
-                this.startMotion("walk");
-            } else if (stateMotion === 3) {
-                this.startMotion("dead");
-            } else if (stateMotion === 2) {
-                this.startMotion("sleep");
-            } else if (actor.isChanting()) {
-                this.startMotion("chant");
-            } else if (actor.isGuard() || actor.isGuardWaiting()) {
-                this.startMotion("guard");
-            } else if (stateMotion === 1) {
-                this.startMotion("abnormal");
-            } else if (actor.isDying()) {
-                this.startMotion("dying");
-            } else if (actor.isUndecided()) {
-                this.startMotion("walk");
-            } else {
-                this.startMotion("wait");
-            }
+        if (this._motion === motionGuard && !BattleManager.isInputting())
+            return;
+        const stateMotion = actor.stateMotionIndex();
+        if (actor.isInputting() || actor.isActing()) {
+            this.startMotion(actor.idleMotion());
+        } else if (stateMotion === 3) {
+            this.startMotion(actor.deadMotion());
+        } else if (stateMotion === 2) {
+            this.startMotion(actor.sleepMotion());
+        } else if (actor.isChanting()) {
+            this.startMotion(actor.chantMotion());
+        } else if (actor.isGuard() || actor.isGuardWaiting()) {
+            this.startMotion(actor.guardMotion());
+        } else if (stateMotion === 1) {
+            this.startMotion(actor.abnormalMotion());
+        } else if (actor.isDying()) {
+            this.startMotion(actor.dyingMotion());
+        } else if (actor.isUndecided()) {
+            this.startMotion(actor.idleMotion());
+        } else {
+            this.startMotion(actor.waitMotion());
         }
     }
 
@@ -287,23 +344,12 @@ export class Sprite_Actor extends Sprite_Battler {
         }
     }
 
-    public stepForward() {
-        this.startMove(-48, 0, 12);
-    }
-
     public stepBack() {
         this.startMove(0, 0, 12);
     }
 
     public retreat() {
-        this.startMove(300, 0, 30);
-    }
-
-    public onMoveEnd() {
-        super.onMoveEnd();
-        if (!BattleManager.isBattleEnd()) {
-            this.refreshMotion();
-        }
+        this.startMove(1200, 0, 120);
     }
 
     public damageOffsetX() {
@@ -312,5 +358,45 @@ export class Sprite_Actor extends Sprite_Battler {
 
     public damageOffsetY() {
         return 0;
+    }
+
+    public forceMotion(motionType) {
+        const newMotion = Sprite_Actor.MOTIONS[motionType];
+        this._motion = newMotion;
+        this._motionCount = 0;
+        this._pattern = 0;
+    }
+
+    public updateTargetPosition() {}
+
+    public updateMotion() {
+        this.updateMotionCount();
+    }
+
+    public onMoveEnd() {
+        Sprite_Battler.prototype.onMoveEnd.call(this);
+    }
+
+    public stepForward() {
+        this.startMove(-Yanfly.Param.BECStepDist, 0, 12);
+    }
+
+    public stepFlinch() {
+        var flinchX = this.x - this._homeX + Yanfly.Param.BECFlinchDist;
+        var flinchY = this.y - this._homeY;
+        this.startMove(flinchX, flinchY, 6);
+    }
+
+    public stepSubBack() {
+        var backX = this._mainSprite.width / 2;
+        this.startMove(backX, 0, 6);
+    }
+
+    public adjustAnchor() {
+        if (!this._mainSprite) {
+            return;
+        }
+        this._mainSprite.anchor.x = this._actor.anchorX();
+        this._mainSprite.anchor.y = this._actor.anchorY();
     }
 }

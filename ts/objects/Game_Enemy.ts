@@ -59,7 +59,7 @@ export class Game_Enemy extends Game_Battler {
     }
 
     public traitObjects() {
-        return super.traitObjects().concat(this.enemy());
+        return super.traitObjects().concat(this.enemy() as any);
     }
 
     public paramBase(paramId) {
@@ -156,7 +156,9 @@ export class Game_Enemy extends Game_Battler {
 
     public performActionStart(action) {
         super.performActionStart(action);
-        this.requestEffect("whiten");
+        if (!$gameSystem.isSideView() || !this.spriteCanMove()) {
+            this.requestEffect("whiten");
+        }
     }
 
     public performAction(action) {
@@ -168,9 +170,13 @@ export class Game_Enemy extends Game_Battler {
     }
 
     public performDamage() {
-        super.performDamage();
-        SoundManager.playEnemyDamage();
-        this.requestEffect("blink");
+        if ($gameSystem.isSideView()) {
+            super.performDamage();
+            SoundManager.playEnemyDamage();
+        } else {
+            SoundManager.playEnemyDamage();
+            this.requestEffect("blink");
+        }
     }
 
     public performCollapse() {
@@ -221,15 +227,6 @@ export class Game_Enemy extends Game_Battler {
                 return this.meetsSwitchCondition(param1);
             default:
                 return true;
-        }
-    }
-
-    public meetsTurnCondition(param1, param2) {
-        const n = $gameTroop.turnCount();
-        if (param2 === 0) {
-            return n === param1;
-        } else {
-            return n > 0 && n >= param1 && n % param2 === param1 % param2;
         }
     }
 
@@ -307,5 +304,99 @@ export class Game_Enemy extends Game_Battler {
             }
         }
         this.setActionState("waiting");
+    }
+
+    public paramPlus(paramId) {
+        let value = super.paramPlus(paramId);
+        value += this.enemy().plusParams[paramId];
+        return value;
+    }
+
+    public paramRate(paramId) {
+        let rate = super.paramRate(paramId);
+        rate *= this.enemy().rateParams[paramId];
+        return rate;
+    }
+
+    public paramFlat(paramId) {
+        let value = super.paramFlat(paramId);
+        value += this.enemy().flatParams[paramId];
+        return value;
+    }
+
+    public customParamMax(paramId) {
+        let value = super.customParamMax(paramId);
+        if (this.enemy().maxParams[paramId]) {
+            value = Math.max(value, this.enemy().maxParams[paramId]);
+        }
+        return value;
+    }
+
+    public customParamMin(paramId) {
+        let value = super.customParamMin(paramId);
+        if (this.enemy().minParams[paramId]) {
+            value = Math.max(value, this.enemy().minParams[paramId]);
+        }
+        return value;
+    }
+
+    public xparamPlus(id) {
+        let value = super.xparamPlus(id);
+        value += this.enemy().plusXParams[id];
+        return value;
+    }
+
+    public xparamRate(id) {
+        let value = super.xparamRate(id);
+        value *= this.enemy().rateXParams[id];
+        return value;
+    }
+
+    public xparamFlat(id) {
+        let value = super.xparamFlat(id);
+        value += this.enemy().flatXParams[id];
+        return value;
+    }
+
+    public skills() {
+        let skills = [];
+        for (let i = 0; i < this.enemy().actions.length; ++i) {
+            let skill = $dataSkills[this.enemy().actions[i].skillId];
+            if (skill) skills.push(skill);
+        }
+        return skills;
+    }
+
+    public attackAnimationId() {
+        return this.enemy().attackAnimationId;
+    }
+
+    public attackAnimationId1() {
+        return this.attackAnimationId();
+    }
+
+    public attackAnimationId2() {
+        return this.attackAnimationId();
+    }
+
+    public reflectAnimationId() {
+        if (this.enemy().reflectAnimationId > 0) {
+            return this.enemy().reflectAnimationId;
+        }
+        return super.reflectAnimationId();
+    }
+
+    public spriteCanMove() {
+        if (this.enemy().spriteCannotMove) return false;
+        return super.spriteCanMove();
+    }
+
+    public meetsTurnCondition(param1, param2) {
+        let n = this.turnCount();
+        if (param2 === 0) {
+            return n === param1;
+        } else {
+            return n > 0 && n >= param1 && n % param2 === param1 % param2;
+        }
     }
 }

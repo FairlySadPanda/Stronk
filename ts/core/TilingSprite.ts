@@ -1,12 +1,11 @@
 import * as PIXI from "pixi.js";
-import { Graphics } from "./Graphics";
+import { Bitmap } from "./Bitmap";
 import { Point } from "./Point";
 import { Rectangle } from "./Rectangle";
 import { Sprite } from "./Sprite";
 import { Utils } from "./Utils";
-import { Bitmap } from "./Bitmap";
 
-export class TilingSprite extends PIXI.extras.TilingSprite {
+export class TilingSprite extends PIXI.TilingSprite {
     /**
      * The image for the tiling sprite.
      *
@@ -58,15 +57,15 @@ export class TilingSprite extends PIXI.extras.TilingSprite {
     public constructor(bitmap?: any) {
         super(new PIXI.Texture(new PIXI.BaseTexture()));
         this._bitmap = null;
-        this._width = 0;
-        this._height = 0;
+        this.width = 0;
+        this.height = 0;
         this._frame = new Rectangle();
         this.spriteId = Sprite._counter++;
         this.origin = new Point();
         this.bitmap = bitmap;
     }
 
-    public _renderWebGL(renderer: any) {
+    public render(renderer: PIXI.Renderer) {
         if (this._bitmap) {
             this._bitmap.touch();
         }
@@ -74,8 +73,8 @@ export class TilingSprite extends PIXI.extras.TilingSprite {
             if (this._bitmap) {
                 this._bitmap.checkDirty();
             }
-            this._speedUpCustomBlendModes(renderer);
-            super._renderWebGL(renderer);
+            // this._speedUpCustomBlendModes(renderer);
+            super.render(renderer);
         }
     }
 
@@ -103,8 +102,8 @@ export class TilingSprite extends PIXI.extras.TilingSprite {
     public move(x?: number, y?: number, width?: number, height?: number) {
         this.x = x || 0;
         this.y = y || 0;
-        this._width = width || 0;
-        this._height = height || 0;
+        this.width = width || 0;
+        this.height = height || 0;
     }
 
     /**
@@ -142,35 +141,35 @@ export class TilingSprite extends PIXI.extras.TilingSprite {
             frame.height = this._bitmap.height;
         }
         this.texture.frame = frame;
-        this.texture._updateUvs();
+        this.texture.updateUvs();
         this.tilingTexture = null;
     }
 
-    private _speedUpCustomBlendModes(renderer: PIXI.WebGLRenderer) {
-        const picture = renderer.plugins.picture;
-        const blend = this.blendMode;
-        if (renderer.renderingToScreen && renderer._activeRenderTarget.root) {
-            if (picture.drawModes[blend]) {
-                // @ts-ignore
-                const stage = renderer._lastObjectRendered;
-                // @ts-ignore
-                const f = stage._filters;
-                if (!f || !f[0]) {
-                    setTimeout(function() {
-                        // @ts-ignore
-                        const f = stage._filters;
-                        if (!f || !f[0]) {
-                            stage.filters = [Sprite.voidFilter];
-                            stage.filterArea = new PIXI.Rectangle(
-                                0,
-                                0,
-                                Graphics.width,
-                                Graphics.height
-                            );
-                        }
-                    }, 0);
-                }
-            }
-        }
-    }
+    // private _speedUpCustomBlendModes(renderer: PIXI.Renderer) {
+    //     const picture = renderer.plugins.picture;
+    //     const blend = this.blendMode;
+    //     if (renderer.renderingToScreen && renderer._activeRenderTarget.root) {
+    //         if (picture.drawModes[blend]) {
+    //             // @ts-ignore
+    //             const stage = renderer._lastObjectRendered;
+    //             // @ts-ignore
+    //             const f = stage._filters;
+    //             if (!f || !f[0]) {
+    //                 setTimeout(function() {
+    //                     // @ts-ignore
+    //                     const f = stage._filters;
+    //                     if (!f || !f[0]) {
+    //                         stage.filters = [Sprite.voidFilter];
+    //                         stage.filterArea = new PIXI.Rectangle(
+    //                             0,
+    //                             0,
+    //                             Graphics.width,
+    //                             Graphics.height
+    //                         );
+    //                     }
+    //                 }, 0);
+    //             }
+    //         }
+    //     }
+    // }
 }
